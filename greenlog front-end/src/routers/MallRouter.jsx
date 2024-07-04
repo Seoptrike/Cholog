@@ -6,7 +6,6 @@ const MallRouter = () => {
     return (
         <Routes>
             <Route path='list' element={<ListPage/>}/>
-
         </Routes>
     )
 }
