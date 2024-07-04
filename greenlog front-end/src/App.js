@@ -7,7 +7,7 @@ import Menupage from './common/home/Menupage';
 function App() {
     return (
         <Container>
-            <Menupage />
+            <Menupage/>
         </Container>
     );
 }
