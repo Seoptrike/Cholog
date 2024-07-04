@@ -3,21 +3,23 @@ import { Route, Routes } from 'react-router-dom'
 import MainPage from '../common/home/MainPage'
 import UserRouter from './UserRouter'
 import ReviewRouter from './ReviewRouter'
-import ReplyPage from '../components/reply/ReplyPage'
 import MallRouter from './MallRouter'
 import ReportRouter from './ReportRouter'
+import ReplyRouter from './ReplyRouter'
+import AboutRouter from './AboutRouter'
 
 const RouterPage = () => {
-  return (
-    <Routes>
-        <Route path='/' element={<MainPage/>}/>
-        <Route path='/user/*' element={<UserRouter/>}/>
-        <Route path='/mall/*' element={<MallRouter/>}/>
-        <Route path='/report/*' element={<ReportRouter/>}/>
-        <Route path='/review/*' element={<ReviewRouter/>}/>
-        <Route path='/reply/*' element={<ReplyPage/>}/>
-    </Routes>
-  )
+    return (
+        <Routes>
+            <Route path='/' element={<MainPage />} />
+            <Route path='/user/*' element={<UserRouter />} />
+            <Route path='/mall/*' element={<MallRouter />} />
+            <Route path='/report/*' element={<ReportRouter />} />
+            <Route path='/review/*' element={<ReviewRouter />} />
+            <Route path='/reply/*' element={<ReplyRouter />} />
+            <Route path='/about/*' element={<AboutRouter />} />
+        </Routes>
+    )
 }
 
 export default RouterPage

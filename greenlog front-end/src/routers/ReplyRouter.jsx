@@ -2,7 +2,7 @@ import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import ReplyPage from '../components/reply/ReplyPage'
 
-const ReviewRouter = () => {
+const ReplyRouter = () => {
     return (
         <Routes>
             <Route path='reply' element={<ReplyPage/>}></Route>
@@ -10,4 +10,4 @@ const ReviewRouter = () => {
     )
 }
 
-export default ReviewRouter
+export default ReplyRouter
