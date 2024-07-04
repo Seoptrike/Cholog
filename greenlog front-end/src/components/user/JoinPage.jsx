@@ -2,19 +2,23 @@ import axios from 'axios'
 import React, { useState } from 'react'
 import { Row, Col, InputGroup, Form, Button } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
+import ModalAddress from '../../common/useful/ModalAddress'
 
 const JoinPage = () => {
     const navi = useNavigate();
     const [form, setform] = useState({
         uid: '',
-        name: '',
-        password: '',
-        checkPassword: '',
+        uname: '',
+        upass: '',
+        checkPass: '',
         phone: '',
         gender: '',
-        birth: ''
+        birth: '',
+        address1: '',
+        address2: '',
+        email: ''
     })
-    const { uid, name, password, phone, gender, birth, checkPassword } = form;
+    const { uid, uname, upass, phone, gender, birth, checkPass, email, address1, address2 } = form;
     const [isCheck, setIsCheck] = useState(false); // 중복체크 상태
     const onChangeForm = (e) => {
         setform({ ...form, [e.target.name]: e.target.value });
@@ -23,20 +27,23 @@ const JoinPage = () => {
     //중복체크버튼
     const onCheckId = async (uid) => {
         console.log(uid);
-        const res = await axios.get(`/member/user?uid=${uid}`)
+        const res = await axios.get(`/user/read?uid=${uid}`)
         if (uid === "") {
             alert("아이디를 입력해주세요")
         } else {
-            if (res.data.member_user_uid === uid) {
+            if (res.data.user_uid === uid) {
                 alert("이미 가입되어있는 아이디입니다.")
                 setform({
                     uid: '',
-                    name: '',
-                    password: '',
-                    checkPassword: '',
+                    uname: '',
+                    upass: '',
+                    checkPass: '',
                     phone: '',
                     gender: '',
-                    birth: ''
+                    birth: '',
+                    address1: '',
+                    address2: '',
+                    email: ''
                 });
                 setIsCheck(false); // 중복체크 실패
             } else {
@@ -46,7 +53,6 @@ const JoinPage = () => {
         }
     }
 
-
     /*회원가입버튼 */
     const onClickInsert = async () => {
         if (!isCheck) {
@@ -54,14 +60,14 @@ const JoinPage = () => {
             return;
         }
 
-        if (password !== checkPassword) {
+        if (upass !== checkPass) {
             alert("비밀번호가 일치하지 않습니다");
             return;
         }
 
-        await axios.post(`/member/insert`, form);
+        await axios.post(`/user/insert`, form);
         alert("회원 가입 완료!");
-        navi("/member/login");
+        navi("/user/login");
     };
 
 
@@ -77,15 +83,19 @@ const JoinPage = () => {
                     </InputGroup >
                     <InputGroup className='joinbox'>
                         <InputGroup.Text className='justify-content-center'>비밀번호</InputGroup.Text>
-                        <Form.Control name="password" value={password} onChange={onChangeForm} />
+                        <Form.Control name="upass" value={upass} onChange={onChangeForm} />
                     </InputGroup >
                     <InputGroup className='joinbox'>
                         <InputGroup.Text className='justify-content-center'>비밀번호확인</InputGroup.Text>
-                        <Form.Control name="checkPassword" value={checkPassword} onChange={onChangeForm} />
+                        <Form.Control name="checkPass" value={checkPass} onChange={onChangeForm} />
+                    </InputGroup >
+                    <InputGroup className='joinbox'>
+                        <InputGroup.Text className='justify-content-center'>이메일</InputGroup.Text>
+                        <Form.Control name="uname" value={uname} onChange={onChangeForm} />
                     </InputGroup >
                     <InputGroup className='joinbox'>
                         <InputGroup.Text className='justify-content-center'>이름</InputGroup.Text>
-                        <Form.Control name="name" value={name} onChange={onChangeForm} />
+                        <Form.Control name="uname" value={uname} onChange={onChangeForm} />
                     </InputGroup >
                     <InputGroup className='joinbox'>
                         <InputGroup.Text className='justify-content-center'>전화번호</InputGroup.Text>
@@ -113,8 +123,13 @@ const JoinPage = () => {
                     <InputGroup className='joinbox'>
                         <InputGroup.Text className='justify-content-center'>생년월일</InputGroup.Text>
                         <Form.Control type="date" name="birth" value={birth} onChange={onChangeForm} />
-
                     </InputGroup >
+                    <InputGroup className='joinbox'>
+                        <InputGroup.Text >주소</InputGroup.Text>
+                        <Form.Control name="address1" value={address1} onChange={onChangeForm} />
+                        <ModalAddress form={form} setform={setform} />
+                    </InputGroup>
+                    <Form.Control className="joinbox" name="address2" value={address2} placeholder='상세주소' onChange={onChangeForm} />
                     <div>
                         <Button onClick={() => onClickInsert()}>회원가입하기</Button>
                     </div>
