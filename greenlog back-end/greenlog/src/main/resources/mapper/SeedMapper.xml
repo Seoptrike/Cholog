@@ -4,4 +4,17 @@
 	<select id="list" resultType="com.example.domain.SeedVO">
 		select * from Seed;
 	</select>
+	
+	<select id="read" resultType="com.example.domain.SeedVO">
+		select * from Seed where seed_uid=#{uid}
+	</select>
+	
+	<insert id="insert">
+		insert into seed (seed_uid,seed_point) value(#{uid},#{point})
+	</insert>
+	
+	<update id="update">
+		update from seed set seed_point=#{point} where seed_uid =#{uid}
+	</update>
+	
 </mapper>
