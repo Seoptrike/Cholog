@@ -16,7 +16,6 @@ const PieChart = () => {
     }
 
     useEffect(()=>{
-        callAPI();
     },[])
 
     // const data = [
