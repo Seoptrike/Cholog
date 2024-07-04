@@ -65,10 +65,10 @@ const LoginPage = () => {
                                         <a href='/user/join'>회원가입</a>
                                     </span>
                                     <span className='mx-3'>
-                                        <a href='/member/searchId'>아이디 찾기</a>
+                                        <a href='/user/searchId'>아이디 찾기</a>
                                     </span>
                                     <span>
-                                        <a href='/member/searchPass'>비밀번호 찾기</a>
+                                        <a href='/user/searchPass'>비밀번호 찾기</a>
                                     </span>
                                 </div>
                             </form>

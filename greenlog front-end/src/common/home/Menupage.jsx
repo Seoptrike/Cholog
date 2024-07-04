@@ -22,7 +22,7 @@ const Menupage = () => {
                         <NavDropdown title="초록" id="basic-nav-dropdown">
                             <NavDropdown.Item href="#action/3.1">초록 소개</NavDropdown.Item>
                             <NavDropdown.Item href="#action/3.2">조직도</NavDropdown.Item>
-                            <NavDropdown.Item href="#action/3.3">씨앗 사용방법</NavDropdown.Item>
+                            <NavDropdown.Item href="/user/wallet">씨앗 사용방법</NavDropdown.Item>
                         </NavDropdown>
                         <NavDropdown title="피망 마켓" id="basic-nav-dropdown">
                             <NavDropdown.Item href="#action/3.1">베스트 물품</NavDropdown.Item>
