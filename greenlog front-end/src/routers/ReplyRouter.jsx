@@ -1,11 +1,11 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
-import ReviewPage from '../components/review/ReviewPage'
+import ReplyPage from '../components/reply/ReplyPage'
 
 const ReviewRouter = () => {
     return (
         <Routes>
-            <Route path='review' element={<ReviewPage/>}></Route>
+            <Route path='reply' element={<ReplyPage/>}></Route>
         </Routes>
     )
 }
