@@ -29,14 +29,14 @@ const Menupage = () => {
                             <NavDropdown.Item href="#action/3.3">피망 몰</NavDropdown.Item>
                         </NavDropdown>
                         <NavDropdown title="클로버 숲" id="basic-nav-dropdown">
-                            <NavDropdown.Item href="#action/3.1">공지사항</NavDropdown.Item>
-                            <NavDropdown.Item href="#action/3.2">이벤트 안내</NavDropdown.Item>
+                            <NavDropdown.Item href="/community/event/list.json">이벤트,봉사</NavDropdown.Item>
                             <NavDropdown.Divider />
-                            <NavDropdown.Item href="#action/3.3">꿀팁 게시판</NavDropdown.Item>
-                            <NavDropdown.Item href="#action/3.4">자유게시판</NavDropdown.Item>
+                            <NavDropdown.Item href="/community/bbs/list.json">자유게시판</NavDropdown.Item>
+                        </NavDropdown>
+                        <NavDropdown title="고객센터" id="basic-nav-dropdown">
+                            <NavDropdown.Item href="/community/ask/list.json">1대1 문의하기</NavDropdown.Item>
                             <NavDropdown.Divider />
-                            <NavDropdown.Item href="#action/3.3">1대1 문의하기</NavDropdown.Item>
-                            <NavDropdown.Item href="#action/3.3">자주 묻는 질문</NavDropdown.Item>
+                            <NavDropdown.Item href="/community/faq/list.json">FAQ,Q&A,공지사항</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>
                     <Nav>

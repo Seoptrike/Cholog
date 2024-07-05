@@ -7,6 +7,7 @@ import MallRouter from './MallRouter'
 import ReportRouter from './ReportRouter'
 import ReplyRouter from './ReplyRouter'
 import AboutRouter from './AboutRouter'
+import CommunityRouter from './CommunityRouter'
 
 const RouterPage = () => {
     return (
@@ -18,6 +19,7 @@ const RouterPage = () => {
             <Route path='/review/*' element={<ReviewRouter />} />
             <Route path='/reply/*' element={<ReplyRouter />} />
             <Route path='/about/*' element={<AboutRouter />} />
+            <Route path='/community/*' element={<CommunityRouter />} />
         </Routes>
     )
 }
