@@ -9,6 +9,7 @@ import Question from '../components/admin/Question'
 import SeedWallet from '../components/user/SeedWallet'
 import SearchIdPage from '../components/user/SearchIdPage'
 import SearchPassPage from '../components/user/SearchPassPage'
+import UserUpdatePage from '../components/user/UserUpdatePage'
 import Following from '../components/follow/Following'
 import Follow from '../components/follow/Follow'
 
@@ -26,6 +27,7 @@ const UserRouter = () => {
         <Route path='wallet/:user_uid' element={<SeedWallet/>}/>
         <Route path='searchId' element={<SearchIdPage/>}/>
         <Route path='searchPass' element={<SearchPassPage/>}/>
+        <Route path='update/:user_uid' element={<UserUpdatePage/>}/>
         <Route path='following' element={<Following/>}/>
         <Route path='follower' element={<Follow/>}/>
     </Routes>
