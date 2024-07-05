@@ -10,31 +10,29 @@ const AboutClover = () => {
                 <Row className='justify-content-center'>
                     <Col xs={4}>
                         <Card>
-                            <img src="/images/seop.png" />
+                            <img src="/images/seop2.png" />
                         </Card>
                     </Col>
-                </Row>
-                <Row className='justify-content-center mt-3'>
+                
                     <Col xs={4}>
                         <Card>
-                            <img src="/images/seop.png" />
-                        </Card>
-                    </Col>
-                    <Col xs={4}>
-                        <Card>
-                            <img src="/images/seop.png" />
-                        </Card>
-                    </Col>
-                </Row>
-                <Row className='justify-content-center my-3'>
-                    <Col xs={4}>
-                        <Card>
-                            <img src="/images/seop.png" />
+                            <img src="/images/jihye.png" />
                         </Card>
                     </Col>
                     <Col xs={4}>
                         <Card>
-                            <img src="/images/seop.png" />
+                            <img src="/images/hanna.png" />
+                        </Card>
+                    </Col>
+               
+                    <Col xs={4}>
+                        <Card>
+                            <img src="/images/sangkyun.png" />
+                        </Card>
+                    </Col>
+                    <Col xs={4}>
+                        <Card>
+                            <img src="/images/yerim.png" />
                         </Card>
                     </Col>
                 </Row>

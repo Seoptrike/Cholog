@@ -5,8 +5,10 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { Link } from 'react-router-dom'
 import RouterPage from '../../routers/RouterPage';
+import TotalPage from '../../components/TotalPage';
 
 const Menupage = () => {
+    const uid= sessionStorage.getItem("uid");
     const onClickLogout = () => {
         sessionStorage.clear();
         window.location.href = '/'
@@ -20,9 +22,9 @@ const Menupage = () => {
                     </Navbar.Brand>
                     <Nav className="me-auto">
                         <NavDropdown title="초록" id="basic-nav-dropdown">
-                            <NavDropdown.Item href="/about/greenlog">초록 소개</NavDropdown.Item>
-                            <NavDropdown.Item href="/about/clover">조직도</NavDropdown.Item>
-                            <NavDropdown.Item href="/user/wallet">씨앗 사용방법</NavDropdown.Item>
+                            <NavDropdown.Item href="/about/greenlog">초록소개</NavDropdown.Item>
+                            <NavDropdown.Item href="/about/clover">함께하는 사람들</NavDropdown.Item>
+                            <NavDropdown.Item href="/about/seed">씨앗이란?</NavDropdown.Item>
                         </NavDropdown>
                         <NavDropdown title="피망 마켓" id="basic-nav-dropdown">
                             <NavDropdown.Item href="#action/3.1">베스트 물품</NavDropdown.Item>
@@ -42,8 +44,8 @@ const Menupage = () => {
                     <Nav>
                         {sessionStorage.getItem("uid") ?
                             <>
+                                <span className='me-3' style={{ float: "right" }}><a href={`/user/read/${uid}`}>{sessionStorage.getItem("uid")}님 </a></span>
                                 <span onClick={onClickLogout} className='me-3' style={{ float: "right" }}><a href='#'>로그아웃</a></span>
-                                <span className='me-3' style={{ float: "right" }}><a href='/user/mypage'>{sessionStorage.getItem("uid")}님 </a></span>
                             </>
                             :
                             <span className='me-3' style={{ float: "right" }}><Link className="mx-3" to='/user/login'>로그인</Link></span>
@@ -52,6 +54,7 @@ const Menupage = () => {
                 </Container>
             </Navbar>
             <RouterPage />
+            <TotalPage/>
         </div>
     )
 }
