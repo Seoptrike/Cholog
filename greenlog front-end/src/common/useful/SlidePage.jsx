@@ -18,7 +18,7 @@ const SlidePage = () => {
     }
 
     useEffect(()=>{
-        callAPI();
+        
     },[])
 
     console.log(thumb);
