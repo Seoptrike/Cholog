@@ -5,7 +5,7 @@ import ReplyPage from '../components/reply/ReplyPage'
 const ReplyRouter = () => {
     return (
         <Routes>
-            <Route path='reply' element={<ReplyPage/>}></Route>
+            <Route path='list.json' element={<ReplyPage/>}></Route>
         </Routes>
     )
 }
