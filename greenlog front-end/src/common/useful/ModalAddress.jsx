@@ -4,14 +4,14 @@ import Modal from 'react-bootstrap/Modal';
 import DaumPostcodeEmbed from 'react-daum-postcode';
 
 const ModalAddress = (props) => {
-    const {setForm, form} = props;
+    const {setform, form} = props;
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const onComplet= (e) => {
         //console.log(e);
         const address = e.buildingName ? `${e.address}(${e.buildingName})` : e.address;
-        setForm({...form, address1:address});
+        setform({...form, user_address1:address});
         handleClose();
     }
     return (

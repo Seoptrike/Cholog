@@ -5,7 +5,7 @@ import ReviewPage from '../components/review/ReviewPage'
 const ReviewRouter = () => {
     return (
         <Routes>
-            <Route path='review' element={<ReviewPage/>}></Route>
+            <Route path='list.jon' element={<ReviewPage/>}></Route>
         </Routes>
     )
 }
