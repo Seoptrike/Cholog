@@ -5,7 +5,7 @@ import ListPage from '../components/mall/ListPage'
 const MallRouter = () => {
     return (
         <Routes>
-            <Route path='list' element={<ListPage/>}/>
+            <Route path='list.json' element={<ListPage/>}/>
         </Routes>
     )
 }

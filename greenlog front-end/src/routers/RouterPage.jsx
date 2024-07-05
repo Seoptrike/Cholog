@@ -8,6 +8,8 @@ import ReportRouter from './ReportRouter'
 import ReplyRouter from './ReplyRouter'
 import AboutRouter from './AboutRouter'
 import DiaryRouter from './DiaryRouter'
+import TradeRouter from './TradeRouter'
+
 
 const RouterPage = () => {
     return (
@@ -20,6 +22,7 @@ const RouterPage = () => {
             <Route path='/reply/*' element={<ReplyRouter />} />
             <Route path='/about/*' element={<AboutRouter />} />
             <Route path='/diary/*' element={<DiaryRouter />} />
+            <Route path='/trade/*' element={<TradeRouter />} />
         </Routes>
     )
 }
