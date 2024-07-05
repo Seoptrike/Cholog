@@ -1,5 +1,6 @@
 import React from 'react'
 import { Card, Row, Col, Button, Table } from 'react-bootstrap'
+import TradeListPage from '../trade/TradeListPage'
 
 const SeedWallet = () => {
     return (
@@ -10,35 +11,15 @@ const SeedWallet = () => {
                         <Row>
                             <Col>
                                 <img src="/images/wallet1.png" />
+                                회원정보
                             </Col>
                             <Col>
                                 <img src="/images/wallet2.png" />
+                                잔액
                             </Col>
                         </Row>
                     </Card>
-                </Col>
-            </Row>
-            <Row className='justify-content-center mt-5'>
-                <Col xs={10}>
-                    <h4>씨앗 기록</h4>
-                    <Table>
-                        <thead>
-                            <tr>
-                                <td>거래번호</td>
-                                <td>from</td>
-                                <td>to</td>
-                                <td>amount</td>
-                                <td>획득날짜</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <td>데이터반복</td>
-                            <td>데이터반복</td>
-                            <td>데이터반복</td>
-                            <td>데이터반복</td>
-                            <td>데이터반복</td>
-                        </tbody>
-                    </Table>
+                    <TradeListPage/>
                 </Col>
             </Row>
         </div>

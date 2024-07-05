@@ -9,6 +9,10 @@ import Question from '../components/admin/Question'
 import SeedWallet from '../components/user/SeedWallet'
 import SearchIdPage from '../components/user/SearchIdPage'
 import SearchPassPage from '../components/user/SearchPassPage'
+import Following from '../components/follow/Following'
+import Follow from '../components/follow/Follow'
+
+
 
 const UserRouter = () => {
   return (
@@ -19,9 +23,11 @@ const UserRouter = () => {
         <Route path='admin' element={<Dashboard/>}/>
         <Route path='admin/list.json' element={<UserListPage/>}/>
         <Route path='admin/question' element={<Question/>}/>
-        <Route path='wallet' element={<SeedWallet/>}/>
+        <Route path='wallet/:user_uid' element={<SeedWallet/>}/>
         <Route path='searchId' element={<SearchIdPage/>}/>
         <Route path='searchPass' element={<SearchPassPage/>}/>
+        <Route path='following' element={<Following/>}/>
+        <Route path='follower' element={<Follow/>}/>
     </Routes>
   )
 }
