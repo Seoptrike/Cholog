@@ -4,10 +4,17 @@ import Slider from "react-slick";
 
 const SlidePage = () => {
     const [thumb, setThumb] = useState([]);
+    const items = [
+       { img : "http://via.placeholder.com/200x200"},  
+        { img : "http://via.placeholder.com/200x200"},
+         { img : "http://via.placeholder.com/200x200"},
+          { img : "http://via.placeholder.com/200x200"}
+    ];
 
     const callAPI= async ()=>{
-        const res= await axios.get('/goods/list/attach/all')
-        setThumb(res.data);
+       // const res= await axios.get('/goods/list/attach/all')
+        //setThumb(res.data);
+        
     }
 
     useEffect(()=>{
@@ -28,9 +35,13 @@ const SlidePage = () => {
       };
     return (
             <Slider {...settings}>
-            {thumb.map(img=>
+            {/* {thumb.map(img=>
                 <img src={img.filename} key={img.aid} className="slider-image"/>
-            )}
+            )} */}
+                
+                 {items.map(img=>
+                <img src={img}  className="slider-image"/>
+            )} 
             </Slider>
     );
 }
