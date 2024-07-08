@@ -16,7 +16,6 @@ import EventInsert from '../components/event/EventInsert';
 import EventList from '../components/event/EventList';
 import EventRead from '../components/event/EventRead';
 import EventUpdate from '../components/event/EventUpdate';
-import NoticeInsert from '../components/notice/NoticeInsert';
 import NoticeList from '../components/notice/NoticeList';
 import NoticeRead from '../components/notice/NoticeRead';
 import NoticeUpdate from '../components/notice/NoticeUpdate';
@@ -44,7 +43,6 @@ const CommunityRouter = () => {
       <Route path="/event/list.json" element={<EventList />} />
       <Route path="/event/read/:event_key" element={<EventRead />} />
       <Route path="/event/update/:event_key" element={<EventUpdate />} />
-      <Route path="/notice/insert" element={<NoticeInsert />} />
       <Route path="/notice/list.json" element={<NoticeList />} />
       <Route path="/notice/read/:notice_key" element={<NoticeRead />} />
       <Route path="/notice/update/:notice_key" element={<NoticeUpdate />} />

@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { Row, Col, Table, Tab, Tabs,Button } from 'react-bootstrap';
+import { useNavigate, Link } from 'react-router-dom';
+import { Row, Col, Table, Tab, Tabs, Button } from 'react-bootstrap';
+import HeaderTabs from '../../common/useful/HeaderTabs'; 
 
 const NoticeList = () => {
+  const navigate = useNavigate();
   const [activeKey, setActiveKey] = useState('전체');
 
   const pinnedNotices = [
@@ -20,7 +23,8 @@ const NoticeList = () => {
 
   return (
     <div>
-      <Row>
+      <HeaderTabs />
+      <Row className="mb-3">
         <Col>
           <Tabs activeKey={activeKey} onSelect={k => setActiveKey(k)} className="mb-3" fill>
             <Tab eventKey="전체" title="전체">
@@ -59,7 +63,9 @@ const NoticeTabContent = ({ pinnedNotices, notices }) => {
           <React.Fragment key={notice.id}>
             <tr>
               <td>{notice.id}</td>
-              <td>{notice.title}</td>
+              <td>
+                <Link to={`/community/notice/read/${notice.id}`}>{notice.title}</Link>
+              </td>
               <td>{notice.category}</td>
               <td>{notice.regDate}</td>
               <td>{notice.views}</td>
@@ -70,7 +76,9 @@ const NoticeTabContent = ({ pinnedNotices, notices }) => {
           <React.Fragment key={notice.id}>
             <tr>
               <td>{notice.id}</td>
-              <td>{notice.title}</td>
+              <td>
+                <Link to={`/community/notice/read/${notice.id}`}>{notice.title}</Link>
+              </td>
               <td>{notice.category}</td>
               <td>{notice.regDate}</td>
               <td>{notice.views}</td>
@@ -78,9 +86,6 @@ const NoticeTabContent = ({ pinnedNotices, notices }) => {
           </React.Fragment>
         ))}
       </tbody>
-      <div>
-      <Button>글쓰기</Button>
-      </div>
     </Table>
   );
 };

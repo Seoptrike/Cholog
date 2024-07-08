@@ -1,16 +1,21 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { Row, Col, InputGroup, FormControl, Button, Table } from 'react-bootstrap';
 
 const BBSList = () => {
   const navigate = useNavigate();
-  const [category, setCategory] = useState('전체'); // 카테고리 상태 추가
-  const [search, setSearch] = useState(''); // 검색어 상태 추가
+  const [category, setCategory] = useState('전체');
+  const [search, setSearch] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const loggedIn = sessionStorage.getItem('uid') !== null;
+    setIsLoggedIn(loggedIn);
+  }, []);
 
   const posts = [
     { id: 1, category: '꿀팁', title: '첫 번째 게시물', writer: '홍길동', date: '2024-07-05', views: 100 },
     { id: 2, category: '자유', title: '두 번째 게시물', writer: '이순신', date: '2024-07-04', views: 200 },
-
   ];
 
   const handleCategoryChange = (e) => {
@@ -27,7 +32,12 @@ const BBSList = () => {
   });
 
   const BBSClick = () => {
-    navigate('/community/bbs/insert'); 
+    if (isLoggedIn) {
+      navigate('/community/bbs/insert'); 
+    } else {
+      sessionStorage.setItem('target', '/community/bbs/list.json');
+      navigate('/user/login');
+    }
   };
 
   return (
@@ -67,7 +77,9 @@ const BBSList = () => {
           {filteredPosts.map(post => (
             <tr key={post.id}>
               <td>{post.category}</td>
-              <td>{post.title}</td>
+              <td>
+                <Link to={`/community/bbs/read/${post.id}`}>{post.title}</Link>
+              </td>
               <td>{post.writer}</td>
               <td>{post.date}</td>
               <td>{post.views}</td>
