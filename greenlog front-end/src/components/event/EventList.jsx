@@ -1,7 +1,9 @@
 import React from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { Row, Col, InputGroup, FormControl, Button, Card } from 'react-bootstrap';
 
 const EventList = () => {
+  const navigate = useNavigate();
   const events = [
     {
       id: 1,
@@ -12,6 +14,10 @@ const EventList = () => {
       imageUrl: 'https://via.placeholder.com/150',
     },
   ];
+
+  const EventClick = () => {
+    navigate('/community/event/insert'); 
+  };
 
   return (
     <div>
@@ -28,6 +34,7 @@ const EventList = () => {
         <Button variant="primary">검색</Button>
       </InputGroup>
       <div className='text-end'>
+        <Button className='me-2' onClick={EventClick}>글쓰기</Button>
         <Button className='me-2' size='lg'>진행중</Button>
         <Button size='lg'>종료</Button>
       </div>
@@ -35,7 +42,7 @@ const EventList = () => {
       <Row>
         {events.map(event => (
           <Col md={4} key={event.id}>
-            <Card>
+            <Card as={Link} to={`/community/event/read/${event.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
               <Card.Img src={event.imageUrl} alt="Event Image" />
               <Card.Body>
                 <Card.Title>{event.title}</Card.Title>

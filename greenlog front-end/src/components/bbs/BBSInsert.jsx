@@ -3,11 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { Form, Button, InputGroup, FormControl } from 'react-bootstrap';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import axios from 'axios';
 
 const BBSInsert = () => {
   const [category, setCategory] = useState('꿀팁');
   const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  const [contents, setContents] = useState('');
+  const [uid, setUid] = useState('sampleUser'); // 예시로 사용자가 'sampleUser'로 설정되어 있습니다.
   const navigate = useNavigate();
 
   const CategoryChange = (e) => {
@@ -20,15 +22,29 @@ const BBSInsert = () => {
 
   const ContentChange = (event, editor) => {
     const data = editor.getData();
-    setContent(data);
+    setContents(data);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('카테고리:', category);
-    console.log('제목:', title);
-    console.log('내용:', content);
-    navigate('/community/bbs/list.json');
+    const postData = {
+      uid,
+      title,
+      contents,
+    };
+    
+    try {
+      const response = await axios.post('/bbs/insert', postData);
+      if (response.status === 200) {
+        alert('게시물이 등록되었습니다.');
+        navigate('/community/bbs/list.json');
+      } else {
+        alert('게시물 등록에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('There was an error registering the post!', error);
+      alert('게시물 등록 중 오류가 발생했습니다.');
+    }
   };
 
   return (
@@ -53,7 +69,7 @@ const BBSInsert = () => {
           editor={ClassicEditor}
           data="<p>내용을 입력하세요...</p>"
           onChange={ContentChange}/>
-        <Button type="submit" className="mt-3" >
+        <Button type="submit" className="mt-3">
           등록
         </Button>
       </Form>
