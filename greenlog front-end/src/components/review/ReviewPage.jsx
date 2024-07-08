@@ -1,56 +1,99 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import {Row, Col, Form, Button, FormControl} from 'react-bootstrap'
+import { Row, Col, Dropdown, Card } from 'react-bootstrap'
 import Pagination from 'react-js-pagination';
+import { FiLock } from "react-icons/fi";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { Rating } from '@mui/material';
+import Spa from '@mui/icons-material/Spa';
 
 const ReviewPage = () => {
+    const [rating, setRating] = useState(0);
     const [page, setPage] = useState(1);
     const [size, setSize] = useState(5);
     const [count, setCount] = useState(0);
-    const [review_contents, setReview_contents] = useState('');
+    const [sort, setSort] = useState('latest')
 
-    const callAPI = async() => {
+    const callAPI = async () => {
+
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         callAPI();
-    },[page]);
+    }, [page, sort]);
 
-    const onInsert = () => {
-        if(review_contents==='') {
-            alert("리뷰 내용을 입력해주세요!")
-        }
-    }
-
+    const handleSelectSort = (eventKey) => {
+        setSort(eventKey);
+        setPage(1);
+    };
 
     return (
-        <div className='text-center'>
-            <h5 className='mt-5'>사용 상품 후기</h5>
-            <Row className='justify-content-center mt-5'>
-                <Col xs={6}>
-                    <Form>
-                        <FormControl value={review_contents} onChange={(e)=>setReview_contents(e.target.value)}
-                            as='textarea' rows={5} placeholder='내용을 입력하세요.'/>
-                        <div className='text-end mt-2'>
-                            <Button className='text-end me-2' type='cancel'>취소</Button>
-                            <Button onClick={onInsert}
-                                className='text-end' type='submit'>등록</Button>
-                        </div>
-                    </Form>
+        <div>
+            <h1 className='text-center my-2'>리뷰 목록 페이지입니다.</h1>
+            <Row className='justify-content-center'>
+                <Col xs={12} md={8} lg={6}>
+                    <Card>
+                        <Card.Body>
+                            <Row className='align-items-center'>
+                                <Col xs="auto">
+                                    <img src="http://via.placeholder.com/30x30" width="70" height="70" className='rounded-circle' />
+                                </Col>
+                                <Col className="ps-2">
+                                    <Row className='align-items-center'>
+                                        <Col><span>김상균 (gr001231) 2024.07.08 17:27 <FiLock/></span></Col>
+                                            <Col xs="auto">
+                                                <Dropdown align="end" onSelect={handleSelectSort}>
+                                                    <Dropdown.Toggle variant="" id="dropdown-basic">
+                                                        <BsThreeDotsVertical />
+                                                    </Dropdown.Toggle>
+                                                <Dropdown.Menu>
+                                                    <Dropdown.Item eventKey="update">수정하기</Dropdown.Item>
+                                                    <Dropdown.Item eventKey="delete">삭제하기</Dropdown.Item>
+                                                    <Dropdown.Item eventKey="warning">신고하기</Dropdown.Item>
+                                                </Dropdown.Menu>
+                                            </Dropdown>
+                                        </Col>
+                                    </Row>
+                                    <Row>                
+                                        <Rating
+                                            name='point'
+                                            value={rating}
+                                            precision={1}
+                                            max={10}
+                                            size='large'
+                                            onChange={(e, newValue) => setRating(newValue)}
+                                            icon={<Spa style={{ color: "green" }} />}
+                                            emptyIcon={<Spa />}/>                       
+                                    </Row>
+                                </Col>
+                            </Row>
+                            <Row className='mt-3'>
+                                <Col>
+                                    난 10포인트 걸었어 드루와
+                                </Col>
+                            </Row>
+                        </Card.Body>
+                    </Card>
+                    <hr />
                 </Col>
             </Row>
-            <div>
-                {count > size &&
-                    <Pagination
-                    activePage={page}
-                    itemsCountPerPage={size}
-                    totalItemsCount={count}
-                    pageRangeDisplayed={5}
-                    prevPageText={"‹"}
-                    nextPageText={"›"}
-                    onChange={ (e)=>setPage(e) }/>
-                }
-            </div>
+            <Row className='justify-content-center'>
+                <Col xs={12} md={8} lg={6}>
+                    <Card>
+                        <Card.Body>
+                            <Row>
+                                <Col>
+                                <div className='mb-2'>비밀 댓글입니다.</div>
+                                <div>
+                                    <span>2024.07.05 10:22:30</span>
+                                </div>
+                                </Col>
+                            </Row>
+                        </Card.Body>
+                    </Card>
+                    <hr />
+                </Col>
+            </Row>
+            
         </div>
     )
 }

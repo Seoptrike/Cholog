@@ -9,9 +9,6 @@ public class ReviewVO {
 	private String review_writer;
 	private int review_rating;
 	private String review_contents;
-	private int review_like;
-	private int review_hate;
-	private String review_img;
 	private int review_lock;
 	private Date review_regDate;
 	private Date review_udate;
@@ -46,24 +43,6 @@ public class ReviewVO {
 	public void setReview_contents(String review_contents) {
 		this.review_contents = review_contents;
 	}
-	public int getReview_like() {
-		return review_like;
-	}
-	public void setReview_like(int review_like) {
-		this.review_like = review_like;
-	}
-	public int getReview_hate() {
-		return review_hate;
-	}
-	public void setReview_hate(int review_hate) {
-		this.review_hate = review_hate;
-	}
-	public String getReview_img() {
-		return review_img;
-	}
-	public void setReview_img(String review_img) {
-		this.review_img = review_img;
-	}
 	public int getReview_lock() {
 		return review_lock;
 	}
@@ -87,9 +66,10 @@ public class ReviewVO {
 	public String toString() {
 		return "ReviewVO [review_key=" + review_key + ", review_mall_key=" + review_mall_key + ", review_writer="
 				+ review_writer + ", review_rating=" + review_rating + ", review_contents=" + review_contents
-				+ ", review_like=" + review_like + ", review_hate=" + review_hate + ", review_img=" + review_img
 				+ ", review_lock=" + review_lock + ", review_regDate=" + review_regDate + ", review_udate="
 				+ review_udate + "]";
 	}
+	
+	
 	
 }
