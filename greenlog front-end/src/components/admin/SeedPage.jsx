@@ -22,18 +22,18 @@ const SeedPage = () => {
         <h2 className='text-center'>초록 회원 씨앗지갑목록</h2>
 
       <Row className='justify-content-center mt-3'>
-        <Col>
-        <InputGroup>
+        <Col lg={3}>
         <form onSubmit={onSubmit}>
+        <InputGroup>
           <Form.Control value={word} name="word"/>
-          <Button type="submit">검색</Button>
-        </form>
+          <Button type="submit" size="sm">검색</Button>
         </InputGroup>
+        </form>
         </Col>
       </Row>
 
         <Row className='justify-content-center mt-5'>
-                <Col lg={10}>
+                <Col lg={8}>
                     <Card>
                         <Row>
                             <Col lg={2}>

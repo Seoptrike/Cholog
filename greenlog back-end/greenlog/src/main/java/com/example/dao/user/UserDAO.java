@@ -11,4 +11,8 @@ public interface UserDAO {
 	public void insert(UserVO vo);
 
 	public UserVO read(String uid);
+	
+	public void delete(int user_key);
+	
+	public void update(UserVO vo);
 }

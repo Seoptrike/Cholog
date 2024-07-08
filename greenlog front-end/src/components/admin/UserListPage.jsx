@@ -11,7 +11,6 @@ import { MdOutlineSettings } from "react-icons/md";
 
 const UserListPage = () => {
     const [list, setList] = useState([]);
-    const [gender, setGender] = useState("");
     const styleRed = "danger"
     const styleBlue = "primary"
     const callAPI = async () => {

@@ -28,6 +28,11 @@ public class UserController {
 	public List<HashMap<String, Object>> adminList() {
 		return udao.adminList();
 	}
+	
+	@PostMapping("/delete/{user_key}")
+	public void delete(@PathVariable("user_key") int user_key) {
+		udao.delete(user_key);
+	}
 
 	@PostMapping("/insert")
 	public void insert(@RequestBody UserVO vo) {
@@ -41,6 +46,13 @@ public class UserController {
 	@GetMapping("/read/{user_uid}")
 	public UserVO read(@PathVariable("user_uid") String uid) {
 		return udao.read(uid);
+	}
+	
+	//관리자= 권한, 비밀번호, 주소, 전화번호, ?
+	@PostMapping("/admin/update")
+	public void update(@RequestBody UserVO vo) {
+		udao.update(vo);
+		System.out.println(vo.getUser_gender());
 	}
 
 	@PostMapping("/login")
@@ -56,4 +68,6 @@ public class UserController {
 		}
 		return result;
 	}
+	
+	
 }

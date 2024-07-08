@@ -10,6 +10,7 @@ import AboutRouter from './AboutRouter'
 import CommunityRouter from './CommunityRouter'
 import DiaryRouter from './DiaryRouter'
 import TradeRouter from './TradeRouter'
+import AuctionRouter from './AuctionRouter'
 
 
 const RouterPage = () => {
@@ -25,6 +26,7 @@ const RouterPage = () => {
             <Route path='/community/*' element={<CommunityRouter />} />
             <Route path='/diary/*' element={<DiaryRouter />} />
             <Route path='/trade/*' element={<TradeRouter />} />
+            <Route path='/auction/*' element={<AuctionRouter />} />
 
         </Routes>
     )

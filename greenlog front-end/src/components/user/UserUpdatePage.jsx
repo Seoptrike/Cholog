@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Card, Row, Col, InputGroup, Form, Button } from 'react-bootstrap'
 import ModalAddress from '../../common/useful/ModalAddress'
 
@@ -7,6 +7,8 @@ import ModalAddress from '../../common/useful/ModalAddress'
 //닉네임, 비밀번호 중복확인 모달 필요
 //value값 정해지면 onChangeForm 필요
 const UserUpdatePage = () => {
+    const [form, setForm]=useState("");
+
     return (
         <div>
             <Row className='justify-content-center my-5'>
@@ -38,7 +40,7 @@ const UserUpdatePage = () => {
                                             </InputGroup>
                                             <InputGroup className='mb-2'>
                                                 <Form.Control />
-                                                <ModalAddress/>
+                                                <ModalAddress form={form} setform={setForm}/>
                                             </InputGroup>
                                             <InputGroup className='mb-2'>
                                                 <InputGroup.Text>생년월일/성별</InputGroup.Text>

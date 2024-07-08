@@ -14,6 +14,7 @@ const ReportPage = () => {
           <Table>
             <thead>
               <tr>
+                <td><input type="checkbox"/></td>
                 <td>신고접수번호</td>
                 <td>신고자</td>
                 <td>신고내용</td>
