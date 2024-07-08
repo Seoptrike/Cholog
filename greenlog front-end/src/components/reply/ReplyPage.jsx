@@ -3,7 +3,6 @@ import { Row, Col, Form, Button, FormControl, Dropdown, Card, InputGroup } from 
 import Pagination from 'react-js-pagination';
 import { BsList, BsHandThumbsUp, BsHandThumbsDown, BsChevronDown, BsThreeDotsVertical, BsArrowReturnRight } from "react-icons/bs";
 
-
 const ReplyPage = () => {
     const [page, setPage] = useState(1);
     const [size, setSize] = useState(5);
@@ -34,13 +33,22 @@ const ReplyPage = () => {
     const onInsert = () => {
         if (reply_contents === '') {
             alert("댓글 내용을 입력해주세요!")
+            return;
         }
         else if (wordCount > wordlimit) {
             alert('허용되는 글자 수가 초과되었습니다.')
         }
         else {
-
+            alert('댓글 등록');
+            setReply_contents('');
+            setOnCancel(false);
+            callAPI();
         }
+    }
+
+    const onClickCancel = () => {
+        setReply_contents('');
+        setOnCancel(false);
     }
 
     const handleSelectSort = (eventKey) => {
@@ -54,6 +62,7 @@ const ReplyPage = () => {
 
     const toggleRep = () => {
         setShowRep(!showRep);
+        setOnCancel(false);
     };
     
 
@@ -77,7 +86,7 @@ const ReplyPage = () => {
                                 </Dropdown.Toggle>
                             <Dropdown.Menu>
                                 <Dropdown.Item eventKey="latest">최신순</Dropdown.Item>
-                                <Dropdown.Item eventKey="rating">평점순</Dropdown.Item>
+                                <Dropdown.Item eventKey="like">좋아요순</Dropdown.Item>
                                 <Dropdown.Item eventKey="oldest">오래된순</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
@@ -85,12 +94,12 @@ const ReplyPage = () => {
                             <Col xs={9}>
                                 <Form>
                                     <FormControl value={reply_contents} onChange={(e) => setReply_contents(e.target.value)}
-                                        onFocus={()=>setOnCancel(true)} as='textarea' rows={5} placeholder='내용을 입력해주세요.' />
+                                        onFocus={() => setOnCancel(true)} as='textarea' rows={5} placeholder='내용을 입력해주세요.' />
                                     <InputGroup.Text className='justify-content-end'>
                                         <span>{wordCount} / {wordlimit}</span>
                                     </InputGroup.Text>
                                     <div className='text-end mt-3'>
-                                        <Button variant=''
+                                        <Button onClick={onClickCancel} variant=''
                                             size="sm" className='text-end me-2' type='cancel' disabled={!onCancel}>취소</Button>
                                         <Button onClick={onInsert} variant=''
                                             size="sm" className='text-end' type='submit' disabled={reply_contents === ''}>등록</Button>
@@ -182,7 +191,7 @@ const ReplyPage = () => {
                                         <div className='text-end mt-2'>
                                             <Button variant='' onClick={toggleRep}
                                                 size="sm" className='text-end me-2' type='cancel' >답글 접기</Button>
-                                            <Button variant=''
+                                            <Button onClick={onClickCancel} variant=''
                                                 size="sm" className='text-end me-2' type='cancel' disabled={!onCancel}>취소</Button>
                                             <Button onClick={onInsert} variant=''
                                                 size="sm" className='text-end' type='submit' disabled={reply_contents === ''}>등록</Button>
