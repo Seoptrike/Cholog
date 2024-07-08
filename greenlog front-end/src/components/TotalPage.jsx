@@ -33,7 +33,7 @@ const TotalPage = () => {
                 <Col xs={2}>
                     <ListGroup>
                         <ListGroup.Item>다이어리</ListGroup.Item>
-                        <ListGroup.Item> <Link to={"/diary/list.json"}>다이어리목록</Link></ListGroup.Item>
+                        <ListGroup.Item> <Link to={"/diary/list.json/:user_uid"}>다이어리목록</Link></ListGroup.Item>
                         <ListGroup.Item> <Link to={"/diary/insert"}>다이어리작성</Link></ListGroup.Item>
                         <ListGroup.Item> <Link to={"/diary/read/:diary_key"}>다이어리읽기</Link></ListGroup.Item>
                         <ListGroup.Item> <Link to={"/diary/list.json"}>다이어리목록</Link></ListGroup.Item>
@@ -63,6 +63,7 @@ const TotalPage = () => {
                         <ListGroup.Item>씨앗</ListGroup.Item>
                         <ListGroup.Item> <Link to={"/user/wallet/:user_uid"}>개인씨앗지갑</Link></ListGroup.Item>
                         <ListGroup.Item> <Link to={"/trade/list.json"}>개인거래내역</Link></ListGroup.Item>
+                        <ListGroup.Item> <Link to={"/user/admin/seed/list.json"}>전체씨앗지갑목록</Link></ListGroup.Item>
                         <ListGroup.Item> <Link to={"/trade/admin/list.json"}>전체씨앗거래내역</Link></ListGroup.Item>
                         <ListGroup.Item> <Link to={"/auction/list.json/:user_uid"}>개인경매목록</Link></ListGroup.Item>
                         <ListGroup.Item> <Link to={"/auction/read/:auction_key"}>경매거래내역</Link></ListGroup.Item>
