@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Card, Table,Row,Col, InputGroup, Button, Form } from 'react-bootstrap'
 import Pagination from 'react-js-pagination';
@@ -22,10 +23,10 @@ const Items = () => {
     };
 
 
-    const callAPI= async()=>{
-       // const res= await axios.get(`/bbs/list.json?key=${key}&word=${word}&page=${page}&size=${size}`)
-        // console.log(res.data);
-        // setList(res.data.documents);
+    const callAPI= async()=>{ 
+       const res= await axios.get(`/mall/list?key=${key}&word=${word}&page=${page}&size=${size}`)
+        console.log(res.data);
+        setList(res.data);
         // setCount(res.data.total);
     }
     useEffect(()=>{
@@ -65,35 +66,20 @@ const Items = () => {
         </div>
         <Table className='justify-content-center'>
             <tbody className='border border-white'>
-            <tr>
-                <td>
-                <Card>
-                    <Card.Body>
-                        <Card.Title>
-                            바디뱅
-                        </Card.Title>
-                        <Card.Text>
-                            <Link to="/mall/read">발을씻자</Link>
-                        </Card.Text>
-                     </Card.Body>
-                    </Card>
+            {list.map(card => (
+                <tr  key={card.mall_key}>
+                    <td>
+                <Card className="mb-3">
+                <Card.Body>
+                    <Card.Title>{card.mall_photo}</Card.Title>
+                    <Card.Text>
+                    <Link to={`/mall/read/${card.mall_key}`}>{card.mall_title}</Link>
+                    </Card.Text>
+                </Card.Body>
+                </Card>
                 </td>
-                <td><Card><Card.Body>바디뱅</Card.Body><Card.Footer> 발을씻자</Card.Footer></Card></td>
-                <td><Card><Card.Body>바디뱅</Card.Body><Card.Footer> 발을씻자</Card.Footer></Card></td>
-                <td><Card><Card.Body>바디뱅</Card.Body><Card.Footer> 발을씻자</Card.Footer></Card></td>
-            </tr>
-            <tr >
-                <td><Card><Card.Body>바디뱅</Card.Body><Card.Footer> 발을씻자</Card.Footer></Card></td>
-                <td><Card><Card.Body>바디뱅</Card.Body><Card.Footer> 발을씻자</Card.Footer></Card></td>
-                <td><Card><Card.Body>바디뱅</Card.Body><Card.Footer> 발을씻자</Card.Footer></Card></td>
-                <td><Card><Card.Body>바디뱅</Card.Body><Card.Footer> 발을씻자</Card.Footer></Card></td>
-            </tr>
-            <tr >
-                <td><Card><Card.Body>바디뱅</Card.Body><Card.Footer> 발을씻자</Card.Footer></Card></td>
-                <td><Card><Card.Body>바디뱅</Card.Body><Card.Footer> 발을씻자</Card.Footer></Card></td>
-                <td><Card><Card.Body>바디뱅</Card.Body><Card.Footer> 발을씻자</Card.Footer></Card></td>
-                <td><Card><Card.Body>바디뱅</Card.Body><Card.Footer> 발을씻자</Card.Footer></Card></td>
-            </tr>
+                </tr>
+            ))}
             </tbody>
         </Table> 
             <Pagination

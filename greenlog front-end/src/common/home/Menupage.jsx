@@ -28,7 +28,7 @@ const Menupage = () => {
                         </NavDropdown>
                         <NavDropdown title="피망 마켓" id="basic-nav-dropdown">
                             <NavDropdown.Item href="#action/3.1">베스트 물품</NavDropdown.Item>
-                            <NavDropdown.Item href="#action/3.3">피망 몰</NavDropdown.Item>
+                            <NavDropdown.Item href="/mall/list.json">피망 몰</NavDropdown.Item>
                         </NavDropdown>
                         <NavDropdown title="클로버 숲" id="basic-nav-dropdown">
                             <NavDropdown.Item href="/community/event/list.json">이벤트,봉사</NavDropdown.Item>

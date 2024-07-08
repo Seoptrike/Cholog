@@ -4,10 +4,10 @@ import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class MallVO {
+public class MallVO extends MallPhotoVO {
 	 private int mall_key;
 	 private String mall_seller;
-	 private String mall_buyser;
+	 private String mall_buyer;
 	 private String mall_title;
 	 private int mall_price;
 	 private String mall_info;
@@ -18,6 +18,8 @@ public class MallVO {
 	 private Date mall_uDate;
 	 private int mall_tstate;
 	 private int mall_pstate;
+	 @JsonFormat(pattern="yyyy년MM월dd일 HH:mm:ss", timezone="Asia/Seoul")
+	 private Date mall_endDate ;
 	public int getMall_key() {
 		return mall_key;
 	}
@@ -29,12 +31,12 @@ public class MallVO {
 	}
 	public void setMall_seller(String mall_seller) {
 		this.mall_seller = mall_seller;
+	} 
+	public String getMall_buyer() {
+		return mall_buyer;
 	}
-	public String getMall_buyser() {
-		return mall_buyser;
-	}
-	public void setMall_buyser(String mall_buyser) {
-		this.mall_buyser = mall_buyser;
+	public void setMall_buyer(String mall_buyer) {
+		this.mall_buyer = mall_buyer;
 	}
 	public String getMall_title() {
 		return mall_title;
@@ -84,12 +86,21 @@ public class MallVO {
 	public void setMall_pstate(int mall_pstate) {
 		this.mall_pstate = mall_pstate;
 	}
+	
+	public Date getMall_endDate() {
+		return mall_endDate;
+	}
+	public void setmall_endDate(Date mall_endDate) {
+		this.mall_endDate = mall_endDate;
+	}
 	@Override
 	public String toString() {
-		return "MallVO [mall_key=" + mall_key + ", mall_seller=" + mall_seller + ", mall_buyser=" + mall_buyser
+		return "MallVO [mall_key=" + mall_key + ", mall_seller=" + mall_seller + ", mall_buyer=" + mall_buyer
 				+ ", mall_title=" + mall_title + ", mall_price=" + mall_price + ", mall_info=" + mall_info
 				+ ", mall_photo=" + mall_photo + ", mall_regDate=" + mall_regDate + ", mall_uDate=" + mall_uDate
-				+ ", mall_tstate=" + mall_tstate + ", mall_pstate=" + mall_pstate + "]";
+				+ ", mall_tstate=" + mall_tstate + ", mall_pstate=" + mall_pstate + ", mall_endDate=" + mall_endDate
+				+ ", getMallPhoto_key()=" + getMallPhoto_key() + ", getMallPhoto_photo()=" + getMallPhoto_photo() + "]";
 	}
+	
 	 
 }
