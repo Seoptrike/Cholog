@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.mapper.UserMapper">
+	<delete id="delete">
+		delete from user where user_key=#{user_key};
+	</delete>
+
 	<select id="adminList" resultType="hashmap">
 		select * from user;
 	</select>
@@ -13,4 +17,9 @@
 	<select id="read" resultType="com.example.domain.UserVO">
 		select * from user where user_uid=#{uid}
 	</select>
+	
+	<update id="adminUpdate">
+		update user set user_nickname=#{user_nickname}, user_birth=#{user_birth}, user_gender=#{user_gender}, user_phone=#{user_phone}, user_email=#{user_email},
+		user_address1=#{user_address1}, user_address2=#{user_address2}, user_auth=#{user_auth} where user_uid=#{user_uid}
+	</update>
 </mapper>

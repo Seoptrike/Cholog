@@ -6,14 +6,19 @@ import { FaThumbsUp } from "react-icons/fa";
 //맵으로 돌려서 카드바디생성 
 //페이징생성
 //검색기능생성 
+//삭제기능생성
 const DiaryListPage = () => {
   return (
     <div>
         <h1 className='my-5 text-center'>000님의 행운일기</h1>
+        <div className='mb-2 text-end'>
+          <Button>삭제기능생성</Button>
+        </div>
         <Row>
           <Col lg={3}>
             <Card>
               <Card.Header>
+                <input type="checkbox" className='me-2'/>
                 <Badge className='me-3'>카테고리</Badge>
                 <span>Title</span>
               </Card.Header>

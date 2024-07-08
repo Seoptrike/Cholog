@@ -31,4 +31,16 @@ public class UserDAOImpl implements UserDAO {
 		return session.selectOne(namespace + ".read", uid);
 	}
 
+	@Override
+	public void delete(int user_key) {
+		session.delete(namespace + ".delete", user_key);
+		
+	}
+
+	@Override
+	public void update(UserVO vo) {
+		session.update(namespace + ".adminUpdate", vo);
+		
+	}
+
 }

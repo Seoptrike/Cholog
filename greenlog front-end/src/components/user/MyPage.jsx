@@ -3,7 +3,7 @@ import { Card, Row, Col, Button } from 'react-bootstrap'
 import SlidePage from '../../common/useful/SlidePage'
 import { FaSeedling } from "react-icons/fa";
 import { Padding } from '@mui/icons-material';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 
 //이미지를 누르면 정보수정페이지로 이동
@@ -14,12 +14,14 @@ import { Link } from 'react-router-dom';
 //일기쓰기, 게시판쓰기 버튼을 누를시 각 쓰기 페이지로 이동 
 
 const MyPage = () => {
+  const {user_uid} = useParams();
+
   return (
     <div>
       <h1 className='text-center my-5'>000님 환영합니다</h1>
       <Row className='my-5'>
         <Col lg={5}>
-          <Link to="#"><img src="http://via.placeholder.com/200x200" width="100%" /></Link>
+          <Link to={`/user/update/${user_uid}`}><img src="http://via.placeholder.com/200x200" width="100%" /></Link>
         </Col>
         <Col lg={7}>
           <Card>
