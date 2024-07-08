@@ -5,10 +5,10 @@ import Slider from "react-slick";
 const SlidePage = () => {
     const [thumb, setThumb] = useState([]);
     const items = [
-       { img : "http://via.placeholder.com/200x200"},  
-        { img : "http://via.placeholder.com/200x200"},
-         { img : "http://via.placeholder.com/200x200"},
-          { img : "http://via.placeholder.com/200x200"}
+       '/images/sorry.png',  
+        '/images/sorry.png',
+        '/images/sorry.png',
+        '/images/sorry.png'
     ];
 
     const callAPI= async ()=>{
@@ -33,14 +33,15 @@ const SlidePage = () => {
         autoplay: true,
         waitForAnimate: false
       };
+
     return (
             <Slider {...settings}>
             {/* {thumb.map(img=>
                 <img src={img.filename} key={img.aid} className="slider-image"/>
             )} */}
                 
-                 {items.map(img=>
-                <img src={img}  className="slider-image"/>
+                 {items.map((img,index)=>
+                <img key={index} src={img}  className="slider-image" />
             )} 
             </Slider>
     );

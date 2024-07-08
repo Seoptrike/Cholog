@@ -1,19 +1,28 @@
-.input-with-image {
-  position: relative;
-  display: inline-flex; /* 라벨 안의 요소들을 가로로 정렬 */
-  align-items: center; /* 요소들을 세로 중앙 정렬 */
+.allImage {
+    display: flex; /* 이미지들을 가로로 나열하기 위해 */
+    flex-direction: column; /* 세로 방향으로 나열 */
+    gap: 10px; /* 이미지들 사이의 간격 설정 */
+    align-items: center; /* 아이템들을 수직 방향으로 가운데 정렬 */
 }
-
-.input-with-image img {
-  width: 20px; /* 이미지 너비 설정 */
-  height: auto; /* 이미지 높이 자동 설정 */
-  margin-right: 8px; /* 이미지와 입력 필드 사이 간격 설정 */
   
+.allImage img {
+    width: 400px; 
+    height: auto; 
+    margin-bottom: 10px; 
 }
 
-.input-with-image input {
-  padding: 8px; /* 입력 필드 패딩 설정 */
-  border: 1px solid #ccc; /* 선택적으로 테두리 추가 */
-  border-radius: 4px; /* 선택적으로 테두리 둥글게 처리 */
-}
+.report_parent {
+    position: relative;
+  }
+  
+  .report_child {
+    position: absolute;
+    left: 80%;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 50px;
+    background-color: rgb(255, 213, 220);
+    border-radius: 50%;
+  }
+
 
