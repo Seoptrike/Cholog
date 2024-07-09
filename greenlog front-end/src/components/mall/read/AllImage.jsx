@@ -11,9 +11,6 @@ const AllImage = () => {
   ];
   return (
     <div>
-    
-    
-  
     <div className="allImage mt-5">
       {imagePaths.map((path, index) => (
         <img key={index} src={process.env.PUBLIC_URL + path} alt={`Product ${index + 1}`} />
