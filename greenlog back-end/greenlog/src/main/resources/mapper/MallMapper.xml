@@ -11,7 +11,7 @@
 		from mall
 		where mall_key=#{mall_key}
 	</select>
-	<insert id="insert">
+	<insert id="insertInfo">
 		insert into mall(mall_seller, mall_buyer, mall_title, mall_info, mall_price, mall_photo, mall_tstate, mall_pstate, mall_endDate)
 		values(#{mall_seller}, #{mall_buyer}, #{mall_title}, #{mall_info}, #{mall_price}, #{mall_photo}, #{mall_tstate}, #{mall_pstate}, #{mall_endDate})
 	</insert>

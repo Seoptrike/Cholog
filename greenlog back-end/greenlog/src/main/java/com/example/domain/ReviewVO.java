@@ -2,6 +2,8 @@ package com.example.domain;
 
 import java.util.*;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class ReviewVO {
 	
 	private int review_key;
@@ -10,7 +12,9 @@ public class ReviewVO {
 	private int review_rating;
 	private String review_contents;
 	private int review_lock;
+	@JsonFormat(pattern="yyyy년MM월dd일 HH:mm:ss", timezone="Asia/Seoul")
 	private Date review_regDate;
+	@JsonFormat(pattern="yyyy년MM월dd일 HH:mm:ss", timezone="Asia/Seoul")
 	private Date review_udate;
 	
 	public int getReview_key() {

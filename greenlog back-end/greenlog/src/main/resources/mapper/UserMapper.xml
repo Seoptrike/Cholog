@@ -22,4 +22,8 @@
 		update user set user_nickname=#{user_nickname}, user_birth=#{user_birth}, user_gender=#{user_gender}, user_phone=#{user_phone}, user_email=#{user_email},
 		user_address1=#{user_address1}, user_address2=#{user_address2}, user_auth=#{user_auth} where user_uid=#{user_uid}
 	</update>
+	
+	<update id="imgUpdate">
+		update user set user_img=#{user_img} where uid=#{uid}
+	</update>
 </mapper>

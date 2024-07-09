@@ -36,7 +36,7 @@ const TotalPage = () => {
                         <ListGroup.Item> <Link to={"/diary/list.json/:user_uid"}>다이어리목록</Link></ListGroup.Item>
                         <ListGroup.Item> <Link to={"/diary/insert"}>다이어리작성</Link></ListGroup.Item>
                         <ListGroup.Item> <Link to={"/diary/read/:diary_key"}>다이어리읽기</Link></ListGroup.Item>
-                        <ListGroup.Item> <Link to={"/diary/list.json"}>다이어리목록</Link></ListGroup.Item>
+                        <ListGroup.Item> <Link to={"/user/chat"}>채팅방</Link></ListGroup.Item>
                     </ListGroup>
                 </Col>
                 <Col xs={2}>

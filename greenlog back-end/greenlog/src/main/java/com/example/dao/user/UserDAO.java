@@ -15,4 +15,6 @@ public interface UserDAO {
 	public void delete(int user_key);
 	
 	public void update(UserVO vo);
+	
+	public void imgUpdate(String img, String uid);
 }
