@@ -65,11 +65,11 @@ const AdminUpdate = () => {
 
   //폼변경
   const onChangeForm = (e) => {
-   // if(e.targe.name==="user_phone"){
-   //  const patternNum = /^\d{3}-\d{3,4}-\d{4}$/;
-   //  if(patternNum.test(e.target.value)){
-   // setForm(e.target.value)}
-  //} 
+    if(e.targe.name==="user_phone"){
+     const patternNum = /^\d{3}-\d{3,4}-\d{4}$/;
+     if(patternNum.test(e.target.value)){
+    setForm(e.target.value)}
+  } 
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 

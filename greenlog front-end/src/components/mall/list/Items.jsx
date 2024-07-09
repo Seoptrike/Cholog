@@ -23,12 +23,12 @@ const Items = () => {
     };
 
 
-    const callAPI= async()=>{ 
-       const res= await axios.get(`/mall/list?key=${key}&word=${word}&page=${page}&size=${size}`)
+     const callAPI= async()=>{ 
+        const res= await axios.get(`/mall/list?key=${key}&word=${word}&page=${page}&size=${size}`)
         console.log(res.data);
-        setList(res.data);
-        // setCount(res.data.total);
-    }
+         setList(res.data);
+         setCount(res.data.total);
+     }
     useEffect(()=>{
         callAPI();
     },[page])

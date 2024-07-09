@@ -1,50 +1,69 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Button, Card } from 'react-bootstrap';
 import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { Row, Col, Card, Button } from 'react-bootstrap';
 
 const BBSRead = () => {
-  const navigate = useNavigate();
-  const { id } = useParams();
-  const [post, setPost] = useState({
-    title: '',
-    contents: '',
-    writer: '',
-    date: ''
+  const { bbs_key } = useParams();
+  const [form, setForm] = useState({
+    bbs_key: '',
+    bbs_title: '',
+    bbs_contents: '',
+    bbs_writer: '',
+    bid: ''
   });
+  const { bbs_contents, bbs_title, bbs_writer,bid } = form;
+
+  const callAPI = async () => {
+      const res = await axios.get(`/bbs/read/${bbs_key}`);
+      setForm(res.data);
+      console.log(res.data);
+    }
 
   useEffect(() => {
-    // 백엔드 없이 더미 데이터로 테스트
-    const fetchPost = () => {
-      // 여기에서 실제로는 axios.get()을 사용해 백엔드에서 데이터를 가져옵니다.
-      const dummyPost = {
-        id: id,
-        title: `게시물 제목 ${id}`,
-        contents: `게시물 내용 ${id}`,
-        writer: `작성자 ${id}`,
-        date: '2024-07-04'
-      };
-      setPost(dummyPost);
-    };
-    fetchPost();
-  }, [id]);
+    callAPI();
+  }, []);
 
-  const handleUpdateClick = () => {
-    navigate(`/community/bbs/update/${id}`, { state: { post } });
+  const onDelete = async () => {
+    if (!window.confirm(`${bbs_key}번 게시글을 삭제하실래요?`)) return;
+    try {
+      await axios.post(`/bbs/delete/${bbs_key}`);
+      alert("게시글삭제완료!");
+      window.location.href = '/community/bbs/list.json';
+    } catch (error) {
+      console.error('There was an error deleting the post!', error);
+      alert('게시물 삭제 중 오류가 발생했습니다.');
+    }
   };
 
   return (
-    <div className="d-flex justify-content-center">
-      <Card style={{ width: '50rem' }} className="mt-5">
-        <Card.Body>
-          <Card.Title>{post.title}</Card.Title>
-          <Card.Subtitle className="mb-2 text-muted">작성자: {post.writer}</Card.Subtitle>
-          <Card.Subtitle className="mb-2 text-muted">작성일: {post.date}</Card.Subtitle>
-          <Card.Text>{post.contents}</Card.Text>
-          <Button onClick={handleUpdateClick} className='me-2'>수정</Button>
-          <Button>삭제</Button>
-        </Card.Body>
-      </Card>
+    <div className='my-5'>
+      <h1 className='text-center mb-5'>{bbs_key} 게시글정보</h1>
+      <Row className='justify-content-center'>
+        <Col xs={12} md={10} lg={8}>
+          <Card>
+            <Card.Header>
+              <Row>
+                <Col>
+                  <h5>{bbs_title}</h5>
+                </Col>
+              </Row>
+            </Card.Header>
+            <Card.Body style={{ whiteSpace: 'pre-wrap' }}>
+              {bbs_contents}
+            </Card.Body>
+            <Card.Footer className='text-muted'>
+              {bbs_writer}
+            </Card.Footer>
+          </Card>
+            <div className='text-center my-3'>
+              <Link to={`/community/bbs/update/${bbs_key}`}>
+                <Button className='me-2'>수정</Button>
+              </Link>
+              <Button onClick={onDelete}>삭제</Button>
+            </div>
+        </Col>
+      </Row>
     </div>
   );
 };

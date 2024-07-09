@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.mapper.BBSMapper">
+
+    <insert id="insert">
+        INSERT INTO BBS (bbs_writer, bbs_title, bbs_contents, bbs_type)
+        VALUES (#{bbs_writer}, #{bbs_title}, #{bbs_contents}, #{bbs_type})
+    </insert>
+
+   <update id="update">
+		update BBS
+		set bbs_title= #{bbs_title}, bbs_contents=#{bbs_contents}, bbs_type= #{bbs_type}
+		where bbs_key=#{bbs_key}
+	</update>
+
+   <delete id="delete">
+		delete from BBS where bbs_key=#{bbs_key}
+	</delete>
+
+    <select id="read" resultType="com.example.domain.BBSVO">
+        SELECT * FROM BBS WHERE bbs_key = #{bbs_key}
+    </select>
+
+ <select id="list" resultType="hashmap">
+ 		select *
+		from BBS
+		order by bbs_key desc;
+ 	</select>
+
+    <select id="total" resultType="int">
+        SELECT COUNT(*) FROM BBS
+        WHERE title LIKE CONCAT('%', #{searchKeyword}, '%')
+    </select>
+
+    <update id="updateViewcnt">
+        UPDATE BBS
+        SET viewcnt = viewcnt + 1
+        WHERE bbs_key = #{bid}
+    </update>
+
+</mapper>

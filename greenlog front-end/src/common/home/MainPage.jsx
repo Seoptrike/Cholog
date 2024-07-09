@@ -10,11 +10,11 @@ const MainPage = () => {
         navigate('/diary/insert');  // 원하는 경로로 변경하세요.
     }
 
-    const callAPI = async (date) => {
-        console.log(date)
+     const callAPI = async (date) => {
+         console.log(date)
         const res = await axios.get('/api/air');
-        console.log(res.data)
-    }
+         console.log(res.data)
+     }
     useEffect(() => {
         const currentDate = new Date().toISOString().slice(0, 10); // YYYY-MM-DD 형식의 문자열
         callAPI(currentDate);
