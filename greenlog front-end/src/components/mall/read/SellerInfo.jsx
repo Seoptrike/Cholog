@@ -1,8 +1,9 @@
 import React from 'react'
 import { Card, CardContent, Typography,  Grid  } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Row ,Carousel} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import "../mall.css";
 
 const SellerInfo = () => { 
   return (
@@ -32,55 +33,108 @@ const SellerInfo = () => {
       </CardContent>
     </Card>
     <div className='report_child '>신고신고고고</div>
-    {/* 두 번째 카드 */}
-    <div style={{ marginTop: '1rem' }}>
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={4}>
-          <Card variant="outlined">
-            <CardContent>
-              <Typography variant="h5" component="div" gutterBottom>
-                바디뱅
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                <Link href="/mall/list.json" underline="none">
-                  발을 씻자
-                </Link>
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
+    <div className='mb-5'>빈공간만들어야댐</div>
+    <Carousel fade interval={null}>
+      <Carousel.Item>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={4}>
+            <Card variant="outlined" className='bg-primary'>
+              <CardContent>
+                <Typography variant="h5" component="div" gutterBottom>
+                  바디뱅
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  <Link href="/mall/list.json" underline="none">
+                    발을 씻자
+                  </Link>
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
 
-        <Grid item xs={12} sm={4}>
-          <Card variant="outlined">
-            <CardContent>
-              <Typography variant="h5" component="div" gutterBottom>
-                바디뱅
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                <Link href="/mall/list.json" underline="none">
-                  발을 씻자
-                </Link>
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
+          <Grid item xs={12} sm={4}>
+            <Card variant="outlined" className='bg-secondary'>
+              <CardContent>
+                <Typography variant="h5" component="div" gutterBottom>
+                  바디뱅
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  <Link href="/mall/list.json" underline="none">
+                    발을 씻자
+                  </Link>
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
 
-        <Grid item xs={12} sm={4}>
-          <Card variant="outlined">
-            <CardContent>
-              <Typography variant="h5" component="div" gutterBottom>
-                바디뱅
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                <Link href="/mall/list.json" underline="none">
-                  발을 씻자
-                </Link>
-              </Typography>
-            </CardContent>
-          </Card>
+          <Grid item xs={12} sm={4}>
+            <Card variant="outlined" className='bg-secondary'>
+              <CardContent>
+                <Typography variant="h5" component="div" gutterBottom>
+                  바디뱅
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  <Link href="/mall/list.json" underline="none">
+                    발을 씻자
+                  </Link>
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
         </Grid>
-      </Grid>
-    </div>
+      </Carousel.Item>
+
+      <Carousel.Item>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={4}>
+            <Card variant="outlined" className='bg-secondary'>
+              <CardContent>
+                <Typography variant="h5" component="div" gutterBottom>
+                  2222222
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  <Link href="/mall/list.json" underline="none">
+                    22222
+                  </Link>
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} sm={4}>
+            <Card variant="outlined">
+              <CardContent>
+                <Typography variant="h5" component="div" gutterBottom>
+                  22222
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  <Link href="/mall/list.json" underline="none">
+                    222222222
+                  </Link>
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} sm={4}>
+            <Card variant="outlined" className='bg-secondary'>
+              <CardContent>
+                <Typography variant="h5" component="div" gutterBottom>
+                  2222
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  <Link href="/mall/list.json" underline="none">
+                    222222
+                  </Link>
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
+      </Carousel.Item>
+
+      {/* 필요한 만큼 Carousel.Item 추가 */}
+    </Carousel>
     </div>
     </>
   )

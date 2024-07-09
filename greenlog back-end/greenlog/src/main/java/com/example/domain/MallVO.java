@@ -5,21 +5,22 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class MallVO extends MallPhotoVO {
-	private int mall_key;
-	private String mall_seller;
-	private String mall_buyer;
-	private String mall_title;
-	private int mall_price;
-	private String mall_info;
-	private String mall_photo;
-	@JsonFormat(pattern = "yyyy년MM월dd일 HH:mm:ss", timezone = "Asia/Seoul")
-	private Date mall_regDate;
-	@JsonFormat(pattern = "yyyy년MM월dd일 HH:mm:ss", timezone = "Asia/Seoul")
-	private Date mall_uDate;
-	private int mall_tstate;
-	private int mall_pstate;
-	@JsonFormat(pattern = "yyyy년MM월dd일 HH:mm:ss", timezone = "Asia/Seoul")
-	private Date mall_endDate;
+
+	 private int mall_key;
+	 private String mall_seller;
+	 private String mall_buyer;
+	 private String mall_title;
+	 private int mall_price;
+	 private String mall_info;
+	 private String mall_photo;
+	 @JsonFormat(pattern="yyyy년MM월dd일 HH:mm:ss", timezone="Asia/Seoul")
+	 private Date mall_regDate;
+	 @JsonFormat(pattern="yyyy년MM월dd일 HH:mm:ss", timezone="Asia/Seoul")
+	 private Date mall_uDate;
+	 private int mall_tstate;
+	 private int mall_pstate;
+	 @JsonFormat(pattern="yyyy-MM-dd", timezone="Asia/Seoul")
+	 private Date mall_endDate ;
 
 	public int getMall_key() {
 		return mall_key;
@@ -112,8 +113,7 @@ public class MallVO extends MallPhotoVO {
 	public Date getMall_endDate() {
 		return mall_endDate;
 	}
-
-	public void setmall_endDate(Date mall_endDate) {
+	public void setMall_endDate(Date mall_endDate) {
 		this.mall_endDate = mall_endDate;
 	}
 

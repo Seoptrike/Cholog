@@ -7,7 +7,6 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.example.domain.MallPhotoVO;
 import com.example.domain.MallVO;
 import com.example.domain.QueryVO;
 
@@ -25,16 +24,24 @@ public class MallDAOImpl implements MallDAO{
 
 
 	@Override
-	public void insert(MallVO vo) {
-		session.insert(namespace+".insert",vo);
+	public void insertInfo(MallVO vo) {
+		session.insert(namespace+".insertInfo",vo);
 	}
 
 
 	@Override
-	public void insert(MallPhotoVO pvo) {
-		session.insert(namespace+".insertPhoto",pvo);
+	public MallVO read(int mall_key) {
+		return session.selectOne(namespace+".read", mall_key);
 	}
 
+
+//	@Override
+//	public void insertPhoto(MallPhotoVO pvo) {
+//		session.insert(namespace+".insertPhoto",pvo);
+//	}
+
+
+	
 
 	
 	
