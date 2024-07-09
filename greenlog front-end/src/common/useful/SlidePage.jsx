@@ -40,8 +40,8 @@ const SlidePage = () => {
                 <img src={img.filename} key={img.aid} className="slider-image"/>
             )} */}
                 
-                 {items.map((img,index)=>
-                <img key={index} src={img}  className="slider-image" />
+                 {items.map((index)=>
+                <img key={index} className="slider-image" />
             )} 
             </Slider>
     );

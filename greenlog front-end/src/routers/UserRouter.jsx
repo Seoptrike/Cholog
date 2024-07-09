@@ -15,6 +15,7 @@ import Following from '../components/follow/Following'
 import Follow from '../components/follow/Follow'
 import AdminUpdate from '../components/admin/AdminUpdate'
 import AdminReadPage from '../components/admin/AdminReadPage'
+import ChatRoom from '../common/useful/ChatRoom'
 
 
 const UserRouter = () => {
@@ -35,6 +36,7 @@ const UserRouter = () => {
         <Route path='update/:user_uid' element={<UserUpdatePage/>}/>
         <Route path='following' element={<Following/>}/>
         <Route path='follower' element={<Follow/>}/>
+        <Route path='chat' element={<ChatRoom/>}/>
     </Routes>
   )
 }
