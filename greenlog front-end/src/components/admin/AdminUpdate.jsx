@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Row, Col, Button, Badge, InputGroup, Form, Card } from 'react-bootstrap'
 import { useParams } from 'react-router-dom'
 import { GiCancel } from "react-icons/gi";
@@ -10,18 +10,28 @@ import { ElevatorSharp } from '@mui/icons-material';
 //엑스버튼 누를 시 취소하기, 수정아이콘누를 시 수정하기
 //비밀번호체크
 //이미지변경
-//전화번호 유효성, 이메일 유효성
-
+//셀렉트박스에서 이벤트를 넣어야하다보니, 선택하지 않으면 디폴트 값이 들어감 
 
 const AdminUpdate = () => {
   const { user_uid } = useParams();
   const [form, setForm] = useState("");
   const [origin, setOrigin] = useState("");
   const [isCheck, setIsCheck] = useState(false);
-  const [isEmail, setIsEmail] =useState(false);
-  const [phoneCheck, setPhoneCheck]=useState(false);
+  const [isEmail, setIsEmail] = useState(false);
+  const [phoneCheck, setPhoneCheck] = useState(false);
   const [gender, setGender] = useState(0);
   const [auth, setAuth] = useState(0);
+  const [img, setImg] = useState({
+    fileName: '',
+    file: null
+  })
+  const { fileName, file } = img;
+  const photoStyle = {
+    borderRadius: '10px',
+    cursor: "pointer",
+  }
+
+  const refFile = useRef();
   const styleRed = "danger"
   const styleBlue = "primary"
 
@@ -37,6 +47,30 @@ const AdminUpdate = () => {
   useEffect(() => {
     callAPI();
   }, []);
+
+  //이미지업로드
+  const onChangeFile = (e) => {
+    setImg({
+      fileName: URL.createObjectURL(e.target.files[0]),
+      file: e.target.files[0]
+    })
+  }
+
+  const onUploadImage = async () => {
+    if (file) {
+      if (!window.confirm("이미지를 수정하시겠습니까?")) return;
+
+      const formData = new FormData();
+      formData.append("file", file);
+      const config = {
+        Headers: { 'content-type': 'multipart/form-data' }
+      }
+      await axios.post(`/upload/img/${user_uid}`, formData, config);
+      alert("이미지가 변경되었습니다");
+      setImg({ file: null, fileName: '' });
+      callAPI();
+    }
+  }
 
   //수정취소
   const onClickReset = () => {
@@ -65,27 +99,49 @@ const AdminUpdate = () => {
 
   //폼변경
   const onChangeForm = (e) => {
-   // if(e.targe.name==="user_phone"){
-   //  const patternNum = /^\d{3}-\d{3,4}-\d{4}$/;
-   //  if(patternNum.test(e.target.value)){
-   // setForm(e.target.value)}
-  //} 
     setForm({ ...form, [e.target.name]: e.target.value });
   }
+
+  //전화번호 유효성 및 자동하이픈 입력
+  const handlePress = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+
+    const regex = /^[0-9\b -]{0,13}$/; // 숫자, 백스페이스, 하이픈 포함한 정규식
+
+    if (regex.test(e.target.value)) {
+      setPhoneCheck(e.target.value);
+      const formattedPhoneNumber = e.target.value
+        .replace(/-/g, '') // 기존 하이픈 제거
+        .replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'); // 새로운 하이픈 삽입
+      setForm({ ...form, [e.target.name]: formattedPhoneNumber }); // 상태 업데이트
+    } else {
+      alert("잘못된 입력값입니다.");
+    }
+  };
+
+  //이메일주소 체크 맞을경우, true로 틀릴경우 false로 리턴 정보수정을 누른 후에 확인이 가능
+  const emailPress = (e) => {
+    if (e.target.value === origin.user_email) {
+      return setIsEmail(true);
+    }
+
+    const regex = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/; // 이메일주소 체크 정규식
+
+    if (regex.test(e.target.value)) {
+      return setIsEmail(true);
+    } else {
+      return setIsEmail(false);
+    }
+  };
 
   //정보수정
   const onClickUpdate = async (form) => {
     if (!window.confirm("변경된 내용을 수정하시겠습니까?")) return;
+    //어쏘와 젠더가 이벤트가 변하지 않았을 때, 원래의 값을 넣어줘야함 
     const updateForm = { ...form, user_gender: gender, user_auth: auth }
     await axios.post("/user/admin/update", updateForm);
     window.location.href = `/user/admin/read/${user_uid}`;
   }
-
-  //useEffect(()=>{
-  //  if (inputValue.length === 13) {
-    //setInputValue(inputValue.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
- // }
- // },[inputValue]) 자동적으로 하이픈 넣기
 
 
   return (
@@ -96,9 +152,13 @@ const AdminUpdate = () => {
             <Card.Body>
               <Row>
                 <Col lg={4}>
-                  <Card.Img variant="top" src="/images/woman.jpg" width="100%" />
+                  <Card.Img src={fileName || "/images/woman.jpg"} variant="top" width="100%"
+                    style={photoStyle} onClick={() => refFile.current.click()} />
                   <InputGroup>
-                    <input type="file" />
+                    <input ref={refFile} type="file" style={{ display: 'none' }} onChange={onChangeFile} />
+                    <div className='text-end'>
+                      <Button className='w-100' size="sm" onClick={onUploadImage}>이미지저장</Button>
+                    </div>
                   </InputGroup>
                 </Col>
                 <Col lg={6}>
@@ -132,19 +192,21 @@ const AdminUpdate = () => {
                       </InputGroup>
                       <InputGroup className='mb-2'>
                         <InputGroup.Text>성별</InputGroup.Text>
-                        <Form.Select onChange={(e) => setGender(parseInt(e.target.value))} value={gender}>
+                        <Form.Select onChange={(e) => {
+                          onChangeForm(e);
+                          setGender(parseInt(e.target.value));
+                        }} value={user_gender} name="user_gender">
                           <option value="0">남자</option>
                           <option value="1">여자</option>
                         </Form.Select>
                       </InputGroup>
                       <InputGroup className='mb-2'>
                         <InputGroup.Text>전화번호</InputGroup.Text>
-                        <Form.Control value={user_phone} name="user_phone" onChange={onChangeForm} />
-                        
+                        <Form.Control value={user_phone} name="user_phone" onChange={handlePress} maxLength={13} />
                       </InputGroup>
                       <InputGroup className='mb-2'>
                         <InputGroup.Text>이메일</InputGroup.Text>
-                        <Form.Control value={user_email} name="user_email" onChange={onChangeForm} />
+                        <Form.Control value={user_email} name="user_email" onChange={onChangeForm} onBlur={emailPress} type="email" />
                       </InputGroup>
                       <InputGroup className='mb-2'>
                         <InputGroup.Text>주소</InputGroup.Text>
@@ -156,12 +218,15 @@ const AdminUpdate = () => {
                       </InputGroup>
                       <InputGroup className='mb-2'>
                         <InputGroup.Text>권한</InputGroup.Text>
-                        <Form.Select onChange={(e) => setAuth(parseInt(e.target.value))} value={auth}>
-                          <option value={0}>일반회원</option>
-                          <option value={1}>우수회원</option>
-                          <option value={500}>블랙리스트</option>
-                          <option value={999}>탈퇴회원</option>
-                          <option value={100}>관리자</option>
+                        <Form.Select onChange={(e) => {
+                          onChangeForm(e);
+                          setAuth(parseInt(e.target.value));
+                        }} value={user_auth} name="user_auth">
+                          <option value="0">일반회원</option>
+                          <option value="1">우수회원</option>
+                          <option value="500">블랙리스트</option>
+                          <option value="999">탈퇴회원</option>
+                          <option value="100">관리자</option>
                         </Form.Select>
                       </InputGroup>
                     </div>
@@ -181,5 +246,5 @@ const AdminUpdate = () => {
       </Row>
     </div>
   )
- }
+}
 export default AdminUpdate

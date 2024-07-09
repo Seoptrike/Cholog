@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.ssl.SslProperties.Bundles.Watch.File;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.*;
+
 
 import com.example.dao.user.UserDAO;
 import com.example.domain.UserVO;
@@ -48,13 +51,13 @@ public class UserController {
 		return udao.read(uid);
 	}
 	
-	//관리자= 권한, 비밀번호, 주소, 전화번호, ?
+	//관리자용 업데이트(권한수정가능)
 	@PostMapping("/admin/update")
 	public void update(@RequestBody UserVO vo) {
 		udao.update(vo);
 		System.out.println(vo.getUser_gender());
 	}
-
+		
 	@PostMapping("/login")
 	public int login(@RequestBody UserVO vo) {
 		int result = 0; // 아이디없음
