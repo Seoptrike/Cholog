@@ -1,22 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Row, Col, InputGroup, FormControl, Button, Table } from 'react-bootstrap';
+import { Row, Col, InputGroup, FormControl, Button, Table, Image } from 'react-bootstrap';
+import axios from 'axios';
 
 const BBSList = () => {
   const navigate = useNavigate();
   const [category, setCategory] = useState('전체');
   const [search, setSearch] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [list, setList]=useState([]);
+
+  const callAPI =async()=>{
+    const res = await axios.get('/bbs/list');
+    console.log(res.data);
+    setList(res.data);
+  }
 
   useEffect(() => {
-    const loggedIn = sessionStorage.getItem('uid') !== null;
-    setIsLoggedIn(loggedIn);
+    callAPI();
   }, []);
-
-  const posts = [
-    { id: 1, category: '꿀팁', title: '첫 번째 게시물', writer: '홍길동', date: '2024-07-05', views: 100 },
-    { id: 2, category: '자유', title: '두 번째 게시물', writer: '이순신', date: '2024-07-04', views: 200 },
-  ];
 
   const handleCategoryChange = (e) => {
     setCategory(e.target.value);
@@ -26,19 +28,6 @@ const BBSList = () => {
     setSearch(e.target.value);
   };
 
-  const filteredPosts = posts.filter(post => {
-    return (category === '전체' || post.category === category) &&
-           (search === '' || post.title.includes(search));
-  });
-
-  const BBSClick = () => {
-    if (isLoggedIn) {
-      navigate('/community/bbs/insert'); 
-    } else {
-      sessionStorage.setItem('target', '/community/bbs/list.json');
-      navigate('/user/login');
-    }
-  };
 
   return (
     <div>
@@ -56,11 +45,11 @@ const BBSList = () => {
               value={search}
               onChange={handleSearchChange}
             />
-            <Button variant="primary">검색</Button>
+            <Button>검색</Button>
           </InputGroup>
         </Col>
         <Col md={2}>
-          <Button onClick={BBSClick}>글쓰기</Button>
+          <Button>글쓰기</Button>
         </Col>
       </Row>
       <Table>
@@ -74,15 +63,14 @@ const BBSList = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredPosts.map(post => (
-            <tr key={post.id}>
-              <td>{post.category}</td>
+          {list.map(post => (
+            <tr key={post.bbs_key}>
+              <td>{post.bbs_type === 0 ? "꿀팁" : "자유"}</td>
               <td>
-                <Link to={`/community/bbs/read/${post.id}`}>{post.title}</Link>
+                <Link to={`/community/bbs/read/${post.bbs_key}`}>{post.bbs_title}</Link>
               </td>
-              <td>{post.writer}</td>
-              <td>{post.date}</td>
-              <td>{post.views}</td>
+              <td>{post.bbs_writer}</td>
+              <td>{post.bbs_regDate}</td>
             </tr>
           ))}
         </tbody>

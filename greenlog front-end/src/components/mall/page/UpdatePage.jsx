@@ -156,5 +156,3 @@ export const UpdatePage = () => {
   )
 }
 export default UpdatePage
-
-

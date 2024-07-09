@@ -14,8 +14,7 @@ const MainPage = () => {
     const handleClick = () => {
         navigate('/diary/insert');  // 원하는 경로로 변경하세요.
     }
-
-
+    
     return (
         <div>
             <div style={{

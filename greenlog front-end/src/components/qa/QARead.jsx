@@ -38,9 +38,9 @@ const QARead = () => {
       <Card style={{ width: '50rem' }} className="mt-5">
         <Card.Body>
           <Card.Title>{post.title}</Card.Title>
-          <Card.Subtitle className="mb-2 text-muted">작성자: {post.writer}</Card.Subtitle>
-          <Card.Subtitle className="mb-2 text-muted">작성일: {post.date}</Card.Subtitle>
-          <Card.Text>{post.contents}</Card.Text>
+          <Card className="mb-2 text-muted">작성자: {post.writer}</Card>
+          <Card className="mb-2 text-muted">작성일: {post.date}</Card>
+          <Card>{post.contents}</Card>
           <Button onClick={handleUpdateClick} className='me-2'>수정</Button>
           <Button>삭제</Button>
         </Card.Body>
