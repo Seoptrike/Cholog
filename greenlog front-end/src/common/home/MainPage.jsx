@@ -2,6 +2,11 @@ import axios from 'axios';
 import React, { useEffect } from 'react'
 import { InputGroup, Form, Button, Row, Col } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
+import SeoulMap from '../useful/SeoulMap';
+import SeoulMapChart from './SeoulMapChart';
+import O3Chart from './O3Chart';
+import MainSlider from './MainSlider';
+import MallSlider from './MallSlider';
 
 const MainPage = () => {
     const navigate = useNavigate();
@@ -10,58 +15,55 @@ const MainPage = () => {
         navigate('/diary/insert');  // 원하는 경로로 변경하세요.
     }
 
-    const callAPI = async (date) => {
-        console.log(date)
-        const res = await axios.get('/api/air');
-        console.log(res.data)
-    }
-    useEffect(() => {
-        const currentDate = new Date().toISOString().slice(0, 10); // YYYY-MM-DD 형식의 문자열
-        callAPI(currentDate);
-    }, [])
+
     return (
         <div>
             <div style={{
+                position: 'relative',
+                width: '100%',
+                height: '1rem',  // 배경 이미지의 높이를 설정합니다.
+                minHeight: '40vh',  // 최소 높이를 설정하여 너무 작아지지 않도록 합니다.
                 backgroundImage: "url('/images/banner.png')",
-                backgroundSize: "contain",
-                backgroundRepeat: "no-repeat",
-                backgroundPosition: "top",
-                width: "100%",
-                height: "40rem",  // 높이를 자동으로 설정하여 이미지 비율을 유지합니다.
-                minHeight: "50vh",  // 최소 높이를 설정하여 너무 작아지지 않도록 합니다.
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                margin: 0,  // 외부 마진을 제거합니다.
-                padding: 0,  // 내부 패딩을 제거합니다.
-                position: 'relative'
+                backgroundSize: 'cover',  // 배경 이미지를 화면에 꽉 채우도록 설정합니다.
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center',  // 배경 이미지를 가운데 정렬합니다.
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                margin: 0,
+                padding: 0,
             }}>
-                <InputGroup style={{
+                <div style={{
                     position: 'absolute',
-                    top: '7rem',
+                    top: '7rem',  // 원하는 위치로 조정
                     left: '50%',
                     transform: 'translateX(-50%)',
-                    width: '40rem',  // 인풋 상자의 너비를 200px로 설정
-                    height: '5rem',  // 인풋 상자의 높이를 40px로 설정
-                    padding: '10px',  // 인풋 상자의 내부 패딩을 10px로 설정
-                    fontSize: '16px',  // 인풋 상자의 글꼴 크기를 16px로 설정
-                    borderRadius: '20px',  // 모서리를 둥글게 설정
-                    textAlign: 'center',  // 텍스트를 중앙 정렬
-                    lineHeight: '100px'  // 텍스트가 중앙에 오도록 설정
+                    width: '40rem',  // 인풋 상자의 너비를 조정
+                    padding: '10px',
+                    borderRadius: '20px',
+                    textAlign: 'center',
+                    backgroundColor: 'rgba(255, 255, 255, 0.8)',  // 배경색을 투명하게 설정합니다.
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                 }}>
                     <Form.Control
                         placeholder='오늘의 활동을 기록해주세요!'
-                        onClick={handleClick}  // 클릭 이벤트 핸들러 추가
+                        onClick={handleClick}
+                        style={{ width: '100%', fontSize: '16px', border: 'none', background: 'none', outline: 'none' }}  // 인풋 상자의 스타일을 조정합니다.
                     />
-                </InputGroup>
+                </div>
             </div>
             <Row>
-                <Col xs={9}>
-
+                <Col xs={8}>
+                    <MallSlider/>
                 </Col>
-                <Col xs={3}>
-
+                <Col xs={4}>
+                    <MainSlider />
                 </Col>
+            </Row>
+            <Row>
+                <h5 className='text-center'>새로 올라온 피망</h5>
             </Row>
         </div>
     )

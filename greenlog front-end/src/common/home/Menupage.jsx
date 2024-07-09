@@ -6,6 +6,7 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import { Link } from 'react-router-dom'
 import RouterPage from '../../routers/RouterPage';
 import TotalPage from '../../components/TotalPage';
+import BottomPage from './BottomPage';
 
 const Menupage = () => {
     const uid= sessionStorage.getItem("uid");
@@ -54,6 +55,7 @@ const Menupage = () => {
                 </Container>
             </Navbar>
             <RouterPage />
+            <BottomPage/>
             <TotalPage/>
         </div>
     )
