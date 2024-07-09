@@ -43,4 +43,12 @@ public class UserDAOImpl implements UserDAO {
 		
 	}
 
+	@Override
+	public void imgUpdate(String img, String uid) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("img", img);
+		map.put("uid", uid);
+		session.update(namespace+ ".imgUpdate", map);
+	}
+
 }
