@@ -92,7 +92,7 @@ const LoginPage = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className='text-center'>
+                                <div className='text-center mt-2'>
                                     <span>
                                         <a href='/user/join'>회원가입</a>
                                     </span>
