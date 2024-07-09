@@ -8,15 +8,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.dao.mall.MallDAO;
-import com.example.domain.MallPhotoVO;
 import com.example.domain.MallVO;
 import com.example.domain.QueryVO;
+import com.example.service.mall.MallService;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/mall")
@@ -24,20 +23,24 @@ public class MallController {
 	
 	@Autowired
 	MallDAO mdao;
+	@Autowired
+	MallService mservice;
 	
 	@GetMapping("/list")
 	public List  <HashMap<String, Object>> list(QueryVO vo) {
 		return mdao.list(vo);
 	}
 	
-	
 	@PostMapping("/insert")
 	public void insert (@RequestBody MallVO vo) {
-		mdao.insert(vo);
+		mdao.insertInfo(vo);
 	}
-	@PostMapping("/insertPhoto")
-	public void insert (@RequestBody MallPhotoVO pvo) {
-		mdao.insert(pvo);
+	
+	@GetMapping("/read/{mall_key}")
+	public MallVO read(@PathVariable ("mall_key") int mall_key ) {
+		return mdao.read(mall_key);
 	}
+	
+	
 
 }

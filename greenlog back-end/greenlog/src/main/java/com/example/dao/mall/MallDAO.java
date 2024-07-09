@@ -3,7 +3,6 @@ package com.example.dao.mall;
 import java.util.HashMap;
 import java.util.List;
 
-import com.example.domain.MallPhotoVO;
 import com.example.domain.MallVO;
 import com.example.domain.QueryVO;
 
@@ -13,6 +12,9 @@ public interface MallDAO {
 	public List<HashMap<String, Object>> list (QueryVO vo);
 	
 	
-	public void insert (MallVO vo);
-	public void insert (MallPhotoVO pvo);
+	public void insertInfo (MallVO vo);
+	
+	//public void insertPhoto (MallPhotoVO pvo);
+	
+	public MallVO read (int mall_key);
 }

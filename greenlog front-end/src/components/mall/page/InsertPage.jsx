@@ -12,57 +12,75 @@ const InsertPage = () => {
   const uid = sessionStorage.getItem("uid");
   const [form, setForm] = useState({
     mall_seller :uid , 
-    mall_buyer :uid  , 
+    mall_buyer :"ghost"  , 
     mall_title :"" , 
     mall_info :"" , 
-    mall_price :100 , 
+    mall_price :0, 
     mall_photo :"" , 
     mall_tstate :0 , 
     mall_pstate :0 ,
-    endDate: tomorrow 
+    mall_endDate:tomorrow
   });
-
+  const {mall_title,mall_info,mall_price, mall_photo,mall_tstate,mall_pstate,mall_endDate} = form;
   
 
+  // 일반 입력 필드 경우
   const onChangeForm = (e) => {
-    const { name, value, files } = e.target;
-
-    if (files) {
-      const uploadedFiles = Array.from(files); 
-      // 파일 업로드 경우
+    const { name, value} = e.target;
+    console.log(name, value);
+    if (name === "mall_price" && value === "0") return;
       setForm((prevData) => ({
         ...prevData,
-        [name]: uploadedFiles 
+        [name]: name === "mall_price" ? parseInt(value) : value
       }));
-    } else {
-      // 일반 입력 필드 경우
-      setForm((prevData) => ({
-        ...prevData,
-        [name]: value
-      }));
-    }
   };
-  const dummyData = [
-   { aid: 1, filename: '/images/sorry.png' },
-    { aid: 2, filename: '/images/sorry.png' },
-    { aid: 3, filename: '/images/sorry.png' }
-  ];
+  
+  // 파일 업로드 경우
+  const onChangePhoto =(e)=>{
+    const { name,  files } = e.target;
+    const uploadedFiles = Array.from(files); 
+    setForm((prevData) => ({
+      ...prevData,
+      [name]: uploadedFiles 
+    }));
+  }
+
+
+  // const dummyData = [
+  //  { aid: 1, filename: '/images/sorry.png' },
+  //   { aid: 2, filename: '/images/sorry.png' },
+  //   { aid: 3, filename: '/images/sorry.png' }
+  // ];
 
   // 상태 변수와 이벤트 핸들러 등을 정의
-  const [photo, setPhoto] = useState(dummyData);
+  const [photo, setPhoto] = useState("");
 
   const imgStyle = {
     width: '90%',
     height: 'auto',
     borderRadius: '1px'
   };
+
   const onSubmit =async(e)=>{
     e.preventDefault();
     if(!window.confirm("피망마켓에 등록하실래요?")) return;
-    //게시글등록
-    await axios.post('/mall/insert',form );
-    alert("게시글등록완료!");
-    window.location.href='/mall/list.json';
+     //console.log(form);
+     // 경매 상품이면서 시드가 0일 경우 경고 메시지를 띄우고 함수를 종료합니다.
+    if (mall_tstate === 0 && mall_price === 0) {
+      alert("경매는 1씨드부터 가능합니다.씨드를 수정해주세요.");
+      return;
+    }
+    try {
+      // 게시글 등록
+      await axios.post('/mall/insert', form);
+      alert("게시글 등록 완료!");
+      //window.location.href = '/mall/list.json';
+      
+    } catch (error) {
+      // 오류 발생 시 오류 메시지 출력
+      console.error("게시글 등록 오류:", error);
+      alert("게시글 등록 중 오류가 발생했습니다.");
+    }
   }
   
 
@@ -78,7 +96,7 @@ const InsertPage = () => {
             <TextField
               name="mall_title"
               label="제목"
-              value={form.mall_title}
+              value={mall_title}
               onChange={onChangeForm}
               fullWidth
               required
@@ -89,7 +107,7 @@ const InsertPage = () => {
               select
               label="유형"
               defaultValue={0}
-              value={form.mall_tstate}
+              value={mall_tstate}
               onChange ={onChangeForm}
               name="mall_tstate"
               required
@@ -105,7 +123,7 @@ const InsertPage = () => {
               select
               label="물품상태"
               defaultValue={0}
-              value={form.mall_pstate}
+              value={mall_pstate}
               onChange ={onChangeForm}
               name="mall_pstate"
               required
@@ -115,7 +133,7 @@ const InsertPage = () => {
               <MenuItem value={1}>미개봉,미사용</MenuItem>
             </TextField>
           </Grid>
-          {form.mall_tstate===0 ?
+          {mall_tstate===0 ?
               <>
               <Grid item xs={3}>
               <TextField
@@ -123,9 +141,8 @@ const InsertPage = () => {
                 type="number"
                 name="mall_price"
                 fullWidth
-                value={form.mall_price}
+                value={mall_price}
                 onChange={onChangeForm}
-                
                 required
               />
               </Grid>
@@ -135,7 +152,7 @@ const InsertPage = () => {
                 type="date"
                 name="endDate"
                 fullWidth
-                value={form.endDate.toISOString().split('T')[0]} // endDate를 ISO 문자열로 변환하여 사용
+                value={mall_endDate instanceof Date ? mall_endDate.toISOString().split('T')[0] : ''}
                 onChange={onChangeForm}
                 required
               />
@@ -160,9 +177,8 @@ const InsertPage = () => {
               name="mall_info"
               label="내용"
               fullWidth
-              required
               multiline
-              value={form.mall_info}
+              value={mall_info}
               rows={4}
               onChange={onChangeForm}
             />
@@ -175,27 +191,34 @@ const InsertPage = () => {
                     type="file"
                     name="mall_photo"
                     width="100%"
-                    value={form.mall_photo}
-                    onChange={onChangeForm}
+                    value={mall_photo}
+                    onChange={onChangePhoto}
                   />
                 </Col>
               </Form.Group>
             </Grid>
-            <Row eventkey="photo" title="첨부한 파일">
-               {photo.map(img => 
-                <Col   key={img.aid} xs={3} md={3} lg={3} >
-                 
-                      <div key={img.aid}className='mb-3'>
-                          <div style={{ position: 'relative' }} className="text-center">
-                              <Badge 
-                                  bg='danger' style={{ position: 'absolute', top: '5px', right: '20px', cursor: 'pointer' }}>X</Badge>
-                              <img src={img.filename} alt={`첨부 파일 ${img.aid}`} style={imgStyle} />
-                          </div>
-                      </div>
-                 
-                </Col>
-               )}
-            </Row>
+           
+        {/* //     <Row eventkey="photo" title="첨부한 파일">
+        //     {photo.map(img => 
+        //      <Col   key={img.aid} xs={3} md={3} lg={3} >
+              
+        //            <div key={img.aid}className='mb-3'>
+        //                <div style={{ position: 'relative' }} className="text-center">
+        //                    <Badge 
+        //                        bg='danger' style={{ position: 'absolute', top: '5px', right: '20px', cursor: 'pointer' }}>X</Badge>
+        //                        <Badge 
+        //                        bg='primary' style={{ position: 'absolute', top: '-20px', right: '10px', cursor: 'pointer' }}>
+        //                          대표이미지
+        //                        </Badge>
+        //                    <img src={img.filename} alt={`첨부 파일 ${img.aid}`} style={imgStyle} />
+        //                </div>
+        //            </div>
+              
+        //      </Col>
+        //     )}
+        //  </Row> */}
+         
+            
           <Grid item xs={12} className="text-end">
             <Button  type="submit" variant="outline-secondary" >게시글 작성</Button>
           </Grid>
