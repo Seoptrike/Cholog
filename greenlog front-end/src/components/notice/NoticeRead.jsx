@@ -1,51 +1,61 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Button, Card } from 'react-bootstrap';
 import axios from 'axios';
 
 const NoticeRead = () => {
-  const navigate = useNavigate();
-  const { id } = useParams();
-  const [notice, setNotice] = useState({
-    title: '',
-    contents: '',
-    writer: '',
-    date: '',
-    views: ''
+  const { notice_key } = useParams();
+  const [form, setForm] = useState({
+    notice_key: '',
+    notice_title: '',
+    notice_contents: '',
+    notice_writer: '',
+    notice_regDate: '',
+    notice_views: 0
   });
 
-  useEffect(() => {
-    // 백엔드 없이 더미 데이터로 테스트
-    const fetchNotice = () => {
-      // 여기에서 실제로는 axios.get()을 사용해 백엔드에서 데이터를 가져옵니다.
-      const dummyNotice = {
-        id: id,
-        title: `공지 제목 ${id}`,
-        contents: `공지 내용 ${id}`,
-        writer: `작성자 ${id}`,
-        date: '2024-07-04',
-        views: 34249
-      };
-      setNotice(dummyNotice);
-    };
-    fetchNotice();
-  }, [id]);
+  const { notice_title, notice_contents, notice_writer, notice_regDate, notice_views } = form;
 
-  const handleUpdateClick = () => {
-    navigate(`/community/notice/update/${id}`, { state: { notice } });
+  const callAPI = async () => {
+    try {
+      const res = await axios.get(`/notice/read/${notice_key}`);
+      setForm(res.data);
+      console.log(res.data);
+    } catch (error) {
+      console.error('There was an error fetching the notice data!', error);
+      alert('공지사항 데이터를 가져오는 중 오류가 발생했습니다.');
+    }
+  };
+
+  useEffect(() => {
+    callAPI();
+  }, [notice_key]);
+
+  const onDelete = async () => {
+    if (!window.confirm(`${notice_key}번 공지사항을 삭제하실래요?`)) return;
+    try {
+      await axios.post(`/notice/delete/${notice_key}`);
+      alert("공지사항 삭제 완료!");
+      window.location.href='/community/notice/list.json';
+    } catch (error) {
+      console.error('There was an error deleting the notice!', error);
+      alert('공지사항 삭제 중 오류가 발생했습니다.');
+    }
   };
 
   return (
     <div className="d-flex justify-content-center">
       <Card style={{ width: '50rem' }} className="mt-5">
         <Card.Body>
-          <Card.Title>{notice.title}</Card.Title>
-          <Card.Subtitle className="mb-2 text-muted">작성자: {notice.writer}</Card.Subtitle>
-          <Card.Subtitle className="mb-2 text-muted">작성일: {notice.date}</Card.Subtitle>
-          <Card.Subtitle className="mb-2 text-muted">조회수: {notice.views}</Card.Subtitle>
-          <Card.Text>{notice.contents}</Card.Text>
-          <Button onClick={handleUpdateClick} className='me-2'>수정</Button>
-          <Button>삭제</Button>
+          <Card.Title>{notice_title}</Card.Title>
+          <Card.Subtitle className="mb-2 text-muted">작성자: {notice_writer}</Card.Subtitle>
+          <Card.Subtitle className="mb-2 text-muted">작성일: {notice_regDate}</Card.Subtitle>
+          <Card.Subtitle className="mb-2 text-muted">조회수: {notice_views}</Card.Subtitle>
+          <Card.Text>{notice_contents}</Card.Text>
+          <Link to={`/community/notice/update/${notice_key}`}>
+            <Button className='me-2'>수정</Button>
+          </Link>
+          <Button onClick={onDelete}>삭제</Button>
         </Card.Body>
       </Card>
     </div>

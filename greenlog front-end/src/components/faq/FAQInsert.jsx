@@ -1,65 +1,95 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Form, Button, InputGroup, FormControl } from 'react-bootstrap';
+import { Form, Button, InputGroup, FormControl, Spinner } from 'react-bootstrap';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import axios from 'axios';
 
 const FAQInsert = () => {
-  const [category, setCategory] = useState('FAQ');
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const uid = sessionStorage.getItem("uid");
+  const [form, setForm] = useState({
+    faq_question: '',
+    faq_answer: '',
+    faq_category: '',
+    faq_writer: uid
+  });
 
-  const CategoryChange = (e) => {
-    setCategory(e.target.value);
+  const { faq_question, faq_answer, faq_category } = form;
+
+  const onChangeForm = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const TitleChange = (e) => {
-    setTitle(e.target.value);
+  const onChangeCKEditor = (event, editor) => {
+    let data = editor.getData();
+    data = data.replace(/<\/?p>/g, '');  // <p> 태그를 제거
+    setForm({ ...form, faq_answer: data });
   };
 
-  const ContentChange = (event, editor) => {
-    const data = editor.getData();
-    setContent(data);
-  };
-
-  const handleSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    console.log('카테고리:', category);
-    console.log('제목:', title);
-    console.log('내용:', content);
-    
-    if (category === 'FAQ') {
-      navigate('/community/faq/list.json');
-    } else if (category === '공지사항') {
-      navigate('/community/notice/list.json');
+    if (faq_question === "") {
+      alert("질문을 입력하세요!");
+      return;
+    }
+    if (faq_category === "") {
+      alert("카테고리를 선택하세요!");
+      return;
+    }
+    if (!window.confirm("FAQ를 등록하실래요?")) return;
+    setLoading(true);
+  
+    const updateForm = { ...form };
+    try {
+      const response = await axios.post("/faq/insert", updateForm);
+      setLoading(false);
+  
+      if (response.status === 200) {
+        alert('FAQ가 등록되었습니다.');
+        navigate(`/community/faq/list.json`);
+      } else {
+        alert('FAQ 등록에 실패했습니다.');
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error('There was an error inserting the FAQ!', error);
+      alert('FAQ 등록 중 오류가 발생했습니다.');
     }
   };
 
   return (
     <div>
-      <h1 className="text-center my-5">글쓰기</h1>
-      <Form onSubmit={handleSubmit}>
+      <h1 className="text-center my-5">FAQ 등록</h1>
+      <Form onSubmit={onSubmit}>
         <InputGroup className="mb-3">
           <FormControl
             as="select"
-            value={category}
-            onChange={CategoryChange}
+            name="faq_category"
+            value={faq_category}
+            onChange={onChangeForm}
             style={{ maxWidth: '150px', marginRight: '10px' }}>
-            <option value="FAQ">FAQ</option>
-            <option value="공지사항">공지사항</option>
+            <option value="">카테고리를 선택하세요</option>
+            <option value="회원">회원</option>
+            <option value="포인트">포인트</option>
+            <option value="참여방법">참여방법</option>
           </FormControl>
           <FormControl
-            placeholder="제목을 입력하세요"
-            value={title}
-            onChange={TitleChange}/>
+            type="text"
+            name="faq_question"
+            placeholder="질문을 입력하세요"
+            value={faq_question}
+            onChange={onChangeForm}
+          />
         </InputGroup>
         <CKEditor
           editor={ClassicEditor}
-          data="<p>내용을 입력하세요...</p>"
-          onChange={ContentChange}/>
-        <Button type="submit" className="mt-3" >
-          등록
+          data={faq_answer}
+          onChange={onChangeCKEditor}
+        />
+        <Button type="submit" className="mt-3" disabled={loading}>
+          {loading ? <Spinner animation="border" size="sm" /> : '등록'}
         </Button>
       </Form>
     </div>

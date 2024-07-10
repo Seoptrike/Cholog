@@ -23,6 +23,7 @@ import AskInsert from '../components/ask/AskInsert';
 import AskList from '../components/ask/AskList';
 import AskRead from '../components/ask/AskRead';
 import AskUpdate from '../components/ask/AskUpdate';
+import NoticeInsert from '../components/notice/NoticeInsert';
 
 const CommunityRouter = () => {
   return (
@@ -43,6 +44,7 @@ const CommunityRouter = () => {
       <Route path="/event/list.json" element={<EventList />} />
       <Route path="/event/read/:event_key" element={<EventRead />} />
       <Route path="/event/update/:event_key" element={<EventUpdate />} />
+      <Route path="/notice/insert" element={<NoticeInsert />} />
       <Route path="/notice/list.json" element={<NoticeList />} />
       <Route path="/notice/read/:notice_key" element={<NoticeRead />} />
       <Route path="/notice/update/:notice_key" element={<NoticeUpdate />} />

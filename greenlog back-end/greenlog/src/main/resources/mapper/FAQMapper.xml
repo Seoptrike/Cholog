@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.mapper.FAQMapper">
+    <insert id="insert">
+        INSERT INTO FAQ (faq_writer, faq_question, faq_answer,faq_category)
+        VALUES (#{faq_writer}, #{faq_question}, #{faq_answer},#{faq_category})
+    </insert>
+   <update id="update">
+		update FAQ
+		set faq_question=#{faq_question}, faq_answer= #{faq_answer},faq_category=#{faq_category}
+		where faq_key=#{faq_key}
+	</update>
+   <delete id="delete">
+		delete from FAQ where faq_key=#{faq_key}
+	</delete>
+    <select id="read" resultType="com.example.domain.FAQVO">
+        SELECT * FROM FAQ WHERE faq_key = #{faq_key}
+    </select>
+ <select id="list" resultType="hashmap">
+ 		select *
+		from FAQ
+		order by faq_key desc;
+ 	</select>
+</mapper>

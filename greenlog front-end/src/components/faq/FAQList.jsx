@@ -1,39 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, InputGroup, FormControl, Button, Table } from 'react-bootstrap';
-import HeaderTabs from '../../common/useful/HeaderTabs'; 
-import { useNavigate } from 'react-router-dom';
+import HeaderTabs from '../../common/useful/HeaderTabs';
+import axios from 'axios';
 
 const FAQList = () => {
   const [openIndex, setOpenIndex] = useState(null);
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('all');
-  const [isAdmin, setIsAdmin] = useState(false); 
-  const navigate = useNavigate();
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [faqs, setFaqs] = useState([]);
 
   useEffect(() => {
-    const user = { name: 'hanna' }; 
+    const user = { name: 'hanna' };
     if (user.name === 'hanna') {
       setIsAdmin(true);
     }
+
+    const fetchFAQs = async () => {
+      try {
+        const response = await axios.get('/faq/list');
+        const data = response.data;
+        console.log('Fetched data:', data);
+        if (Array.isArray(data)) {
+          setFaqs(data);
+        } else {
+          console.error('Fetched data is not an array:', data);
+          setFaqs([]);
+        }
+      } catch (error) {
+        console.error('Error fetching FAQs:', error);
+        setFaqs([]);
+      }
+    };
+
+    fetchFAQs();
   }, []);
 
   const handleToggle = (index) => {
-    if (openIndex === index) {
-      setOpenIndex(null);
-    } else {
-      setOpenIndex(index);
-    }
+    setOpenIndex(openIndex === index ? null : index);
   };
 
   const handleWriteClick = () => {
-    navigate('/community/faq/insert');
+    window.location.href = '/community/faq/insert';
   };
-
-  const faqs = [
-    { id: 1, category: '포인트', title: '포인트 사용 방법', content: '포인트는 이렇게 사용합니다.' },
-    { id: 2, category: '회원', title: '회원 가입 방법', content: '회원 가입은 이렇게 합니다.' },
-    { id: 3, category: '참여방법', title: '참여 방법 안내', content: '참여는 이렇게 합니다.' },
-  ];
 
   return (
     <div>
@@ -52,12 +61,12 @@ const FAQList = () => {
               value={search}
               onChange={e => setSearch(e.target.value)}
             />
-            <Button>검색</Button>
+            <Button type="button">검색</Button>
           </InputGroup>
         </Col>
         <Col md={2}>
           {isAdmin && (
-            <Button onClick={handleWriteClick}>
+            <Button type="button" onClick={handleWriteClick}>
               글쓰기
             </Button>
           )}
@@ -65,22 +74,27 @@ const FAQList = () => {
       </Row>
       <Table>
         <tbody>
+          {faqs.length === 0 && (
+            <tr>
+              <td colSpan="2">FAQ 데이터가 없습니다.</td>
+            </tr>
+          )}
           {faqs.map((faq, index) => {
             if (
-              (category === 'all' || faq.category === category) &&
-              (search === '' || faq.title.includes(search))
+              (category === 'all' || faq.FAQ_category === category) &&
+              (search === '' || faq.FAQ_question.includes(search))
             ) {
               return (
-                <React.Fragment key={faq.id}>
+                <React.Fragment key={faq.FAQ_key}>
                   <tr onClick={() => handleToggle(index)}>
-                    <td>{faq.category}</td>
-                    <td>{faq.title}</td>
+                    <td>{faq.FAQ_category}</td>
+                    <td>{faq.FAQ_question}</td>
                   </tr>
                   {openIndex === index && (
-                    <tr>
-                      <td colSpan="4">
+                    <tr key={`${faq.FAQ_key}-content`}>
+                      <td colSpan="2">
                         <div style={{ padding: '10px' }}>
-                          {faq.content}
+                          {faq.FAQ_answer}
                         </div>
                       </td>
                     </tr>

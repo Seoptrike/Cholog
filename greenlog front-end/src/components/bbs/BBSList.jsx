@@ -4,7 +4,6 @@ import { Row, Col, InputGroup, FormControl, Button, Table, Image } from 'react-b
 import axios from 'axios';
 
 const BBSList = () => {
-  const navigate = useNavigate();
   const [category, setCategory] = useState('전체');
   const [search, setSearch] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -36,9 +35,9 @@ const BBSList = () => {
         <Col md={10}>
           <InputGroup>
             <FormControl as="select" onChange={handleCategoryChange}>
-              <option value="전체">전체</option>
-              <option value="꿀팁">꿀팁</option>
-              <option value="자유">자유</option>
+              <option value="2">전체</option>
+              <option value="0">꿀팁</option>
+              <option value="1">자유</option>
             </FormControl>
             <FormControl 
               placeholder="검색어를 입력하세요"
@@ -49,7 +48,9 @@ const BBSList = () => {
           </InputGroup>
         </Col>
         <Col md={2}>
+        <Link to={'/community/bbs/insert'}>
           <Button>글쓰기</Button>
+        </Link>
         </Col>
       </Row>
       <Table>
