@@ -7,7 +7,6 @@
 			    from review
 			    where review_mall_key=#{review_mall_key} 
 			    order by review_regDate desc 
-			    limit #{start}, #{size} ;
 		</select>
 		
 		<insert id="insert">

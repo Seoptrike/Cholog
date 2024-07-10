@@ -11,34 +11,34 @@ import '../../common/useful/Paging.css'
 const ReviewPage = () => {
     const [list, setList] = useState([]);
     const [page, setPage] = useState(1);
-    const [size, setSize] = useState(4);
+    const [size, setSize] = useState(12);
     const [count, setCount] = useState(0);
     const [sort, setSort] = useState('latest');
-    const [review_mall_key, setReview_mall_key] = useState(24);
+    const [review_mall_key, setReview_mall_key] = useState(25);
 
-    // const callAPI = async () => {
-    //     const res = await axios.get(`/review/plist/${review_mall_key}?page=${page}&size=${size}`);
-    //     console.log(res.data);
-    //     setList(res.data.documents);
-    //     setCount(res.data.total);
-    // };
+    const callAPI = async () => {
+        const res = await axios.get(`/review/plist/${review_mall_key}`);
+        console.log(res.data);
+        setList(res.data.documents);
+        setCount(res.data.total);
+    };
 
-    // useEffect(() => {
-    //     callAPI();
-    // }, [page, sort, review_mall_key]);
+    useEffect(() => {
+        callAPI();
+    }, [page, sort, review_mall_key]);
 
-    // const handleSelectSort = (eventKey) => {
-    //     setSort(eventKey);
-    //     setPage(1);
-    // };
+    const handleSelectSort = (eventKey) => {
+        setSort(eventKey);
+        setPage(1);
+    };
 
-    // const onDelete = async(review_key) => {
-    //     if(!window.confirm(`${review_key}번 댓글을 삭제하실래요?`)) return;
-    //     const res = await axios.post(`/review/delete/${review_key}`);
-    //     if(res.data.result===1) {
-    //         callAPI();
-    //     }
-    // }
+    const onDelete = async(review_key) => {
+        if(!window.confirm(`${review_key}번 댓글을 삭제하실래요?`)) return;
+        const res = await axios.post(`/review/delete/${review_key}`);
+        if(res.data.result===1) {
+            callAPI();
+        }
+    }
 
     return (
         <div>
@@ -68,13 +68,13 @@ const ReviewPage = () => {
                                                 )}
                                             </Col>
                                             <Col xs="auto">
-                                                <Dropdown align="end">
+                                                <Dropdown align="end" onSelect={handleSelectSort}>
                                                     <Dropdown.Toggle variant="" id="dropdown-basic">
                                                         <BsThreeDotsVertical />
                                                     </Dropdown.Toggle>
                                                     <Dropdown.Menu>
                                                         <Dropdown.Item eventKey="update">수정하기</Dropdown.Item>
-                                                        <Dropdown.Item 
+                                                        <Dropdown.Item onClick={()=>onDelete(review.review_key)}
                                                             eventKey="delete">삭제하기</Dropdown.Item>
                                                         <Dropdown.Item eventKey="warning">신고하기</Dropdown.Item>
                                                     </Dropdown.Menu>
