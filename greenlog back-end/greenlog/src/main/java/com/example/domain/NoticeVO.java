@@ -14,7 +14,14 @@ public class NoticeVO {
     @JsonFormat(pattern="yyyy년MM월dd일 HH:mm:ss", timezone="Asia/Seoul")
     private Date notice_uDate;
     private String notice_photo;
+    private int notice_type;
     
+	public int getNotice_type() {
+		return notice_type;
+	}
+	public void setNotice_type(int notice_type) {
+		this.notice_type = notice_type;
+	}
 	public int getNotice_key() {
 		return notice_key;
 	}
@@ -61,6 +68,7 @@ public class NoticeVO {
 	public String toString() {
 		return "NoticeVO [notice_key=" + notice_key + ", notice_writer=" + notice_writer + ", notice_title="
 				+ notice_title + ", notice_contents=" + notice_contents + ", notice_regDate=" + notice_regDate
-				+ ", notice_uDate=" + notice_uDate + ", notice_photo=" + notice_photo + "]";
+				+ ", notice_uDate=" + notice_uDate + ", notice_photo=" + notice_photo + ", notice_type=" + notice_type
+				+ "]";
 	}
 }

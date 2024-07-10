@@ -23,13 +23,8 @@ public class ReviewDAOImpl implements ReviewDAO {
 		}
 
 		@Override
-		public List<HashMap<String, Object>> reviewList(QueryVO vo) {
-				return session.selectList(namespace + ".reviewList", vo);
-		}
-
-		@Override
 		public void delete(int review_key) {
-				session.delete(namespace + ".delete", review_key);
+				session.delete(namespace + "delete", review_key);
 		}
 
 		@Override
@@ -40,6 +35,19 @@ public class ReviewDAOImpl implements ReviewDAO {
 		@Override
 		public void updateLock(ReviewVO vo) {
 				session.update(namespace + ".updateLock", vo);
+		}
+
+		@Override
+		public int total() {
+				return session.selectOne(namespace + ".total");
+		}
+
+		@Override
+		public List<HashMap<String, Object>> reviewList(int review_mall_key, QueryVO vo) {
+				HashMap<String, Object> map = new HashMap<String, Object>();
+				map.put("review_mall_key", review_mall_key);
+				map.put("vo", vo);
+				return session.selectList(namespace + ".reviewList", map);
 		}
 		
 		

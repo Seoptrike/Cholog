@@ -13,6 +13,8 @@ public class EventVO {
     private Date event_regDate;
     private Date event_uDate;
     private String event_photo;
+    private int event_type;
+    private String event_category;
     
 	public int getEvent_key() {
 		return event_key;
@@ -56,12 +58,24 @@ public class EventVO {
 	public void setEvent_photo(String event_photo) {
 		this.event_photo = event_photo;
 	}
+	public int getEvent_type() {
+		return event_type;
+	}
+	public void setEvent_type(int event_type) {
+		this.event_type = event_type;
+	}
+	public String getEvent_category() {
+		return event_category;
+	}
+	public void setEvent_category(String event_category) {
+		this.event_category = event_category;
+	}
+	
 	@Override
 	public String toString() {
 		return "EventVO [event_key=" + event_key + ", event_writer=" + event_writer + ", event_title=" + event_title
 				+ ", event_contents=" + event_contents + ", event_regDate=" + event_regDate + ", event_uDate="
-				+ event_uDate + ", event_photo=" + event_photo + "]";
+				+ event_uDate + ", event_photo=" + event_photo + ", event_type=" + event_type + ", event_category="
+				+ event_category + "]";
 	}
-
 }
-

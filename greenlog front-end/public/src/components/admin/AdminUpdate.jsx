@@ -19,8 +19,10 @@ const AdminUpdate = () => {
   const [isCheck, setIsCheck] = useState(false);
   const [isEmail, setIsEmail] = useState(false);
   const [phoneCheck, setPhoneCheck] = useState(false);
-  const [gender, setGender] = useState(0);
-  const [auth, setAuth] = useState(0);
+
+  const { user_key, user_nickname, user_uname, user_phone, user_address1, user_address2,
+    user_birth, user_email, user_gender, user_auth } = form;
+
   const [img, setImg] = useState({
     fileName: '',
     file: null
@@ -35,15 +37,17 @@ const AdminUpdate = () => {
   const styleRed = "danger"
   const styleBlue = "primary"
 
-  const { user_key, user_nickname, user_uname, user_phone, user_address1, user_address2,
-    user_birth, user_email, user_gender, user_auth } = form;
+
 
   const callAPI = async () => {
     const res = await axios.get(`/user/read/${user_uid}`);
     setForm(res.data);
     setOrigin(res.data);
-
   }
+
+  const [gender, setGender] = useState("");
+  const [auth, setAuth] = useState("");
+
   useEffect(() => {
     callAPI();
   }, []);
@@ -134,6 +138,30 @@ const AdminUpdate = () => {
     }
   };
 
+
+  //auth 변경 함수 (이벤트가 없을때는 default값이 저장)
+  const onChangeAuth = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+
+    if (e.target.value) {
+      setAuth(e.target.value);
+    } else {
+      setAuth(origin.user_auth);
+    }
+  }
+
+
+  //gender 변경 함수 
+  const onChangeGender = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+    if (e.target.value) {
+      setGender(e.target.value);
+    } else {
+      setGender(origin.user_gender);
+    }
+  }
+
+
   //정보수정
   const onClickUpdate = async (form) => {
     if (!window.confirm("변경된 내용을 수정하시겠습니까?")) return;
@@ -142,6 +170,7 @@ const AdminUpdate = () => {
     await axios.post("/user/admin/update", updateForm);
     window.location.href = `/user/admin/read/${user_uid}`;
   }
+
 
 
   return (
@@ -192,10 +221,7 @@ const AdminUpdate = () => {
                       </InputGroup>
                       <InputGroup className='mb-2'>
                         <InputGroup.Text>성별</InputGroup.Text>
-                        <Form.Select onChange={(e) => {
-                          onChangeForm(e);
-                          setGender(parseInt(e.target.value));
-                        }} value={user_gender} name="user_gender">
+                        <Form.Select onChange={onChangeGender} value={user_gender} name="user_gender" >
                           <option value="0">남자</option>
                           <option value="1">여자</option>
                         </Form.Select>
@@ -218,10 +244,7 @@ const AdminUpdate = () => {
                       </InputGroup>
                       <InputGroup className='mb-2'>
                         <InputGroup.Text>권한</InputGroup.Text>
-                        <Form.Select onChange={(e) => {
-                          onChangeForm(e);
-                          setAuth(parseInt(e.target.value));
-                        }} value={user_auth} name="user_auth">
+                        <Form.Select onChange={onChangeAuth} value={user_auth} name="user_auth">
                           <option value="0">일반회원</option>
                           <option value="1">우수회원</option>
                           <option value="500">블랙리스트</option>

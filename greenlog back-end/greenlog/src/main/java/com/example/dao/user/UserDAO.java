@@ -17,4 +17,12 @@ public interface UserDAO {
 	public void update(UserVO vo);
 	
 	public void imgUpdate(String img, String uid);
+	
+	public void updatePerson(UserVO vo);
+	
+	public HashMap<String, Object> mypage1();
+
+	public List<HashMap<String, Object>> mypage2(String uid);
+	
+	public HashMap<String, Object> mypage3(String uid);
 }

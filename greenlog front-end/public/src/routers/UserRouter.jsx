@@ -16,6 +16,7 @@ import Follow from '../components/follow/Follow'
 import AdminUpdate from '../components/admin/AdminUpdate'
 import AdminReadPage from '../components/admin/AdminReadPage'
 import ChatRoom from '../common/useful/ChatRoom'
+import AdminAskList from '../components/admin/AdminAskList'
 
 
 const UserRouter = () => {
@@ -26,6 +27,7 @@ const UserRouter = () => {
         <Route path='read/:user_uid' element={<MyPage/>}/>
         <Route path='admin' element={<Dashboard/>}/>
         <Route path='admin/list.json' element={<UserListPage/>}/>
+        <Route path='admin/ask/list.json' element={<AdminAskList/>}/>
         <Route path='admin/question' element={<Question/>}/>
         <Route path='admin/update/:user_uid' element={<AdminUpdate/>}/>
         <Route path='admin/read/:user_uid' element={<AdminReadPage/>}/>

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class DiaryVO {
 	private int diary_key;
+	private String diary_title;
 	private String diary_writer;
 	private String diary_contents;
 	private String diary_photo;
@@ -13,6 +14,13 @@ public class DiaryVO {
 	private Date diary_regDate;
 	private int diary_like;
 	private int diary_state;
+	
+	public String getDiary_title() {
+		return diary_title;
+	}
+	public void setDiary_title(String diary_title) {
+		this.diary_title = diary_title;
+	}
 	public int getDiary_key() {
 		return diary_key;
 	}
@@ -57,8 +65,9 @@ public class DiaryVO {
 	}
 	@Override
 	public String toString() {
-		return "DiaryVO [diary_key=" + diary_key + ", diary_writer=" + diary_writer + ", diary_contents="
-				+ diary_contents + ", diary_photo=" + diary_photo + ", diary_regDate=" + diary_regDate + ", diary_like="
-				+ diary_like + ", diary_state=" + diary_state + "]";
+		return "DiaryVO [diary_key=" + diary_key + ", diary_title=" + diary_title + ", diary_writer=" + diary_writer
+				+ ", diary_contents=" + diary_contents + ", diary_photo=" + diary_photo + ", diary_regDate="
+				+ diary_regDate + ", diary_like=" + diary_like + ", diary_state=" + diary_state + "]";
 	}
+	
 }

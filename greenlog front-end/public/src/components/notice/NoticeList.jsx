@@ -1,24 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Row, Col, Table, Tab, Tabs, Button } from 'react-bootstrap';
+import axios from 'axios';
 import HeaderTabs from '../../common/useful/HeaderTabs'; 
 
 const NoticeList = () => {
-  const navigate = useNavigate();
   const [activeKey, setActiveKey] = useState('전체');
+  const [pinnedNotices, setPinnedNotices] = useState([]);
+  const [notices, setNotices] = useState([]);
 
-  const pinnedNotices = [
-    { id: 1, category: '전체', title: '고정공지', contents: '고정공지 내용입니다.', regDate: '2024-06-20', views: 5376 },
-  ];
+  useEffect(() => {
+    fetchNotices();
+  }, []);
 
-  const notices = [
-    { id: 2, category: '이벤트', title: '이벤트공지', contents: '이벤트공지 내용입니다.', regDate: '2024-07-02', views: 6541 },
-    { id: 3, category: '일반', title: '일반공지', contents: '일반공지 내용입니다.', regDate: '2024-07-01', views: 11515 },
-    { id: 4, category: '포인트', title: '포인트공지', contents: '포인트공지 내용입니다.', regDate: '2024-06-30', views: 19735 },
-  ];
+  const fetchNotices = async () => {
+    try {
+      const response = await axios.get('/notice/list');
+      const allNotices = response.data;
+
+      // 고정 공지와 일반 공지를 분리
+      const pinned = allNotices.filter(notice => notice.is_pinned);
+      const regular = allNotices.filter(notice => !notice.is_pinned);
+
+      setPinnedNotices(pinned);
+      setNotices(regular);
+    } catch (error) {
+      console.error('Error fetching notices:', error);
+    }
+  };
 
   const filterNoticesByCategory = (category) => {
-    return notices.filter(notice => category === '전체' || notice.category === category);
+    return notices.filter(notice => category === '전체' || notice.notice_category === category);
   };
 
   return (
@@ -48,45 +60,48 @@ const NoticeList = () => {
 
 const NoticeTabContent = ({ pinnedNotices, notices }) => {
   return (
-    <Table>
-      <thead>
-        <tr>
-          <th>번호</th>
-          <th>제목</th>
-          <th>카테고리</th>
-          <th>작성일</th>
-          <th>조회수</th>
-        </tr>
-      </thead>
-      <tbody>
-        {pinnedNotices.map(notice => (
-          <React.Fragment key={notice.id}>
-            <tr>
-              <td>{notice.id}</td>
+    <div>
+      <Table>
+        <thead>
+          <tr>
+            <th>번호</th>
+            <th>제목</th>
+            <th>카테고리</th>
+            <th>작성일</th>
+            <th>조회수</th>
+          </tr>
+        </thead>
+        <tbody>
+          {pinnedNotices.map((notice, index) => (
+            <tr key={notice.notice_key}>
+              <td>{index + 1}</td>
               <td>
-                <Link to={`/community/notice/read/${notice.id}`}>{notice.title}</Link>
+                <Link to={`/community/notice/read/${notice.notice_key}`}>{notice.notice_title}</Link>
               </td>
-              <td>{notice.category}</td>
-              <td>{notice.regDate}</td>
-              <td>{notice.views}</td>
+              <td>{notice.notice_category}</td>
+              <td>{notice.notice_regDate}</td>
+              <td>{notice.notice_views}</td>
             </tr>
-          </React.Fragment>
-        ))}
-        {notices.map(notice => (
-          <React.Fragment key={notice.id}>
-            <tr>
-              <td>{notice.id}</td>
+          ))}
+          {notices.map((notice, index) => (
+            <tr key={notice.notice_key}>
+              <td>{pinnedNotices.length + index + 1}</td>
               <td>
-                <Link to={`/community/notice/read/${notice.id}`}>{notice.title}</Link>
+                <Link to={`/community/notice/read/${notice.notice_key}`}>{notice.notice_title}</Link>
               </td>
-              <td>{notice.category}</td>
-              <td>{notice.regDate}</td>
-              <td>{notice.views}</td>
+              <td>{notice.notice_category}</td>
+              <td>{notice.notice_regDate}</td>
+              <td>{notice.notice_views}</td>
             </tr>
-          </React.Fragment>
-        ))}
-      </tbody>
-    </Table>
+          ))}
+        </tbody>
+      </Table>
+      <div className="text-end mt-3">
+        <Link to={'/community/notice/insert'}>
+          <Button>글쓰기</Button>
+        </Link>
+      </div>
+    </div>
   );
 };
 

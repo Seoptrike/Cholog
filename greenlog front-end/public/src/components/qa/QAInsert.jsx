@@ -1,48 +1,74 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Form, Button, InputGroup, FormControl } from 'react-bootstrap';
+import { Form, Button, InputGroup, FormControl, Spinner } from 'react-bootstrap';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import axios from 'axios';
 
 const QAInsert = () => {
-  const [category, setCategory] = useState('공지사항');
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const uid = sessionStorage.getItem("uid");
+  const [form, setForm] = useState({
+    qa_title: '',
+    qa_contents: '',
+    qa_writer: uid
+  });
 
-  const TitleChange = (e) => {
-    setTitle(e.target.value);
+  const { qa_title, qa_contents, qa_writer } = form;
+
+  const onChangeForm = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const ContentChange = (event, editor) => {
-    const data = editor.getData();
-    setContent(data);
+  const onChangeCKEditor = (event, editor) => {
+    let data = editor.getData();
+    data = data.replace(/<\/?p>/g, '');  // <p> 태그를 제거
+    setForm({ ...form, qa_contents: data });
   };
 
-  const handleSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    console.log('카테고리:', category);
-    console.log('제목:', title);
-    console.log('내용:', content);
-    navigate('/community/qa/list.json');
+    if (qa_title === "") {
+      alert("제목을 입력하세요!");
+      return;
+    }
+    if (!window.confirm("질문을 등록하실래요?")) return;
+    setLoading(true);
+  
+    const updateForm = { ...form };
+    const response = await axios.post("/qa/insert", updateForm);
+    setLoading(false);
+  
+    if (response.status === 200) {
+      alert('질문이 등록되었습니다.');
+      navigate(`/community/qa/list.json`);
+    } else {
+      alert('질문 등록에 실패했습니다.');
+    }
   };
+  
 
   return (
     <div>
-      <h1 className="text-center my-5">글쓰기</h1>
-      <Form onSubmit={handleSubmit}>
+      <h1 className="text-center my-5">Q&A</h1>
+      <Form onSubmit={onSubmit}>
         <InputGroup className="mb-3">
           <FormControl
+            type="text"
+            name="qa_title"
             placeholder="제목을 입력하세요"
-            value={title}
-            onChange={TitleChange}/>
+            value={qa_title}
+            onChange={onChangeForm}
+          />
         </InputGroup>
         <CKEditor
           editor={ClassicEditor}
-          data="<p>내용을 입력하세요...</p>"
-          onChange={ContentChange}/>
-        <Button type="submit" className="mt-3" >
-          등록
+          data={qa_contents}
+          onChange={onChangeCKEditor}
+        />
+        <Button type="submit" className="mt-3" disabled={loading}>
+          {loading ? <Spinner animation="border" size="sm" /> : '등록'}
         </Button>
       </Form>
     </div>

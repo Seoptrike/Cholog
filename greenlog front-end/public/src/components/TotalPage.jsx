@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ListGroup from 'react-bootstrap/ListGroup';
 import RouterPage from '../routers/RouterPage';
 import { Row, Col } from 'react-bootstrap';
@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 
 const TotalPage = () => {
-    const uid= sessionStorage.getItem("uid")
+    const uid= sessionStorage.getItem("uid");
     return (
         <div>
             <Row>
@@ -43,8 +43,6 @@ const TotalPage = () => {
                     <ListGroup>
                         <ListGroup.Item>피망몰</ListGroup.Item>
                         <ListGroup.Item> <Link to={"/mall/list.json"}>상품리스트</Link></ListGroup.Item>
-                        <ListGroup.Item> <Link to={`/mall/read/:mall_key`}>상품정보</Link></ListGroup.Item>
-                        <ListGroup.Item> <Link to={"/mall/update/:mall_key"}>상품정보수정</Link></ListGroup.Item>
                         <ListGroup.Item> <Link to={"/mall/insert"}>상품등록</Link></ListGroup.Item>
                     </ListGroup>
                 </Col>
