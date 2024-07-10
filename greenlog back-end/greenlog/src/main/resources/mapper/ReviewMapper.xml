@@ -3,7 +3,11 @@
 <mapper namespace="com.example.mapper.ReviewMapper">
 
 		<select id="reviewList" resultType="hashmap">
-				select * from review order by review_regDate desc limit #{start}, #{size} ;
+			    select * 
+			    from review
+			    where review_mall_key=#{review_mall_key} 
+			    order by review_regDate desc 
+			    limit #{start}, #{size} ;
 		</select>
 		
 		<insert id="insert">
@@ -23,6 +27,10 @@
 		<delete id="delete">
 				delete from review where review_key=#{review_key};
 		</delete>
+		
+		<select id="total" resultType="int">
+				select count(*) as total from review;
+		</select>
 		
 		
 						

@@ -31,9 +31,9 @@ public class ReviewController {
 				rdao.insert(vo);
 		}
 		
-		@GetMapping("/list")
-		public List<HashMap<String, Object>> reviewList(QueryVO vo) {
-				return rdao.reviewList(vo);
+		@GetMapping("/list/{review_mall_key}")
+		public List<HashMap<String, Object>> reviewList(@PathVariable("review_mall_key") int review_mall_key, QueryVO vo) {
+				return rdao.reviewList(review_mall_key,vo);
 		}
 		
 		@PostMapping("/delete/{review_key}")
@@ -51,5 +51,9 @@ public class ReviewController {
 				rservice.updateLock(vo);
 		}
 		
+		@GetMapping("/plist/{review_mall_key}")
+		public HashMap<String, Object> plist(@PathVariable("review_mall_key") int review_mall_key, QueryVO vo) {
+				return rservice.plist(review_mall_key, vo);
+		}
 
 }
