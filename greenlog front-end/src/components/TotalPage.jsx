@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ListGroup from 'react-bootstrap/ListGroup';
 import RouterPage from '../routers/RouterPage';
 import { Row, Col } from 'react-bootstrap';
@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 
 const TotalPage = () => {
-    const uid= sessionStorage.getItem("uid")
+    const uid= sessionStorage.getItem("uid");
     return (
         <div>
             <Row>

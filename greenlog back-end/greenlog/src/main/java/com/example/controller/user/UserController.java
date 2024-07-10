@@ -1,6 +1,6 @@
 package com.example.controller.user;
 
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,13 +51,18 @@ public class UserController {
 		return udao.read(uid);
 	}
 	
-	//관리자용 업데이트(권한수정가능)
+	//관리자용 업데이트(권한/성별 수정가능)
 	@PostMapping("/admin/update")
 	public void update(@RequestBody UserVO vo) {
 		udao.update(vo);
-		System.out.println(vo.getUser_gender());
 	}
-		
+	
+	//개인정보 업데이트
+	 @PostMapping("/update")
+	 public void updatePerson(@RequestBody UserVO vo) {
+		 udao.updatePerson(vo);
+	 }
+	 
 	@PostMapping("/login")
 	public int login(@RequestBody UserVO vo) {
 		int result = 0; // 아이디없음
@@ -72,5 +77,19 @@ public class UserController {
 		return result;
 	}
 	
+	//마이페이지 포인트, 옥션, 유저정보
+	@GetMapping("/mypage1")
+	public HashMap<String, Object> mypage1(){
+		return udao.mypage1();
+	}
 	
+	@GetMapping("/mypage2/{user_uid}")
+	public List<HashMap<String, Object>> mypage2(@PathVariable("user_uid") String uid){
+		return udao.mypage2(uid);
+	}
+
+	@GetMapping("/mypage3/{user_uid}")
+	public HashMap<String, Object> mypage3(@PathVariable("user_uid") String uid){
+		return udao.mypage3(uid);
+	}
 }

@@ -22,8 +22,23 @@
 		update user set user_nickname=#{user_nickname}, user_birth=#{user_birth}, user_gender=#{user_gender}, user_phone=#{user_phone}, user_email=#{user_email},
 		user_address1=#{user_address1}, user_address2=#{user_address2}, user_auth=#{user_auth} where user_uid=#{user_uid}
 	</update>
-	
+	<update id="personUpdate">
+		update user set user_uname=#{user_uname}, user_phone=#{user_phone}, user_address1=#{user_address1}, user_address2=#{user_address2}, user_birth=#{user_birth},
+		user_nickname=#{user_nickname}, user_email=#{user_email} where user_uid=#{user_uid}
+	</update>
 	<update id="imgUpdate">
 		update user set user_img=#{user_img} where uid=#{uid}
 	</update>
+	
+	<select id="mypage1" resultType="hashmap">
+		select seed_point, count(auction_key) auction, user_nickname, user_img
+		from seed, auction, user where seed_uid = auction_seller and seed_uid=user_uid;
+	</select>
+	<select id="mypage2" resultType="hashmap">
+		select * from diary where diary_writer=#{diary_writer}
+	</select>
+	
+	<select id="mypage3" resultType="hashmap">
+		select count(follow_from) as ftotal , count(follow_to) as ttotal from follow where follow_from = #{follow_from}
+	</select>
 </mapper>
