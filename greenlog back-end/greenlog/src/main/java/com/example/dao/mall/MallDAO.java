@@ -11,10 +11,21 @@ public interface MallDAO {
 	
 	public List<HashMap<String, Object>> list (QueryVO vo);
 	
-	
 	public void insertInfo (MallVO vo);
 	
 	//public void insertPhoto (MallPhotoVO pvo);
 	
 	public MallVO read (int mall_key);
+	
+	public void update (MallVO vo);
+	
+	public void delete (int mall_key);
+	
+	public int total(QueryVO vo);
+	
+
+	
+	
+	
+
 }

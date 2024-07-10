@@ -13,10 +13,10 @@ public class MallServiceImpl implements MallService{
 	@Autowired
 	MallDAO mdao ;
 	
-	@Transactional
-	@Override
-	public void insertAll(MallVO vo, MallPhotoVO pvo) {
-		 mdao.insertInfo(vo);
+	//@Transactional
+	//@Override
+	//public void insertAll(MallVO vo, MallPhotoVO pvo) {
+	//	 mdao.insertInfo(vo);
 //	     if (pvo != null) {
 //	    	 mdao.insertPhoto(pvo);
 //	     }
@@ -25,6 +25,7 @@ public class MallServiceImpl implements MallService{
 	
 	
 	
+	
 
 
-}
+

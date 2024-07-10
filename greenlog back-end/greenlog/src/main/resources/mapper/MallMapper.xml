@@ -1,22 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.mapper.MallMapper">
-	<select id="mallList" resultType="hashmap">
+	<select id="list" resultType="hashmap">
 		select *
 		from mall
 		order by mall_regDate desc
+		limit #{start}, #{size}
 	</select>
+	
 	<select id="read" resultType="com.example.domain.MallVO">
 		select *
 		from mall
 		where mall_key=#{mall_key}
 	</select>
+	
 	<insert id="insertInfo">
 		insert into mall(mall_seller, mall_buyer, mall_title, mall_info, mall_price, mall_photo, mall_tstate, mall_pstate, mall_endDate)
 		values(#{mall_seller}, #{mall_buyer}, #{mall_title}, #{mall_info}, #{mall_price}, #{mall_photo}, #{mall_tstate}, #{mall_pstate}, #{mall_endDate})
 	</insert>
+	
 	<insert id="insertPhoto">
 		insert into mallPhoto (mallPhoto_mall_key, mallPhoto_key, mallPhoto_photo)
 		values(#{mallPhoto_mall_key}, #{mallPhoto_key}, #{mallPhoto_photo})
 	</insert>
+	
+	<select id="total" resultType="int">
+		select count(*) as total
+		from mall
+		 <where>
+        <if test="key == 'mall_seller'">
+            AND mall_seller LIKE CONCAT('%', #{word}, '%')
+        </if>
+        <if test="key == 'mall_title'">
+            AND mall_title LIKE CONCAT('%', #{word}, '%')
+        </if>
+        <if test="key == 'mall_info'">
+            AND mall_info LIKE CONCAT('%', #{word}, '%')
+        </if>
+    </where>
+	</select>
+	
+	<update id="update">
+		update mall
+		set mall_title=#{mall_title},mall_info=#{mall_info}
+		where mall_key=#{mall_key}
+	</update>
+	
+	<delete id="delete">
+		delete from mall
+		where mall_key=#{mall_key}
+	</delete>
 </mapper>
