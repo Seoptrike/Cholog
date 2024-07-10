@@ -1,6 +1,7 @@
 import React from 'react'
 import {Row, Col, Tab, Tabs} from 'react-bootstrap'
 import Sidebar from './Sidebar'
+import AdminAskList from './AdminAskList'
 
 //탭을 누를때 마다 페이지 변경, 
 const Question = () => {
@@ -18,7 +19,7 @@ const Question = () => {
                   fill
                 >
                   <Tab eventKey="home" title="1:1">
-                    채팅 컴포넌트
+                    <AdminAskList/>
                   </Tab>
                   <Tab eventKey="profile" title="FAQ">
                     FAQ수정페이지

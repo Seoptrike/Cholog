@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.ChatMapper">
+	 <insert id="insertChat">
+        INSERT INTO chat (chat_sender, chat_content)
+        VALUES (#{chat_sender}, #{chat_content})
+    </insert>
+    
+    <select id="list" resultType="com.example.domain.ChatVO">
+        SELECT * FROM chat where chat_endTime= null;
+    </select>
+    
+    <update id="update">
+    	update chat set chat_endTime=now()
+    	where chat_key=#{chat_key};
+    </update>
+</mapper>
