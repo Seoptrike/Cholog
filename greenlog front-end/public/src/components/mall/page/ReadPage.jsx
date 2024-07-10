@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Nav, TabContent ,Row,Col,Table,Button} from 'react-bootstrap';
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
 
 import AllImage from '../read/AllImage';
 import SellerInfo from '../read/SellerInfo';
 
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import InsertPage from '../../review/InsertPage';
-import ReviewPage from '../../review/ReviewPage';
 
 const ReadPage = () => {
+  const navi = useNavigate();
   const {mall_key}=useParams();
+  const uid = sessionStorage.getItem("uid");
   console.log(mall_key);
   const [form, setForm] = useState({});
   console.log(form);
@@ -30,9 +32,17 @@ const ReadPage = () => {
   useEffect(()=>{
     callAPI();
   },[])
- 
+  
+  const onClickUpdate=()=>{
+    navi(`/mall/update/${mall_key}`);
+  }
     
-    
+  const onClickDelete=async()=>{
+    //console.log("0000000000000000000000000>>>>>>>>>>>"+mall_key);
+    await axios.post(`/mall/delete/${mall_key}`);
+    callAPI();
+    navi("/mall/list.json")
+  }
       
   return (
     
@@ -49,25 +59,36 @@ const ReadPage = () => {
                 <Table bordered>
                     <tbody>
                         <tr>
-                            <td className='ellipsis'  style={{borderRight:"0px"}}>mall_title</td>
-                            <td  className='text-end' style={{width:"12%",borderLeft:"0px"}}>신고</td>
+                            <td className='ellipsis'  style={{borderRight:"0px"}}>{mall_title}</td>
+                            {mall_seller===uid ?
+                              <td  className='text-end' style={{width:"12%",borderLeft:"0px"}}>
+                                  <DropdownButton id="dropdown-basic-button" title="수정" size='sm'>
+                                    <Dropdown.Item onClick={onClickUpdate}>수정하기</Dropdown.Item>
+                                    <Dropdown.Item onClick={(e)=>onClickDelete(e)}>삭제하기</Dropdown.Item>
+                                  </DropdownButton>
+                              </td>
+                              :
+                              <td  className='text-end' style={{width:"12%",borderLeft:"0px"}}>신고</td>
+                            }
                         </tr>
                         <tr>
-                            <td >mall_tstate</td> 
-                            <td className='w-50' >mall_pstate</td>
+                            <td >{mall_tstate === 0 ? "경매" : (mall_tstate === 1 ? "나눔" : (mall_tstate === 2 ? "구매" : ""))}</td> 
+                            <td className='w-50' >{mall_pstate === 0 ? "중고상품" : "(미개봉,미사용)"}</td>
                         </tr>
                         <tr>
                             <td colSpan={2} style={{width:"100%",height:"80px"}}>
-                              mall_info
+                             { mall_info}
                             </td>
                         </tr> 
-                        <tr>
-                            <td className='w-50'>mall_endDate</td> 
-                            <td >mall_price</td>
+                        {mall_tstate===0 &&
+                         <tr>
+                            <td className='w-50'>마감일:{mall_endDate}</td> 
+                            <td >{mall_price}씨드</td>
                         </tr>
+                        }
                         <tr>
-                          <td className='w-50'>mall_seller</td> 
-                          <td >mall_regDate</td>
+                          <td className='w-50'>(유저아이콘){mall_seller}</td> 
+                          <td style={{fontSize:"12px"}}>{mall_regDate}</td>
                         </tr>
                     </tbody> 
                 </Table>
@@ -90,12 +111,12 @@ const ReadPage = () => {
         </Nav.Item>
         <Nav.Item>
           <Nav.Link eventKey="2" onClick={() => handleTabClick('2')} active={activeTab === '2'}>
-            입찰하기
+            상품후기(0)
           </Nav.Link>
         </Nav.Item>
         <Nav.Item>
           <Nav.Link eventKey="3" onClick={() => handleTabClick('3')} active={activeTab === '3'}>
-            현재 입찰 내역
+            1:1
           </Nav.Link>
         </Nav.Item>
         <Nav.Item>
@@ -112,12 +133,12 @@ const ReadPage = () => {
         )}
         {activeTab === '2' && (
           <div>
-            <InsertPage mall_key={mall_key}/>
+            <h3>상품후기(0) 페이지 내용</h3>
           </div>
         )}
         {activeTab === '3' && (
           <div>
-            <ReviewPage mall_seller={mall_seller}/>
+            <h3>1:1 문의 페이지 내용</h3>
           </div>
         )}
         {activeTab === '4' && (

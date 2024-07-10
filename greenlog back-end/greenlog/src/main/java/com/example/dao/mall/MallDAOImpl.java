@@ -19,7 +19,7 @@ public class MallDAOImpl implements MallDAO{
 	
 	@Override
 	public List<HashMap<String, Object>> list(QueryVO vo) {
-		return session.selectList(namespace + ".mallList", vo);
+		return session.selectList(namespace + ".list", vo);
 	}
 
 
@@ -33,6 +33,30 @@ public class MallDAOImpl implements MallDAO{
 	public MallVO read(int mall_key) {
 		return session.selectOne(namespace+".read", mall_key);
 	}
+	
+	@Override
+	public void update(MallVO vo) {
+		session.update(namespace+".update", vo);
+	}
+
+
+	@Override
+	public void delete(int mall_key) {
+		session.delete(namespace+".delete", mall_key);
+	}
+
+	@Override
+	public int total(QueryVO vo) {
+		return session.selectOne(namespace+".total",vo);
+	}
+
+	
+
+
+	
+
+
+	
 
 
 //	@Override

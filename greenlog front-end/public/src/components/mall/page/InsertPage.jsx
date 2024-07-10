@@ -74,7 +74,7 @@ const InsertPage = () => {
       // 게시글 등록
       await axios.post('/mall/insert', form);
       alert("게시글 등록 완료!");
-      //window.location.href = '/mall/list.json';
+      window.location.href = '/mall/list.json';
       
     } catch (error) {
       // 오류 발생 시 오류 메시지 출력
