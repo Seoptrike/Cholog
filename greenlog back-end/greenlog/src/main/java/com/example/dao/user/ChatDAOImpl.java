@@ -16,8 +16,8 @@ public class ChatDAOImpl implements ChatDAO {
 	String namespace = "com.example.mapper.ChatMapper";
 
 	@Override
-	public void insertChat(ChatVO chatVO) {
-		session.insert(namespace + ".insertChat", chatVO);
+	public void insertChat(ChatVO vo) {
+		session.insert(namespace + ".insertChat", vo);
 
 	}
 
@@ -27,8 +27,18 @@ public class ChatDAOImpl implements ChatDAO {
 	}
 
 	@Override
-	public void update() {
-		session.update(namespace + ".update");
+	public void update(ChatVO vo) {
+		session.update(namespace + ".update", vo);
+	}
+
+	@Override
+	public List<ChatVO> alist() {
+		return session.selectList(namespace + ".alreadylist");
+	}
+
+	@Override
+	public void save(ChatVO vo) {
+		session.update(namespace + ".saveChat", vo);
 	}
 
 }

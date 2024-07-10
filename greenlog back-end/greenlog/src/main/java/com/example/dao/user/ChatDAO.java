@@ -9,5 +9,9 @@ public interface ChatDAO {
 
 	public List<ChatVO> list();
 
-	public void update();
+	public void update(ChatVO chatVO);
+
+	public List<ChatVO> alist();
+
+	public void save(ChatVO chatVO);
 }

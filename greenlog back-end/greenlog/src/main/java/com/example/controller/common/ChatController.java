@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,8 +31,8 @@ public class ChatController {
 
 	// 채팅방 해결
 	@PostMapping("/chat/delete")
-	public void update() {
-		cdao.update();
+	public void update(@RequestBody ChatVO vo) {
+		cdao.update(vo);
 	}
 
 	// 채팅방 목록
@@ -42,18 +41,26 @@ public class ChatController {
 		return cdao.list();
 	}
 
+	// 완료된 채팅방 목록
+	@GetMapping("/chat/alist")
+	public List<ChatVO> alist() {
+		return cdao.alist();
+	}
+
 	@MessageMapping("/chat.sendMessage")
 	public void sendMessage(ChatVO chatMessage) {
-		String uid = chatMessage.getChat_sender();
-		String destination = "/topic/" + uid;
+		String path = chatMessage.getChat_path();
+		String destination = "/topic/" + path;
+		cdao.save(chatMessage);
+		System.out.println("Sending message to " + destination + ": " + chatMessage);
 		messagingTemplate.convertAndSend(destination, chatMessage);
 	}
 
 	@MessageMapping("/chat.addUser")
-	@SendTo("/topic/{uid}")
 	public void addUser(ChatVO chatMessage) {
-		String uid = chatMessage.getChat_sender();
-		String destination = "/topic/" + uid;
+		String path = chatMessage.getChat_path();
+		String destination = "/topic/" + path;
+		System.out.println("Adding user to " + destination + ": " + chatMessage);
 		messagingTemplate.convertAndSend(destination, chatMessage);
 	}
 }

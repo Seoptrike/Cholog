@@ -6,12 +6,21 @@
         VALUES (#{chat_sender}, #{chat_content})
     </insert>
     
+	<update id="saveChat">
+		update chat set chat_content = #{chat_content} where chat_sender = #{chat_sender} and chat_state='미처리'
+	</update>
     <select id="list" resultType="com.example.domain.ChatVO">
-        SELECT * FROM chat where chat_endTime= null;
+        SELECT * FROM chat where chat_endTime is null;
+    </select>
+    
+     <select id="alreadylist" resultType="com.example.domain.ChatVO">
+        SELECT * FROM chat where chat_endTime is not null;
     </select>
     
     <update id="update">
-    	update chat set chat_endTime=now()
+    	update chat set chat_endTime=now(), chat_state='처리완료'
     	where chat_key=#{chat_key};
     </update>
+    
+    
 </mapper>

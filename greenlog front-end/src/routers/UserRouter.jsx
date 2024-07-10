@@ -17,6 +17,7 @@ import AdminUpdate from '../components/admin/AdminUpdate'
 import AdminReadPage from '../components/admin/AdminReadPage'
 import ChatRoom from '../common/useful/ChatRoom'
 import AdminAskList from '../components/admin/AdminAskList'
+import AdminChat from '../components/admin/AdminChat'
 
 
 const UserRouter = () => {
@@ -26,6 +27,7 @@ const UserRouter = () => {
         <Route path='join' element={<JoinPage/>}/>
         <Route path='read/:user_uid' element={<MyPage/>}/>
         <Route path='admin' element={<Dashboard/>}/>
+        <Route path='chat/:user_uid' element={<AdminChat/>}/>
         <Route path='admin/list.json' element={<UserListPage/>}/>
         <Route path='admin/ask/list.json' element={<AdminAskList/>}/>
         <Route path='admin/question' element={<Question/>}/>
