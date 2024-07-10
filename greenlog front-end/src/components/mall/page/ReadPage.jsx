@@ -8,6 +8,8 @@ import SellerInfo from '../read/SellerInfo';
 
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import InsertPage from '../../review/InsertPage';
+import ReviewPage from '../../review/ReviewPage';
 
 const ReadPage = () => {
   const navi = useNavigate();
@@ -111,12 +113,12 @@ const ReadPage = () => {
         </Nav.Item>
         <Nav.Item>
           <Nav.Link eventKey="2" onClick={() => handleTabClick('2')} active={activeTab === '2'}>
-            상품후기(0)
+            입찰하기
           </Nav.Link>
         </Nav.Item>
         <Nav.Item>
           <Nav.Link eventKey="3" onClick={() => handleTabClick('3')} active={activeTab === '3'}>
-            1:1
+            현재 입찰 내역
           </Nav.Link>
         </Nav.Item>
         <Nav.Item>
@@ -133,12 +135,12 @@ const ReadPage = () => {
         )}
         {activeTab === '2' && (
           <div>
-            <h3>상품후기(0) 페이지 내용</h3>
+            <InsertPage mall_key={mall_key}/>
           </div>
         )}
         {activeTab === '3' && (
           <div>
-            <h3>1:1 문의 페이지 내용</h3>
+            <ReviewPage mall_seller={mall_seller}/>
           </div>
         )}
         {activeTab === '4' && (

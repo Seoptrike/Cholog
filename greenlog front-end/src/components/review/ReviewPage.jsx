@@ -7,14 +7,15 @@ import { Rating } from '@mui/material';
 import Spa from '@mui/icons-material/Spa';
 import axios from 'axios';
 import '../../common/useful/Paging.css'
+import { useParams } from 'react-router-dom';
 
 const ReviewPage = () => {
+    const { review_mall_key } = useParams;
     const [list, setList] = useState([]);
     const [page, setPage] = useState(1);
     const [size, setSize] = useState(12);
     const [count, setCount] = useState(0);
     const [sort, setSort] = useState('latest');
-    const [review_mall_key, setReview_mall_key] = useState(25);
 
     const callAPI = async () => {
         const res = await axios.get(`/review/plist/${review_mall_key}`);
@@ -25,7 +26,7 @@ const ReviewPage = () => {
 
     useEffect(() => {
         callAPI();
-    }, [page, sort, review_mall_key]);
+    }, [page, sort]);
 
     const handleSelectSort = (eventKey) => {
         setSort(eventKey);
