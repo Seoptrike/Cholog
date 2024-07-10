@@ -34,6 +34,7 @@ dependencies {
     implementation 'org.springframework.security:spring-security-oauth2-client'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	implementation 'org.springframework.security:spring-security-messaging'
+	implementation 'org.hibernate:hibernate-core:5.6.4.Final'
 }
 
 

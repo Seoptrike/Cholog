@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import axios from 'axios';
-const ChatRoom = () => {
+
+const AdminChat = () => {
     const uid = sessionStorage.getItem('uid'); // 사용자 ID 또는 식별자
     const [stompClient, setStompClient] = useState(null);
     const [messages, setMessages] = useState([]);
     const [messageInput, setMessageInput] = useState('');
-
     useEffect(() => {
         const socket = new SockJS('http://localhost:8080/ws');
         const stomp = Stomp.over(socket);
@@ -31,7 +31,7 @@ const ChatRoom = () => {
         if (stompClient && messageInput) {
             stompClient.send('/app/chat.sendMessage', {}, JSON.stringify({
                 chat_content: messageInput,
-                chat_sender: uid // 사용자 이름 설정
+                chat_sender: "관리자"// 사용자 이름 설정
             }));
             setMessageInput('');
         }
@@ -57,4 +57,4 @@ const ChatRoom = () => {
     )
 }
 
-export default ChatRoom
+export default AdminChat
