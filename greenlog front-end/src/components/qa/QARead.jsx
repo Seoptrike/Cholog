@@ -1,48 +1,61 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Button, Card } from 'react-bootstrap';
 import axios from 'axios';
 
 const QARead = () => {
-  const navigate = useNavigate();
-  const { id } = useParams();
-  const [post, setPost] = useState({
-    title: '',
-    contents: '',
-    writer: '',
-    date: ''
+  const { qa_key } = useParams();
+  const [form, setForm] = useState({
+    qa_key: '',
+    qa_title: '',
+    qa_contents: '',
+    qa_writer: '',
+    qa_regDate: '',
+    qa_udate: '',
+    qid: ''
   });
 
-  useEffect(() => {
-    // 백엔드 없이 더미 데이터로 테스트
-    const fetchPost = () => {
-      // 여기에서 실제로는 axios.get()을 사용해 백엔드에서 데이터를 가져옵니다.
-      const dummyPost = {
-        id: id,
-        title: `문의 제목 ${id}`,
-        contents: `문의 내용 ${id}`,
-        writer: `작성자 ${id}`,
-        date: '2024-07-04'
-      };
-      setPost(dummyPost);
-    };
-    fetchPost();
-  }, [id]);
+  const { qa_contents, qa_title, qa_writer, qa_regDate } = form;
 
-  const handleUpdateClick = () => {
-    navigate(`/community/qa/update/${id}`, { state: { post } });
+  const callAPI = async () => {
+    try {
+      const res = await axios.get(`/qa/read/${qa_key}`);
+      setForm(res.data);
+      console.log(res.data);
+    } catch (error) {
+      console.error('There was an error fetching the post data!', error);
+      alert('게시물 데이터를 가져오는 중 오류가 발생했습니다.');
+    }
+  };
+
+  useEffect(() => {
+    callAPI();
+  }, [qa_key]);
+
+  const onDelete = async () => {
+    if (!window.confirm(`${qa_key}번 게시글을 삭제하실래요?`)) return;
+    try {
+      await axios.post(`/qa/delete/${qa_key}`);
+      alert("게시글 삭제 완료!");
+      window.location.href = '/community/qa/list.json';
+    } catch (error) {
+      console.error('There was an error deleting the post!', error);
+      alert('게시물 삭제 중 오류가 발생했습니다.');
+    }
   };
 
   return (
     <div className="d-flex justify-content-center">
       <Card style={{ width: '50rem' }} className="mt-5">
         <Card.Body>
-          <Card.Title>{post.title}</Card.Title>
-          <Card className="mb-2 text-muted">작성자: {post.writer}</Card>
-          <Card className="mb-2 text-muted">작성일: {post.date}</Card>
-          <Card>{post.contents}</Card>
-          <Button onClick={handleUpdateClick} className='me-2'>수정</Button>
-          <Button>삭제</Button>
+          <Card.Title>{qa_title}</Card.Title>
+          <Card.Subtitle className="mb-2 text-muted">작성자: {qa_writer}</Card.Subtitle>
+          <Card.Subtitle className="mb-2 text-muted">작성일: {qa_regDate}</Card.Subtitle>
+          <Card.Text>{qa_contents}</Card.Text>
+          <Link to={`/community/qa/update/${qa_key}`}>
+            <Button className='me-2'>수정</Button>
+          </Link>
+          <Button onClick={onDelete}>삭제</Button>
         </Card.Body>
       </Card>
     </div>

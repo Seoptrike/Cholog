@@ -1,54 +1,59 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Button, Card } from 'react-bootstrap';
 import axios from 'axios';
 
 const EventRead = () => {
-  const navigate = useNavigate();
-  const { id } = useParams();
-  const [event, setEvent] = useState({
-    title: '',
-    contents: '',
-    writer: '',
-    date: '',
-    views: '',
-    imageUrl: ''
+  const { event_key } = useParams();
+  const [form, setForm] = useState({
+    event_key: '',
+    event_title: '',
+    event_contents: '',
+    event_writer: '',
+    event_regDate:'',
+    event_uDate:'',
+    eid: ''
   });
 
-  useEffect(() => {
-    // 백엔드 없이 더미 데이터로 테스트
-    const fetchEvent = () => {
-      // 여기에서 실제로는 axios.get()을 사용해 백엔드에서 데이터를 가져옵니다.
-      const dummyEvent = {
-        id: id,
-        title: `이벤트 제목 ${id}`,
-        contents: `이벤트 내용 ${id}`,
-        writer: `작성자 ${id}`,
-        date: '2024-07-04',
-        views: 34249,
-        imageUrl: 'https://via.placeholder.com/150',
-      };
-      setEvent(dummyEvent);
-    };
-    fetchEvent();
-  }, [id]);
+  const {event_contents,event_title,event_writer,event_regDate,event_uDate}=form;
 
-  const handleUpdateClick = () => {
-    navigate(`/community/event/update/${id}`, { state: { event } });
-  };
+  const callAPI = async () => {
+    const res = await axios.get(`/event/read/${event_key}`);
+    setForm(res.data);
+    console.log(res.data);
+  }
+
+useEffect(() => {
+  callAPI();
+}, []);
+
+const onDelete = async () => {
+  if (!window.confirm(`${event_key}번 게시글을 삭제하실래요?`)) return;
+  try {
+    await axios.post(`/event/delete/${event_key}`);
+    alert("게시글삭제완료!");
+    window.location.href = '/community/event/list.json';
+  } catch (error) {
+    console.error('There was an error deleting the post!', error);
+    alert('게시물 삭제 중 오류가 발생했습니다.');
+  }
+};
 
   return (
     <div className="d-flex justify-content-center">
       <Card style={{ width: '50rem' }} className="mt-5">
-        <Card.Img variant="top" src={event.imageUrl} />
+        <Card.Img variant="top"/> {/*이미지넣을자리*/}
         <Card.Body>
-          <Card.Title>{event.title}</Card.Title>
-          <Card.Subtitle className="mb-2 text-muted">작성자: {event.writer}</Card.Subtitle>
-          <Card.Subtitle className="mb-2 text-muted">작성일: {event.date}</Card.Subtitle>
-          <Card.Subtitle className="mb-2 text-muted">조회수: {event.views}</Card.Subtitle>
-          <Card.Text>{event.contents}</Card.Text>
-          <Button onClick={handleUpdateClick} className='me-2'>수정</Button>
-          <Button>삭제</Button>
+          <Card.Title>{event_title}</Card.Title>
+          <Card.Subtitle className="mb-2 text-muted">작성자: {event_writer}</Card.Subtitle>
+          {<Card.Subtitle className="mb-2 text-muted">작성일:{event_regDate} </Card.Subtitle>}
+          <Card.Subtitle className="mb-2 text-muted">수정일:{event_uDate} </Card.Subtitle>
+          <Card.Subtitle className="mb-2 text-muted">조회수: </Card.Subtitle>
+          <Card.Text>{event_contents}</Card.Text>
+          <Link to={`/community/event/update/${event_key}`}>
+          <Button className='me-2'>수정</Button>
+          </Link>
+          <Button onClick={onDelete}>삭제</Button>
         </Card.Body>
       </Card>
     </div>

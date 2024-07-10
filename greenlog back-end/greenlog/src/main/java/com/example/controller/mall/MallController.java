@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.dao.mall.MallDAO;
 import com.example.domain.MallVO;
 import com.example.domain.QueryVO;
-import com.example.service.mall.MallService;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,8 +22,6 @@ public class MallController {
 	
 	@Autowired
 	MallDAO mdao;
-	@Autowired
-	MallService mservice;
 	
 	@GetMapping("/list")
 	public List  <HashMap<String, Object>> list(QueryVO vo) {

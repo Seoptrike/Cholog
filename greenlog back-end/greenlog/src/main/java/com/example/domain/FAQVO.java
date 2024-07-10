@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class FAQVO {
 	
 	private int faq_key;
+	private String faq_category;
     private String faq_writer;
     private String faq_question;
     private String faq_answer;
@@ -15,6 +16,12 @@ public class FAQVO {
     @JsonFormat(pattern="yyyy년MM월dd일 HH:mm:ss", timezone="Asia/Seoul")
     private Date faq_uDate;
     
+	public String getFaq_category() {
+		return faq_category;
+	}
+	public void setFaq_category(String faq_category) {
+		this.faq_category = faq_category;
+	}
 	public int getFaq_key() {
 		return faq_key;
 	}
@@ -53,7 +60,8 @@ public class FAQVO {
 	}
 	@Override
 	public String toString() {
-		return "FAQVO [faq_key=" + faq_key + ", faq_writer=" + faq_writer + ", faq_question=" + faq_question
-				+ ", faq_answer=" + faq_answer + ", faq_regDate=" + faq_regDate + ", faq_uDate=" + faq_uDate + "]";
+		return "FAQVO [faq_key=" + faq_key + ", faq_category=" + faq_category + ", faq_writer=" + faq_writer
+				+ ", faq_question=" + faq_question + ", faq_answer=" + faq_answer + ", faq_regDate=" + faq_regDate
+				+ ", faq_uDate=" + faq_uDate + "]";
 	}
 }

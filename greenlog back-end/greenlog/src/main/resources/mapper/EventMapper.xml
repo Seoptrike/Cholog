@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.EventMapper">
+	 <insert id="insert">
+        INSERT INTO event (event_writer, event_title, event_contents, event_type)
+        VALUES (#{event_writer}, #{event_title}, #{event_contents}, #{event_type})
+    </insert>
+     <update id="update">
+		update event
+		set event_title= #{event_title}, event_contents=#{event_contents}, event_type= #{event_type}
+		where event_key=#{event_key}
+	</update>
+	 <delete id="delete">
+		delete from event where event_key=#{event_key}
+	</delete>
+	 <select id="read" resultType="com.example.domain.EventVO">
+        SELECT * FROM event WHERE event_key = #{evnet_key}
+    </select>
+		<select id="list" resultType="hashmap">
+ 		select *
+		from event
+		order by event_key desc;
+ 		</select>
+</mapper>

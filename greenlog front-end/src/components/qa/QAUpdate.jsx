@@ -1,69 +1,91 @@
-import React, { useState } from 'react';
-import { useNavigate, useLocation, useParams } from 'react-router-dom';
-import { Form, Button, InputGroup, FormControl } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Form, Button, Row, Col, InputGroup, FormControl } from 'react-bootstrap';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import axios from 'axios';
 
 const QAUpdate = () => {
+  const [loading, setLoading] = useState(false);
+  const { qa_key } = useParams();
   const navigate = useNavigate();
-  const location = useLocation();
-  const { id } = useParams();
-  const { post } = location.state;
+  const [form, setForm] = useState({
+    qa_title: '',
+    qa_contents: '',
+    qa_writer: '',
+  });
 
-  const [title, setTitle] = useState(post.title);
-  const [contents, setContents] = useState(post.contents);
-  const [category, setCategory] = useState(post.category);
+  const { qa_title, qa_contents, qa_writer } = form;
 
-  const TitleChange = (e) => {
-    setTitle(e.target.value);
+  const callAPI = async () => {
+    const res = await axios.get(`/qa/read/${qa_key}`);
+    setForm(res.data);
   };
 
-  const ContentsChange = (event, editor) => {
-    const data = editor.getData();
-    setContents(data);
+  useEffect(() => {
+    callAPI();
+  }, [qa_key]);
+
+  const onChangeForm = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const CategoryChange = (e) => {
-    setCategory(e.target.value);
+  const onChangeCKEditor = (event, editor) => {
+    let data = editor.getData();
+    data = data.replace(/<\/?p>/g, '');  // <p> 태그를 제거
+    setForm({ ...form, qa_contents: data });
   };
 
-  const handleSubmit = async (e) => {
+  const onReset = () => {
+    if (!window.confirm('변경된 내용을 취소하실래요?')) return;
+    callAPI();
+  };
+
+  const onSubmit = async (e) => {
     e.preventDefault();
-    const updatedPost = { title, contents, category };
-    // 실제로는 axios.post()를 사용해 백엔드로 데이터를 전송합니다.
-    // 여기서는 성공했다고 가정하고 바로 리다이렉트합니다.
-    alert('문의사항이 수정되었습니다.');
-    navigate(`/community/qa/read/${id}`);
+    if (!window.confirm('변경된 내용을 수정하실래요?')) return;
+    setLoading(true);
+    const response = await axios.post(`/qa/update/${qa_key}`, form);
+    setLoading(false);
+    if (response.status === 200) {
+      alert('게시물이 수정되었습니다.');
+      navigate(`/community/qa/read/${qa_key}`);
+    } else {
+      alert('게시물 수정에 실패했습니다.');
+    }
   };
 
   return (
-    <div>
-      <h1 className="text-center my-5">문의사항 수정</h1>
-      <Form onSubmit={handleSubmit}>
-        <InputGroup className="mb-3">
-          <FormControl
-            as="select"
-            value={category}
-            onChange={CategoryChange}
-            style={{ maxWidth: '150px', marginRight: '10px' }}>
-            <option value="일반">일반</option>
-            <option value="포인트">포인트</option>
-            <option value="이벤트">이벤트</option>
-          </FormControl>
-          <FormControl
-            placeholder="제목을 입력하세요"
-            value={title}
-            onChange={TitleChange}/>
-        </InputGroup>
-        <CKEditor
-          editor={ClassicEditor}
-          data={contents}
-          onChange={ContentsChange}/>
-        <Button type="submit" className="mt-3">
-          수정
-        </Button>
-      </Form>
+    <div className='my-5'>
+      <h1 className='text-center mb-5'>질문 수정</h1>
+      <Row className='justify-content-center'>
+        <Col xs={12} md={10} lg={8}>
+          {form && form.qa_title && (
+            <Form onReset={onReset} onSubmit={onSubmit}>
+              <InputGroup className='mb-3'>
+                <FormControl
+                  placeholder="제목을 입력하세요"
+                  name="qa_title"
+                  value={qa_title}
+                  onChange={onChangeForm}
+                  className='mb-2'
+                />
+              </InputGroup>
+              <CKEditor
+                editor={ClassicEditor}
+                data={qa_contents}
+                onChange={onChangeCKEditor}
+              />
+              <div className='text-center mt-3'>
+                <Button type="submit" className='px-5 me-2' disabled={loading}>
+                  {loading ? '수정 중...' : '수정'}
+                </Button>
+                <Button type="reset" className='px-5' variant='secondary'>취소</Button>
+              </div>
+            </Form>
+          )}
+        </Col>
+      </Row>
     </div>
   );
 };
