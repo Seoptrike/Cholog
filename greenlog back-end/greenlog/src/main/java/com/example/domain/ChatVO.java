@@ -2,12 +2,18 @@ package com.example.domain;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class ChatVO {
 	private int chat_key;
 	private String chat_content;
 	private String chat_sender;
+	@JsonFormat(pattern = "yyyy.MM.dd HH:mm:ss", timezone = "Asia/Seoul")
 	private LocalDateTime chat_sendTime;
+	@JsonFormat(pattern = "yyyy.MM.dd HH:mm:ss", timezone = "Asia/Seoul")
 	private LocalDateTime chat_endTime;
+	private String chat_path;
+	private String chat_state;
 
 	public int getChat_key() {
 		return chat_key;
@@ -53,6 +59,22 @@ public class ChatVO {
 	public String toString() {
 		return "ChatVO [chat_key=" + chat_key + ", chat_content=" + chat_content + ", chat_sender=" + chat_sender
 				+ ", chat_sendTime=" + chat_sendTime + ", chat_endTime=" + chat_endTime + "]";
+	}
+
+	public String getChat_path() {
+		return chat_path;
+	}
+
+	public void setChat_path(String chat_path) {
+		this.chat_path = chat_path;
+	}
+
+	public String getChat_state() {
+		return chat_state;
+	}
+
+	public void setChat_state(String chat_state) {
+		this.chat_state = chat_state;
 	}
 
 }

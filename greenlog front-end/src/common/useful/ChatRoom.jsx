@@ -31,7 +31,8 @@ const ChatRoom = () => {
         if (stompClient && messageInput) {
             stompClient.send('/app/chat.sendMessage', {}, JSON.stringify({
                 chat_content: messageInput,
-                chat_sender: uid // 사용자 이름 설정
+                chat_sender: uid, // 사용자 이름 설정
+                chat_path: uid
             }));
             setMessageInput('');
         }
@@ -39,6 +40,13 @@ const ChatRoom = () => {
 
     const handleChange = (event) => {
         setMessageInput(event.target.value);
+    };
+
+    const handleCloseConnection = () => {
+        if (stompClient) {
+            stompClient.disconnect();
+            console.log('WebSocket connection closed.');
+        }
     };
     return (
         <div>
@@ -52,6 +60,7 @@ const ChatRoom = () => {
         <div>
             <input type="text" value={messageInput} onChange={handleChange} />
             <button onClick={sendMessage}>Send</button>
+            <button onClick={handleCloseConnection}>Close Connection</button>
         </div>
     </div>
     )
