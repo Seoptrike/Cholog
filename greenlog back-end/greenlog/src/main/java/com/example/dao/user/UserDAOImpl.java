@@ -51,4 +51,29 @@ public class UserDAOImpl implements UserDAO {
 		session.update(namespace+ ".imgUpdate", map);
 	}
 
+	@Override
+	public void updatePerson(UserVO vo) {
+		session.update(namespace + ".personUpdate", vo);
+		
+	}
+
+	@Override
+	public HashMap<String, Object> mypage1() {
+		return session.selectOne(namespace + ".mypage1");
+	}
+
+	@Override
+	public List<HashMap<String, Object>> mypage2(String uid) {
+		return session.selectList(namespace + ".mypage2", uid);
+	}
+
+	@Override
+	public HashMap<String, Object> mypage3(String uid) {
+		return session.selectOne(namespace + ".mypage3", uid);
+	}
+
+	
+
+
+
 }

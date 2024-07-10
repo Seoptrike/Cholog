@@ -1,6 +1,6 @@
 package com.example.domain;
 
-public class SeedVO {
+public class SeedVO extends UserVO{
 	private int seed_key;
 	private String seed_uid;
 	private int seed_point;
@@ -31,7 +31,10 @@ public class SeedVO {
 
 	@Override
 	public String toString() {
-		return "SeedVO [seed_key=" + seed_key + ", seed_uid=" + seed_uid + ", seed_point=" + seed_point + "]";
+		return "SeedVO [seed_key=" + seed_key + ", seed_uid=" + seed_uid + ", seed_point=" + seed_point
+				+ ", getUser_nickname()=" + getUser_nickname() + ", getUser_img()=" + getUser_img() + "]";
 	}
+
+	
 
 }

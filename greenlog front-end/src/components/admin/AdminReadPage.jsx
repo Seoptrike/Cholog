@@ -6,6 +6,7 @@ import axios from 'axios';
 
 
 //설정 아이콘 누를 시 회원수정페이지로 이동 
+//권한설정
 
 const AdminReadPage = () => {
     const {user_uid} =useParams();
@@ -18,13 +19,9 @@ const AdminReadPage = () => {
         setForm(res.data);
     }
 
-    
-
     useEffect(()=>{
         callAPI();
     },[]);
-
-
 
   return (
     <div>
