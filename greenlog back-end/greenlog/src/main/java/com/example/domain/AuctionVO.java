@@ -9,6 +9,7 @@ public class AuctionVO {
 	private int auction_mall_key;
 	private String auction_seller;
 	private String auction_buyer;
+
 	@JsonFormat(pattern = "yyyy년 MM월dd일 HH:mm:ss", timezone = "Asia/Seoul")
 	private Date auction_regDate;
 	private int auction_amount;

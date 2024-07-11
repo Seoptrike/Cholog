@@ -8,10 +8,10 @@ import com.example.dao.bbs.BBSDAO;
 import com.example.domain.BBSVO;
 
 @Service
-public class BBSServiceImpl implements BBSService{
+public class BBSServiceImpl implements BBSService {
 	@Autowired
 	BBSDAO bbsDAO;
-	
+
 	@Transactional
 	@Override
 	public BBSVO read(int bbs_key) {
