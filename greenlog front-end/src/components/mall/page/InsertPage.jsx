@@ -113,8 +113,8 @@ const InsertPage = () => {
               required
               fullWidth
             >
-              <MenuItem value={0}>경매물품으로 올리기</MenuItem>
-              <MenuItem value={1}>나눔물품으로 올리기</MenuItem>
+              <MenuItem value={0}>나눔물품으로 올리기</MenuItem>
+              <MenuItem value={1}>무료나눔으로 올리기</MenuItem>
               <MenuItem value={2}>내가 찾는 물품 올리기</MenuItem>
             </TextField>
           </Grid>
@@ -148,7 +148,7 @@ const InsertPage = () => {
               </Grid>
               <Grid item xs={3}>
               <TextField
-                label="경매낙찰날짜"
+                label="나눔확정날짜"
                 type="date"
                 name="endDate"
                 fullWidth

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.example.domain.MallVO;
 import com.example.domain.QueryVO;
+import com.example.domain.UserVO;
 
 @Repository
 public class MallDAOImpl implements MallDAO{
@@ -30,7 +31,7 @@ public class MallDAOImpl implements MallDAO{
 
 
 	@Override
-	public MallVO read(int mall_key) {
+	public HashMap<String, Object> read(int mall_key) {
 		return session.selectOne(namespace+".read", mall_key);
 	}
 	
@@ -49,6 +50,9 @@ public class MallDAOImpl implements MallDAO{
 	public int total(QueryVO vo) {
 		return session.selectOne(namespace+".total",vo);
 	}
+
+
+	
 
 
 	

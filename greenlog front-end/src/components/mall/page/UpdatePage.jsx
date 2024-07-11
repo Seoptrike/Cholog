@@ -9,6 +9,7 @@ export const UpdatePage = () => {
   const [loading, setLoading] = useState(false);
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
+  const today = new Date();
   const uid = sessionStorage.getItem("uid");
   
   const [form, setForm] = useState({
@@ -21,16 +22,27 @@ export const UpdatePage = () => {
     mall_photo :"" , 
     mall_tstate :0 , 
     mall_pstate :0 ,
-    mall_endDate:tomorrow
+    mall_endDate:tomorrow,
+    mall_uDate:today
   });
-  
-  const {mall_title,mall_info,mall_price, mall_photo,mall_tstate,mall_pstate,mall_endDate} = form;
-  
+  const {mall_uDate,mall_title,mall_info,mall_price, mall_photo,mall_tstate,mall_pstate,mall_endDate} = form;
+  const [list,setList] = useState({
+    mall_key:mall_key,
+    mall_seller :uid , 
+    mall_buyer :"ghost"  , 
+    mall_title :"" , 
+    mall_info :"" , 
+    mall_price :0, 
+    mall_photo :"" , 
+    mall_tstate :0 , 
+    mall_pstate :0 ,
+    mall_endDate:tomorrow,
+    mall_uDate:today
+  });
 
   // 일반 입력 필드 경우
   const onChangeForm = (e) => {
     const { name, value} = e.target;
-    console.log(name, value);
       setForm((prevData) => ({
         ...prevData,
         [name]: value
@@ -62,28 +74,6 @@ export const UpdatePage = () => {
     height: 'auto',
     borderRadius: '1px'
   };
-
-  const onSubmit =async(e)=>{
-    e.preventDefault();
-     //console.log(form)
-     // 기존 데이터와 폼 데이터 비교
-    if (mall_title === form.mall_title && mall_info === form.mall_info ) {
-      alert("수정된 내용이 없습니다.");
-      return;
-    }
-    if(!window.confirm("내용을 수정하실래요?")) return;
-    try {
-      // 게시글 수정
-      await axios.post('/mall/update', form);
-      alert("게시글 수정 완료!");
-      window.location.href = '/mall/list.json';
-      
-    } catch (error) {
-      // 오류 발생 시 오류 메시지 출력
-      console.error("게시글 수정 오류:", error);
-      alert("게시글 수정 중 오류가 발생했습니다.");
-    }
-  }
   const callAPI=async()=>{ 
     setLoading(true);
     try {
@@ -96,12 +86,35 @@ export const UpdatePage = () => {
         mall_info: res.data.mall_info || ''
       };
       setForm(data);
+      setList(data);
       setLoading(false);
     } catch (error) {
       console.error("API 호출 중 오류 발생:", error);
       setLoading(false);
     }
     }
+  const onSubmit =async(e)=>{
+    e.preventDefault();
+     //console.log(form)
+     // 기존 데이터와 폼 데이터 비교
+    if(JSON.stringify(list) === JSON.stringify(form)) {
+      alert("변경된 내용이 없습니다!")  
+      return
+    }
+    if(!window.confirm("내용을 수정하실래요?")) return;
+    try {
+      // 게시글 수정
+      await axios.post('/mall/update', list);
+      alert("게시글 수정 완료!");
+      window.location.href = '/mall/list.json';
+      
+    } catch (error) {
+      // 오류 발생 시 오류 메시지 출력
+      console.error("게시글 수정 오류:", error.toString());
+      alert("게시글 수정 중 오류가 발생했습니다.");
+    }
+  }
+ 
    
   useEffect(()=>{
     callAPI();
