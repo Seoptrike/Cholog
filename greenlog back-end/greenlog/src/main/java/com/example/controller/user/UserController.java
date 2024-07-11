@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.dao.seed.SeedDAO;
 import com.example.dao.user.UserDAO;
+import com.example.domain.QueryVO;
 import com.example.domain.UserVO;
 
 @RestController
@@ -47,8 +48,11 @@ public class UserController {
 	}
 
 	@GetMapping("/admin/list")
-	public List<HashMap<String, Object>> adminList() {
-		return udao.adminList();
+	public HashMap<String, Object> adminList(QueryVO vo) {
+		HashMap<String,Object> map=new HashMap<String,Object>();
+		map.put("total", udao.total(vo));
+		map.put("documents", udao.adminList(vo));
+		return map;
 	}
 
 	@PostMapping("/delete/{user_key}")
@@ -97,9 +101,9 @@ public class UserController {
 	}
 
 	// 마이페이지 포인트, 옥션, 유저정보
-	@GetMapping("/mypage1")
-	public HashMap<String, Object> mypage1() {
-		return udao.mypage1();
+	@GetMapping("/mypage1/{user_uid}")
+	public HashMap<String, Object> mypage1(@PathVariable("user_uid") String uid) {
+		return udao.mypage1(uid);
 	}
 
 	@GetMapping("/mypage2/{user_uid}")

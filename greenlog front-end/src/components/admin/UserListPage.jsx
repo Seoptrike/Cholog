@@ -3,25 +3,35 @@ import { Row, Col, Button, Badge, InputGroup, Form, Card } from 'react-bootstrap
 import Sidebar from './Sidebar'
 import axios from 'axios';
 import { MdOutlineSettings } from "react-icons/md";
+import '../../common/useful/Paging.css';
+import Pagination from 'react-js-pagination'
 
-
-//검색기능, 페이징기능 , 회원정보 수정기능, 권한설정 
 //이미지 클릭 시 관리자용 회원정보읽기페이지로 이동
 //설정아이콘 클릭 시 관리자용 회원정보수정페이지로 이동 
 
 const UserListPage = () => {
     const [list, setList] = useState([]);
+    const [key, setKey] = useState("user_uid");
+    const [count, setCount] = useState(0);
+    const [page, setPage] = useState(1);
+    const [size, setSize] = useState(3);
+    const [word, setWord] = useState("");
     const styleRed = "danger"
     const styleBlue = "primary"
     const callAPI = async () => {
-        const res = await axios.get("/user/admin/list")
+        const res = await axios.get(`/user/admin/list?key=${key}&word=${word}&page=${page}&size=${size}`)
         console.log(res.data)
-        setList(res.data)
+        setList(res.data.documents);
+        setCount(res.data.total);
     }
     useEffect(() => {
         callAPI()
-    }, []);
+    }, [page]);
 
+    const onSubmit = (e) => {
+        e.preventDefault();
+        callAPI();
+      }
 
     return (
         <Row>
@@ -33,17 +43,23 @@ const UserListPage = () => {
 
                 <Row className='justify-content-center mb-5'>
                     <Col lg={5}>
-                        <form>
+                        <form onSubmit={onSubmit}>
                             <InputGroup>
-                                <Form.Control placeholder='검색어' />
+                                <Form.Select value={key} name="key" onChange={(e) => setKey(e.target.value)}>
+                                    <option value="user_uid">아이디</option>
+                                    <option value="user_uname">이름</option>
+                                    <option value="user_nickname">닉네임</option>
+                                    <option value="user_birth">생년월일</option>
+                                </Form.Select>
+                                <Form.Control placeholder='검색어' value={word} name="word" onChange={(e) => setWord(e.target.value)} />
                                 <Button type='submit'>검색</Button>
                             </InputGroup>
                         </form>
                     </Col>
                 </Row>
-                {list.map((user, index) => (
+                {list.map(user => (
                     <Row className='justify-content-center'>
-                        <Col xs={12} sm={11} md={10} lg={9} key={index} className='mb-3'>
+                        <Col xs={12} sm={11} md={10} lg={9}  className='mb-3'>
                             <Card className='text-center' border={user.user_gender === "남자" ? styleBlue : styleRed}>
                                 <Card.Body>
                                     <Row>
@@ -79,6 +95,19 @@ const UserListPage = () => {
                     </Row>
                 ))}
             </Col>
+            <div>
+                {count > size &&
+                    <Pagination
+                        activePage={page}
+                        itemsCountPerPage={size}
+                        totalItemsCount={count}
+                        pageRangeDisplayed={5}
+                        prevPageText={"‹"}
+                        nextPageText={"›"}
+                        onChange={(e) => setPage(e)}
+                    />
+                }
+            </div>
         </Row>
     )
 }

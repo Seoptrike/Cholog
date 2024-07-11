@@ -23,7 +23,7 @@ const MyPage = () => {
 
   //포인트조회 및 거래내역, 유저(닉네임, 이미지정보)
   const callAPI = async () => {
-    const res = await axios.get("/user/mypage1");
+    const res = await axios.get(`/user/mypage1/${user_uid}`);
     console.log(res.data);
     setTrade(res.data);
   }

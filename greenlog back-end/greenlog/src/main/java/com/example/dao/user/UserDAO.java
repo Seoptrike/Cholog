@@ -3,10 +3,13 @@ package com.example.dao.user;
 import java.util.HashMap;
 import java.util.List;
 
+import com.example.domain.QueryVO;
 import com.example.domain.UserVO;
 
 public interface UserDAO {
-	public List<HashMap<String, Object>> adminList();
+	public List<HashMap<String, Object>> adminList(QueryVO vo);
+	
+	public int total(QueryVO vo);
 
 	public void insert(UserVO vo);
 
@@ -20,7 +23,7 @@ public interface UserDAO {
 
 	public void updatePerson(UserVO vo);
 
-	public HashMap<String, Object> mypage1();
+	public HashMap<String, Object> mypage1(String uid);
 
 	public List<HashMap<String, Object>> mypage2(String uid);
 
