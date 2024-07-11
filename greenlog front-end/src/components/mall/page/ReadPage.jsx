@@ -20,16 +20,21 @@ const ReadPage = () => {
   const [form, setForm] = useState({});
   //console.log(form);
   const {mall_seller,mall_title,mall_info,mall_price,mall_regDate, mall_photo,mall_tstate,mall_pstate,mall_endDate} = form;
-
   const [activeTab, setActiveTab] = useState('1');
   
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
   };
+  //경매시스템 위해서 넣어놓음 -인섭
+  const [seedNumber, setSeedNumber] = useState({})
+  const {seed_number}= seedNumber
   const callAPI=async()=>{
     const res = await axios.get(`/mall/read/${mall_key}`);
     //console.log("****************************",res.data);
     setForm(res.data);
+    //경매시스템 위해서 넣어놓음 -인섭
+    const res2 = await axios.get(`/seed/read/${res.data.mall_seller}`)
+    setSeedNumber(res2.data)
   }
   useEffect(()=>{
     callAPI();
@@ -154,7 +159,7 @@ const ReadPage = () => {
         )}
         {activeTab === '3' && (
           <div>
-            <ReviewPage mall_key={mall_key} mall_seller={mall_seller}/>
+            <ReviewPage mall_key={mall_key} mall_seller={mall_seller} seller_number={seed_number}/>
           </div>
         )}
         {activeTab === '4' && (
