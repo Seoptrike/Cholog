@@ -36,14 +36,9 @@ const InsertPage = ({mall_key}) => {
     const onSubmit = async(e) => {
         e.preventDefault();
         if(!window.confirm("리뷰를 등록하실래요?")) return;
-        console.log(form)
-        try {
-            await axios.post('/review/insert', form);
-            alert('리뷰가 등록되었습니다.');
-        } catch (error) {
-            console.error('리뷰 등록 실패:', error);
-            alert('리뷰 등록에 실패했습니다. 다시 시도해주세요.');
-        }
+        await axios.post('/review/insert', form);
+        alert('리뷰가 등록되었습니다.');
+        //리뷰 내용 클리어
     };
 
     return (
@@ -53,13 +48,6 @@ const InsertPage = ({mall_key}) => {
                 <Col xs={6}>
                     <div>
                         <form onSubmit={onSubmit} onReset={onClickCancel}>
-                            <FormControl
-                                name='review_contents' 
-                                value={review_contents} 
-                                as='textarea' rows={5} 
-                                placeholder='내용을 입력해주세요.' 
-                                onChange={onChangeForm}
-                                onFocus={()=>setOnCancel(true)}/>
                             <InputGroup.Text> 
                                 <Rating
                                     name='review_rating'
@@ -82,10 +70,17 @@ const InsertPage = ({mall_key}) => {
                                     {secret ? <SlLock /> : <SlLockOpen />} {secret ? '비공개' : '공개'}
                                 </Button>
                             </InputGroup.Text>
+                            <FormControl
+                                name='review_contents' 
+                                value={review_contents} 
+                                as='textarea' rows={1} 
+                                placeholder='내용을 입력해주세요.' 
+                                onChange={onChangeForm}
+                                onFocus={()=>setOnCancel(true)}/>
                         <div className='text-end mt-3'>
+                            <Button variant='' size="sm" className='text-end' type='submit'>등록</Button>
                             <Button onReset={onClickCancel}
                                 variant='' size="sm" className='text-end me-2' type='reset' disabled={!onCancel}>취소</Button>
-                            <Button variant='' size="sm" className='text-end' type='submit'>등록</Button>
                         </div>
                         </form>    
                     </div>

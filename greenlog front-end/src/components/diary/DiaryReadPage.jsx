@@ -8,7 +8,6 @@ import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 
 
-//클릭여부에 따라 좋아요 색 바꾸기
 //슬릭슬라이더로 인스타처럼 사진 넘기기
 //설정누르면 일기수정페이지로 이동 
 //span에 ellipsis

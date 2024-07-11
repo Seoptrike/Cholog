@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Card, Row, Col, InputGroup, Form, Button } from 'react-bootstrap'
 
 //등록버튼 눌렀을 시, 경고창에 포인트는 적립되나, 차감될 수도 있다는 경고창 주기
@@ -7,32 +7,50 @@ import { Card, Row, Col, InputGroup, Form, Button } from 'react-bootstrap'
 const DiaryInsertPage = () => {
   const uid = sessionStorage.getItem("uid");
   const [diary, setDiary] = useState({
-    diary_writer:uid,
-    diary_contents:"",
-    diary_title:"",
-    diary_state:""
+    diary_writer: uid,
+    diary_contents: "",
+    diary_title: "",
+    diary_state: ""
   });
 
-  const {diary_contents, diary_title, diary_state, diary_writer} =diary;
+  const { diary_contents, diary_title, diary_state, diary_writer } = diary;
 
-  const onChangeForm = (e)=>{
-    setDiary({...diary, [e.target.name]:e.target.value});
+  const [data, setData] = useState({
+    seed_key: '',
+    seed_number: '',
+    seed_point: ''
+  })
+  const callAPI = async () => {
+    const res = await axios.get(`/seed/read/${uid}`)
+    setData(res.data);
+  }
+  useEffect(() => { callAPI() }, [])
+
+  const onChangeForm = (e) => {
+    setDiary({ ...diary, [e.target.name]: e.target.value });
   }
 
   //일기등록
-  const onClickInsert = async()=>{
-    if(!uid){
+  const onClickInsert = async () => {
+    if (!uid) {
       alert("로그인이 필요한 작업입니다.");
-      sessionStorage.setItem('target' , '/diary/insert');
-      window.location.href="/user/login";
+      sessionStorage.setItem('target', '/diary/insert');
+      window.location.href = "/user/login";
       return;
     }
-    
-    if(!window.confirm("일기를 등록하시겠습니까?")) return;
+
+    if (!window.confirm("일기를 등록하시겠습니까?")) return;
 
     await axios.post('/diary/insert', diary)
+    await axios.post('/trade/insert', {
+      trade_to: data.seed_number,
+      trade_from: 'seed00000000',
+      amount: 1,
+      seed_number: data.seed_number,
+      trade_state:1
+    })
     alert("일기등록완료!");
-    window.location.href=`/diary/list.json/${uid}`;
+    window.location.href = `/diary/list.json/${uid}`;
   }
   return (
     <div>
@@ -67,17 +85,17 @@ const DiaryInsertPage = () => {
                 </Form.Control>
                 <InputGroup className='mb-3'>
                   <InputGroup.Text>제목</InputGroup.Text>
-                  <Form.Control value={diary_title} onChange={onChangeForm} name="diary_title"/>
+                  <Form.Control value={diary_title} onChange={onChangeForm} name="diary_title" />
                 </InputGroup>
                 <InputGroup className='mb-3'>
                   <input type="file" />
                 </InputGroup>
                 <div>사진미리보기공간</div>
                 <InputGroup className='mb-5'>
-                  <Form.Control as="textarea" rows={20} value={diary_contents} onChange={onChangeForm} name="diary_contents"/>
+                  <Form.Control as="textarea" rows={20} value={diary_contents} onChange={onChangeForm} name="diary_contents" />
                 </InputGroup>
                 <InputGroup className='mb-5'>
-                  <Form.Control value={diary_writer} readOnly/>
+                  <Form.Control value={diary_writer} readOnly />
                 </InputGroup>
               </Col>
             </Row>
