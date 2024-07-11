@@ -68,6 +68,7 @@ const JoinPage = () => {
         }
 
         await axios.post(`/user/insert`, form);
+        await axios.post('/seed/insert', {seed_uid:form.user_uid});
         alert("회원 가입 완료!");
         navi("/user/login");
     };
@@ -114,7 +115,7 @@ const JoinPage = () => {
                             name="user_gender"
                             id="1"
                             label="남자"
-                            value={1}
+                            value={"남자"}
                             onChange={onChangeForm}
                         />
                         <Form.Check
@@ -122,7 +123,7 @@ const JoinPage = () => {
                             name="user_gender"
                             id="2"
                             label="여자"
-                            value={2}
+                            value={"여자"}
                             onChange={onChangeForm}
                         />
                     </InputGroup >

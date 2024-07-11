@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.dao.seed.SeedDAO;
 import com.example.dao.user.UserDAO;
 import com.example.domain.UserVO;
 
@@ -20,6 +21,9 @@ import com.example.domain.UserVO;
 public class UserController {
 	@Autowired
 	UserDAO udao;
+
+	@Autowired
+	SeedDAO sdao;
 
 	@Autowired
 	PasswordEncoder encoder;
