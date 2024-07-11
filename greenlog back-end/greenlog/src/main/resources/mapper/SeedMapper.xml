@@ -2,19 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.mapper.SeedMapper">
 	<select id="list" resultType="com.example.domain.SeedVO">
-		select * from Seed;
+		select * from seed;
 	</select>
 	
 	<select id="read" resultType="com.example.domain.SeedVO">
-		select * from Seed where seed_uid=#{uid}
+		select * from seed s, user u where s.seed_uid=u.user_uid and seed_uid=#{seed_uid}
 	</select>
 	
 	<insert id="insert">
-		insert into seed (seed_uid,seed_point) value(#{uid},#{point})
+		insert into seed (seed_uid,seed_number) value( #{seed_uid}, concat('seed',lpad(last_insert_id(),8,'0')) );
 	</insert>
 	
 	<update id="update">
-		update from seed set seed_point=#{point} where seed_uid =#{uid}
+		update seed set seed_point=(seed_point+#{amount}) where seed_number= #{seed_number}
 	</update>
+	
 	
 </mapper>

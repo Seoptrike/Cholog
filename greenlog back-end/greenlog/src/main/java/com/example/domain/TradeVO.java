@@ -1,17 +1,19 @@
 package com.example.domain;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class TradeVO {
+public class TradeVO extends SeedVO {
 	private int trade_key;
 	private String trade_from;
 	private String trade_to;
-	private int trade_amount;
+	private int amount;
 
-	@JsonFormat(pattern = "yyyy년MM월dd일 HH:mm:ss", timezone = "Asia/Seoul")
-	private Date trade_date;
+	private String trade_info;
+
+	@JsonFormat(pattern = "yyyy.MM.dd HH:mm:ss", timezone = "Asia/Seoul")
+	private LocalDateTime trade_date;
 
 	private int trade_state;
 
@@ -39,19 +41,19 @@ public class TradeVO {
 		this.trade_to = trade_to;
 	}
 
-	public int getTrade_amount() {
-		return trade_amount;
+	public int getAmount() {
+		return amount;
 	}
 
-	public void setTrade_amount(int trade_amount) {
-		this.trade_amount = trade_amount;
+	public void setAmount(int amount) {
+		this.amount = amount;
 	}
 
-	public Date getTrade_date() {
+	public LocalDateTime getTrade_date() {
 		return trade_date;
 	}
 
-	public void setTrade_date(Date trade_date) {
+	public void setTrade_date(LocalDateTime trade_date) {
 		this.trade_date = trade_date;
 	}
 
@@ -65,9 +67,17 @@ public class TradeVO {
 
 	@Override
 	public String toString() {
-		return "TradeVO [trade_key=" + trade_key + ", trade_from=" + trade_from + ", trade_to=" + trade_to
-				+ ", trade_amount=" + trade_amount + ", trade_date=" + trade_date + ", trade_state=" + trade_state
-				+ "]";
+		return "TradeVO [trade_key=" + trade_key + ", trade_from=" + trade_from + ", trade_to=" + trade_to + ", amount="
+				+ amount + ", trade_date=" + trade_date + ", trade_state=" + trade_state + ", getSeed_number()="
+				+ getSeed_number() + "]";
+	}
+
+	public String getTrade_info() {
+		return trade_info;
+	}
+
+	public void setTrade_info(String trade_info) {
+		this.trade_info = trade_info;
 	}
 
 }

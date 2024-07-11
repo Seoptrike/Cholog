@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.TradeMapper">
+	<insert id="insert">
+		insert into trade (trade_from, trade_to,trade_amount,trade_state, trade_info) 
+		value( #{trade_from} ,#{trade_to}, #{amount} ,#{trade_state}, #{trade_info} )
+	</insert>
+	
+	<select id="userList" resultType="Hashmap">
+		select * ,date_format(trade_date,'%Y.%m.%d %T') as fmtdate 
+		from trade t, seed s
+		where  trade_to = seed_number and ((trade_to=#{seed_number} and trade_state=1) or (trade_from=#{seed_number} and trade_state=1))
+	</select>
+</mapper>
