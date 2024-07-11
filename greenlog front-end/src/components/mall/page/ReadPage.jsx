@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Nav, TabContent ,Row,Col,Table,Button} from 'react-bootstrap';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
-
+ import SeoulMap from '../../../common/useful/SeoulMap';
 import AllImage from '../read/AllImage';
 import SellerInfo from '../read/SellerInfo';
 
@@ -10,16 +10,16 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import InsertPage from '../../review/InsertPage';
 import ReviewPage from '../../review/ReviewPage';
+import { Padding } from '@mui/icons-material';
 
 const ReadPage = () => {
   const navi = useNavigate();
   const {mall_key}=useParams();
   const uid = sessionStorage.getItem("uid");
-  console.log(mall_key);
+  //console.log(mall_key);
   const [form, setForm] = useState({});
-  console.log(form);
+  //console.log(form);
   const {mall_seller,mall_title,mall_info,mall_price,mall_regDate, mall_photo,mall_tstate,mall_pstate,mall_endDate} = form;
-
 
   const [activeTab, setActiveTab] = useState('1');
   
@@ -28,7 +28,7 @@ const ReadPage = () => {
   };
   const callAPI=async()=>{
     const res = await axios.get(`/mall/read/${mall_key}`);
-    console.log(res.data);
+    //console.log("****************************",res.data);
     setForm(res.data);
   }
   useEffect(()=>{
@@ -50,7 +50,14 @@ const ReadPage = () => {
     }
     
   }
-      
+  const mapST={
+    width: '100%', 
+    height: '7rem',
+    Padding:"0px 0px" 
+  };
+  
+    
+
   return (
     
     <div className="read-page mb-5" >
@@ -79,7 +86,7 @@ const ReadPage = () => {
                             }
                         </tr>
                         <tr>
-                            <td >{mall_tstate === 0 ? "경매" : (mall_tstate === 1 ? "나눔" : (mall_tstate === 2 ? "구매" : ""))}</td> 
+                            <td >{mall_tstate === 0 ? "나눔" : (mall_tstate === 1 ? "무료나눔" : (mall_tstate === 2 ? "구매" : ""))}</td> 
                             <td className='w-50' >{mall_pstate === 0 ? "중고상품" : "(미개봉,미사용)"}</td>
                         </tr>
                         <tr>
@@ -102,7 +109,9 @@ const ReadPage = () => {
                    
             </Row>
             <Row className='text-center justify-content-center'>
-                <div style={{width:"100%", height:"150px",border:"2px solid green",background:"gray"}}>여기는 지도자리</div>
+                <div style={mapST}>
+                  <SeoulMap />
+                </div>
             </Row>
             </Col>
         </Row>
@@ -110,7 +119,7 @@ const ReadPage = () => {
       </div>
       
       {/* 탭 부분 */}
-      <Nav  fill variant="tabs" defaultActive="1">
+      <Nav  fill variant="tabs">
         <Nav.Item>
           <Nav.Link eventKey="1" onClick={() => handleTabClick('1')} active={activeTab === '1'}>
             상세이미지
@@ -145,11 +154,11 @@ const ReadPage = () => {
         )}
         {activeTab === '3' && (
           <div>
-            <ReviewPage mall_seller={mall_seller}/>
+            <ReviewPage mall_key={mall_key}/>
           </div>
         )}
         {activeTab === '4' && (
-          <SellerInfo form={form} />
+          <SellerInfo mall_seller={mall_seller} />
         )}
       </TabContent>
     </div>
