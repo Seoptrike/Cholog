@@ -25,7 +25,7 @@ public class DiaryController {
 	}
 	
 	@GetMapping("/read/{diary_key}")
-	public HashMap<String,Object> read(@PathVariable("diary_key") int key) {
+	public DiaryVO read(@PathVariable("diary_key") int key) {
 		return dao.read(key);
 	}
 	

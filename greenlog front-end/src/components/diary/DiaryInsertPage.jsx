@@ -6,12 +6,11 @@ import { Card, Row, Col, InputGroup, Form, Button } from 'react-bootstrap'
 //파일에 사진넣기 공간으로 사진여러개 넣는거 출력
 const DiaryInsertPage = () => {
   const uid = sessionStorage.getItem("uid");
-  const [state, setState] =useState(0);
   const [diary, setDiary] = useState({
     diary_writer:uid,
     diary_contents:"",
     diary_title:"",
-    diary_state:state
+    diary_state:""
   });
 
   const {diary_contents, diary_title, diary_state, diary_writer} =diary;
@@ -48,14 +47,14 @@ const DiaryInsertPage = () => {
               <Col lg={10}>
                 <InputGroup className='text-center mb-3'>
                   <Form.Select value={diary_state} onChange={onChangeForm} name="diary_state">
-                    <option value={0}>개인컵 활용(카페/사무실/식당)</option>
-                    <option value={1}>용기 활용(리필스테이션/배달음식)</option>
-                    <option value={2}>리사이클링 제작(리사이클링/업사이클링)</option>
-                    <option value={3}>전자영수증(쇼핑)</option>
-                    <option value={4}>친환경 제품구매(제로웨이스트/업사이클링/리사이클링)</option>
-                    <option value={5}>재활용품 배출(폐휴대폰반납)</option>
-                    <option value={6}>전기차 대여(대여만 가능, 반납일 캡쳐)</option>
-                    <option value={7}>봉사활동(쓰레기줍기, 봉사활동참여)</option>
+                    <option value="개인컵/텀블러">개인컵 활용(카페/사무실/식당)</option>
+                    <option value="리필스테이션/개인용기">용기 활용(리필스테이션/배달음식)</option>
+                    <option value="리사이클링 제작">리사이클링 제작(리사이클링/업사이클링)</option>
+                    <option value="전자영수증">전자영수증(쇼핑)</option>
+                    <option value="친환경 제품구매">친환경 제품구매(제로웨이스트/업사이클링/리사이클링)</option>
+                    <option value="재활용품 배출">재활용품 배출(폐휴대폰 반납/페트병,유리병 반납)</option>
+                    <option value="전기차 대여">전기차 대여(대여만 가능, 반납일 캡쳐)</option>
+                    <option value="봉사활동/개인 환경활동">봉사활동/개인 환경활동 (쓰레기줍기, 봉사활동참여)</option>
                   </Form.Select>
                 </InputGroup>
                 <Form.Control as="template" className='mb-5'>

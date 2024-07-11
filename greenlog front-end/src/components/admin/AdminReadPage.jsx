@@ -28,7 +28,7 @@ const AdminReadPage = () => {
         <h1 className='text-center my-5'>{form.user_uid}({form.user_uname})님 회원정보</h1>
         <Row className='justify-content-center'>
                         <Col xs={12} sm={11} md={10} lg={9}  className='mb-3'>
-                            <Card className='text-center' border={form.user_gender === 0 ? styleBlue : styleRed}>
+                            <Card className='text-center' border={form.user_gender === "남자" ? styleBlue : styleRed}>
                                 <Card.Body>
                                     <Row>
                                         <Col lg={5}>
@@ -43,10 +43,10 @@ const AdminReadPage = () => {
                                                     <p>이름: {form.user_uname}</p>
                                                     <p>닉네임: {form.user_nickname}</p>
                                                     <p>생년월일: {form.user_birth}</p>
-                                                    <p>성별: {form.user_gender === 0 ? "남자" : "여자"}</p>
+                                                    <p>성별: {form.user_gender}</p>
                                                     <p>전화번호: {form.user_phone}</p>
                                                     <p>이메일: {form.user_email}</p>
-                                                    <p>주소: {form.user_address1} ({form.user_address2})</p>
+                                                    <p>주소: {form.user_address1 ? `${form.user_address1} (${form.user_address2})` : "-"} </p>
                                                     <p>권한: {form.user_auth}</p>
                                                 </div>
                                             </Card.Text>

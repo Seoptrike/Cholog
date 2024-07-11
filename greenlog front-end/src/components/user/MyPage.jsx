@@ -105,7 +105,7 @@ const MyPage = () => {
       </Row>
       <div className='my-5'>
         <h4 className='text-center mb-3'>{trade.user_nickname}님의 럭키클로버 일기</h4>
-        <h5 className='text-center'>한줄소개</h5>
+        <h5 className='text-center'>{trade.user_ment}</h5>
       </div>
       <div className='mt-3 mb-5'>
         <SlidePage diary={diary} setDiary={setDiary}/>

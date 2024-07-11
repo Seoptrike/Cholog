@@ -12,8 +12,10 @@ public class DiaryVO {
 	private String diary_photo;
 	@JsonFormat(pattern="yyyy년 MM월 dd일 HH:mm:ss", timezone="Asia/Seoul")
 	private Date diary_regDate;
+	@JsonFormat(pattern="yyyy년 MM월 dd일 HH:mm:ss", timezone="Asia/Seoul")
+	private Date diary_uDate;
 	private int diary_like;
-	private int diary_state;
+	private String diary_state;
 	
 	public String getDiary_title() {
 		return diary_title;
@@ -57,11 +59,18 @@ public class DiaryVO {
 	public void setDiary_like(int diary_like) {
 		this.diary_like = diary_like;
 	}
-	public int getDiary_state() {
+	
+	public String getDiary_state() {
 		return diary_state;
 	}
-	public void setDiary_state(int diary_state) {
+	public void setDiary_state(String diary_state) {
 		this.diary_state = diary_state;
+	}
+	public Date getDiary_uDate() {
+		return diary_uDate;
+	}
+	public void setDiary_uDate(Date diary_uDate) {
+		this.diary_uDate = diary_uDate;
 	}
 	@Override
 	public String toString() {

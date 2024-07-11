@@ -45,9 +45,6 @@ const AdminUpdate = () => {
     setOrigin(res.data);
   }
 
-  const [gender, setGender] = useState("");
-  const [auth, setAuth] = useState("");
-
   useEffect(() => {
     callAPI();
   }, []);
@@ -139,35 +136,10 @@ const AdminUpdate = () => {
   };
 
 
-  //auth 변경 함수 (이벤트가 없을때는 default값이 저장)
-  const onChangeAuth = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-
-    if (e.target.value) {
-      setAuth(e.target.value);
-    } else {
-      setAuth(origin.user_auth);
-    }
-  }
-
-
-  //gender 변경 함수 
-  const onChangeGender = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-    if (e.target.value) {
-      setGender(e.target.value);
-    } else {
-      setGender(origin.user_gender);
-    }
-  }
-
-
   //정보수정
-  const onClickUpdate = async (form) => {
-    if (!window.confirm("변경된 내용을 수정하시겠습니까?")) return;
-    //어쏘와 젠더가 이벤트가 변하지 않았을 때, 원래의 값을 넣어줘야함 
-    const updateForm = { ...form, user_gender: gender, user_auth: auth }
-    await axios.post("/user/admin/update", updateForm);
+  const onClickUpdate = async () => {
+    if (!window.confirm("변경된 내용을 수정하시겠습니까?")) return; 
+    await axios.post("/user/admin/update", form);
     window.location.href = `/user/admin/read/${user_uid}`;
   }
 
@@ -177,7 +149,7 @@ const AdminUpdate = () => {
     <div><h1 className='text-center my-5'>{user_uid}({user_uname})님 회원정보</h1>
       <Row className='justify-content-center'>
         <Col xs={12} sm={11} md={10} lg={9} className='mb-3'>
-          <Card className='text-center' border={user_gender === 1 ? styleBlue : styleRed}>
+          <Card className='text-center' border={user_gender === "남자" ? styleBlue : styleRed}>
             <Card.Body>
               <Row>
                 <Col lg={4}>
@@ -221,9 +193,9 @@ const AdminUpdate = () => {
                       </InputGroup>
                       <InputGroup className='mb-2'>
                         <InputGroup.Text>성별</InputGroup.Text>
-                        <Form.Select onChange={onChangeGender} value={user_gender} name="user_gender" >
-                          <option value="0">남자</option>
-                          <option value="1">여자</option>
+                        <Form.Select onChange={onChangeForm} value={user_gender} name="user_gender" >
+                          <option value="남자">남자</option>
+                          <option value="여자">여자</option>
                         </Form.Select>
                       </InputGroup>
                       <InputGroup className='mb-2'>
@@ -244,19 +216,20 @@ const AdminUpdate = () => {
                       </InputGroup>
                       <InputGroup className='mb-2'>
                         <InputGroup.Text>권한</InputGroup.Text>
-                        <Form.Select onChange={onChangeAuth} value={user_auth} name="user_auth">
-                          <option value="0">일반회원</option>
-                          <option value="1">우수회원</option>
-                          <option value="500">블랙리스트</option>
-                          <option value="999">탈퇴회원</option>
-                          <option value="100">관리자</option>
+                        <Form.Select onChange={onChangeForm} value={user_auth} name="user_auth">
+                          <option value="일반회원">일반회원</option>
+                          <option value="우수회원">우수회원</option>
+                          <option value="휴면회원">휴면회원</option>
+                          <option value="블랙리스트">블랙리스트</option>
+                          <option value="탈퇴회원">탈퇴회원</option>
+                          <option value="관리자">관리자</option>
                         </Form.Select>
                       </InputGroup>
                     </div>
                   </Card.Text>
                 </Col>
                 <Col lg={2}>
-                  <FaEdit style={{ fontSize: "40px", cursor: "pointer" }} className='me-4' onClick={() => onClickUpdate(form)} />
+                  <FaEdit style={{ fontSize: "40px", cursor: "pointer" }} className='me-4' onClick={onClickUpdate} />
                   <GiCancel style={{ fontSize: "40px", cursor: "pointer" }} onClick={onClickReset} />
                 </Col>
               </Row>
