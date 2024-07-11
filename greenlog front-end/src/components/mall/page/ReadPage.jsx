@@ -145,7 +145,7 @@ const ReadPage = () => {
         )}
         {activeTab === '3' && (
           <div>
-            <ReviewPage mall_seller={mall_seller}/>
+            <ReviewPage mall_key={mall_key} mall_seller={mall_seller}/>
           </div>
         )}
         {activeTab === '4' && (

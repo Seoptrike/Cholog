@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.example.domain.QueryVO;
 import com.example.domain.ReplyVO;
 
 @Repository
@@ -15,15 +16,36 @@ public class ReplyDAOImpl implements ReplyDAO {
 		@Autowired
 		SqlSession session;
 		String namespace="com.example.mapper.ReplyMapper";
-
-		@Override
-		public List<HashMap<String, Object>> replyList() {
-				return session.selectList(namespace + ".replyList");
-		}
 		
 		@Override
 		public void insert(ReplyVO vo) {
 				session.insert(namespace + ".insert" , vo);
+		}
+
+		@Override
+		public void delete(int reply_key) {
+				session.delete(namespace + ".delete", reply_key);
+			
+		}
+
+		@Override
+		public void update(ReplyVO vo) {
+				session.update(namespace + ".update", vo);
+			
+		}
+		
+		@Override
+		public List<HashMap<String, Object>> replyList(int reply_bbs_key, QueryVO vo) {
+				HashMap<String, Object> map = new HashMap<String, Object>();
+				map.put("reply_bbs_key", reply_bbs_key);
+				map.put("start", vo.getStart());
+				map.put("size", vo.getSize());
+				return session.selectList(namespace + ".replyList", map);
+		}
+
+		@Override
+		public int total(int reply_bbs_key) {
+			return session.selectOne(namespace + ".total", reply_bbs_key);
 		}
 
 }
