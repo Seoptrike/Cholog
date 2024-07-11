@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.example.domain.QueryVO;
 import com.example.domain.UserVO;
 
 @Repository
@@ -17,8 +18,8 @@ public class UserDAOImpl implements UserDAO {
 	String namespace = "com.example.mapper.UserMapper";
 
 	@Override
-	public List<HashMap<String, Object>> adminList() {
-		return session.selectList(namespace + ".adminList");
+	public List<HashMap<String, Object>> adminList(QueryVO vo) {
+		return session.selectList(namespace + ".adminList", vo);
 	}
 
 	@Override
@@ -58,8 +59,8 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	@Override
-	public HashMap<String, Object> mypage1() {
-		return session.selectOne(namespace + ".mypage1");
+	public HashMap<String, Object> mypage1(String uid) {
+		return session.selectOne(namespace + ".mypage1", uid);
 	}
 
 	@Override
@@ -85,6 +86,11 @@ public class UserDAOImpl implements UserDAO {
 	@Override
 	public void updatePass(UserVO vo) {
 		session.update(namespace + ".updatePass", vo);
+	}
+
+	@Override
+	public int total(QueryVO vo) {
+		return session.selectOne(namespace + ".adminListTotal", vo);
 	}
 
 }

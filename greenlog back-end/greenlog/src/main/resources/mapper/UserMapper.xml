@@ -18,7 +18,17 @@
 	</delete>
 
 	<select id="adminList" resultType="hashmap">
-		select * from user;
+		select * from user
+		<if test="key=='user_uid'"> where user_uid like concat('%', #{word}, '%')</if>
+		<if test="key=='user_uname'">where user_uname like concat('%', #{word}, '%')</if>
+		<if test="key=='user_nickname'">where user_nickname like concat('%', #{word}, '%')</if>
+		<if test="key=='user_birth'">where user_birth like concat('%', #{word}, '%')</if>
+		order by user_regDate desc
+		limit #{start}, #{size} ;
+	</select>
+	
+	<select id="adminListTotal" resultType="int">
+		select count(*) from user;
 	</select>
 	
 	<insert id="insert" >
@@ -44,7 +54,7 @@
 	
 	<select id="mypage1" resultType="hashmap">
 		select seed_point, count(auction_key) auction, user_nickname, user_img, user_ment
-		from seed, auction, user where seed_uid = auction_seller and seed_uid=user_uid;
+		from seed, auction, user where seed_uid = auction_seller and user_uid=#{user_uid}
 	</select>
 	<select id="mypage2" resultType="hashmap">
 		select * from diary where diary_writer=#{diary_writer}
