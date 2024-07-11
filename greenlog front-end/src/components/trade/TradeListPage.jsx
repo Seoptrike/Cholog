@@ -37,7 +37,7 @@ const TradeListPage = ({ seed_number }) => {
                                 <td>{data.trade_from}</td>
                                 <td>{data.trade_to}</td>
                                 <td>{data.trade_amount} <span style={{ fontSize: '15px', color:"brown" }}><TbBrandSnapseed /></span> </td>
-                                <td>{data.trade_info}</td>
+                                <td>{data.trade_info ? data.trade_info : "경매 낙찰"}</td>
                             </tr>
                         </tbody>
                     )}

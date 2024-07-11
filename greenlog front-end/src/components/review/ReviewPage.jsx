@@ -7,7 +7,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import axios from 'axios';
 import '../../common/useful/Paging.css';
 
-const ReviewPage = ({ mall_key, mall_seller }) => {
+const ReviewPage = ({ mall_key, mall_seller, seller_number }) => {
     const [list, setList] = useState([]);
     const [page, setPage] = useState(1);
     const [size, setSize] = useState(3);
@@ -84,7 +84,29 @@ const ReviewPage = ({ mall_key, mall_seller }) => {
         });
         setList(data);
     };
+    //낙찰하기
+    const onClickBuy = async (review_writer, review_rating, mall_seller) => {
+        alert(review_writer, review_rating, mall_seller)
+        await axios.post('/auction/insert', {
+            auction_mall_key: mall_key,
+            auction_seller: mall_seller,
+            auction_buyer: review_writer,
+            auction_amount: review_rating
+        })
+        //경매시스템 위해서 넣어놓음 -인섭
+        const res2 = await axios.get(`/seed/read/${review_writer}`)
+        if (res2.data) {
+            await axios.post('/trade/insert', {
+                trade_to: seller_number,
+                trade_from: res2.data.seed_number,
+                amount: review_rating,
+                seed_number: seller_number,
+                trade_state:1,
+                trade_info:"경매"
+              })
+        }
 
+    }
     return (
         <div>
             <h1 className='text-center my-2'>리뷰 목록 페이지입니다.</h1>
@@ -133,7 +155,7 @@ const ReviewPage = ({ mall_key, mall_seller }) => {
                                                     ) : (
                                                         uid === mall_seller ? (
                                                             <Dropdown.Menu>
-                                                                <Dropdown.Item eventKey="a">낙찰하기</Dropdown.Item>
+                                                                <Dropdown.Item onClick={() => onClickBuy(review.review_writer, review.review_rating, mall_seller)} eventKey="buy">낙찰하기</Dropdown.Item>
                                                                 <Dropdown.Item eventKey="warning">댓글 신고하기</Dropdown.Item>
                                                             </Dropdown.Menu>
                                                         ) : (
@@ -160,9 +182,9 @@ const ReviewPage = ({ mall_key, mall_seller }) => {
                                                     review.review_contents
                                                 }
                                             </Col>
-                                            
+
                                         </Row>
-              
+
                                     </Col>
                                 </Row>
                             </Card.Body>

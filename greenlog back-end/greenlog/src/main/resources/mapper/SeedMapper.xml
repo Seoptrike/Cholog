@@ -14,7 +14,7 @@
 	</insert>
 	
 	<update id="update">
-		update seed set seed_point=(seed_point+#{amount}) where seed_number= #{seed_number}
+		update seed set seed_point=(seed_point+ #{amount}*#{trade_state} ) where seed_number= #{trade_to}
 	</update>
 	
 	

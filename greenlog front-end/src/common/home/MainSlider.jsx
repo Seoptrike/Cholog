@@ -14,10 +14,10 @@ const MainSlider = () => {
   return (
     <Slider {...settings}>
         <div>
-            <O3Chart/>
+        <SeoulMapChart/>
         </div>
         <div>
-          <SeoulMapChart/>
+          <O3Chart/>
         </div>
       </Slider>
   )

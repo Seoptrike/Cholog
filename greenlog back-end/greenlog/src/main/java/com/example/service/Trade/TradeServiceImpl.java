@@ -19,6 +19,7 @@ public class TradeServiceImpl implements TradeService {
 	@Transactional
 	@Override
 	public void insert(TradeVO vo) {
+
 		tdao.insert(vo);
 		sdao.update(vo);
 
@@ -26,6 +27,7 @@ public class TradeServiceImpl implements TradeService {
 		String temp = vo.getTrade_from();
 		vo2.setTrade_from(vo.getTrade_to());
 		vo2.setTrade_to(temp);
+		vo2.setSeed_number(temp);
 		vo2.setTrade_state((vo.getTrade_state() * (-1)));
 		vo2.setAmount(vo.getAmount());
 
