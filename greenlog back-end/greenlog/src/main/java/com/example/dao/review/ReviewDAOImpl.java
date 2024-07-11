@@ -45,6 +45,7 @@ public class ReviewDAOImpl implements ReviewDAO {
 				map.put("review_mall_key", review_mall_key);
 				map.put("start", vo.getStart());
 				map.put("size", vo.getSize());
+				map.put("key", vo.getKey());
 				return session.selectList(namespace + ".reviewList", map);
 		}
 
