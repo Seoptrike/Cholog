@@ -20,7 +20,7 @@ public class DiaryDAOImpl implements DiaryDAO{
 	}
 
 	@Override
-	public HashMap<String, Object> read(int key) {
+	public DiaryVO read(int key) {
 		return session.selectOne(namespace + ".read" , key);
 	}
 

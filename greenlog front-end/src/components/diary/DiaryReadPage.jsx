@@ -21,7 +21,7 @@ const DiaryReadPage = () => {
     diary_title:"",
     diary_regDate:"",
     diary_state:"",
-    user_nickname:""
+    diary_uDate:""
   });
   const {diary_key} =useParams();
 
@@ -31,18 +31,15 @@ const DiaryReadPage = () => {
     setDiary(res.data);
   }
 
-  const {diary_contents, diary_title, diary_regDate, diary_state, user_nickname}=diary;
+  const {diary_contents, diary_title, diary_regDate, diary_state, diary_uDate}=diary;
 
   useEffect(()=>{
-    //callAPI();
+    callAPI();
   },[]);
 
   return (
     <div>
       <Row className='justify-content-center my-5'>
-      <div className='my-3 mb-2 text-center'>
-        <h3>{user_nickname}님의 {diary_key}번 일기입니다.</h3>
-      </div>
         <Col lg={6}>
           <Card>
             <Card.Body>
@@ -78,7 +75,7 @@ const DiaryReadPage = () => {
                 </Col>
                 <hr />
                 <span>{diary_regDate}</span>
-                <span>udate</span>
+                <span>{diary_uDate}</span>
               </Row>
             </Card.Body>
           </Card>

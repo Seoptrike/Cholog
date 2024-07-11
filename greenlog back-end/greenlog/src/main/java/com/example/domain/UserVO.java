@@ -15,12 +15,13 @@ public class UserVO {
 	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	private Date user_birth;
 	private String user_img;
-	private int user_gender;
-	private int user_auth;
+	private String user_gender;
+	private String user_auth;
 	private String user_email;
 	@JsonFormat(pattern = "yyyy년 MM월 dd일 HH:mm:ss", timezone = "Asia/Seoul")
 	private Date user_regDate;
 	private String user_nickname;
+	private String user_ment;
 
 	public String getUser_nickname() {
 		return user_nickname;
@@ -101,21 +102,30 @@ public class UserVO {
 	public void setUser_img(String user_img) {
 		this.user_img = user_img;
 	}
+	
 
-	public int getUser_gender() {
+	public String getUser_gender() {
 		return user_gender;
 	}
 
-	public void setUser_gender(int user_gender) {
+	public void setUser_gender(String user_gender) {
 		this.user_gender = user_gender;
 	}
 
-	public int getUser_auth() {
+	public String getUser_auth() {
 		return user_auth;
 	}
 
-	public void setUser_auth(int user_auth) {
+	public void setUser_auth(String user_auth) {
 		this.user_auth = user_auth;
+	}
+
+	public String getUser_ment() {
+		return user_ment;
+	}
+
+	public void setUser_ment(String user_ment) {
+		this.user_ment = user_ment;
 	}
 
 	public String getUser_email() {
