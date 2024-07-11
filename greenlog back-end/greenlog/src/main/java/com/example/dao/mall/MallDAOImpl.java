@@ -50,6 +50,14 @@ public class MallDAOImpl implements MallDAO{
 		return session.selectOne(namespace+".total",vo);
 	}
 
+
+	
+	
+	
+	
+	
+	
+
 	
 
 
