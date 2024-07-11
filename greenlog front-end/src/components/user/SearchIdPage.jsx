@@ -6,18 +6,18 @@ import { Link } from 'react-router-dom';
 const SearchIdPage = () => {
     const [findid, setUid] = useState("");
     const [form, setform] = useState({
-        uname: '김인섭',
-        phone: '01041110342',
-        email: 'dlstjq977@gmail.com'
+        user_uname: '김인섭',
+        user_phone: '01041110342',
+        user_email: 'dlstjq977@gmail.com'
     })
-    const { uname, phone, email } = form;
+    const { user_uname, user_phone, user_email } = form;
 
     const onChangeForm = (e) => {
         setform({ ...form, [e.target.name]: e.target.value })
     }
 
-    const onFindId = async (uname, phone, email) => {
-        const res = await axios.post('/member/find/id', { uname, phone, email });
+    const onFindId = async (user_uname, user_phone, user_email) => {
+        const res = await axios.post('/user/findid', { user_uname, user_phone, user_email });
         console.log(res.data);
         if (res.data === "") {
             alert("등록된 아이디가 없습니다")
@@ -52,17 +52,17 @@ const SearchIdPage = () => {
                             <Col xs={12} md={10} lg={6}>
                                 <InputGroup className='h-25'>
                                     <InputGroup.Text className=' justify-content-center '>이름</InputGroup.Text>
-                                    <Form.Control name="uname" value={uname} onChange={onChangeForm} />
+                                    <Form.Control name="user_uname" value={user_uname} onChange={onChangeForm} />
                                 </InputGroup >
                                 <InputGroup>
                                     <InputGroup.Text className='justify-content-center ' >전화번호</InputGroup.Text>
-                                    <Form.Control name="phone" value={phone} onChange={onChangeForm} />
+                                    <Form.Control name="user_phone" value={user_phone} onChange={onChangeForm} />
                                 </InputGroup>
                                 <InputGroup>
                                     <InputGroup.Text className='justify-content-center ' >이메일</InputGroup.Text>
-                                    <Form.Control name="email" value={email} onChange={onChangeForm} />
+                                    <Form.Control name="user_email" value={user_email} onChange={onChangeForm} />
                                 </InputGroup>
-                                <Button className='w-100 mt-2 btn-dark' onClick={() => onFindId(uname, phone, email)} >아이디 찾기</Button>
+                                <Button className='w-100 mt-2 btn-dark' onClick={() => onFindId(user_uname, user_phone, user_email)} >아이디 찾기</Button>
                             </Col>
                         </Row>
                     </Card>

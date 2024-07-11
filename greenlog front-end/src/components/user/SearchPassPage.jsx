@@ -7,31 +7,30 @@ const SearchPassPage = () => {
     const location = useLocation();
     const search = new URLSearchParams(location.search)
     const findid = search.get("findid")
-    const [findPass, setFindPass] = useState("");
-    console.log(findid);
+    //console.log(findid);
     const [form, setform] = useState({
-        uid: '',
-        uname: '',
-        phone: '',
-        email:''
+        user_uid: findid,
+        user_uname: '김인섭',
+        user_phone: '01041110342',
+        user_email: 'dlstjq977@gmail.com'
     })
-    const { uname, phone, uid,email } = form;
+    const { user_uname, user_phone, user_uid, user_email } = form;
 
     const onChangeForm = (e) => {
         setform({ ...form, [e.target.name]: e.target.value })
     }
 
     //온클릭이벤트
-    const onFindPass = async (uname, phone, uid,email) => {
-        const res = await axios.post('/member/find/pass', { uid, uname, phone,email })
+    const onFindPass = async (form) => {
+        console.log(form)
+        const res = await axios.post('/user/findpass', form)
         if (res.data === "") {
             alert("회원정보가 일치하지 않습니다")
             return;
         } else {
-            setFindPass(res.data.user_upass);
+            window.location.href=`/user/updatePass/${form.user_uid}`
         }
     }
-    useEffect(() => { console.log(findPass) }, [findPass])
     return (
         <div>
             <div className='d-flex justify-content-center'>
@@ -49,28 +48,28 @@ const SearchPassPage = () => {
                             {findid ?
                                 <InputGroup>
                                     <InputGroup.Text className='justify-content-center ' >아이디</InputGroup.Text>
-                                    <Form.Control name="uid" value={findid} readOnly />
+                                    <Form.Control name="user_uid" value={findid} readOnly />
                                 </InputGroup>
                                 :
                                 <InputGroup>
                                     <InputGroup.Text className='justify-content-center ' >아이디</InputGroup.Text>
-                                    <Form.Control name="uid" value={uid} onChange={onChangeForm} />
+                                    <Form.Control name="user_uid" value={user_uid} onChange={onChangeForm} />
                                 </InputGroup>
                             }
 
                             <InputGroup className='h-25'>
                                 <InputGroup.Text className=' justify-content-center '>이름</InputGroup.Text>
-                                <Form.Control name="uuname" value={uname} onChange={onChangeForm} />
+                                <Form.Control name="user_uname" value={user_uname} onChange={onChangeForm} />
                             </InputGroup >
                             <InputGroup>
                                 <InputGroup.Text className='justify-content-center ' >전화번호</InputGroup.Text>
-                                <Form.Control name="phone" value={phone} onChange={onChangeForm} />
+                                <Form.Control name="user_phone" value={user_phone} onChange={onChangeForm} />
                             </InputGroup>
                             <InputGroup>
                                 <InputGroup.Text className='justify-content-center ' >이메일</InputGroup.Text>
-                                <Form.Control name="email" value={email} onChange={onChangeForm} />
+                                <Form.Control name="user_email" value={user_email} onChange={onChangeForm} />
                             </InputGroup>
-                            <Button className='w-100 mt-2 btn-dark' onClick={() => onFindPass(uid, uname, phone,email)}>비밀번호찾기</Button>
+                            <Button className='w-100 mt-2 btn-dark' onClick={() => onFindPass(form)}>비밀번호찾기</Button>
                         </Col>
                     </Row>
                 </Card>

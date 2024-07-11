@@ -44,7 +44,7 @@ const UserListPage = () => {
                 {list.map((user, index) => (
                     <Row className='justify-content-center'>
                         <Col xs={12} sm={11} md={10} lg={9} key={index} className='mb-3'>
-                            <Card className='text-center' border={user.user_gender === 1 ? styleBlue : styleRed}>
+                            <Card className='text-center' border={user.user_gender === "남자" ? styleBlue : styleRed}>
                                 <Card.Body>
                                     <Row>
                                         <Col lg={5}>
@@ -59,10 +59,10 @@ const UserListPage = () => {
                                                     <p>이름: {user.user_uname}</p>
                                                     <p>닉네임: {user.user_nickname}</p>
                                                     <p>생년월일: {user.user_birth}</p>
-                                                    <p>성별: {user.user_gender === 1 ? "남자" : "여자"}</p>
+                                                    <p>성별: {user.user_gender}</p>
                                                     <p>전화번호: {user.user_phone}</p>
                                                     <p>이메일: {user.user_email}</p>
-                                                    <p>주소: {user.user_address1} ({user.user_address2})</p>
+                                                    <p>주소: {user.user_address1 ? `${user.user_address1} (${user.user_address2})` : "-"}</p>
                                                     <p>권한: {user.user_auth}</p>
                                                 </div>
                                             </Card.Text>
