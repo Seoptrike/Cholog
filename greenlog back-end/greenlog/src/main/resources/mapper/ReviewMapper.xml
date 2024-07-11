@@ -7,7 +7,7 @@
 			    from review
 			    where review_mall_key=#{review_mall_key} 
 			    order by review_regDate desc
-			    limit #{start},#{size}
+			    limit #{start}, #{size}
 		</select>
 		
 		<insert id="insert">
@@ -29,7 +29,7 @@
 		</delete>
 		
 		<select id="total" resultType="int">
-				select count(*) as total from review;
+				select count(*) as total from review where review_mall_key=#{review_mall_key} ;
 		</select>
 		
 		

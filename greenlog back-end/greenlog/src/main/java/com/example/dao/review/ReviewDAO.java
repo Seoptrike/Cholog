@@ -13,6 +13,6 @@ public interface ReviewDAO {
 	public void delete (int review_key);
 	public void update (ReviewVO vo);
 	public void updateLock (ReviewVO vo);
-	public int total();
+	public int total(int review_mall_key);
 
 }
