@@ -41,9 +41,14 @@ const ReadPage = () => {
     
   const onClickDelete=async()=>{
     //console.log("0000000000000000000000000>>>>>>>>>>>"+mall_key);
-    await axios.post(`/mall/delete/${mall_key}`);
-    callAPI();
-    navi("/mall/list.json")
+    try {
+      await axios.post(`/mall/delete/${mall_key}`);
+      callAPI();
+      navi("/mall/list.json")
+    } catch (error) {
+      alert("삭제실패! 댓글이 존재합니다!")
+    }
+    
   }
       
   return (
@@ -105,7 +110,7 @@ const ReadPage = () => {
       </div>
       
       {/* 탭 부분 */}
-      <Nav  fill variant="tabs" defaultActiveKey="1">
+      <Nav  fill variant="tabs" defaultActive="1">
         <Nav.Item>
           <Nav.Link eventKey="1" onClick={() => handleTabClick('1')} active={activeTab === '1'}>
             상세이미지
@@ -113,12 +118,12 @@ const ReadPage = () => {
         </Nav.Item>
         <Nav.Item>
           <Nav.Link eventKey="2" onClick={() => handleTabClick('2')} active={activeTab === '2'}>
-            입찰하기
+            {mall_tstate===0 ? "입찰하기" : "문의하기 "}
           </Nav.Link>
         </Nav.Item>
         <Nav.Item>
           <Nav.Link eventKey="3" onClick={() => handleTabClick('3')} active={activeTab === '3'}>
-            현재 입찰 내역
+          {mall_tstate===0 ? "현재 입찰 내역" : "현재 문의 내역 "}
           </Nav.Link>
         </Nav.Item>
         <Nav.Item>
@@ -140,11 +145,11 @@ const ReadPage = () => {
         )}
         {activeTab === '3' && (
           <div>
-            <ReviewPage mall_key={mall_key}/>
+            <ReviewPage mall_seller={mall_seller}/>
           </div>
         )}
         {activeTab === '4' && (
-          <SellerInfo />
+          <SellerInfo form={form} />
         )}
       </TabContent>
     </div>

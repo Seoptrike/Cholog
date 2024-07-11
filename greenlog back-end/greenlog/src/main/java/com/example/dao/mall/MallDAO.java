@@ -23,6 +23,10 @@ public interface MallDAO {
 	
 	public int total(QueryVO vo);
 	
+	
+	
+	
+	
 
 	
 	

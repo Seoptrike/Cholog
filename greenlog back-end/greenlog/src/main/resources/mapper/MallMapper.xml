@@ -4,6 +4,17 @@
 	<select id="list" resultType="hashmap">
 		select *
 		from mall
+		 <where>
+        <if test="key == 'mall_seller'">
+           mall_seller like concat('%', #{word}, '%')
+        </if>
+        <if test="key == 'mall_title'">
+            mall_title like concat('%', #{word}, '%')
+        </if>
+        <if test="key == 'mall_info'">
+           mall_info like concat('%', #{word}, '%')
+        </if>
+    </where>
 		order by mall_regDate desc
 		limit #{start}, #{size}
 	</select>
@@ -29,13 +40,13 @@
 		from mall
 		 <where>
         <if test="key == 'mall_seller'">
-            AND mall_seller LIKE CONCAT('%', #{word}, '%')
+            mall_seller like concat('%', #{word}, '%')
         </if>
         <if test="key == 'mall_title'">
-            AND mall_title LIKE CONCAT('%', #{word}, '%')
+            mall_title like concat('%', #{word}, '%')
         </if>
         <if test="key == 'mall_info'">
-            AND mall_info LIKE CONCAT('%', #{word}, '%')
+            mall_info like concat('%', #{word}, '%')
         </if>
     </where>
 	</select>
@@ -50,4 +61,11 @@
 		delete from mall
 		where mall_key=#{mall_key}
 	</delete>
+	
+	
+	
+	
+	
+	
+	
 </mapper>
