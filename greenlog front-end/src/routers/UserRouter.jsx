@@ -18,29 +18,31 @@ import AdminReadPage from '../components/admin/AdminReadPage'
 import ChatRoom from '../common/useful/ChatRoom'
 import AdminAskList from '../components/admin/AdminAskList'
 import AdminChat from '../components/admin/AdminChat'
+import NewPass from '../components/user/NewPass'
 
 
 const UserRouter = () => {
   return (
     <Routes>
-        <Route path='login' element={<LoginPage/>}/>
-        <Route path='join' element={<JoinPage/>}/>
-        <Route path='read/:user_uid' element={<MyPage/>}/>
-        <Route path='admin' element={<Dashboard/>}/>
-        <Route path='chat/:user_uid' element={<AdminChat/>}/>
-        <Route path='admin/list.json' element={<UserListPage/>}/>
-        <Route path='admin/ask/list.json' element={<AdminAskList/>}/>
-        <Route path='admin/question' element={<Question/>}/>
-        <Route path='admin/update/:user_uid' element={<AdminUpdate/>}/>
-        <Route path='admin/read/:user_uid' element={<AdminReadPage/>}/>
-        <Route path='admin/seed/list.json' element={<SeedPage/>}/>
-        <Route path='wallet/:user_uid' element={<SeedWallet/>}/>
-        <Route path='searchId' element={<SearchIdPage/>}/>
-        <Route path='searchPass' element={<SearchPassPage/>}/>
-        <Route path='update/:user_uid' element={<UserUpdatePage/>}/>
-        <Route path='following' element={<Following/>}/>
-        <Route path='follower' element={<Follow/>}/>
-        <Route path='chat' element={<ChatRoom/>}/>
+      <Route path='updatePass/:user_uid' element={<NewPass/>} />
+      <Route path='login' element={<LoginPage />} />
+      <Route path='join' element={<JoinPage />} />
+      <Route path='read/:user_uid' element={<MyPage />} />
+      <Route path='admin' element={<Dashboard />} />
+      <Route path='chat/:user_uid' element={<AdminChat />} />
+      <Route path='admin/list.json' element={<UserListPage />} />
+      <Route path='admin/ask/list.json' element={<AdminAskList />} />
+      <Route path='admin/question' element={<Question />} />
+      <Route path='admin/update/:user_uid' element={<AdminUpdate />} />
+      <Route path='admin/read/:user_uid' element={<AdminReadPage />} />
+      <Route path='admin/seed/list.json' element={<SeedPage />} />
+      <Route path='wallet/:user_uid' element={<SeedWallet />} />
+      <Route path='searchId' element={<SearchIdPage />} />
+      <Route path='searchPass' element={<SearchPassPage />} />
+      <Route path='update/:user_uid' element={<UserUpdatePage />} />
+      <Route path='following' element={<Following />} />
+      <Route path='follower' element={<Follow />} />
+      <Route path='chat' element={<ChatRoom />} />
     </Routes>
   )
 }

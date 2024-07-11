@@ -34,13 +34,13 @@ public class UserDAOImpl implements UserDAO {
 	@Override
 	public void delete(int user_key) {
 		session.delete(namespace + ".delete", user_key);
-		
+
 	}
 
 	@Override
 	public void update(UserVO vo) {
 		session.update(namespace + ".adminUpdate", vo);
-		
+
 	}
 
 	@Override
@@ -48,13 +48,13 @@ public class UserDAOImpl implements UserDAO {
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("img", img);
 		map.put("uid", uid);
-		session.update(namespace+ ".imgUpdate", map);
+		session.update(namespace + ".imgUpdate", map);
 	}
 
 	@Override
 	public void updatePerson(UserVO vo) {
 		session.update(namespace + ".personUpdate", vo);
-		
+
 	}
 
 	@Override
@@ -72,8 +72,19 @@ public class UserDAOImpl implements UserDAO {
 		return session.selectOne(namespace + ".mypage3", uid);
 	}
 
-	
+	@Override
+	public UserVO findid(UserVO vo) {
+		return session.selectOne(namespace + ".findid", vo);
+	}
 
+	@Override
+	public UserVO findpass(UserVO vo) {
+		return session.selectOne(namespace + ".findpass", vo);
+	}
 
+	@Override
+	public void updatePass(UserVO vo) {
+		session.update(namespace + ".updatePass", vo);
+	}
 
 }
