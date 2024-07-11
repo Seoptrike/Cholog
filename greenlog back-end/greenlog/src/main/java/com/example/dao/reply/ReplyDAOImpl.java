@@ -40,6 +40,7 @@ public class ReplyDAOImpl implements ReplyDAO {
 				map.put("reply_bbs_key", reply_bbs_key);
 				map.put("start", vo.getStart());
 				map.put("size", vo.getSize());
+				map.put("key", vo.getKey());
 				return session.selectList(namespace + ".replyList", map);
 		}
 

@@ -53,7 +53,8 @@
 	</update>
 	
 	<select id="mypage1" resultType="hashmap">
-		select seed_point, user_nickname, user_img, user_ment from seed, user where seed_uid =user_uid and user_uid=#{user_uid};
+		select seed_point, count(auction_key) auction, user_nickname, user_img, user_ment
+		from seed, auction, user where user_uid=seed_uid and user_uid=#{user_uid}
 	</select>
 	<select id="mypage2" resultType="hashmap">
 		select * from diary where diary_writer=#{diary_writer}

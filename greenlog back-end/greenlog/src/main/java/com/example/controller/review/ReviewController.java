@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.dao.review.ReviewDAO;
@@ -32,7 +33,9 @@ public class ReviewController {
 		}
 		
 		@GetMapping("/list/{review_mall_key}")
-		public List<HashMap<String, Object>> reviewList(@PathVariable("review_mall_key") int review_mall_key, QueryVO vo) {
+		public List<HashMap<String, Object>> reviewList(@PathVariable("review_mall_key") int review_mall_key, @RequestParam("key") String key, QueryVO vo) {
+				vo.setKey(key);
+				System.out.println("Received key: ---------------------- " + key);
 				return rdao.reviewList(review_mall_key,vo);
 		}
 		
