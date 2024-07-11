@@ -2,10 +2,13 @@ package com.example.dao.bbs;
 
 import java.util.HashMap;
 import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
 import com.example.domain.BBSVO;
+import com.example.domain.QueryVO;
 
 @Repository
 public class BBSDAOImpl implements BBSDAO {
@@ -16,9 +19,9 @@ public class BBSDAOImpl implements BBSDAO {
     private static final String NAMESPACE = "com.example.mapper.BBSMapper";
 
     @Override
-    public List<HashMap<String, Object>> list() {
-        return session.selectList(NAMESPACE + ".list");
-    }
+	public List<HashMap<String, Object>> list(QueryVO vo) {
+		return session.selectList(NAMESPACE + ".list", vo);
+	}
 
     @Override
     public void delete(int bbs_key) {
@@ -42,5 +45,15 @@ public class BBSDAOImpl implements BBSDAO {
 		
 	}
 
+	@Override
+	public int total(QueryVO vo) {
+		return session.selectOne(NAMESPACE + ".total", vo);
+	}
+
+	@Override
+	public void updateViewcnt(int bbs_key) {
+		session.update(NAMESPACE+".updateViewcnt",bbs_key);
+		
+	}
 
 }

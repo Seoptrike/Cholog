@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.dao.notice.NoticeDAO;
 import com.example.domain.NoticeVO;
 import com.example.domain.QaVO;
+import com.example.domain.QueryVO;
 
 @RestController
 @RequestMapping("/notice")
@@ -22,11 +23,15 @@ public class NoticeController {
 	@Autowired
 	private NoticeDAO NDAO;
 	
-	 @GetMapping("/list")
-	    public List<HashMap<String, Object>> list(){
-	        return NDAO.list();
-	    }
-
+	@GetMapping("/list.json")
+	public HashMap<String, Object> list(QueryVO vo) {
+	    HashMap<String, Object> map = new HashMap<>();
+	    List<HashMap<String, Object>> list = NDAO.list(vo);
+	    map.put("documents", list);
+	    map.put("total", NDAO.total(vo));
+	    return map;
+	}
+	
 	    @PostMapping("/update/{notice_key}")
 		public void update(@RequestBody NoticeVO vo) {
 			NDAO.update(vo);

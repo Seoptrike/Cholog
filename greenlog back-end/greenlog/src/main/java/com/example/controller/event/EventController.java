@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.dao.event.EventDAO;
 import com.example.domain.EventVO;
+import com.example.domain.QueryVO;
 
 @RestController
 @RequestMapping("/event")
@@ -21,11 +22,15 @@ public class EventController {
 	@Autowired
     private EventDAO EDAO;
 
-    @GetMapping("/list")
-    public List<HashMap<String, Object>> list(){
-        return EDAO.list();
-    }
-
+	@GetMapping("/list.json")
+	public HashMap<String, Object> list(QueryVO vo) {
+	    HashMap<String, Object> map = new HashMap<>();
+	    List<HashMap<String, Object>> list = EDAO.list(vo);
+	    map.put("documents", list);
+	    map.put("total", EDAO.total(vo));
+	    return map;
+	}
+	
     @PostMapping("/update/{event_key}")
 	public void update(@RequestBody EventVO vo) {
 		EDAO.update(vo);

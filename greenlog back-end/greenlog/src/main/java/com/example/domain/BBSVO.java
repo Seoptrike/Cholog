@@ -15,8 +15,17 @@ public class BBSVO {
     @JsonFormat(pattern="yyyy년MM월dd일 HH:mm:ss", timezone="Asia/Seoul")
     private Date bbs_uDate;
     private int bbs_type;
+    private int bbs_vcnt;
 
-    public int getBbs_key() {
+    public int getBbs_vcnt() {
+		return bbs_vcnt;
+	}
+
+	public void setBbs_vcnt(int bbs_vcnt) {
+		this.bbs_vcnt = bbs_vcnt;
+	}
+
+	public int getBbs_key() {
         return bbs_key;
     }
 

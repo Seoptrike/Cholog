@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class NoticeVO {
     private int notice_key;
+    private String notice_category;
     private String notice_writer;
     private String notice_title;
     private String notice_contents;
@@ -16,6 +17,12 @@ public class NoticeVO {
     private String notice_photo;
     private int notice_type;
     
+	public String getNotice_category() {
+		return notice_category;
+	}
+	public void setNotice_category(String notice_category) {
+		this.notice_category = notice_category;
+	}
 	public int getNotice_type() {
 		return notice_type;
 	}
@@ -66,9 +73,9 @@ public class NoticeVO {
 	}
 	@Override
 	public String toString() {
-		return "NoticeVO [notice_key=" + notice_key + ", notice_writer=" + notice_writer + ", notice_title="
-				+ notice_title + ", notice_contents=" + notice_contents + ", notice_regDate=" + notice_regDate
-				+ ", notice_uDate=" + notice_uDate + ", notice_photo=" + notice_photo + ", notice_type=" + notice_type
-				+ "]";
+		return "NoticeVO [notice_key=" + notice_key + ", notice_category=" + notice_category + ", notice_writer="
+				+ notice_writer + ", notice_title=" + notice_title + ", notice_contents=" + notice_contents
+				+ ", notice_regDate=" + notice_regDate + ", notice_uDate=" + notice_uDate + ", notice_photo="
+				+ notice_photo + ", notice_type=" + notice_type + "]";
 	}
 }

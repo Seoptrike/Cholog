@@ -44,7 +44,7 @@ const FAQUpdate = () => {
     e.preventDefault();
     if (!window.confirm('변경된 내용을 수정하실래요?')) return;
     setLoading(true);
-    axios.put(`/faq/update/${faq_key}`, form, {
+    axios.post(`/faq/update/${faq_key}`, form, {
       headers: {
         'Content-Type': 'application/json'
       }

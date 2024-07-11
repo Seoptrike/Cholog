@@ -17,8 +17,19 @@
         SELECT * FROM event WHERE event_key = #{evnet_key}
     </select>
 		<select id="list" resultType="hashmap">
- 		select *
+ 		select * 
 		from event
-		order by event_key desc;
- 		</select>
+		<if test="key=='event_writer'">where event_writer like #{word}</if>
+		<if test="key=='event_title'">where event_title like #{word}</if>
+		<if test="key=='event_contents'">where event_contents like #{word}</if>
+		order by event_key desc
+		limit #{start}, #{size} ;
+ 	</select>
+ 	<select id="total" resultType="int">
+ 		select count(*)
+ 		from event
+ 		<if test="key=='event_writer'">where event_writer like #{word}</if>
+		<if test="key=='event_title'">where event_title like #{word}</if>
+		<if test="key=='event_contents'">where event_contents like #{word}</if>
+ 	</select>
 </mapper>

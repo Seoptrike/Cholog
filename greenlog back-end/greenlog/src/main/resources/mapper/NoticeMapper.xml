@@ -8,7 +8,7 @@
     </insert>
    <update id="update">
 		update notice
-		set notice_title= #{notice_title}, notice_contents=#{notice_contents}, notice_type= #{notice_type}
+		set notice_title= #{notice_title}, notice_contents=#{notice_contents}, notice_type= #{notice_type}}
 		where notice_key=#{notice_key}
 	</update>
    <delete id="delete">
@@ -19,8 +19,20 @@
     </select>
 
  <select id="list" resultType="hashmap">
- 		select *
-		from notice
-		order by notice_key desc;
- 	</select>
+    select *
+    from notice
+    <if test="key == 'notice_writer'">where notice_writer like #{word}</if>
+    <if test="key == 'notice_title'">where notice_title like #{word}</if>
+    <if test="key == 'notice_contents'">where notice_contents like #{word}</if>
+    order by notice_key desc
+    limit #{start}, #{size}
+</select>
+
+<select id="total" resultType="int">
+    select count(*)
+    from notice
+    <if test="key == 'notice_writer'">where notice_writer like #{word}</if>
+    <if test="key == 'notice_title'">where notice_title like #{word}</if>
+    <if test="key == 'notice_contents'">where notice_contents like #{word}</if>
+    </select>
 </mapper>
