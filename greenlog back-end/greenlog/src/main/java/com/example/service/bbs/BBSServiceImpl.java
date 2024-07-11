@@ -9,7 +9,6 @@ import com.example.domain.BBSVO;
 
 @Service
 public class BBSServiceImpl implements BBSService {
-
 	@Autowired
 	BBSDAO bbsDAO;
 
