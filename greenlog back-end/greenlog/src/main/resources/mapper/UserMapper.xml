@@ -53,8 +53,7 @@
 	</update>
 	
 	<select id="mypage1" resultType="hashmap">
-		select seed_point, count(auction_key) auction, user_nickname, user_img, user_ment
-		from seed, auction, user where seed_uid = auction_seller and user_uid=#{user_uid}
+		select seed_point, user_nickname, user_img, user_ment from seed, user where seed_uid =user_uid and user_uid=#{user_uid};
 	</select>
 	<select id="mypage2" resultType="hashmap">
 		select * from diary where diary_writer=#{diary_writer}
@@ -62,5 +61,9 @@
 	
 	<select id="mypage3" resultType="hashmap">
 		select count(follow_from) as ftotal , count(follow_to) as ttotal from follow where follow_from = #{follow_from}
+	</select>
+	
+	<select id="mypage4" resultType="int">
+		select count(auction_key) from auction where auction_seller=#{auction_seller} or auction_buyer=#{auction_buyer}
 	</select>
 </mapper>

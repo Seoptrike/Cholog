@@ -12,7 +12,9 @@ import  Pagination from 'react-js-pagination'
 //대표사진 출력기능
 
 const DiaryListPage = () => {
+  const [loading , setLoading] =useState(false);
   const [list, setList] = useState([]);
+  const [origin, setOrigin] =useState([]);
   const [checked, setChecked] = useState(0);
   const [size, setSize] =useState(4);
   const [page, setPage] =useState(1);
@@ -24,6 +26,7 @@ const DiaryListPage = () => {
     console.log(res.data);
     const data=res.data.documents.map(diary=> diary && {...diary , checked:false})
     setList(data);
+    setOrigin(data);
     setCount(res.data.total);
 
   }
@@ -66,10 +69,28 @@ const DiaryListPage = () => {
   }
 
   const LikePress =async(diary_key)=>{
-    await axios.post(`/diary/like/${user_uid}?diary_key=${diary_key}`);
-    alert("좋아요를 눌렀습니다!");
+    if(origin.diary_key===diary_key && user_uid === sessionStorage.get("uid")){
+      alert("이미 좋아요를 눌렀습니다!")
+      return;
+    }
+      await axios.post(`/diary/like`, {user_uid, diary_key});
+      alert("좋아요를 눌렀습니다!");
+      callAPI();
+      setLoading(false);
   }
 
+  const LikeCancel =async(diary_key)=>{
+    if(diary_key===""){
+      setLoading(true);
+    }else{
+      await axios.post(`/diary/cancel`, {user_uid, diary_key});
+      alert("좋아요가 취소되었습니다");
+      callAPI();
+      setLoading(false);
+    }  
+  }
+
+  if(loading) return <h1>로딩중</h1>
   return (
     <div>
       <h1 className='my-5 text-center'>행운일기목록</h1>
@@ -81,7 +102,7 @@ const DiaryListPage = () => {
           <input type="checkbox" onClick={onChangeAll}  checked={list.length===checked} className='me-2'/> 전체선택
         </div>
         {list.map(d =>
-          <Col lg={3}>
+          <Col lg={3} key={d.diary_key}>
            <Card className='mb-3'>
               <Card.Header>
               <input onChange={(e)=>onChangeSingle(e, d.diary_key)}
@@ -98,9 +119,9 @@ const DiaryListPage = () => {
                   <span>{d.diary_contents}</span>
                 </Col>
                 <Col>
-                  <div className='text-end' style={{cursor:"pointer"}} onClick={()=>LikePress(d.diary_key)}>
-                    {d.diary_like===0 ?
-                    <FaRegThumbsUp style={{ fontSize: "20px" }} /> : <FaThumbsUp style={{ fontSize: "20px" }} />}
+                  <div className='text-end' style={{cursor:"pointer"}} >
+                    <FaRegThumbsUp style={{ fontSize: "20px" }} onClick={()=>LikePress(d.diary_key)}/> : 
+                      <FaThumbsUp style={{ fontSize: "20px" }} onClick={()=>LikeCancel(d.diary_key)}/>
                   </div>
                 </Col>
                 <hr />
