@@ -3,11 +3,28 @@
 <mapper namespace="com.example.mapper.ReplyMapper">
 
 		<select id="replyList" resultType="hashmap">
-				select * from reply;
+				select * 
+				from reply
+				where reply_bbs_key=#{reply_bbs_key}
+				order by reply_regdate desc
+				limit #{start}, #{size};
 		</select>
 		
 		<insert id="insert">
 				insert into reply ( reply_bbs_key, reply_writer, reply_contents, reply_reaction)
 				value ( #{reply_bbs_key}, #{reply_writer}, #{reply_contents}, #{reply_reaction})
 		</insert>
+		
+		<update id="update">
+				update reply set reply_contents=#{reply_contents}
+				where reply_key=#{reply_key}
+		</update>
+		
+		<delete id="delete">
+				delete from reply where reply_key=#{reply_key};
+		</delete>
+		
+		<select id="total" resultType="int">
+				select count(*) as total from reply where reply_bbs_key=#{reply_bbs_key} ;
+		</select>
 </mapper>
