@@ -3,6 +3,7 @@ package com.example.dao.diary;
 import java.util.HashMap;
 import java.util.List;
 
+import com.example.domain.DiaryLikeVO;
 import com.example.domain.DiaryVO;
 import com.example.domain.QueryVO;
 
@@ -14,5 +15,6 @@ public interface DiaryDAO {
 	public int pTotal(String uid);
 	public List<HashMap<String, Object>> adminList();
 	public void delete(int key);
-	public void likePress(int key, String uid);
+	public void likePress(DiaryLikeVO vo);
+	public void likeCancel(DiaryLikeVO vo);
 }

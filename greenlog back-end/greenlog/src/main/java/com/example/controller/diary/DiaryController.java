@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.dao.diary.DiaryDAO;
+import com.example.domain.DiaryLikeVO;
 import com.example.domain.DiaryVO;
 import com.example.domain.QueryVO;
 
@@ -54,8 +55,13 @@ public class DiaryController {
 		dao.delete(key);
 	}
 	
-	@PostMapping("/like/{user_uid}")
-	public void likepress(@RequestParam("diary_key") int key, @PathVariable("user_uid") String uid) {
-		dao.likePress(key, uid);
+	@PostMapping("/like")
+	public void likepress(@RequestBody DiaryLikeVO vo) {
+		dao.likePress(vo);
+	}
+	
+	@PostMapping("/cancel")
+	public void likeCancel(@RequestBody DiaryLikeVO vo) {
+		dao.likeCancel(vo);
 	}
 }

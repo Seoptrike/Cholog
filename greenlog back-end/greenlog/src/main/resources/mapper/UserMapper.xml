@@ -63,4 +63,8 @@
 	<select id="mypage3" resultType="hashmap">
 		select count(follow_from) as ftotal , count(follow_to) as ttotal from follow where follow_from = #{follow_from}
 	</select>
+	
+	<select id="mypage4" resultType="int">
+		select count(auction_key) from auction where auction_seller=#{auction_seller} or auction_buyer=#{auction_buyer}
+	</select>
 </mapper>

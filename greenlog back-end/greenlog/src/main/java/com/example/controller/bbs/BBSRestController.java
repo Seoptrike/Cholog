@@ -47,7 +47,7 @@ public class BBSRestController {
 	}
     
     @GetMapping("/read/{bbs_key}")
-	public BBSVO read(@PathVariable("bbs_key") int bid,Model model) {
+	public BBSVO read(@PathVariable("bbs_key") int bid, Model model) {
     	model.addAttribute("bbs", service.read(bid));
 		return bbsDAO.read(bid);
 	}

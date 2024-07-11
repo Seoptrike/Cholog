@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.dao.seed.SeedDAO;
@@ -114,5 +115,10 @@ public class UserController {
 	@GetMapping("/mypage3/{user_uid}")
 	public HashMap<String, Object> mypage3(@PathVariable("user_uid") String uid) {
 		return udao.mypage3(uid);
+	}
+	
+	@GetMapping("/mypage4")
+	public int mypage4(@RequestParam("auction_seller") String uid1, @RequestParam("auction_buyer") String uid2) {
+		return udao.mypage4(uid1, uid2);
 	}
 }

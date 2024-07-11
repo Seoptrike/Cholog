@@ -16,7 +16,7 @@
 	<select id="personList" resultType="hashmap">
 		select *, date_format(diary_regDate,'%Y년%m월%d일 %T') as fmtDdate, 
 		date_format(diary_uDate,'%Y년%m월%d일 %T') as fmtUdate   
-		from diary 
+		from diary
 		where diary_writer = #{diary_writer}
 		order by diary_regDate desc  
         limit #{start}, #{size}	
@@ -36,4 +36,8 @@
 	<insert id="likePress">
 		insert into diaryLike(diary_key, user_uid) values (#{diary_key}, #{user_uid})
 	</insert>
+	
+	<delete id="likeCancel">
+		delete from diaryLike where diary_key=#{diary_key} and user_uid=#{user_uid}
+	</delete>
 </mapper>
