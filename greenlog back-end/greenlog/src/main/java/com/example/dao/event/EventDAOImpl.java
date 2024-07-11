@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.example.domain.EventVO;
+import com.example.domain.QueryVO;
 
 @Repository
 public class EventDAOImpl implements EventDAO{
@@ -17,8 +18,8 @@ public class EventDAOImpl implements EventDAO{
     private static final String NAMESPACE = "com.example.mapper.EventMapper";
     
     @Override
-    public List<HashMap<String, Object>> list() {
-        return session.selectList(NAMESPACE + ".list");
+    public List<HashMap<String, Object>> list(QueryVO vo) {
+        return session.selectList(NAMESPACE + ".list",vo);
     }
 
     @Override
@@ -41,6 +42,10 @@ public class EventDAOImpl implements EventDAO{
 	public void update(EventVO vo) {
 		session.update(NAMESPACE+".update",vo);
 		
+	}
+	@Override
+	public int total(QueryVO vo) {
+		return session.selectOne(NAMESPACE + ".total", vo);
 	}
 
 

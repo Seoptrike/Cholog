@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.dao.faq.FAQDAO;
 import com.example.domain.FAQVO;
+import com.example.domain.QueryVO;
 
 
 @RestController
@@ -22,11 +23,14 @@ public class FAQContoller {
 	@Autowired
 	private FAQDAO FDAO;
 	
-	 @GetMapping("/list")
-	    public List<HashMap<String, Object>> list(){
-	        return FDAO.list();
-	    }
-
+	@GetMapping("/list.json")
+	public HashMap<String, Object> list(QueryVO vo) {
+	    HashMap<String, Object> map = new HashMap<>();
+	    List<HashMap<String, Object>> list = FDAO.list(vo);
+	    map.put("documents", list);
+	    map.put("total", FDAO.total(vo));
+	    return map;
+	}
 	    @PostMapping("/update/{faq_key}")
 		public void update(@RequestBody FAQVO vo) {
 			FDAO.update(vo);

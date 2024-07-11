@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.example.domain.FAQVO;
+import com.example.domain.QueryVO;
 
 @Repository
 public class FAQDAOImpl implements FAQDAO{
@@ -16,10 +17,10 @@ public class FAQDAOImpl implements FAQDAO{
     private SqlSession session;
     private static final String NAMESPACE = "com.example.mapper.FAQMapper";
 
-	@Override
-	public List<HashMap<String, Object>> list() {
-		return session.selectList(NAMESPACE+".list");
-	}
+    @Override
+    public List<HashMap<String, Object>> list(QueryVO vo) {
+        return session.selectList(NAMESPACE + ".list",vo);
+    }
 
 	 @Override
 	    public void delete(int faq_key) {
@@ -41,6 +42,10 @@ public class FAQDAOImpl implements FAQDAO{
 		public void update(FAQVO vo) {
 			session.update(NAMESPACE+".update",vo);
 			
+		}
+		@Override
+		public int total(QueryVO vo) {
+			return session.selectOne(NAMESPACE + ".total", vo);
 		}
 
 	}

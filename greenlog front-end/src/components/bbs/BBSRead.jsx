@@ -78,7 +78,6 @@ const BBSRead = () => {
             <Button onClick={onDelete}>삭제</Button>
           </div>
         </Col>
-        <ReplyPage/>
       </Row>
     </div>
   );

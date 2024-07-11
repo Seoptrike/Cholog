@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.dao.bbs.BBSDAO;
 import com.example.domain.BBSVO;
+import com.example.domain.QueryVO;
+import com.example.service.bbs.BBSService;
 
 @RestController
 @RequestMapping("/bbs")
@@ -16,12 +18,19 @@ public class BBSRestController {
 
     @Autowired
     private BBSDAO bbsDAO;
+    
+    @Autowired
+	BBSService service;
 
-    @GetMapping("/list")
-    public List<HashMap<String, Object>> list(){
-        return bbsDAO.list();
-    }
-
+    @GetMapping("/list.json")
+	public HashMap<String, Object> list(QueryVO vo) {
+	    HashMap<String, Object> map = new HashMap<>();
+	    List<HashMap<String, Object>> list = bbsDAO.list(vo);
+	    map.put("documents", list);
+	    map.put("total", bbsDAO.total(vo));
+	    return map;
+	}
+    
     @PostMapping("/update/{bbs_key}")
 	public void update(@RequestBody BBSVO vo) {
 		bbsDAO.update(vo);
@@ -38,7 +47,8 @@ public class BBSRestController {
 	}
     
     @GetMapping("/read/{bbs_key}")
-	public BBSVO read(@PathVariable("bbs_key") int bid) {
+	public BBSVO read(@PathVariable("bbs_key") int bid,Model model) {
+    	model.addAttribute("bbs", service.read(bid));
 		return bbsDAO.read(bid);
 	}
 }

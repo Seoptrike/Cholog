@@ -1,31 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Row, Col, InputGroup, FormControl, Button, Table, Image } from 'react-bootstrap';
+import Pagination from 'react-js-pagination';
+import { Row, Col, InputGroup, Button, Table,Form } from 'react-bootstrap';
 import axios from 'axios';
 
 const BBSList = () => {
-  const [category, setCategory] = useState('전체');
-  const [search, setSearch] = useState('');
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [list, setList]=useState([]);
+  const [list, setList] = useState([]);
+  const [count, setCount] = useState(0);
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(5); 
+  const [key, setKey] = useState('bbs_title');
+  const [word, setWord] = useState('');
 
-  const callAPI =async()=>{
-    const res = await axios.get('/bbs/list');
+  const callAPI = async() => {
+    const res=await axios.get(`/bbs/list.json?key=${key}&word=${word}&page=${page}&size=${size}`);
     console.log(res.data);
-    setList(res.data);
+    setList(res.data.documents);
+    setCount(res.data.total);
   }
 
   useEffect(() => {
     callAPI();
-  }, []);
+  }, [page]);
 
-  const handleCategoryChange = (e) => {
-    setCategory(e.target.value);
-  };
+  const onSubmit = (e) => {
+    e.preventDefault();
+    callAPI();
+  }
 
-  const handleSearchChange = (e) => {
-    setSearch(e.target.value);
-  };
+  const onClickSearch=async(e)=>{
+    e.preventDefault();
+    setPage(1);
+    callAPI();
+}
 
 
   return (
@@ -33,25 +40,26 @@ const BBSList = () => {
       <h1 className="text-center my-5">자유게시판</h1>
       <Row className="mb-3">
         <Col md={10}>
-          <InputGroup>
-            <FormControl as="select" onChange={handleCategoryChange}>
-              <option value="2">전체</option>
-              <option value="0">꿀팁</option>
-              <option value="1">자유</option>
-            </FormControl>
-            <FormControl 
-              placeholder="검색어를 입력하세요"
-              value={search}
-              onChange={handleSearchChange}
-            />
-            <Button>검색</Button>
-          </InputGroup>
+        <InputGroup onSubmit={onSubmit}>
+              <Form.Select className='me-2' value={key} onChange={(e)=>setKey(e.target.value)}>
+                <option value="bbs_title">제목</option>
+                <option value="bbs_contents">꿀팁</option>
+                <option value="bbs_writer">자유</option>
+              </Form.Select>
+              <Form.Control placeholder='검색어' value={word} onChange={(e)=>setWord(e.target.value)}/>
+              <Button  onClick={(e)=>onClickSearch(e)} type='submit'>검색</Button>
+            </InputGroup>
         </Col>
-        <Col md={2}>
-        <Link to={'/community/bbs/insert'}>
-          <Button>글쓰기</Button>
-        </Link>
+        <Col>
+          검색수: {count}건
         </Col>
+        {sessionStorage.getItem('uid') &&
+          <Col className='text-end'>
+            <Link to="/community/bbs/insert">
+              <Button size='sm'>글쓰기</Button>
+            </Link>
+          </Col>
+        }
       </Row>
       <Table>
         <thead>
@@ -72,10 +80,22 @@ const BBSList = () => {
               </td>
               <td>{post.bbs_writer}</td>
               <td>{post.bbs_regDate}</td>
+              <td>{post.bbs_views}</td> {/* 조회수 추가 */}
             </tr>
           ))}
         </tbody>
       </Table>
+      {count > size && 
+        <Pagination
+          activePage={page}
+          itemsCountPerPage={size}
+          totalItemsCount={count}
+          pageRangeDisplayed={5}
+          prevPageText={"‹"}
+          nextPageText={"›"}
+          onChange={(e) => setPage(e)}
+        />
+      }
     </div>
   );
 };

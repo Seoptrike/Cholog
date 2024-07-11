@@ -3,8 +3,8 @@
 
 <mapper namespace="com.example.mapper.BBSMapper">
     <insert id="insert">
-        INSERT INTO BBS (bbs_writer, bbs_title, bbs_contents, bbs_type)
-        VALUES (#{bbs_writer}, #{bbs_title}, #{bbs_contents}, #{bbs_type})
+        INSERT INTO BBS (bbs_writer, bbs_title, bbs_contents, bbs_type,bbs_category)
+        VALUES (#{bbs_writer}, #{bbs_title}, #{bbs_contents}, #{bbs_type},#{bbs_category})
     </insert>
    <update id="update">
 		update BBS
@@ -17,21 +17,25 @@
     <select id="read" resultType="com.example.domain.BBSVO">
         SELECT * FROM BBS WHERE bbs_key = #{bbs_key}
     </select>
-
- <select id="list" resultType="hashmap">
- 		select *
+   <select id="list" resultType="hashmap">
+ 		select * 
 		from BBS
-		order by bbs_key desc;
+		<if test="key=='bbs_writer'">where bbs_writer like #{word}</if>
+		<if test="key=='bbs_title'">where bbs_title like #{word}</if>
+		<if test="key=='bbs_contents'">where bbs_contents like #{word}</if>
+		order by bbs_key desc
+		limit #{start}, #{size} ;
  	</select>
-    <select id="total" resultType="int">
-        SELECT COUNT(*) FROM BBS
-        WHERE title LIKE CONCAT('%', #{searchKeyword}, '%')
-    </select>
-
-    <update id="updateViewcnt">
-        UPDATE BBS
-        SET viewcnt = viewcnt + 1
-        WHERE bbs_key = #{bid}
-    </update>
-
+ 	<select id="total" resultType="int">
+ 		select count(*)
+ 		from BBS
+ 		<if test="key=='bbs_writer'">where bbs_writer like #{word}</if>
+		<if test="key=='bbs_title'">where bbs_title like #{word}</if>
+		<if test="key=='bbs_contents'">where bbs_contents like #{word}</if>
+ 	</select>
+ 	<update id="updateViewcnt">
+		update BBS
+		set bbs_vcnt=bbs_vcnt+1
+		where bbs_key=#{bbs_key}
+	</update>
 </mapper>

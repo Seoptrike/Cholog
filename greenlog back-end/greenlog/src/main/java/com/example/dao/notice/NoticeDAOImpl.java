@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.example.domain.NoticeVO;
+import com.example.domain.QueryVO;
 
 @Repository
 public class NoticeDAOImpl implements NoticeDAO{
@@ -16,10 +17,10 @@ public class NoticeDAOImpl implements NoticeDAO{
     private SqlSession session;
     private static final String NAMESPACE = "com.example.mapper.NoticeMapper";
 
-	@Override
-	public List<HashMap<String, Object>> list() {
-		return session.selectList(NAMESPACE+".list");
-	}
+    @Override
+    public List<HashMap<String, Object>> list(QueryVO vo) {
+        return session.selectList(NAMESPACE + ".list",vo);
+    }
 
 	 @Override
 	    public void delete(int notice_key) {
@@ -41,6 +42,10 @@ public class NoticeDAOImpl implements NoticeDAO{
 		public void update(NoticeVO vo) {
 			session.update(NAMESPACE+".update",vo);
 			
+		}
+		@Override
+		public int total(QueryVO vo) {
+			return session.selectOne(NAMESPACE + ".total", vo);
 		}
 
 	}

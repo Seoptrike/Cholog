@@ -4,11 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.example.domain.QaVO;
+import com.example.domain.QueryVO;
 
 public interface QADAO {
-	public List<HashMap<String, Object>> list();
+	public List<HashMap<String, Object>> list(QueryVO vo);
     public void delete(int qa_key);
     public void insert(QaVO vo);
     public QaVO read(int qa_key);
     public void update(QaVO vo);
+    public int total(QueryVO vo);
 }
