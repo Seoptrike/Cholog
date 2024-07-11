@@ -4,7 +4,7 @@ import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 const SeoulMap = () => {
     const containerStyle = {
         width: '100%',
-        height: '100vh'
+        height: '100%'
       };
       const center = {
         lat: 37.5665,

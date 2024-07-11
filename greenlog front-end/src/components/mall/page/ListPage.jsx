@@ -34,7 +34,7 @@ const ListPage = () => {
     const callAPI= async()=>{ 
         setLoading(true);
         const res= await axios.get(`/mall/list?key=${key}&word=${word}&page=${page}&size=${size}`)
-        //console.log("0000000000000000"+res.data);
+        //console.log("ListPage : "+ JSON.stringify(res.data));
         setList(res.data.documents);
         setCount(res.data.total);
         setLoading(false);
@@ -53,6 +53,10 @@ const ListPage = () => {
     useEffect(()=>{
         callAPI();
     },[page])
+
+    
+
+
 
     if(loading) return <h1 className='text-center'>로딩중...</h1>
     return (

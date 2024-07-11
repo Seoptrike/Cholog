@@ -12,4 +12,28 @@
 		update diary set diary_contents=#{diary_contents}, diary_title=#{diary_title}, diary_state=#{diary_state}, diary_uDate=now() 
 		where diary_key=#{diary_key}
 	</update>
+	
+	<select id="personList" resultType="hashmap">
+		select *, date_format(diary_regDate,'%Y년%m월%d일 %T') as fmtDdate, 
+		date_format(diary_uDate,'%Y년%m월%d일 %T') as fmtUdate   
+		from diary 
+		where diary_writer = #{diary_writer}
+		order by diary_regDate desc  
+        limit #{start}, #{size}	
+	</select>
+	
+	<select id="personTotal" resultType="int">
+		select count(*) from diary where diary_writer=#{diary_writer}
+	</select>
+	<select id="adminList" resultType="hashmap">
+		select * from diary order by diary_regDate desc
+	</select>
+	
+	<delete id="delete">
+		delete from diary where diary_key=#{diary_key}
+	</delete>
+	
+	<insert id="likePress">
+		insert into diaryLike(diary_key, user_uid) values (#{diary_key}, #{user_uid})
+	</insert>
 </mapper>

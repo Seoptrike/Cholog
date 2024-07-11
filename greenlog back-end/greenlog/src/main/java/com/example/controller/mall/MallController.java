@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.dao.mall.MallDAO;
 import com.example.domain.MallVO;
 import com.example.domain.QueryVO;
+import com.example.domain.UserVO;
 import com.example.service.mall.MallService;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,7 +42,7 @@ public class MallController {
 	}
 	
 	@GetMapping("/read/{mall_key}")
-	public MallVO read(@PathVariable ("mall_key") int mall_key ) {
+	public HashMap<String, Object> read(@PathVariable ("mall_key") int mall_key ) {
 		return mdao.read(mall_key);
 	}
 	
@@ -54,6 +55,8 @@ public class MallController {
 	public void delete (@PathVariable("mall_key") int mall_key) {
 		mdao.delete(mall_key);
 	}
+	
+	
 	
 	
 
