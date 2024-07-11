@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, InputGroup, FormControl, Button, Table } from 'react-bootstrap';
 import HeaderTabs from '../../common/useful/HeaderTabs';
 import axios from 'axios';
+import { Link, useParams } from 'react-router-dom';
 
 const FAQList = () => {
+  const { faq_key } = useParams();
   const [openIndex, setOpenIndex] = useState(null);
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('all');
@@ -20,7 +22,6 @@ const FAQList = () => {
       try {
         const response = await axios.get('/faq/list');
         const data = response.data;
-        console.log('Fetched data:', data);
         if (Array.isArray(data)) {
           setFaqs(data);
         } else {
@@ -42,6 +43,19 @@ const FAQList = () => {
 
   const handleWriteClick = () => {
     window.location.href = '/community/faq/insert';
+  };
+
+  const handleUpdateClick = (faq_key) => {
+    window.location.href = `/community/faq/update/${faq_key}`;
+  };
+
+  const handleDeleteClick = async (faq_key) => {
+    try {
+      await axios.delete(`/faq/delete/${faq_key}`);
+      setFaqs(faqs.filter(faq => faq.FAQ_key !== faq_key));
+    } catch (error) {
+      console.error('Error deleting FAQ:', error);
+    }
   };
 
   return (
@@ -96,6 +110,8 @@ const FAQList = () => {
                         <div style={{ padding: '10px' }}>
                           {faq.FAQ_answer}
                         </div>
+                        <Button onClick={() => handleUpdateClick(faq.FAQ_key)} className='me-2'>수정</Button>
+                        <Button onClick={() => handleDeleteClick(faq.FAQ_key)}>삭제</Button>
                       </td>
                     </tr>
                   )}
