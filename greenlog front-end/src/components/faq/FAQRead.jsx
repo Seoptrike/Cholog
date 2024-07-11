@@ -1,8 +1,11 @@
 import React from 'react'
+import { Button } from 'react-bootstrap'
 
 const FAQRead = () => {
   return (
-    <div>FAQRead</div>
+    <div>FAQRead
+    <Button>수정</Button>
+    </div>
   )
 }
 

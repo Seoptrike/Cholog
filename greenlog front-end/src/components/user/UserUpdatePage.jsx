@@ -41,7 +41,7 @@ const UserUpdatePage = () => {
     }
 
     const { user_key, user_nickname, user_uname, user_phone, user_address1, user_address2,
-        user_birth, user_email, user_gender} = form;
+        user_birth, user_email, user_gender, user_ment} = form;
 
     useEffect(() => {
         callAPI();
@@ -192,7 +192,8 @@ const UserUpdatePage = () => {
                                             </InputGroup>
                                             <InputGroup className='mb-2'>
                                                 <InputGroup.Text>한줄소개</InputGroup.Text>
-                                                <Form.Control placeholder="한줄소개" onChange={onChangeForm} />
+                                                <Form.Control placeholder="한줄소개" onChange={onChangeForm} 
+                                                value={user_ment} name="user_ment"/>
                                             </InputGroup>
                                         </Card.Body>
                                     </Card>

@@ -5,11 +5,11 @@
 		insert into diary(diary_writer, diary_contents, diary_title, diary_state)
 		values (#{diary_writer}, #{diary_contents}, #{diary_title}, #{diary_state})
 	</insert>
-	<select id="read" resultType="hashmap">
-		select user_nickname, diary.* from diary, user where diary_writer=user_uid and diary_key=#{diary_key}
+	<select id="read" resultType="com.example.domain.DiaryVO">
+		select * from diary where diary_key=#{diary_key}
 	</select>
 	<update id="update">
-		update diary set diary_contents=#{diary_contents}, diary_title=#{diary_title}, diary_state=#{diary_state}
+		update diary set diary_contents=#{diary_contents}, diary_title=#{diary_title}, diary_state=#{diary_state}, diary_uDate=now() 
 		where diary_key=#{diary_key}
 	</update>
 </mapper>

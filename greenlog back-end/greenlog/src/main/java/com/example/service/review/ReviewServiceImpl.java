@@ -35,7 +35,7 @@ public class ReviewServiceImpl implements ReviewService {
 		public HashMap<String, Object> plist(int review_mall_key, QueryVO vo) {
 			 HashMap<String, Object> map = new  HashMap<>();
 			 map.put("documents",  rdao.reviewList(review_mall_key, vo));
-			 map.put("total", rdao.total());
+			 map.put("total", rdao.total(review_mall_key));
 			return map;
 		}
 

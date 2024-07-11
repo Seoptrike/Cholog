@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { Row, Col, Card, Button } from 'react-bootstrap';
+import ReplyPage from '../reply/ReplyPage';
 
 const BBSRead = () => {
   const { bbs_key } = useParams();
@@ -77,6 +78,7 @@ const BBSRead = () => {
             <Button onClick={onDelete}>삭제</Button>
           </div>
         </Col>
+        <ReplyPage/>
       </Row>
     </div>
   );

@@ -35,10 +35,6 @@ const InsertPage = ({mall_key}) => {
 
     const onSubmit = async(e) => {
         e.preventDefault();
-        if (review_contents === '') {
-            alert('리뷰 내용을 입력하세요!');
-            return;
-        }
         if(!window.confirm("리뷰를 등록하실래요?")) return;
         console.log(form)
         try {
@@ -89,7 +85,7 @@ const InsertPage = ({mall_key}) => {
                         <div className='text-end mt-3'>
                             <Button onReset={onClickCancel}
                                 variant='' size="sm" className='text-end me-2' type='reset' disabled={!onCancel}>취소</Button>
-                            <Button variant='' size="sm" className='text-end' type='submit' disabled={review_contents === ''}>등록</Button>
+                            <Button variant='' size="sm" className='text-end' type='submit'>등록</Button>
                         </div>
                         </form>    
                     </div>

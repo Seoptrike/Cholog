@@ -6,7 +6,6 @@ import BBSRead from '../components/bbs/BBSRead';
 import BBSUpdate from '../components/bbs/BBSUpdate';
 import FAQInsert from '../components/faq/FAQInsert';
 import FAQList from '../components/faq/FAQList';
-import FAQRead from '../components/faq/FAQRead';
 import FAQUpdate from '../components/faq/FAQUpdate';
 import QAInsert from '../components/qa/QAInsert';
 import QAList from '../components/qa/QAList';
@@ -24,6 +23,7 @@ import AskList from '../components/ask/AskList';
 import AskRead from '../components/ask/AskRead';
 import AskUpdate from '../components/ask/AskUpdate';
 import NoticeInsert from '../components/notice/NoticeInsert';
+import FAQRead from '../components/faq/FAQRead';
 
 const CommunityRouter = () => {
   return (
@@ -33,8 +33,8 @@ const CommunityRouter = () => {
       <Route path="/bbs/read/:bbs_key" element={<BBSRead />} />
       <Route path="/bbs/update/:bbs_key" element={<BBSUpdate />} />
       <Route path="/faq/insert" element={<FAQInsert />} />
+      <Route path="/faq/read/:{faq_key}" element={<FAQRead />} />
       <Route path="/faq/list.json" element={<FAQList />} />
-      <Route path="/faq/read/:faq_key" element={<FAQRead />} />
       <Route path="/faq/update/:faq_key" element={<FAQUpdate />} />
       <Route path="/qa/insert" element={<QAInsert />} />
       <Route path="/qa/list.json" element={<QAList />} />

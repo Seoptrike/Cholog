@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.mapper.UserMapper">
+	<update id="updatePass">
+		update user set user_upass=#{user_upass} where user_uid=#{user_uid}
+	</update>
+
+	<select id="findpass" resultType="com.example.domain.UserVO">
+		select * from user where user_uname=#{user_uname} and user_phone=#{user_phone} and user_email=#{user_email} and user_uid=#{user_uid}
+	</select>
+
+	<select id="findid" resultType="com.example.domain.UserVO">
+		select * from user where user_uname=#{user_uname} and user_phone=#{user_phone} and user_email=#{user_email}
+	</select>
+
 	<delete id="delete">
 		delete from user where user_key=#{user_key};
 	</delete>
@@ -24,14 +36,14 @@
 	</update>
 	<update id="personUpdate">
 		update user set user_uname=#{user_uname}, user_phone=#{user_phone}, user_address1=#{user_address1}, user_address2=#{user_address2}, user_birth=#{user_birth},
-		user_nickname=#{user_nickname}, user_email=#{user_email} where user_uid=#{user_uid}
+		user_nickname=#{user_nickname}, user_email=#{user_email}, user_ment=#{user_ment} where user_uid=#{user_uid}
 	</update>
 	<update id="imgUpdate">
 		update user set user_img=#{user_img} where uid=#{uid}
 	</update>
 	
 	<select id="mypage1" resultType="hashmap">
-		select seed_point, count(auction_key) auction, user_nickname, user_img
+		select seed_point, count(auction_key) auction, user_nickname, user_img, user_ment
 		from seed, auction, user where seed_uid = auction_seller and seed_uid=user_uid;
 	</select>
 	<select id="mypage2" resultType="hashmap">
