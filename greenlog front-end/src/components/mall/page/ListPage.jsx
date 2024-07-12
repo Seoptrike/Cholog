@@ -34,7 +34,7 @@ const ListPage = () => {
     const callAPI= async()=>{ 
         setLoading(true);
         const res= await axios.get(`/mall/list?key=${key}&word=${word}&page=${page}&size=${size}`)
-        //console.log("ListPage : "+ JSON.stringify(res.data));
+        console.log("ListPage : "+ JSON.stringify(res.data));
         setList(res.data.documents);
         setCount(res.data.total);
         setLoading(false);
