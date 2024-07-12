@@ -48,4 +48,10 @@ public class FAQDAOImpl implements FAQDAO{
 			return session.selectOne(NAMESPACE + ".total", vo);
 		}
 
+		@Override
+		public void updateViewcnt(int faq_key) {
+			session.update(NAMESPACE+".updateViewcnt",faq_key);
+			
+		}
+
 	}

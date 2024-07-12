@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.dao.qa.QADAO;
 import com.example.domain.QaVO;
 import com.example.domain.QueryVO;
+import com.example.service.qa.QAService;
 
 
 @RestController
@@ -22,6 +24,9 @@ public class QAController {
 
 	@Autowired
     private QADAO QDAO;
+	
+	 @Autowired
+	 QAService service;
 
 	@GetMapping("/list.json")
 	public HashMap<String, Object> list(QueryVO vo) {
@@ -48,7 +53,8 @@ public class QAController {
 	}
     
     @GetMapping("/read/{qa_key}")
-	public QaVO read(@PathVariable("qa_key") int qid) {
+	public QaVO read(@PathVariable("qa_key") int qid, Model model) {
+    	model.addAttribute("qa",service.read(qid));
 		return QDAO.read(qid);
 	}
 }

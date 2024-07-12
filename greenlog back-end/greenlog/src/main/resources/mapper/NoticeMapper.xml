@@ -8,7 +8,7 @@
     </insert>
    <update id="update">
 		update notice
-		set notice_title= #{notice_title}, notice_contents=#{notice_contents}, notice_type= #{notice_type}}
+		set notice_title= #{notice_title}, notice_contents=#{notice_contents}, notice_type= #{notice_type}
 		where notice_key=#{notice_key}
 	</update>
    <delete id="delete">
@@ -35,4 +35,9 @@
     <if test="key == 'notice_title'">where notice_title like #{word}</if>
     <if test="key == 'notice_contents'">where notice_contents like #{word}</if>
     </select>
+    <update id="updateViewcnt">
+		update notice
+		set notice_vcnt=notice_vcnt+1
+		where notice_key=#{notice_key}
+	</update>
 </mapper>

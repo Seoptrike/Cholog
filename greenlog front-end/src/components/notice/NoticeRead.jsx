@@ -11,10 +11,10 @@ const NoticeRead = () => {
     notice_contents: '',
     notice_writer: '',
     notice_regDate: '',
-    notice_views: 0
+    notice_vcnt: 0
   });
 
-  const { notice_title, notice_contents, notice_writer, notice_regDate, notice_views } = form;
+  const { notice_title, notice_contents, notice_writer, notice_regDate, notice_vcnt } = form;
 
   const callAPI = async () => {
     try {
@@ -50,7 +50,7 @@ const NoticeRead = () => {
           <Card.Title>{notice_title}</Card.Title>
           <Card.Subtitle className="mb-2 text-muted">작성자: {notice_writer}</Card.Subtitle>
           <Card.Subtitle className="mb-2 text-muted">작성일: {notice_regDate}</Card.Subtitle>
-          <Card.Subtitle className="mb-2 text-muted">조회수: {notice_views}</Card.Subtitle>
+          <Card.Subtitle className="mb-2 text-muted">조회수: {notice_vcnt}</Card.Subtitle>
           <Card.Text>{notice_contents}</Card.Text>
           <Link to={`/community/notice/update/${notice_key}`}>
             <Button className='me-2'>수정</Button>

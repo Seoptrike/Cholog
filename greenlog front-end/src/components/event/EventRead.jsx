@@ -15,7 +15,7 @@ const EventRead = () => {
     eid: ''
   });
 
-  const {event_contents,event_title,event_writer,event_regDate,event_uDate}=form;
+  const {event_contents,event_title,event_writer,event_regDate,event_uDate,event_vcnt}=form;
 
   const callAPI = async () => {
     const res = await axios.get(`/event/read/${event_key}`);
@@ -48,7 +48,7 @@ const onDelete = async () => {
           <Card.Subtitle className="mb-2 text-muted">작성자: {event_writer}</Card.Subtitle>
           {<Card.Subtitle className="mb-2 text-muted">작성일:{event_regDate} </Card.Subtitle>}
           <Card.Subtitle className="mb-2 text-muted">수정일:{event_uDate} </Card.Subtitle>
-          <Card.Subtitle className="mb-2 text-muted">조회수: </Card.Subtitle>
+          <Card.Subtitle className="mb-2 text-muted">조회수:{event_vcnt} </Card.Subtitle>
           <Card.Text>{event_contents}</Card.Text>
           <Link to={`/community/event/update/${event_key}`}>
           <Button className='me-2'>수정</Button>

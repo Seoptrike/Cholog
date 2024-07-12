@@ -56,7 +56,6 @@ const QARead = () => {
             <Button className='me-2'>수정</Button>
           </Link>
           <Button onClick={onDelete} className='me-2'>삭제</Button>
-          <Button>답변</Button>
         </Card.Body>
       </Card>
     </div>

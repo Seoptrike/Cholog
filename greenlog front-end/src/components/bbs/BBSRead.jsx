@@ -6,7 +6,6 @@ import ReplyPage from '../reply/ReplyPage';
 
 const BBSRead = () => {
   const { bbs_key } = useParams();
-  const navigate = useNavigate();
   const [form, setForm] = useState(null);
 
   const callAPI = async () => {
@@ -26,6 +25,8 @@ const BBSRead = () => {
   useEffect(() => {
     callAPI();
   }, [bbs_key]);
+
+  
 
   const onDelete = async () => {
     if (!window.confirm(`${bbs_key}번 게시글을 삭제하실래요?`)) return;
@@ -47,7 +48,7 @@ const BBSRead = () => {
     return <div>Loading...</div>; // 데이터가 로드될 때까지 로딩 상태를 표시합니다.
   }
 
-  const { bbs_contents, bbs_title, bbs_writer, bbs_regDate,bbs_uDate } = form;
+  const { bbs_contents, bbs_title, bbs_writer, bbs_regDate,bbs_uDate,bbs_vcnt } = form;
 
   return (
     <div className='my-5'>
@@ -69,6 +70,7 @@ const BBSRead = () => {
               {bbs_writer} <br />
               {bbs_regDate}<br/>
               {bbs_uDate}
+              조회수: {bbs_vcnt}
             </Card.Footer>
           </Card>
           <div className='text-center my-3'>

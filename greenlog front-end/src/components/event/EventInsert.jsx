@@ -7,7 +7,6 @@ import axios from 'axios';
 
 const EventInsert = () => {
   const [loading, setLoading] = useState(false);
-  const [category, setCategory] = useState(0);
   const navigate = useNavigate();
   const uid = sessionStorage.getItem("uid");
   const [form, setForm] = useState({
@@ -21,6 +20,10 @@ const EventInsert = () => {
 
   const onChangeForm = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const onChangeCategory = (e) => {
+    setForm({ ...form, event_type: parseInt(e.target.value) });
   };
 
   const onChangeCKEditor = (event, editor) => {
@@ -38,8 +41,7 @@ const EventInsert = () => {
     if (!window.confirm("게시글을 등록하실래요?")) return;
     setLoading(true);
   
-    const updateForm = { ...form, event_category: category };
-    const response = await axios.post("/event/insert", updateForm);
+    const response = await axios.post("/event/insert", form);
     setLoading(false);
   
     if (response.status === 200) {
@@ -57,8 +59,9 @@ const EventInsert = () => {
         <InputGroup className="mb-3">
           <FormControl
             as="select"
+            name="event_type"
             value={event_type}
-            onChange={(e) => setCategory(parseInt((e.target.value)))}
+            onChange={onChangeCategory}
             style={{ maxWidth: '150px', marginRight: '10px' }}>
             <option value="0">이벤트</option>
             <option value="1">봉사</option>

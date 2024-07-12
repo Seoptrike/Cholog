@@ -13,4 +13,5 @@ public interface QADAO {
     public QaVO read(int qa_key);
     public void update(QaVO vo);
     public int total(QueryVO vo);
+    public void updateViewcnt(int qa_key);
 }

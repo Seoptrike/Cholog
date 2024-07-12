@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,7 @@ import com.example.dao.notice.NoticeDAO;
 import com.example.domain.NoticeVO;
 import com.example.domain.QaVO;
 import com.example.domain.QueryVO;
+import com.example.service.notice.NoticeService;
 
 @RestController
 @RequestMapping("/notice")
@@ -22,6 +24,9 @@ public class NoticeController {
 
 	@Autowired
 	private NoticeDAO NDAO;
+	
+	@Autowired
+	NoticeService service;
 	
 	@GetMapping("/list.json")
 	public HashMap<String, Object> list(QueryVO vo) {
@@ -48,7 +53,8 @@ public class NoticeController {
 		}
 	    
 	    @GetMapping("/read/{notice_key}")
-		public NoticeVO read(@PathVariable("notice_key") int nid) {
+		public NoticeVO read(@PathVariable("notice_key") int nid, Model model) {
+	    	model.addAttribute("notice", service.read(nid));
 			return NDAO.read(nid);
 		}
 	}

@@ -48,5 +48,10 @@ public class QADAOImpl implements QADAO{
 	public int total(QueryVO vo) {
 		return session.selectOne(NAMESPACE + ".total", vo);
 	}
-
+	
+	@Override
+	public void updateViewcnt(int qa_key) {
+		session.update(NAMESPACE+".updateViewcnt",qa_key);
+		
+	}
 }
