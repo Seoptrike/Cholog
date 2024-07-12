@@ -28,16 +28,16 @@ const ReviewPage = ({ mall_key, mall_seller, seller_number }) => {
         callAPI();
     }, [key, page, size]);
 
-    const handleSelectKey = (eventKey) => {
+    const onKey = (eventKey) => {
         setKey(eventKey);
         setPage(1);
     };
 
     // 삭제하기
     const onDelete = async (review_key) => {
-        if (!window.confirm(`${review_key}번 댓글을 삭제하실래요?`)) return;
+        if (!window.confirm(`${review_key}번 리뷰 삭제하실래요?`)) return;
         await axios.post(`/review/delete/${review_key}`);
-        alert('댓글 삭제 완료!');
+        alert('리뷰 삭제 완료!');
         callAPI();
     };
 
@@ -50,9 +50,9 @@ const ReviewPage = ({ mall_key, mall_seller, seller_number }) => {
     // 등록하기 (저장)
     const onSave = async (review) => {
         if (review.isEdit && (review.num !== review.review_rating || review.text !== review.review_contents)) {
-            if (!window.confirm("댓글을 수정하시겠습니까?")) return;
+            if (!window.confirm("리뷰를 수정하시겠습니까?")) return;
             await axios.post(`/review/update`, { review_key: review.review_key, review_contents: review.text, review_rating: review.num });
-            alert("댓글 수정 완료!");
+            alert("리뷰 수정 완료!");
             callAPI();
         } else {
             callAPI();
@@ -62,7 +62,7 @@ const ReviewPage = ({ mall_key, mall_seller, seller_number }) => {
     // 취소하기
     const onCancel = (review) => {
         if (review.num !== review.review_rating || review.text !== review.review_contents) {
-            if (!window.confirm(`${review.review_key}번 댓글 수정을 취소하시겠습니까?`)) return;
+            if (!window.confirm(`${review.review_key}번 리뷰 수정을 취소하시겠습니까?`)) return;
         }
         const data = list.map(item => item.review_key === review.review_key ? { ...item, isEdit: false } : item);
         setList(data);
@@ -75,7 +75,7 @@ const ReviewPage = ({ mall_key, mall_seller, seller_number }) => {
         setList(data);
     };
 
-    // 수정할 때 별점 바꾸기
+    // 아이콘을 클릭했을때 별점 바꾸기
     const changeRating = (review_key, newRating) => {
         const data = list.map(review => {
             if (review.review_key === review_key && review.isEdit) {
@@ -118,10 +118,10 @@ const ReviewPage = ({ mall_key, mall_seller, seller_number }) => {
                     <BsThreeDotsVertical />
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                    <Dropdown.Item onSelect={() => handleSelectKey('review_regDate desc')} eventKey="latest">최신순</Dropdown.Item>
-                    <Dropdown.Item onSelect={() => handleSelectKey('review_regDate asc')} eventKey="oldest">오래된순</Dropdown.Item>
-                    <Dropdown.Item onSelect={() => handleSelectKey('review_rating desc')} eventKey="highest">평점 높은순</Dropdown.Item>
-                    <Dropdown.Item onSelect={() => handleSelectKey('review_rating asc')} eventKey="lowest">평점 낮은순</Dropdown.Item>
+                    <Dropdown.Item onClick={()=>onKey('review_regDate desc')}>최신순</Dropdown.Item>
+                    <Dropdown.Item onClick={()=>onKey('review_regDate asc')}>오래된순</Dropdown.Item>
+                    <Dropdown.Item onClick={()=>onKey('review_rating desc')}>평점 높은순</Dropdown.Item>
+                    <Dropdown.Item onClick={()=>onKey('review_rating asc')}>평점 낮은순</Dropdown.Item>
                 </Dropdown.Menu>
                 <Row className='justify-content-center'>
                 <Col xs={12}>
@@ -169,11 +169,11 @@ const ReviewPage = ({ mall_key, mall_seller, seller_number }) => {
                                                         uid === mall_seller ? (
                                                             <Dropdown.Menu>
                                                                 <Dropdown.Item onClick={() => onClickBuy(review.review_writer, review.review_rating, mall_seller)} eventKey="buy">낙찰하기</Dropdown.Item>
-                                                                <Dropdown.Item eventKey="warning">댓글 신고하기</Dropdown.Item>
+                                                                <Dropdown.Item eventKey="warning">리뷰 신고하기</Dropdown.Item>
                                                             </Dropdown.Menu>
                                                         ) : (
                                                             <Dropdown.Menu>
-                                                                <Dropdown.Item eventKey="warning">댓글 신고하기</Dropdown.Item>
+                                                                <Dropdown.Item eventKey="warning">리뷰 신고하기</Dropdown.Item>
                                                             </Dropdown.Menu>
                                                         )
                                                     )}

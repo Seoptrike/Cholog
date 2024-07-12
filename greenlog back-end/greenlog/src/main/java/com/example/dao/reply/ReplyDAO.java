@@ -12,6 +12,7 @@ public interface ReplyDAO {
 	public List <HashMap<String, Object>> replyList(int reply_bbs_key, QueryVO vo);
 	public void delete(int reply_key);
 	public void update(ReplyVO vo);
+	public void updateLock(ReplyVO vo);
 	public int total(int reply_bbs_key);
 
 }

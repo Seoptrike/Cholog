@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.dao.reply.ReplyDAO;
@@ -38,11 +39,18 @@ public class ReplyController {
 		
 		@PostMapping("/update")
 		public void update(@RequestBody ReplyVO vo) {
-				rdao.update(vo);
+				rservice.update(vo);
+		}
+		
+		@PostMapping("/update/lock")
+		public void updateLock(@RequestBody ReplyVO vo) {
+				rservice.updateLock(vo);
 		}
 		
 		@GetMapping("/list/{review_bbs_key}")
-		public List<HashMap<String, Object>> replyList(@PathVariable("reply_bbs_key") int reply_bbs_key, QueryVO vo) {
+		public List<HashMap<String, Object>> replyList(@PathVariable("reply_bbs_key") int reply_bbs_key, @RequestParam("key") String key, QueryVO vo) {
+				vo.setKey(key);
+				System.out.println("Received key: ---------------------- " + key);
 				return rdao.replyList(reply_bbs_key, vo);
 		}
 		

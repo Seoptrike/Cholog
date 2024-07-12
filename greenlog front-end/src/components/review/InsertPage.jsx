@@ -1,25 +1,32 @@
 import React, { useEffect, useState } from 'react'
 import { Row, Col, Button, FormControl, InputGroup } from 'react-bootstrap'
-import { SlLock, SlLockOpen } from "react-icons/sl";
 import { Rating } from '@mui/material';
 import Spa from '@mui/icons-material/Spa';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
-const InsertPage = ({mall_key}) => {
+const InsertPage = ({mall_key, mall_seller}) => {
+    const uid = sessionStorage.getItem('uid');
+
+    useEffect(()=> {
+        if(uid === mall_seller) {
+            alert('자신의 게시글에는 댓글을 달 수 없습니다.')
+        }
+    },[uid, mall_seller])
+
     const [form, setForm] = useState({
         review_mall_key: mall_key, 
         review_writer : sessionStorage.getItem('uid'),
         review_rating : 0,
         review_contents:'',
-        review_lock: 0
+        
     })
-    const { review_mall_key, review_writer, review_rating, review_contents, review_lock }=form;
+    const { review_mall_key, review_writer, review_rating, review_contents }=form;
     const [onCancel, setOnCancel] = useState(false);
-    const [secret, setSecret] = useState(false);
 
     const onChangeForm = (e) => { 
         setForm({...form, [e.target.name] : e.target.value});
+        setOnCancel(true);
     }
 
     const onClickCancel = () => {
@@ -27,18 +34,34 @@ const InsertPage = ({mall_key}) => {
         setOnCancel(false);
     }
 
-    const onClickLock = () => {
-        const lockState = review_lock === 0 ? 1 : 0;
-        setForm({...form, review_lock : lockState})
-        setSecret(lockState === 1);
-    }
-
-    const onSubmit = async(e) => {
+    const onSubmit = async (e) => {
         e.preventDefault();
-        if(!window.confirm("리뷰를 등록하실래요?")) return;
-        await axios.post('/review/insert', form);
-        alert('리뷰가 등록되었습니다.');
-        //리뷰 내용 클리어
+        if (review_contents === '' && review_rating === 0) {
+            alert("리뷰나 포인트를 클릭하세요");
+            return;
+        }
+        if (!window.confirm("리뷰를 등록하실래요?")) return;
+        try {
+            await axios.post('/review/insert', form);
+            alert('리뷰가 등록되었습니다.');
+            setForm({
+                review_mall_key: mall_key, 
+                review_writer: sessionStorage.getItem('uid'),
+                review_rating: 0,
+                review_contents: ''
+            });
+            setOnCancel(false);
+        } catch (error) {
+            alert('이미 리뷰를 등록하셨습니다.')
+            //현재 입찰 내역으로 이동
+            setForm({
+                review_mall_key: mall_key, 
+                review_writer: sessionStorage.getItem('uid'),
+                review_rating: 0,
+                review_contents: ''
+            });
+            setOnCancel(false);
+        }
     };
 
     return (
@@ -59,16 +82,6 @@ const InsertPage = ({mall_key}) => {
                                     icon={<Spa style={{color:"green"}}/>}
                                     emptyIcon={<Spa/>}    
                                 />
-                                <Button
-                                    onClick={onClickLock}
-                                    variant='' 
-                                    size="sm" 
-                                    className='me-2' 
-                                    type='button'
-                                    style={{ color: secret ? 'green' : 'inherit' }}
-                                    >
-                                    {secret ? <SlLock /> : <SlLockOpen />} {secret ? '비공개' : '공개'}
-                                </Button>
                             </InputGroup.Text>
                             <FormControl
                                 name='review_contents' 
@@ -78,9 +91,9 @@ const InsertPage = ({mall_key}) => {
                                 onChange={onChangeForm}
                                 onFocus={()=>setOnCancel(true)}/>
                         <div className='text-end mt-3'>
-                            <Button variant='' size="sm" className='text-end' type='submit'>등록</Button>
+                            <Button variant='' size="sm" className='text-end me-2' type='submit' disabled={uid === mall_seller}>등록</Button>
                             <Button onReset={onClickCancel}
-                                variant='' size="sm" className='text-end me-2' type='reset' disabled={!onCancel}>취소</Button>
+                                variant='' size="sm" className='text-end' type='reset' disabled={!onCancel}>취소</Button>
                         </div>
                         </form>    
                     </div>

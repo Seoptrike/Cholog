@@ -78,7 +78,7 @@ const BBSRead = () => {
             <Button onClick={onDelete}>삭제</Button>
           </div>
         </Col>
-        <ReplyPage bbs_key={bbs_key}/>
+        <ReplyPage bbs_key={bbs_key} bbs_writer={bbs_writer}/>
       </Row>
     </div>
   );

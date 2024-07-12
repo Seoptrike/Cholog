@@ -49,4 +49,10 @@ public class ReplyDAOImpl implements ReplyDAO {
 			return session.selectOne(namespace + ".total", reply_bbs_key);
 		}
 
+		@Override
+		public void updateLock(ReplyVO vo) {
+				session.update(namespace + ".updateLock", vo);
+			
+		}
+
 }
