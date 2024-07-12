@@ -7,6 +7,15 @@
 	</insert>
 	
 	<select id="userAList" resultType="hashmap">
-		select * from auction where auction_seller=#{user_uid} or auction_seller=#{user_uid}
+		select *, date_format(Auction_regDate,'%Y.%m.%d %T') as fmtdate
+		from auction 
+		join mall on auction_mall_key=mall_key 
+		where auction_seller=#{uid} or auction_buyer=#{uid} 
+		order by auction_regDate desc limit #{start}, #{size}
 	</select>
+	
+	<select id="total" resultType="int">
+		select count(*) from auction where auction_seller=#{uid} or auction_seller=#{uid}
+	</select>
+	
 </mapper>

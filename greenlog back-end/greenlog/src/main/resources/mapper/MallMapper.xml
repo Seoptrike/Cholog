@@ -26,13 +26,14 @@
 	</select>
 	
 	<insert id="insertInfo">
-		insert into mall(mall_seller, mall_buyer, mall_title, mall_info, mall_price, mall_photo, mall_tstate, mall_pstate, mall_endDate)
-		values(#{mall_seller}, #{mall_buyer}, #{mall_title}, #{mall_info}, #{mall_price}, #{mall_photo}, #{mall_tstate}, #{mall_pstate}, #{mall_endDate})
-	</insert>
+      insert into mall(mall_seller, mall_title, mall_info, mall_price, mall_photo, mall_tstate, mall_pstate, mall_endDate)
+      values(#{mall_seller}, #{mall_title}, #{mall_info}, #{mall_price}, #{mall_photo}, #{mall_tstate}, #{mall_pstate}, #{mall_endDate})
+   </insert>
+   
 	
 	<insert id="insertPhoto">
-		insert into mallPhoto (mallPhoto_mall_key, mallPhoto_key, mallPhoto_photo)
-		values(#{mallPhoto_mall_key}, #{mallPhoto_key}, #{mallPhoto_photo})
+		insert into mallPhoto (mallPhoto_mall_key, mallPhoto_photo) 
+		values (#{mallPhoto_mall_key},#{mallPhoto_photo})
 	</insert>
 	
 	<select id="total" resultType="int">
@@ -62,11 +63,11 @@
 		where mall_key=#{mall_key}
 	</delete>
 	
+	<delete id="deleteAttach">
+		delete from mallPhoto where mallPhoto_key= #{mallPhto_key}
+	</delete>
 	
-	
-	
-	
-	
-	
-	
+	<select id="getLastInsertId" resultType="int">
+		select distinct(last_insert_id()) as last from mall
+	</select>
 </mapper>
