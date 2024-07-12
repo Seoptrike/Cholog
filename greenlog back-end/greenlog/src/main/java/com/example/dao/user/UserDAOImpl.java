@@ -93,4 +93,12 @@ public class UserDAOImpl implements UserDAO {
 		return session.selectOne(namespace + ".adminListTotal", vo);
 	}
 
+	@Override
+	public int mypage4(String uid1, String uid2) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("auction_seller", uid1);
+		map.put("auction_buyer" , uid2);
+		return session.selectOne(namespace + ".mypage4" , map);
+	}
+
 }

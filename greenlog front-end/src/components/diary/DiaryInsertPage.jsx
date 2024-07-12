@@ -47,7 +47,8 @@ const DiaryInsertPage = () => {
       trade_from: 'seed00000000',
       amount: 1,
       seed_number: data.seed_number,
-      trade_state:1
+      trade_state:1,
+      trade_info:"다이어리 작성"
     })
     alert("일기등록완료!");
     window.location.href = `/diary/list.json/${uid}`;

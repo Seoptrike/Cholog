@@ -19,13 +19,18 @@ const MyPage = () => {
   const [diary, setDiary] = useState("");
   const [trade, setTrade] = useState("");
   const [follow, setFollow] =useState("");
+  const [auction, setAuction] =useState("");
 
 
-  //포인트조회 및 거래내역, 유저(닉네임, 이미지정보)
+  //포인트조회 및 유저(닉네임, 이미지정보)
   const callAPI = async () => {
     const res = await axios.get(`/user/mypage1/${user_uid}`);
     console.log(res.data);
     setTrade(res.data);
+
+    const res2=await axios.get(`/user/mypage4?auction_seller=${user_uid}&auction_buyer=${user_uid}`);
+    console.log(".........", res2);
+    setAuction(res2.data);
   }
 
   //일기내용 조회(슬라이더로 목록 만들기)
@@ -41,6 +46,7 @@ const MyPage = () => {
     console.log(res.data);
     setFollow(res.data);
   }
+
 
 
   useEffect(() => {
@@ -72,7 +78,7 @@ const MyPage = () => {
                   <Col>
                     <Card>
                       <Card.Body>
-                        <Link to={`/auction/list.json/${user_uid}`}>피망이용: {trade.auction}건</Link>
+                        <Link to={`/auction/list.json/${user_uid}`}>피망이용: {auction}건</Link>
                       </Card.Body>
                     </Card>
                   </Col>

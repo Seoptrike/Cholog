@@ -11,7 +11,7 @@ import com.example.domain.BBSVO;
 public class BBSServiceImpl implements BBSService{
 	@Autowired
 	BBSDAO bbsDAO;
-	
+
 	@Transactional
 	@Override
 	public BBSVO read(int bbs_key) {

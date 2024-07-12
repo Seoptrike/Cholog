@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.example.domain.DiaryLikeVO;
 import com.example.domain.DiaryVO;
 import com.example.domain.QueryVO;
 
@@ -58,12 +59,18 @@ public class DiaryDAOImpl implements DiaryDAO{
 	}
 
 	@Override
-	public void likePress(int key, String uid) {
-		HashMap<String, Object> map = new HashMap<>();
-		map.put("diary_key", key);
-		map.put("diary_writer", uid);
-		session.insert(namespace + ".likePress", map);
+	public void likePress(DiaryLikeVO vo) {
+		session.insert(namespace + ".likePress", vo);
+		
 	}
+
+	@Override
+	public void likeCancel(DiaryLikeVO vo) {
+		session.delete(namespace + ".likeCancel", vo);
+		
+	}
+
+	
 	
 	
 

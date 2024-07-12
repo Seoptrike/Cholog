@@ -7,8 +7,10 @@
 	</insert>
 	
 	<select id="userList" resultType="Hashmap">
-		select * ,date_format(trade_date,'%Y.%m.%d %T') as fmtdate 
-		from trade t, seed s
-		where  trade_to = seed_number and ((trade_to=#{seed_number} and trade_state=1) or (trade_from=#{seed_number} and trade_state=1))
+		select t.*, s.seed_point, date_format(t.trade_date,'%Y.%m.%d %T') as fmtdate 
+    	from trade t
+    	join seed s on t.trade_to = s.seed_number 
+    	where (t.trade_to = #{seed_number} )
+    	order by t.trade_date desc
 	</select>
 </mapper>

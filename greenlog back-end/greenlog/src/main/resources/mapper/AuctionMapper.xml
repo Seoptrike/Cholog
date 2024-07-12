@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.AuctionMapper">
+	<insert id="insert">
+		insert into auction (auction_seller , auction_buyer, auction_amount , auction_mall_key) 
+		value (#{auction_seller},#{auction_buyer},#{auction_amount}, #{auction_mall_key})
+	</insert>
+	
+	<select id="userAList" resultType="hashmap">
+		select * from auction where auction_seller=#{user_uid} or auction_seller=#{user_uid}
+	</select>
+</mapper>

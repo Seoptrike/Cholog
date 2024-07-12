@@ -6,7 +6,7 @@
 			    select * 
 			    from review
 			    where review_mall_key=#{review_mall_key} 
-			    order by review_regDate desc
+			    order by #{key}
 			    limit #{start}, #{size}
 		</select>
 		
