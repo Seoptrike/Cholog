@@ -13,13 +13,17 @@ const NoticeInsert = () => {
     notice_title: '',
     notice_contents: '',
     notice_writer: uid,
-    notice_type: ''
+    notice_type: 0 // 기본값 설정
   });
 
   const { notice_title, notice_contents, notice_type } = form;
 
   const onChangeForm = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const onChangeCategory = (e) => {
+    setForm({ ...form, notice_type: parseInt(e.target.value) });
   };
 
   const onChangeCKEditor = (event, editor) => {
@@ -37,8 +41,7 @@ const NoticeInsert = () => {
     if (!window.confirm("공지사항을 등록하실래요?")) return;
     setLoading(true);
   
-    const updateForm = { ...form };
-    const response = await axios.post("/notice/insert", updateForm);
+    const response = await axios.post("/notice/insert", form);
     setLoading(false);
   
     if (response.status === 200) {
@@ -58,11 +61,11 @@ const NoticeInsert = () => {
             as="select"
             name="notice_type"
             value={notice_type}
-            onChange={onChangeForm}
+            onChange={onChangeCategory}
             style={{ maxWidth: '150px', marginRight: '10px' }}>
-            <option value="0">일반</option>
-            <option value="1">포인트</option>
-            <option value="2">이벤트</option>
+            <option value={0}>일반</option>
+            <option value={1}>포인트</option>
+            <option value={2}>이벤트</option>
           </FormControl>
           <FormControl
             type="text"

@@ -16,7 +16,14 @@ public class NoticeVO {
     private Date notice_uDate;
     private String notice_photo;
     private int notice_type;
+    private int notice_vcnt;
     
+	public int getNotice_vcnt() {
+		return notice_vcnt;
+	}
+	public void setNotice_vcnt(int notice_vcnt) {
+		this.notice_vcnt = notice_vcnt;
+	}
 	public String getNotice_category() {
 		return notice_category;
 	}

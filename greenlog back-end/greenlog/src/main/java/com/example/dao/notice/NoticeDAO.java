@@ -13,4 +13,5 @@ public interface NoticeDAO {
     public NoticeVO read(int notice_key);
     public void update(NoticeVO vo);
     public int total(QueryVO vo);
+    public void updateViewcnt(int notice_key);
 }

@@ -15,7 +15,14 @@ public class FAQVO {
     private Date faq_regDate;
     @JsonFormat(pattern="yyyy년MM월dd일 HH:mm:ss", timezone="Asia/Seoul")
     private Date faq_uDate;
+    private int faq_vcnt;
     
+	public int getFaq_vcnt() {
+		return faq_vcnt;
+	}
+	public void setFaq_vcnt(int faq_vcnt) {
+		this.faq_vcnt = faq_vcnt;
+	}
 	public String getFaq_category() {
 		return faq_category;
 	}

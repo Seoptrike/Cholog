@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.dao.event.EventDAO;
 import com.example.domain.EventVO;
 import com.example.domain.QueryVO;
+import com.example.service.event.EventService;
 
 @RestController
 @RequestMapping("/event")
@@ -21,6 +23,9 @@ public class EventController {
 
 	@Autowired
     private EventDAO EDAO;
+	
+	@Autowired
+	EventService service;
 
 	@GetMapping("/list.json")
 	public HashMap<String, Object> list(QueryVO vo) {
@@ -47,7 +52,8 @@ public class EventController {
 	}
     
     @GetMapping("/read/{event_key}")
-	public EventVO read(@PathVariable("event_key") int eid) {
+	public EventVO read(@PathVariable("event_key") int eid,Model model) {
+    	model.addAttribute("event",service.read(eid));
 		return EDAO.read(eid);
 	}
 }

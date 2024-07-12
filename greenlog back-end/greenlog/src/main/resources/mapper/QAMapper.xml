@@ -32,4 +32,9 @@
 		<if test="key=='qa_title'">where qa_title like #{word}</if>
 		<if test="key=='qa_contents'">where qa_contents like #{word}</if>
  	</select>
+ 	<update id="updateViewcnt">
+		update QA
+		set qa_vcnt=qa_vcnt+1
+		where qa_key=#{qa_key}
+	</update>
 </mapper>

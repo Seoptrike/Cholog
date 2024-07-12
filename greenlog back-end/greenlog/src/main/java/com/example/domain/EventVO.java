@@ -15,7 +15,14 @@ public class EventVO {
     private String event_photo;
     private int event_type;
     private String event_category;
+    private int event_vcnt;
     
+	public int getEvent_vcnt() {
+		return event_vcnt;
+	}
+	public void setEvent_vcnt(int event_vcnt) {
+		this.event_vcnt = event_vcnt;
+	}
 	public int getEvent_key() {
 		return event_key;
 	}

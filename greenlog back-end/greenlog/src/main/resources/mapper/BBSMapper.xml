@@ -3,8 +3,8 @@
 
 <mapper namespace="com.example.mapper.BBSMapper">
     <insert id="insert">
-        INSERT INTO BBS (bbs_writer, bbs_title, bbs_contents, bbs_type,bbs_category)
-        VALUES (#{bbs_writer}, #{bbs_title}, #{bbs_contents}, #{bbs_type},#{bbs_category})
+        INSERT INTO BBS (bbs_writer, bbs_title, bbs_contents, bbs_type)
+        VALUES (#{bbs_writer}, #{bbs_title}, #{bbs_contents}, #{bbs_type})
     </insert>
    <update id="update">
 		update BBS

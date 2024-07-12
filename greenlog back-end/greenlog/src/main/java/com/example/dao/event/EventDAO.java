@@ -14,4 +14,5 @@ public interface EventDAO {
     public EventVO read(int event_key);
     public void update(EventVO vo);
     public int total(QueryVO vo);
+    public void updateViewcnt(int event_key);
 }

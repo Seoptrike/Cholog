@@ -36,4 +36,9 @@
     <if test="key == 'faq_answer'">where faq_answer like #{word}</if>
     <if test="key == 'faq_category'">where faq_category like #{word}</if>
     </select>
+    <update id="updateViewcnt">
+		update FAQ
+		set faq_vcnt=faq_vcnt+1
+		where faq_key=#{faq_key}
+	</update>
 </mapper>

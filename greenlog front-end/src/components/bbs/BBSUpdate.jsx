@@ -13,11 +13,10 @@ const BBSUpdate = () => {
     bbs_title: '',
     bbs_contents: '',
     bbs_type: 0,
-    bbs_writer: '',
-    bbs_category: ''
+    bbs_writer: ''
   });
 
-  const { bbs_title, bbs_contents, bbs_type, bbs_writer, bbs_category } = form;
+  const { bbs_title, bbs_contents, bbs_type, bbs_writer } = form;
 
   const callAPI = async () => {
     const res = await axios.get(`/bbs/read/${bbs_key}`);
@@ -38,6 +37,10 @@ const BBSUpdate = () => {
     setForm({ ...form, bbs_contents: data });
   };
 
+  const onChangeCategory = (e) => {
+    setForm({ ...form, bbs_type: parseInt(e.target.value) });
+  };
+
   const onReset = () => {
     if (!window.confirm('변경된 내용을 취소하실래요?')) return;
     callAPI();
@@ -51,7 +54,7 @@ const BBSUpdate = () => {
     setLoading(false);
     if (response.status === 200) {
       alert('게시물이 수정되었습니다.');
-      navigate(`/community/bbs/read/${bbs_key}`);
+      window.location.href=`/community/bbs/read/${bbs_key}`;
     } else {
       alert('게시물 수정에 실패했습니다.');
     }
@@ -67,12 +70,12 @@ const BBSUpdate = () => {
               <InputGroup className='mb-3'>
                 <FormControl
                   as="select"
-                  name="bbs_category"
-                  value={bbs_category}
-                  onChange={onChangeForm}
+                  name="bbs_type"
+                  value={bbs_type}
+                  onChange={onChangeCategory}
                   style={{ maxWidth: '150px', marginRight: '10px' }}>
-                  <option value="0">꿀팁</option>
-                  <option value="1">자유</option>
+                  <option value={0}>꿀팁</option>
+                  <option value={1}>자유</option>
                 </FormControl>
                 <FormControl
                   placeholder="제목을 입력하세요"

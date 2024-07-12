@@ -14,7 +14,7 @@
 		delete from event where event_key=#{event_key}
 	</delete>
 	 <select id="read" resultType="com.example.domain.EventVO">
-        SELECT * FROM event WHERE event_key = #{evnet_key}
+        SELECT * FROM event WHERE event_key = #{event_key}
     </select>
 		<select id="list" resultType="hashmap">
  		select * 
@@ -32,4 +32,9 @@
 		<if test="key=='event_title'">where event_title like #{word}</if>
 		<if test="key=='event_contents'">where event_contents like #{word}</if>
  	</select>
+ 	<update id="updateViewcnt">
+		update event
+		set event_vcnt=event_vcnt+1
+		where event_key=#{event_key}
+	</update>
 </mapper>

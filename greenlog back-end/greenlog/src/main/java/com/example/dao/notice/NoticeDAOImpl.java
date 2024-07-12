@@ -48,4 +48,10 @@ public class NoticeDAOImpl implements NoticeDAO{
 			return session.selectOne(NAMESPACE + ".total", vo);
 		}
 
+		@Override
+		public void updateViewcnt(int notice_key) {
+			session.update(NAMESPACE+".updateViewcnt",notice_key);
+			
+		}
+
 	}

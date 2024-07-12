@@ -18,5 +18,4 @@ public class BBSServiceImpl implements BBSService{
 		bbsDAO.updateViewcnt(bbs_key);
 		return bbsDAO.read(bbs_key);
 	}
-
 }

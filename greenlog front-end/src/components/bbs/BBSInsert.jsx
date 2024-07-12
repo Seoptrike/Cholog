@@ -7,7 +7,6 @@ import axios from 'axios';
 
 const BBSInsert = () => {
   const [loading, setLoading] = useState(false);
-  const [category, setCategory] = useState(0);
   const navigate = useNavigate();
   const uid = sessionStorage.getItem("uid");
   const [form, setForm] = useState({
@@ -21,6 +20,10 @@ const BBSInsert = () => {
 
   const onChangeForm = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const onChangeCategory = (e) => {
+    setForm({ ...form, bbs_type: parseInt(e.target.value) });
   };
 
   const onChangeCKEditor = (event, editor) => {
@@ -38,8 +41,7 @@ const BBSInsert = () => {
     if (!window.confirm("게시글을 등록하실래요?")) return;
     setLoading(true);
   
-    const updateForm = { ...form, bbs_category: category };
-    const response = await axios.post("/bbs/insert", updateForm);
+    const response = await axios.post("/bbs/insert", form);
     setLoading(false);
   
     if (response.status === 200) {
@@ -49,7 +51,6 @@ const BBSInsert = () => {
       alert('게시물 등록에 실패했습니다.');
     }
   };
-  
 
   return (
     <div>
@@ -58,11 +59,12 @@ const BBSInsert = () => {
         <InputGroup className="mb-3">
           <FormControl
             as="select"
+            name="bbs_type"
             value={bbs_type}
-            onChange={(e) => setCategory(parseInt((e.target.value)))}
+            onChange={onChangeCategory}
             style={{ maxWidth: '150px', marginRight: '10px' }}>
-            <option value="0">꿀팁</option>
-            <option value="1">자유</option>
+            <option value={0}>꿀팁</option>
+            <option value={1}>자유</option>
           </FormControl>
           <FormControl
             type="text"

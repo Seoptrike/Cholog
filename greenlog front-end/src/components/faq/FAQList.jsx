@@ -16,26 +16,20 @@ const FAQList = () => {
   const [category, setCategory] = useState('all');
 
   const callAPI = async () => {
-    const res = await axios.get(`/faq/list.json?key=${key}&word=${word}&page=${page}&size=${size}&category=${category}`);
-    console.log(res.data);
+    const res = await axios.get(`/faq/list.json?key=${key}&word=${word}&page=${page}&size=${size}`);
     setList(res.data.documents);
     setCount(res.data.total);
   }
-
+  
   useEffect(() => {
     callAPI();
-  }, [page, category]);
-
-  const onSubmit = (e) => {
-    e.preventDefault();
-    callAPI();
-  }
+  }, [page,word]);
 
   const onClickSearch = async (e) => {
     e.preventDefault();
-    setPage(1);
+    setPage(1); 
     callAPI();
-  }
+  };
 
   const handleToggle = (index) => {
     setOpenIndex(openIndex === index ? null : index);
@@ -60,20 +54,34 @@ const FAQList = () => {
     }
   };
 
+  const handleCategoryChange = (e) => {
+    setCategory(e.target.value);
+  }
+
+  const filterList = () => {
+    if (category === 'all') {
+      return list;
+    }
+    return list.filter(faq => faq.FAQ_category === category);
+  }
+
+  const filteredList = filterList();
+
   return (
     <div>
       <HeaderTabs />
       <h1 className="text-center my-5">FAQ</h1>
       <Row className="mb-3">
         <Col md={10}>
-          <InputGroup onSubmit={onSubmit}>
-            <Form.Select className='me-2' value={key} onChange={(e) => setKey(e.target.value)}>
-              <option value="faq_question">질문</option>
-              <option value="faq_answer">답변</option>
-              <option value="faq_writer">글쓴이</option>
+          <InputGroup >
+            <Form.Select className='me-2' value={category} onChange={handleCategoryChange}>
+              <option value="all">전체</option>
+              <option value="회원">회원</option>
+              <option value="포인트">포인트</option>
+              <option value="참여방법">참여방법</option>
             </Form.Select>
             <Form.Control placeholder='검색어' value={word} onChange={(e) => setWord(e.target.value)} />
-            <Button onClick={(e) => onClickSearch(e)} type='submit'>검색</Button>
+            <Button onClick={(e) => onClickSearch(e)}>검색</Button>
           </InputGroup>
         </Col>
         <Col>
@@ -93,7 +101,7 @@ const FAQList = () => {
           </tr>
         </thead>
         <tbody>
-          {list.map((faq, index) => (
+          {filteredList.map((faq, index) => (
             <React.Fragment key={faq.FAQ_key}>
               <tr onClick={() => handleToggle(index)}>
                 <td>{faq.FAQ_category}</td>

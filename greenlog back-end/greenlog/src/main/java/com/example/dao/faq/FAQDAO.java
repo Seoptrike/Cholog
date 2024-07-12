@@ -13,4 +13,5 @@ public interface FAQDAO {
     public FAQVO read(int faq_key);
     public void update(FAQVO vo);
     public int total(QueryVO vo);
+    public void updateViewcnt(int faq_key);
 }

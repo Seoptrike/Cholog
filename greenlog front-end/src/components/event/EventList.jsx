@@ -11,19 +11,18 @@ const EventList = () => {
   const [size, setSize] = useState(5); 
   const [key, setKey] = useState('event_title');
   const [word, setWord] = useState('');
-  const [category, setCategory] = useState('2');
+  const [category, setCategory] = useState('');
   const [status, setStatus] = useState('all');
 
   const callAPI = async () => {
     const res = await axios.get(`/event/list.json?key=${key}&word=${word}&page=${page}&size=${size}`);
-    console.log(res.data);
     setList(res.data.documents);
     setCount(res.data.total);
   }
 
   useEffect(() => {
     callAPI();
-  }, [page]);
+  }, [page, word]);
 
   const handleSearchChange = (e) => {
     setWord(e.target.value);
@@ -39,18 +38,24 @@ const EventList = () => {
     setCategory(e.target.value);
   };
 
-  const handleStatusChange = (newStatus) => {
-    setStatus(newStatus);
+  const filterList = () => {
+    return list.filter(item => {
+      const matchCategory = category === '' || item.event_type === parseInt(category);
+      const matchStatus = status === 'all' || (status === 'ongoing' && item.event_status === 'ongoing') || (status === 'ended' && item.event_status === 'ended');
+      return matchCategory && matchStatus;
+    });
   };
+
+  const filteredList = filterList();
 
   return (
     <div>
       <h1 className="text-center my-5">이벤트, 봉사 페이지</h1>
       <InputGroup className="mb-3">
-        <FormControl as="select" value={key} onChange={handleCategoryChange}>
-          <option value="event_title">전체</option>
-          <option value="bbs_contents">이벤트</option>
-          <option value="bbs_writer">봉사</option>
+        <FormControl as="select" value={category} onChange={handleCategoryChange}>
+          <option value="">전체</option>
+          <option value="0">이벤트</option>
+          <option value="1">봉사</option>
         </FormControl>
         <FormControl
           placeholder="검색어를 입력하세요"
@@ -63,7 +68,6 @@ const EventList = () => {
         <Col>
           검색수: {count}건
         </Col>
-        {/* 관리자만 로그인하게끔 다시수정해야함 */}
         {sessionStorage.getItem('uid') && (  
           <Col className='text-end'>
             <Link to="/community/event/insert">
@@ -71,12 +75,12 @@ const EventList = () => {
             </Link>
           </Col>
         )}
-        <Button className='me-2' size='lg' onClick={() => handleStatusChange('ongoing')}>진행중</Button>
-        <Button size='lg' onClick={() => handleStatusChange('ended')}>종료</Button>
+        <Button className='me-2' size='lg' >진행중</Button>
+        <Button size='lg'>종료</Button>
       </div>
       <hr />
       <Row>
-        {list.map(e => (
+        {filteredList.map(e => (
           <Col md={4} key={e.event_key} className="mb-4">
             <Card as={Link} to={`/community/event/read/${e.event_key}`}>
               {/* 이미지 넣을 자리 */}
@@ -87,7 +91,9 @@ const EventList = () => {
                 </Card.Text>
                 <div>
                   <span>작성일: {e.event_regDate} {e.event_type === 0 ? "이벤트" : "봉사"}</span>
-                  {/* 조회수 */}
+                </div>
+                <div>
+                  조회수:{e.event_vcnt}
                 </div>
               </Card.Body>
             </Card>

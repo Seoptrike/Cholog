@@ -48,5 +48,11 @@ public class EventDAOImpl implements EventDAO{
 		return session.selectOne(NAMESPACE + ".total", vo);
 	}
 
+	@Override
+	public void updateViewcnt(int event_key) {
+		session.update(NAMESPACE+".updateViewcnt",event_key);
+		
+	}
+
 
 }

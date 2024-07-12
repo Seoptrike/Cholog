@@ -15,7 +15,14 @@ public class QaVO {
     private Date qa_uDate;
     private int qa_lock;
     private int qa_state;
+    private int qa_vcnt;
     
+	public int getQa_vcnt() {
+		return qa_vcnt;
+	}
+	public void setQa_vcnt(int qa_vcnt) {
+		this.qa_vcnt = qa_vcnt;
+	}
 	public int getQa_key() {
 		return qa_key;
 	}
