@@ -4,10 +4,9 @@ import ModalAddress from '../../common/useful/ModalAddress'
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 
-//주소 모달 사용
 //이미지저장(관리자용이랑 동일하게 사용)
 //닉네임 중복확인 알고리즘 검토 필요
-//한줄소개 필요, 
+
 const UserUpdatePage = () => {
     const uid =sessionStorage.getItem("uid")
     const [form, setForm] = useState({

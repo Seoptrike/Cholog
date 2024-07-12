@@ -8,7 +8,7 @@ import DiaryReadPage from '../components/diary/DiaryReadPage'
 const DiaryRouter = () => {
   return (
     <Routes>
-            <Route path='list.json/:user_uid' element={<DiaryListPage/>}/>
+            <Route path='list.json/:diary_writer' element={<DiaryListPage/>}/>
             <Route path='update/:diary_key' element={<DiaryUpdatePage/>}/>
             <Route path='insert' element={<DiaryInsertPage/>}/>
             <Route path='read/:diary_key' element={<DiaryReadPage/>}/>
