@@ -10,6 +10,7 @@ const InsertPage = () => {
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
   const uid = sessionStorage.getItem("uid");
+  
   const [form, setForm] = useState({
     mall_seller :uid , 
     mall_buyer :"ghost"  , 
@@ -19,7 +20,7 @@ const InsertPage = () => {
     mall_photo :"" , 
     mall_tstate :0 , 
     mall_pstate :0 ,
-    mall_endDate:tomorrow
+    mall_endDate:tomorrow,
   });
   const {mall_title,mall_info,mall_price, mall_photo,mall_tstate,mall_pstate,mall_endDate} = form;
   
@@ -64,14 +65,18 @@ const InsertPage = () => {
   const onSubmit =async(e)=>{
     e.preventDefault();
     if (mall_tstate === 0 && mall_price === 0) {
-      alert("경매는 1씨드부터 가능합니다.씨드를 수정해주세요.");
+      alert("일반나눔은 1씨드부터 가능합니다.씨드를 수정해주세요.");
       return;
     }
     if(!window.confirm("피망마켓에 등록하실래요?")) return;
-     //console.log(form);
+    
      // 경매 상품이면서 시드가 0일 경우 경고 메시지를 띄우고 함수를 종료합니다.
     try {
       // 게시글 등록
+      const postData = {
+        ...form,mall_endDate: mall_tstate === 0 ? mall_endDate : null
+      };
+      
       await axios.post('/mall/insert', form);
       alert("게시글 등록 완료!");
       window.location.href = '/mall/list.json';
