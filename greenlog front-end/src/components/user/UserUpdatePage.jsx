@@ -9,17 +9,20 @@ import { Link, useParams } from 'react-router-dom';
 //닉네임 중복확인 알고리즘 검토 필요
 //한줄소개 필요, 
 const UserUpdatePage = () => {
-    const [form, setForm] = useState("");
+    const uid =sessionStorage.getItem("uid")
+    const [form, setForm] = useState({
+        user_key:'', user_nickname:'', user_uname:'', user_phone:'', user_address1:'', user_address2:'',
+        user_birth:'', user_email:'', user_gender:'', user_ment:''
+    });
     const [origin, setOrigin] = useState("");
     const [overlap, setOverlap] =useState([]);
     const [isCheck, setIsCheck] = useState(false);
     const [phoneCheck, setPhoneCheck] = useState(false);
     const { user_uid } = useParams();
-    const [img, setImg] = useState({
-        fileName: '',
-        file: null
-      })
-      const { fileName, file } = img;
+    const [file, setfile] = useState({
+        name: '',
+        byte: null
+    })
       const photoStyle = {
         borderRadius: '10px',
         cursor: "pointer",
@@ -32,12 +35,14 @@ const UserUpdatePage = () => {
         const res = await axios.get(`/user/read/${user_uid}`);
         setForm(res.data);
         setOrigin(res.data);
+        console.log(res.data)
+        setfile({ name: res.data.user_img, byte: null });
     }
-
+    //닉네임 중복확인 용도
     const userCallAPI = async ()=>{
         const res2 = await axios.get("/user/admin/list");
         setOverlap(res2.data);
-        console.log(res2.data);
+        //console.log(res2.data);
     }
 
     const { user_key, user_nickname, user_uname, user_phone, user_address1, user_address2,
@@ -90,32 +95,9 @@ const UserUpdatePage = () => {
         }
     }
 
-    //이미지업로드
-  const onChangeFile = (e) => {
-    setImg({
-      fileName: URL.createObjectURL(e.target.files[0]),
-      file: e.target.files[0]
-    })
-  }
-
-  const onUploadImage = async () => {
-    if (file) {
-      if (!window.confirm("이미지를 수정하시겠습니까?")) return;
-
-      const formData = new FormData();
-      formData.append("file", file);
-      const config = {
-        Headers: { 'content-type': 'multipart/form-data' }
-      }
-      await axios.post(`/upload/img/${user_uid}`, formData, config);
-      alert("이미지가 변경되었습니다");
-      setImg({ file: null, fileName: '' });
-      callAPI();
-    }
-  }
 
 
-    //수정취소
+     //수정취소
     const onClickReset = () => {
         alert("취소하시겠습니까?");
         callAPI();
@@ -128,7 +110,25 @@ const UserUpdatePage = () => {
         await axios.post("/user/update", form);
         window.location.href = `/user/read/${user_uid}`;
     }
-    
+    //사진 업로드
+
+    const onChangeFile = (e) => {
+        setfile({
+            name: URL.createObjectURL(e.target.files[0]),
+            byte: e.target.files[0]
+        })
+    }
+
+    const onClickImageSave = async () => {
+        if (file.byte === null) return;
+        if (!window.confirm("변경된 이미지를 저장하시겠습니까?")) return;
+        //이미지 업로드
+        const formData = new FormData();
+        formData.append("byte", file.byte);
+        console.log(formData);
+        await axios.post(`/upload/img/${uid}`, formData);
+        alert("이미지 변경완료!")
+    }
     return (
         <div>
             <Row className='justify-content-center my-5'>
@@ -137,16 +137,16 @@ const UserUpdatePage = () => {
                         <Card.Body>
                             <Row>
                                 <Col lg={4}>
-                                    <img src={fileName ||"http://via.placeholder.com/100x150"} width="100%" onClick={() => refFile.current.click()}/>
-                                    <input ref={refFile} type="file" style={{ display: 'none' }} onChange={onChangeFile} />
-                                    <Button>이미지저장</Button>
+                                    <img src={file.name ||"http://via.placeholder.com/100x150"} width="100%" onClick={() => refFile.current.click()}/>
+                                    <input ref={refFile} type="file" onChange={onChangeFile}/>
+                                    <Button onClick={onClickImageSave}>이미지저장</Button>
                                 </Col>
                                 <Col lg={8}>
                                     <Card className='mb-2'>
                                         <Card.Body>
                                             <InputGroup className='mb-2'>
                                                 <InputGroup.Text>회원번호</InputGroup.Text>
-                                                <Form.Control disabled="true" value={user_key} />
+                                                <Form.Control name="user_key" readOnly value={user_key} />
                                             </InputGroup>
                                             <InputGroup className='mb-2'>
                                                 <InputGroup.Text>성함</InputGroup.Text>
@@ -167,7 +167,7 @@ const UserUpdatePage = () => {
                                             <InputGroup className='mb-2'>
                                                 <InputGroup.Text>생년월일/성별</InputGroup.Text>
                                                 <Form.Control value={user_birth} name="user_birth" onChange={onChangeForm} type="date"/>
-                                                <Form.Control value={user_gender === 0 ? "남자" : "여자"} name="user_gender" disabled="true" />
+                                                <Form.Control value={user_gender === '남자' ? "남자" : "여자"} name="user_gender" readOnly />
                                             </InputGroup>
                                         </Card.Body>
                                     </Card>
@@ -175,7 +175,7 @@ const UserUpdatePage = () => {
                                         <Card.Body>
                                             <InputGroup className='mb-2'>
                                                 <InputGroup.Text>아이디</InputGroup.Text>
-                                                <Form.Control disabled="true" value={user_uid} />
+                                                <Form.Control readOnly value={user_uid} name="user_uid" />
                                             </InputGroup>
                                             <InputGroup className='mb-2'>
                                                 <InputGroup.Text>이메일</InputGroup.Text>

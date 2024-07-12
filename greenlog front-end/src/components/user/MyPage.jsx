@@ -7,6 +7,7 @@ import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 
+
 //이미지를 누르면 정보수정페이지로 이동
 //link to를 이용
 //아이콘은 css로 움직일 예정
@@ -29,21 +30,21 @@ const MyPage = () => {
     setTrade(res.data);
 
     const res2=await axios.get(`/user/mypage4?auction_seller=${user_uid}&auction_buyer=${user_uid}`);
-    console.log(".........", res2);
+    //console.log(".........", res2);
     setAuction(res2.data);
   }
 
   //일기내용 조회(슬라이더로 목록 만들기)
   const callAPI2 = async () => {
     const res = await axios.get(`/user/mypage2/${user_uid}`);
-    console.log(res.data);
+   //console.log(res.data);
     setDiary(res.data);
   }
 
   //팔로우, 팔로잉 수
   const callAPI3 = async ()=>{
     const res = await axios.get(`/user/mypage3/${user_uid}`);
-    console.log(res.data);
+    //console.log(res.data);
     setFollow(res.data);
   }
 
@@ -60,7 +61,7 @@ const MyPage = () => {
       <h1 className='text-center my-5'>{trade.user_nickname}님 환영합니다</h1>
       <Row className='my-5'>
         <Col lg={5}>
-          <Link to={`/user/update/${user_uid}`}><img src={"http://via.placeholder.com/200x200"} width="100%" /></Link>
+          <Link to={`/user/update/${user_uid}`}><img src={trade.user_img||"http://via.placeholder.com/200x200"} width="100%" /></Link>
         </Col>
         <Col lg={7}>
           <Card>

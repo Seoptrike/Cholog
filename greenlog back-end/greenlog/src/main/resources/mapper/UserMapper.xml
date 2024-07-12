@@ -49,7 +49,7 @@
 		user_nickname=#{user_nickname}, user_email=#{user_email}, user_ment=#{user_ment} where user_uid=#{user_uid}
 	</update>
 	<update id="imgUpdate">
-		update user set user_img=#{user_img} where uid=#{uid}
+		update user set user_img=#{user_img} where user_uid=#{user_uid}
 	</update>
 	
 	<select id="mypage1" resultType="hashmap">

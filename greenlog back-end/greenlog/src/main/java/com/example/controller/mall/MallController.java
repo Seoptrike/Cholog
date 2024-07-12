@@ -1,63 +1,127 @@
 package com.example.controller.mall;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.example.dao.mall.MallDAO;
-import com.example.domain.MallVO;
-import com.example.domain.QueryVO;
-import com.example.domain.UserVO;
-import com.example.service.mall.MallService;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import com.example.dao.mall.MallDAO;
+import com.example.domain.MallPhotoVO;
+import com.example.domain.MallVO;
+import com.example.domain.QueryVO;
+import com.example.service.mall.MallService;
 
 @RestController
 @RequestMapping("/mall")
 public class MallController {
-	
+
 	@Autowired
 	MallDAO mdao;
 	@Autowired
 	MallService mservice;
-	
+
 	@GetMapping("/list")
 	public HashMap<String, Object> list(QueryVO vo) {
-	    HashMap<String, Object> map = new HashMap<>();
-	    List<HashMap<String, Object>> list = mdao.list(vo);
-	    map.put("documents", list);
-	    map.put("total", mdao.total(vo));
-	    return map;
+		HashMap<String, Object> map = new HashMap<>();
+		List<HashMap<String, Object>> list = mdao.list(vo);
+		map.put("documents", list);
+		map.put("total", mdao.total(vo));
+		return map;
 	}
-	
+
 	@PostMapping("/insert")
-	public void insert (@RequestBody MallVO vo) {
-		mdao.insertInfo(vo);
+	public int insert(@RequestBody MallVO vo) {
+		mdao.insertInfo(vo); // 데이터베이스에 삽입
+		int lastInsertId = mdao.getLastInsertId(); // 마지막 삽입된 자동 생성 키를 가져옴
+		return lastInsertId; // 클라이언트에게 반환
 	}
-	
+
 	@GetMapping("/read/{mall_key}")
-	public HashMap<String, Object> read(@PathVariable ("mall_key") int mall_key ) {
+	public HashMap<String, Object> read(@PathVariable("mall_key") int mall_key) {
 		return mdao.read(mall_key);
 	}
-	
+
 	@PostMapping("/update")
-	public void update (@RequestBody MallVO vo) {
+	public void update(@RequestBody MallVO vo) {
 		mdao.update(vo);
 	}
-	
+
 	@PostMapping("/delete/{mall_key}")
-	public void delete (@PathVariable("mall_key") int mall_key) {
+	public void delete(@PathVariable("mall_key") int mall_key) {
 		mdao.delete(mall_key);
 	}
-	
-	
-	
-	
+
+	// Attach 파일들 업로드
+	@PostMapping("/attach/{mallPhoto_mall_key}")
+	public void attach(@PathVariable("mallPhoto_mall_key") String mallPhoto_mall_key,
+			MultipartHttpServletRequest multi) {
+		try {
+			String relativePath = "upload/" + mallPhoto_mall_key + "/";
+			String currentDir = System.getProperty("user.dir");
+			String uploadPath = currentDir + File.separator + relativePath;
+
+			File folder = new File(uploadPath);
+			if (!folder.exists()) {
+				folder.mkdirs(); // 폴더가 없으면 모든 부모 디렉토리까지 생성
+			}
+			List<MultipartFile> files = multi.getFiles("bytes");
+			for (MultipartFile file : files) {
+				if (!file.isEmpty()) {
+					String fileName = UUID.randomUUID().toString() + ".jpg";
+					File destFile = new File(uploadPath, fileName);
+					file.transferTo(destFile);
+					System.out.println("Uploaded file: " + fileName);
+
+					// 이미지 경로 설정 및 DB 삽입
+					MallPhotoVO vo = new MallPhotoVO();
+					vo.setMallPhoto_mall_key(Integer.parseInt(mallPhoto_mall_key));
+					vo.setMallPhoto_photo("/display?file=" + mallPhoto_mall_key + "/" + fileName);
+					mdao.insertPhoto(vo);
+
+				} else {
+					System.out.println("Empty file detected");
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("Attach 파일들 업로드" + e.toString());
+		}
+	}
+
+	// attach 삭제
+	@PostMapping("/attach/delete")
+	public void deleteAttach(@RequestBody MallPhotoVO vo) {
+		try {
+			// 파일 경로 처리
+			String displayPath = vo.getMallPhoto_photo();
+			int index = displayPath.indexOf("file=");
+			String relativePath = displayPath.substring(index + 5);
+
+			// 현재 작업 디렉토리 확인
+			String currentDir = System.getProperty("user.dir");
+			String filePath = currentDir + File.separator + relativePath;
+
+			// 파일 자체를 삭제
+			File file = new File(filePath);
+			if (file.exists()) {
+				file.delete();
+				System.out.println("Deleted file: " + filePath);
+			}
+			// DB에서 삭제
+			mdao.deleteAttach(vo.getMallPhoto_key());
+
+		} catch (Exception e) {
+			System.out.println("첨부파일삭제:" + e.toString());
+		}
+	}
 
 }

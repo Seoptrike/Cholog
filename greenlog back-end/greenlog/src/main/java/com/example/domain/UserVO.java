@@ -23,14 +23,6 @@ public class UserVO {
 	private String user_nickname;
 	private String user_ment;
 
-	public String getUser_nickname() {
-		return user_nickname;
-	}
-
-	public void setUser_nickname(String user_nickname) {
-		this.user_nickname = user_nickname;
-	}
-
 	public int getUser_key() {
 		return user_key;
 	}
@@ -102,7 +94,6 @@ public class UserVO {
 	public void setUser_img(String user_img) {
 		this.user_img = user_img;
 	}
-	
 
 	public String getUser_gender() {
 		return user_gender;
@@ -120,14 +111,6 @@ public class UserVO {
 		this.user_auth = user_auth;
 	}
 
-	public String getUser_ment() {
-		return user_ment;
-	}
-
-	public void setUser_ment(String user_ment) {
-		this.user_ment = user_ment;
-	}
-
 	public String getUser_email() {
 		return user_email;
 	}
@@ -142,6 +125,22 @@ public class UserVO {
 
 	public void setUser_regDate(Date user_regDate) {
 		this.user_regDate = user_regDate;
+	}
+
+	public String getUser_nickname() {
+		return user_nickname;
+	}
+
+	public void setUser_nickname(String user_nickname) {
+		this.user_nickname = user_nickname;
+	}
+
+	public String getUser_ment() {
+		return user_ment;
+	}
+
+	public void setUser_ment(String user_ment) {
+		this.user_ment = user_ment;
 	}
 
 	@Override

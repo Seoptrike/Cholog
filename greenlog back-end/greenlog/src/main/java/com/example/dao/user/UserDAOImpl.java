@@ -45,11 +45,8 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	@Override
-	public void imgUpdate(String img, String uid) {
-		HashMap<String, Object> map = new HashMap<>();
-		map.put("img", img);
-		map.put("uid", uid);
-		session.update(namespace + ".imgUpdate", map);
+	public void imgUpdate(UserVO vo) {
+		session.update(namespace + ".imgUpdate", vo);
 	}
 
 	@Override
@@ -97,8 +94,8 @@ public class UserDAOImpl implements UserDAO {
 	public int mypage4(String uid1, String uid2) {
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("auction_seller", uid1);
-		map.put("auction_buyer" , uid2);
-		return session.selectOne(namespace + ".mypage4" , map);
+		map.put("auction_buyer", uid2);
+		return session.selectOne(namespace + ".mypage4", map);
 	}
 
 }

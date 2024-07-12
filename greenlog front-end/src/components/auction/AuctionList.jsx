@@ -1,10 +1,25 @@
-import React from 'react'
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
 import { Row, Col, Button, Badge, InputGroup, Form, Card, Table } from 'react-bootstrap'
+import { TbBrandSnapseed } from "react-icons/tb";
+import SyncAltIcon from '@mui/icons-material/SyncAlt';
+import Pagination from 'react-js-pagination';
 
 const AuctionList = () => {
   //상품명과 이미지 넣기
   //처리상태 영구삭제요청 넣기(관리자에서 직접 해줄수있게끔)
-  
+  const uid= sessionStorage.getItem("uid")
+  const [count, setCount] = useState(0);
+  const [list, setList] = useState([]);
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(10);
+  const callAPI= async()=>{
+    const res = await axios.get(`/auction/list/${uid}?page=${page}&size=${size}`)
+    setList(res.data.documents)
+    setCount(res.data.total)
+    console.log(res)
+  }
+  useEffect(()=>{callAPI()},[page])
   return (
     <Row>
       <Col>
@@ -25,19 +40,33 @@ const AuctionList = () => {
           </Col>
           <Table>
             <thead>
-              <tr>
+              {list.map(a=>
+              <tr key={a.auction_key}>
                 <td><input type="checkbox"/></td>
-                <td>경매번호</td>
-                <td colSpan={2}>상품명</td>
-                <td>구매자</td>
-                <td>등록일</td>
-                <td>처리상태</td>
+                <td>{a.auction_key}</td>
+                <td colSpan={2}>{a.mall_title}</td>
+                <td>{a.auction_seller} <SyncAltIcon/> {a.auction_buyer} </td>
+                <td>{a.auction_amount} <span style={{ fontSize: '15px', color:"brown" }}><TbBrandSnapseed /></span>  </td>
+                <td>{a.fmtdate}</td>
               </tr>
+              )}
             </thead>
           </Table>
         </Row>
+        {count > size && 
+            <Pagination
+                activePage={page}
+                itemsCountPerPage={size}
+                totalItemsCount={count}
+                pageRangeDisplayed={5}
+                prevPageText={"‹"}
+                nextPageText={"›"}
+                onChange={ (e)=>setPage(e) }/>
+        }
+
       </Col>
     </Row>
+    
   )
 }
 
