@@ -67,4 +67,5 @@
 	<select id="mypage4" resultType="int">
 		select count(auction_key) from auction where auction_seller=#{auction_seller} or auction_buyer=#{auction_buyer}
 	</select>
+	
 </mapper>

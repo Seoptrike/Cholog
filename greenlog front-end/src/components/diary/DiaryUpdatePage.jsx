@@ -3,8 +3,9 @@ import React, { useEffect, useState } from 'react'
 import { Card, Row, Col, InputGroup, Form, Button } from 'react-bootstrap'
 import { useParams } from 'react-router-dom';
 
-//수정버튼 눌렀을 시 일기읽기페이지로 돌아가기 
+
 const DiaryUpdatePage = () => {
+  const uid= sessionStorage.getItem("uid");
  
   const [diary, setDiary] = useState({
     diary_title:"",
@@ -14,7 +15,7 @@ const DiaryUpdatePage = () => {
   const {diary_key} =useParams();
 
   const callAPI =async()=>{
-    const res= await axios.get(`/diary/read/${diary_key}`)
+    const res= await axios.get(`/diary/read/${diary_key}?user_uid=${uid}`)
     console.log(res.data);
     setDiary(res.data);
   }
@@ -34,9 +35,9 @@ const DiaryUpdatePage = () => {
 
   const onClickUpdate = async()=>{
     if(!window.confirm("변경된 내용을 수정하시겠습니까?")) return;
-    await axios.post('/diary/update',diary);
-    alert("수정성공");
-    window.location.href=`/diary/read/${diary_key}`;
+      await axios.post('/diary/update', {diary_title, diary_contents, diary_state, diary_writer:uid, diary_key});     
+        alert("수정했습니다!");
+        window.location.href=`/diary/read/${diary_key}`;   
   }
 
   return (

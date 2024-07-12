@@ -5,8 +5,12 @@
 		insert into diary(diary_writer, diary_contents, diary_title, diary_state)
 		values (#{diary_writer}, #{diary_contents}, #{diary_title}, #{diary_state})
 	</insert>
-	<select id="read" resultType="com.example.domain.DiaryVO">
-		select * from diary where diary_key=#{diary_key}
+	<select id="read" resultType="hashmap">
+		select *, date_format(diary_regDate,'%Y년%m월%d일 %T') as fmtDdate, 
+		date_format(diary_uDate,'%Y년%m월%d일 %T') as fmtUdate,
+		(select count(*) from diaryLike f where user_uid=#{user_uid} and f.diary_key=d.diary_key) ucnt, 
+		(select count(*) from diaryLike f where f.diary_key=d.diary_key) fcnt   
+		from diary d where d.diary_key=#{diary_key}
 	</select>
 	<update id="update">
 		update diary set diary_contents=#{diary_contents}, diary_title=#{diary_title}, diary_state=#{diary_state}, diary_uDate=now() 
@@ -15,8 +19,10 @@
 	
 	<select id="personList" resultType="hashmap">
 		select *, date_format(diary_regDate,'%Y년%m월%d일 %T') as fmtDdate, 
-		date_format(diary_uDate,'%Y년%m월%d일 %T') as fmtUdate   
-		from diary
+		date_format(diary_uDate,'%Y년%m월%d일 %T') as fmtUdate,
+		(select count(*) from diaryLike f where user_uid=#{user_uid} and f.diary_key=d.diary_key) ucnt, 
+		(select count(*) from diaryLike f where f.diary_key=d.diary_key) fcnt   
+		from diary d
 		where diary_writer = #{diary_writer}
 		order by diary_regDate desc  
         limit #{start}, #{size}	
@@ -40,4 +46,16 @@
 	<delete id="likeCancel">
 		delete from diaryLike where diary_key=#{diary_key} and user_uid=#{user_uid}
 	</delete>
+	
+	<insert id="photoInsert">
+		insert into diaryPhoto(diaryPhoto_diary_key, diaryPhoto_filename) values (#{diaryPhoto_diary_key}, #{diaryPhoto_filename})
+	</insert>
+	
+	<select id="lastKey" resultType="int">
+		select distinct(last_insert_id()) last from diary;
+	</select>
+	
+	<insert id="thumbnail">
+		insert into diary(diary_thumbnail) value (#{diary_thumbnail}) where diary_key = #{diary_key};
+	</insert>
 </mapper>

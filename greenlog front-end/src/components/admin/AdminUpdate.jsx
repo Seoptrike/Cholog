@@ -10,7 +10,6 @@ import { ElevatorSharp } from '@mui/icons-material';
 //엑스버튼 누를 시 취소하기, 수정아이콘누를 시 수정하기
 //비밀번호체크
 //이미지변경
-//셀렉트박스에서 이벤트를 넣어야하다보니, 선택하지 않으면 디폴트 값이 들어감 
 
 const AdminUpdate = () => {
   const { user_uid } = useParams();

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.example.domain.DiaryLikeVO;
+import com.example.domain.DiaryPhotoVO;
 import com.example.domain.DiaryVO;
 import com.example.domain.QueryVO;
 
@@ -23,9 +24,13 @@ public class DiaryDAOImpl implements DiaryDAO{
 	}
 
 	@Override
-	public DiaryVO read(int key) {
-		return session.selectOne(namespace + ".read" , key);
+	public HashMap<String, Object>read(int key, String uid) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("diary_key", key);
+		map.put("user_uid", uid);
+		return session.selectOne(namespace + ".read" , map);
 	}
+	
 
 	@Override
 	public void update(DiaryVO vo) {
@@ -44,11 +49,12 @@ public class DiaryDAOImpl implements DiaryDAO{
 	}
 
 	@Override
-	public List<HashMap<String, Object>> personList(String uid, QueryVO vo) {
+	public List<HashMap<String, Object>> personList(String uid1, String uid2, QueryVO vo) {
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("size", vo.getSize());
 		map.put("start", vo.getStart());
-		map.put("diary_writer", uid);
+		map.put("diary_writer", uid1);
+		map.put("user_uid", uid2);
 		return session.selectList(namespace + ".personList", map);
 	}
 
@@ -69,6 +75,29 @@ public class DiaryDAOImpl implements DiaryDAO{
 		session.delete(namespace + ".likeCancel", vo);
 		
 	}
+
+	@Override
+	public void photoInsert(DiaryPhotoVO vo) {
+		session.insert(namespace + ".photoInsert", vo);
+		
+	}
+
+	@Override
+	public int lastKey() {
+		return session.selectOne(namespace +".lastKey");
+	}
+
+	@Override
+	public void thumbnail(int diary_key, String diary_thumbnail) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("diary_key", diary_key);
+		map.put("diary_thumbnail", diary_thumbnail);
+		session.insert(namespace + ".thumbnail", map);
+		
+	}
+
+	
+
 
 	
 	

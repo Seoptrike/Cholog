@@ -2,7 +2,6 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Card, Row, Col, InputGroup, Form, Button } from 'react-bootstrap'
 
-//등록버튼 눌렀을 시, 경고창에 포인트는 적립되나, 차감될 수도 있다는 경고창 주기
 //파일에 사진넣기 공간으로 사진여러개 넣는거 출력
 const DiaryInsertPage = () => {
   const uid = sessionStorage.getItem("uid");
@@ -10,7 +9,7 @@ const DiaryInsertPage = () => {
     diary_writer: uid,
     diary_contents: "",
     diary_title: "",
-    diary_state: ""
+    diary_state: "개인컵/텀블러"
   });
 
   const { diary_contents, diary_title, diary_state, diary_writer } = diary;
@@ -20,15 +19,67 @@ const DiaryInsertPage = () => {
     seed_number: '',
     seed_point: ''
   })
+  //포인트적립
   const callAPI = async () => {
     const res = await axios.get(`/seed/read/${uid}`)
     setData(res.data);
   }
   useEffect(() => { callAPI() }, [])
 
+  //폼변경
   const onChangeForm = (e) => {
     setDiary({ ...diary, [e.target.name]: e.target.value });
   }
+
+  //파일 여러개첨부
+
+  const [files, setFiles] = useState([]);
+  const [attaches, setAtteches] = useState([]);
+  const style={
+    border: '1px solid gray',
+    width: '100%',
+  }
+
+  //파일 업로드 전 이미지 출력
+  const onChangeFile = (e) => {
+    let selFiles = [];
+    for (let i = 0; i < e.target.files.length; i++) {
+      const file = {
+        name: URL.createObjectURL(e.target.files[i]),
+        byte: e.target.files[i]
+      }
+        selFiles.push(file);
+    }
+      setFiles(selFiles);
+  }
+
+//일기사진저장
+
+const onClickUpload =async()=>{
+    if(files.length===0) return;
+    if(!window.confirm(`${files.length}개 사진파일을 업로드 하시겠습니까?`));
+
+    const formData = new FormData();
+    for (let i=0; i<files.length; i++){
+      formData.append("bytes", files[i].bytes);
+    }
+    await axios.post(`/diary/photo/insert`, formData);
+    alert("이미지저장완료!");
+    setFiles([]);
+}
+
+//일기대표사진저장
+
+const ThumbnailUpload = async()=>{
+  if(!window.confirm("선택하신 이미지를 대표 이미지로 저장하시겠습니까?"));
+   const thumbnail =new FormData();
+   thumbnail.append();
+   const config = {
+    Headers: { 'content-type': 'multipart/form-data' }
+  }
+  await axios.post(`/thumbnail`, thumbnail, config);
+}
+
 
   //일기등록
   const onClickInsert = async () => {
@@ -47,12 +98,14 @@ const DiaryInsertPage = () => {
       trade_from: 'seed00000000',
       amount: 1,
       seed_number: data.seed_number,
-      trade_state:1,
-      trade_info:"다이어리 작성"
+      trade_state: 1,
+      trade_info: "다이어리 작성"
     })
     alert("일기등록완료!");
-    window.location.href = `/diary/list.json/${uid}`;
+    alert("관련없는 일기가 있을 시, 포인트를 관리자가 차감합니다. 유의해주십시오.")
+    window.location.href = `/diary/list.json/${diary_writer}`;
   }
+
   return (
     <div>
       <div className='text-center my-5'>
@@ -89,9 +142,18 @@ const DiaryInsertPage = () => {
                   <Form.Control value={diary_title} onChange={onChangeForm} name="diary_title" />
                 </InputGroup>
                 <InputGroup className='mb-3'>
-                  <input type="file" />
+                  <Form.Control type="file" onChange={onChangeFile} multiple="true"/>
                 </InputGroup>
-                <div>사진미리보기공간</div>
+               <Row>
+                {files.map(f=>
+                  <Col key={f.name} lg={4} className='mb-2'>
+                    <Button size="sm" style={{}}>대표</Button>
+                    <img src={f.name} style={style}/>
+                  </Col>
+                )}
+                
+               </Row>
+               <Button className='w-100 my-2' onClick={onClickUpload}>이미지저장</Button>
                 <InputGroup className='mb-5'>
                   <Form.Control as="textarea" rows={20} value={diary_contents} onChange={onChangeForm} name="diary_contents" />
                 </InputGroup>
