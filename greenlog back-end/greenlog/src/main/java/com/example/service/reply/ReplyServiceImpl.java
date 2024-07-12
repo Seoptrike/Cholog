@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.dao.reply.ReplyDAO;
 import com.example.domain.QueryVO;
+import com.example.domain.ReplyVO;
 
 @Service
 public class ReplyServiceImpl implements ReplyService {
@@ -22,6 +23,20 @@ public class ReplyServiceImpl implements ReplyService {
 		 map.put("documents",  rdao.replyList(reply_bbs_key, vo));
 		 map.put("total", rdao.total(reply_bbs_key));
 		return map;
+	}
+
+	@Transactional
+	@Override
+	public void update(ReplyVO vo) {
+			rdao.update(vo);
+		
+	}
+
+	@Transactional
+	@Override
+	public void updateLock(ReplyVO vo) {
+			rdao.updateLock(vo);
+		
 	}
 
 }

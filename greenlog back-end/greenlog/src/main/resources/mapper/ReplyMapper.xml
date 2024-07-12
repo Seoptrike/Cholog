@@ -6,18 +6,22 @@
 				select * 
 				from reply
 				where reply_bbs_key=#{reply_bbs_key}
-				order by reply_regdate desc
+				order by ${key}
 				limit #{start}, #{size};
 		</select>
 		
 		<insert id="insert">
-				insert into reply ( reply_bbs_key, reply_writer, reply_contents, reply_reaction)
-				value ( #{reply_bbs_key}, #{reply_writer}, #{reply_contents}, #{reply_reaction})
+				insert into reply ( reply_bbs_key, reply_writer, reply_contents, reply_lock, reply_reaction)
+				value ( #{reply_bbs_key}, #{reply_writer}, #{reply_contents}, #{reply_lock}, #{reply_reaction})
 		</insert>
 		
 		<update id="update">
 				update reply set reply_contents=#{reply_contents}
 				where reply_key=#{reply_key}
+		</update>
+		
+		<update id="updateLock">
+				update reply set reply_lock=#{reply_lock} where reply_key=#{reply_key}
 		</update>
 		
 		<delete id="delete">
