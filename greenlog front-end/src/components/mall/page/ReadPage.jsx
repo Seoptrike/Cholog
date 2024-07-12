@@ -10,7 +10,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import InsertPage from '../../review/InsertPage';
 import ReviewPage from '../../review/ReviewPage';
-import { Padding } from '@mui/icons-material';
 
 const ReadPage = () => {
   const navi = useNavigate();
@@ -18,8 +17,9 @@ const ReadPage = () => {
   const uid = sessionStorage.getItem("uid");
   //console.log(mall_key);
   const [form, setForm] = useState({});
-  //console.log(form);
-  const {mall_seller,mall_title,mall_info,mall_price,mall_regDate, mall_photo,mall_tstate,mall_pstate,mall_endDate} = form;
+
+  console.log("read!!!!!!!!!!!!!!"+form);
+  const {mall_uDate,mall_seller,mall_title,mall_info,mall_price,mall_regDate, mall_photo,mall_tstate,mall_pstate,mall_endDate} = form;
   const [activeTab, setActiveTab] = useState('1');
   
   const handleTabClick = (tabName) => {
@@ -30,7 +30,7 @@ const ReadPage = () => {
   const {seed_number}= seedNumber
   const callAPI=async()=>{
     const res = await axios.get(`/mall/read/${mall_key}`);
-    //console.log("****************************",res.data);
+    console.log("****************************",res.data);
     setForm(res.data);
     //경매시스템 위해서 넣어놓음 -인섭
     const res2 = await axios.get(`/seed/read/${res.data.mall_seller}`)
@@ -105,9 +105,13 @@ const ReadPage = () => {
                             <td >{mall_price}씨드</td>
                         </tr>
                         }
+                         <tr>
+                            <td className='w-50'>마감일:{mall_endDate}</td> 
+                            <td >{mall_price}씨드</td>
+                        </tr>
                         <tr>
                           <td className='w-50'>(유저아이콘){mall_seller}</td> 
-                          <td style={{fontSize:"12px"}}>{mall_regDate}</td>
+                          <td style={{fontSize:"12px"}}>{mall_uDate ? mall_uDate`(수정됨)` : mall_regDate}</td>
                         </tr>
                     </tbody> 
                 </Table>

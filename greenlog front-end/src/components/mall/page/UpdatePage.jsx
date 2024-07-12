@@ -9,7 +9,6 @@ export const UpdatePage = () => {
   const [loading, setLoading] = useState(false);
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
-  const today = new Date();
   const uid = sessionStorage.getItem("uid");
   
   const [form, setForm] = useState({
@@ -22,10 +21,9 @@ export const UpdatePage = () => {
     mall_photo :"" , 
     mall_tstate :0 , 
     mall_pstate :0 ,
-    mall_endDate:tomorrow,
-    mall_uDate:today
+    mall_endDate:tomorrow
   });
-  const {mall_uDate,mall_title,mall_info,mall_price, mall_photo,mall_tstate,mall_pstate,mall_endDate} = form;
+  const {mall_title,mall_info,mall_price, mall_photo,mall_tstate,mall_pstate,mall_endDate} = form;
   const [list,setList] = useState({
     mall_key:mall_key,
     mall_seller :uid , 
@@ -36,8 +34,7 @@ export const UpdatePage = () => {
     mall_photo :"" , 
     mall_tstate :0 , 
     mall_pstate :0 ,
-    mall_endDate:tomorrow,
-    mall_uDate:today
+    mall_endDate:tomorrow
   });
 
   // 일반 입력 필드 경우
@@ -102,9 +99,11 @@ export const UpdatePage = () => {
       return
     }
     if(!window.confirm("내용을 수정하실래요?")) return;
+    console.log("form: "+form+"list: "+list);
     try {
       // 게시글 수정
-      await axios.post('/mall/update', list);
+      
+      await axios.post('/mall/update',form);
       alert("게시글 수정 완료!");
       window.location.href = '/mall/list.json';
       
@@ -145,7 +144,6 @@ export const UpdatePage = () => {
               label="유형"
               defaultValue={0}
               value={mall_tstate}
-              onChange ={onChangeForm}
               name="mall_tstate"
               required
               fullWidth
@@ -162,7 +160,6 @@ export const UpdatePage = () => {
               label="물품상태"
               defaultValue={0}
               value={mall_pstate}
-              onChange ={onChangeForm}
               name="mall_pstate"
               required
               fullWidth
@@ -181,7 +178,6 @@ export const UpdatePage = () => {
                 name="mall_price"
                 fullWidth
                 value={mall_price}
-                onChange={onChangeForm}
                 required
                 disabled
               />
@@ -193,7 +189,6 @@ export const UpdatePage = () => {
                 name="endDate"
                 fullWidth
                 value={mall_endDate instanceof Date ? mall_endDate.toISOString().split('T')[0] : ''}
-                onChange={onChangeForm}
                 required
                 disabled
               />
@@ -207,7 +202,6 @@ export const UpdatePage = () => {
                 name="mall_price"
                 fullWidth
                 value={mall_price}
-                onChange={onChangeForm}
                 disabled
               />
               </Grid>
