@@ -16,7 +16,7 @@
 		</insert>
 		
 		<update id="update">
-				update reply set reply_contents=#{reply_contents}
+				update reply set reply_contents=#{reply_contents}, reply_udate=now()
 				where reply_key=#{reply_key}
 		</update>
 		

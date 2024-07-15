@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Row, Col, Dropdown, Card, Button } from 'react-bootstrap';
 import Pagination from 'react-js-pagination';
 import { Rating } from '@mui/material';
-import Spa from '@mui/icons-material/Spa';
+
 import { BsThreeDotsVertical } from "react-icons/bs";
 import axios from 'axios';
 import '../../common/useful/Paging.css';
+import { TbBrandSnapseed } from "react-icons/tb";
 
 const ReviewPage = ({ mall_key, mall_seller, seller_number }) => {
     const [list, setList] = useState([]);
@@ -141,10 +142,10 @@ const ReviewPage = ({ mall_key, mall_seller, seller_number }) => {
                                                     value={review.num || review.review_rating}
                                                     precision={1}
                                                     max={10}
-                                                    size='large'
+                                                    size='small'
                                                     onChange={(e, newValue) => changeRating(review.review_key, newValue)}
-                                                    icon={<Spa style={{ color: "green" }} />}
-                                                    emptyIcon={<Spa />}
+                                                    icon={<TbBrandSnapseed style={{ color: "brown" }} />}
+                                                    emptyIcon={<TbBrandSnapseed />}
                                                     readOnly={!review.isEdit}
                                                 />
                                             </Col>
@@ -181,7 +182,7 @@ const ReviewPage = ({ mall_key, mall_seller, seller_number }) => {
                                             </Col>
                                         </Row>
                                         <Col>
-                                            <div>{review.review_regDate}</div>
+                                            <span>{review.review_udate ? `수정일 : ${review.review_udate}` : `등록일  : ${review.review_regDate}`} </span>
                                         </Col>
                                         <Row className='align-items-center my-2'>
                                             <Col>
