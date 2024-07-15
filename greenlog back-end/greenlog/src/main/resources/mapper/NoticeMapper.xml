@@ -18,7 +18,7 @@
         SELECT * FROM notice WHERE notice_key = #{notice_key}
     </select>
 
- <select id="list" resultType="hashmap">
+ 	<select id="list" resultType="hashmap">
     select *
     from notice
     <if test="key == 'notice_writer'">where notice_writer like #{word}</if>
@@ -26,9 +26,8 @@
     <if test="key == 'notice_contents'">where notice_contents like #{word}</if>
     order by notice_key desc
     limit #{start}, #{size}
-</select>
-
-<select id="total" resultType="int">
+	</select>
+	<select id="total" resultType="int">
     select count(*)
     from notice
     <if test="key == 'notice_writer'">where notice_writer like #{word}</if>

@@ -95,11 +95,16 @@ const NoticeUpdate = () => {
                   className='mb-2'
                 />
               </InputGroup>
-              <CKEditor
-                editor={ClassicEditor}
-                data={notice_contents}
-                onChange={onChangeCKEditor}
-              />
+              <Form.Group controlId="notice_contents">
+                <Form.Label>내용</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  rows={10}
+                  name="notice_contents"
+                  value={notice_contents}
+                  onChange={onChangeForm}
+                />
+              </Form.Group>
               <div className='text-center mt-3'>
                 <Button type="submit" className='px-5 me-2' disabled={loading}>
                   {loading ? '수정 중...' : '수정'}

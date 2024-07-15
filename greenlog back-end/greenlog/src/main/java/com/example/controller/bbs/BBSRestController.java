@@ -51,13 +51,5 @@ public class BBSRestController {
     	model.addAttribute("bbs", service.read(bid));
 		return bbsDAO.read(bid);
 	}
-    
-    @GetMapping("/{bbs_key}")
-	public BBSVO read(@PathVariable("bbs_key") int bid, @RequestParam("isCnt") boolean isCnt) {
-		if(isCnt) {
-			return service.read(bid);
-		}else {
-			return bbsDAO.read(bid);
-		}
-	}
+       
 }

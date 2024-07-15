@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { Button, Card } from 'react-bootstrap';
 import axios from 'axios';
 
@@ -15,6 +15,10 @@ const NoticeRead = () => {
   });
 
   const { notice_title, notice_contents, notice_writer, notice_regDate, notice_vcnt } = form;
+
+  // 관리자 아이디 목록
+  const adminIds = ['admin', 'seop', 'hanna', 'gr001231', 'laonmiku', 'ne4102'];
+  const currentUser = sessionStorage.getItem('uid');
 
   const callAPI = async () => {
     try {
@@ -36,7 +40,7 @@ const NoticeRead = () => {
     try {
       await axios.post(`/notice/delete/${notice_key}`);
       alert("공지사항 삭제 완료!");
-      window.location.href='/community/notice/list.json';
+      window.location.href = '/community/notice/list.json';
     } catch (error) {
       console.error('There was an error deleting the notice!', error);
       alert('공지사항 삭제 중 오류가 발생했습니다.');
@@ -52,10 +56,14 @@ const NoticeRead = () => {
           <Card.Subtitle className="mb-2 text-muted">작성일: {notice_regDate}</Card.Subtitle>
           <Card.Subtitle className="mb-2 text-muted">조회수: {notice_vcnt}</Card.Subtitle>
           <Card.Text>{notice_contents}</Card.Text>
-          <Link to={`/community/notice/update/${notice_key}`}>
-            <Button className='me-2'>수정</Button>
-          </Link>
-          <Button onClick={onDelete}>삭제</Button>
+          {adminIds.includes(currentUser) && (
+            <>
+              <Link to={`/community/notice/update/${notice_key}`}>
+                <Button className='me-2'>수정</Button>
+              </Link>
+              <Button onClick={onDelete}>삭제</Button>
+            </>
+          )}
         </Card.Body>
       </Card>
     </div>

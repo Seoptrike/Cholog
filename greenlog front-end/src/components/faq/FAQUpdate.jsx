@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Form, Button, Row, Col, InputGroup, FormControl } from 'react-bootstrap';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 const FAQUpdate = () => {
   const [loading, setLoading] = useState(false);
@@ -28,11 +26,6 @@ const FAQUpdate = () => {
 
   const onChangeForm = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const onChangeCKEditor = (event, editor) => {
-    const data = editor.getData();
-    setForm({ ...form, faq_answer: data });
   };
 
   const onReset = () => {
@@ -94,11 +87,16 @@ const FAQUpdate = () => {
                 className='mb-2'
               />
             </InputGroup>
-            <CKEditor
-              editor={ClassicEditor}
-              data={form.faq_answer} 
-              onChange={onChangeCKEditor}
-            />
+            <Form.Group controlId="faq_answer">
+              <Form.Label>답변</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={10}
+                name="faq_answer"
+                value={form.faq_answer}
+                onChange={onChangeForm}
+              />
+            </Form.Group>
             <div className='text-center mt-3'>
               <Button type="submit" className='px-5 me-2' disabled={loading}>
                 {loading ? '수정 중...' : '수정'}

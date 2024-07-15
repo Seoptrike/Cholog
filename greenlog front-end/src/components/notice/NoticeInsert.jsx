@@ -75,11 +75,16 @@ const NoticeInsert = () => {
             onChange={onChangeForm}
           />
         </InputGroup>
-        <CKEditor
-          editor={ClassicEditor}
-          data={notice_contents}
-          onChange={onChangeCKEditor}
-        />
+        <Form.Group controlId="notice_contents">
+          <Form.Label>내용</Form.Label>
+          <Form.Control
+            as="textarea"
+            rows={10}
+            name="notice_contents"
+            value={notice_contents}
+            onChange={onChangeForm}
+          />
+        </Form.Group>
         <Button type="submit" className="mt-3" disabled={loading}>
           {loading ? <Spinner animation="border" size="sm" /> : '등록'}
         </Button>
