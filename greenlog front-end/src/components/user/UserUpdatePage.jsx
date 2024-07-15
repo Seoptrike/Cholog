@@ -8,13 +8,13 @@ import { Link, useParams } from 'react-router-dom';
 //닉네임 중복확인 알고리즘 검토 필요
 
 const UserUpdatePage = () => {
-    const uid =sessionStorage.getItem("uid")
+    const uid = sessionStorage.getItem("uid")
     const [form, setForm] = useState({
-        user_key:'', user_nickname:'', user_uname:'', user_phone:'', user_address1:'', user_address2:'',
-        user_birth:'', user_email:'', user_gender:'', user_ment:''
+        user_key: '', user_nickname: '', user_uname: '', user_phone: '', user_address1: '', user_address2: '',
+        user_birth: '', user_email: '', user_gender: '', user_ment: ''
     });
     const [origin, setOrigin] = useState("");
-    const [overlap, setOverlap] =useState([]);
+    const [overlap, setOverlap] = useState([]);
     const [isCheck, setIsCheck] = useState(false);
     const [phoneCheck, setPhoneCheck] = useState(false);
     const { user_uid } = useParams();
@@ -22,12 +22,12 @@ const UserUpdatePage = () => {
         name: '',
         byte: null
     })
-      const photoStyle = {
+    const photoStyle = {
         borderRadius: '10px',
         cursor: "pointer",
-      }
-    
-      const refFile = useRef();
+    }
+
+    const refFile = useRef();
 
 
     const callAPI = async () => {
@@ -38,14 +38,14 @@ const UserUpdatePage = () => {
         setfile({ name: res.data.user_img, byte: null });
     }
     //닉네임 중복확인 용도
-    const userCallAPI = async ()=>{
+    const userCallAPI = async () => {
         const res2 = await axios.get("/user/admin/list");
         setOverlap(res2.data);
         //console.log(res2.data);
     }
 
     const { user_key, user_nickname, user_uname, user_phone, user_address1, user_address2,
-        user_birth, user_email, user_gender, user_ment} = form;
+        user_birth, user_email, user_gender, user_ment } = form;
 
     useEffect(() => {
         callAPI();
@@ -56,33 +56,33 @@ const UserUpdatePage = () => {
     //폼변경
     const onChangeForm = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
-      }
-
-      //전화번호 유효성 및 자동하이픈 입력
-  const handlePress = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-
-    const regex = /^[0-9\b -]{0,13}$/; // 숫자, 백스페이스, 하이픈 포함한 정규식
-
-    if (regex.test(e.target.value)) {
-      setPhoneCheck(e.target.value);
-      const formattedPhoneNumber = e.target.value
-        .replace(/-/g, '') // 기존 하이픈 제거
-        .replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'); // 새로운 하이픈 삽입
-      setForm({ ...form, [e.target.name]: formattedPhoneNumber }); // 상태 업데이트
-    } else {
-      alert("잘못된 입력값입니다.");
     }
-  };
+
+    //전화번호 유효성 및 자동하이픈 입력
+    const handlePress = (e) => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+
+        const regex = /^[0-9\b -]{0,13}$/; // 숫자, 백스페이스, 하이픈 포함한 정규식
+
+        if (regex.test(e.target.value)) {
+            setPhoneCheck(e.target.value);
+            const formattedPhoneNumber = e.target.value
+                .replace(/-/g, '') // 기존 하이픈 제거
+                .replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'); // 새로운 하이픈 삽입
+            setForm({ ...form, [e.target.name]: formattedPhoneNumber }); // 상태 업데이트
+        } else {
+            alert("잘못된 입력값입니다.");
+        }
+    };
 
     //닉네임 중복확인
     const onCheckNickname = (user_nickname) => {
-        const findNickname= overlap.findIndex(user=> user.user_nickname === user_nickname);
+        const findNickname = overlap.findIndex(user => user.user_nickname === user_nickname);
         if (user_nickname) {
             alert("현재 사용중인 닉네임입니다");
             setIsCheck(false);
             return;
-        } else if(findNickname){
+        } else if (findNickname) {
             alert("다른유저가 사용하고 있는 닉네임입니다.");
             setIsCheck(false);
             return;
@@ -96,15 +96,15 @@ const UserUpdatePage = () => {
 
 
 
-     //수정취소
+    //수정취소
     const onClickReset = () => {
         alert("취소하시겠습니까?");
         callAPI();
-      }
+    }
 
     //수정하기
-    
-    const onClickUpdate = async()=>{
+
+    const onClickUpdate = async () => {
         if (!window.confirm("변경된 내용을 수정하시겠습니까?")) return;
         await axios.post("/user/update", form);
         window.location.href = `/user/read/${user_uid}`;
@@ -128,6 +128,8 @@ const UserUpdatePage = () => {
         await axios.post(`/upload/img/${uid}`, formData);
         alert("이미지 변경완료!")
     }
+
+  
     return (
         <div>
             <Row className='justify-content-center my-5'>
@@ -136,8 +138,8 @@ const UserUpdatePage = () => {
                         <Card.Body>
                             <Row>
                                 <Col lg={4}>
-                                    <img src={file.name ||"http://via.placeholder.com/100x150"} width="100%" onClick={() => refFile.current.click()}/>
-                                    <input ref={refFile} type="file" onChange={onChangeFile}/>
+                                    <img src={file.name || "http://via.placeholder.com/100x150"} width="100%" onClick={() => refFile.current.click()} />
+                                    <input ref={refFile} type="file" onChange={onChangeFile} style={{display:"none"}} />
                                     <Button onClick={onClickImageSave}>이미지저장</Button>
                                 </Col>
                                 <Col lg={8}>
@@ -149,7 +151,7 @@ const UserUpdatePage = () => {
                                             </InputGroup>
                                             <InputGroup className='mb-2'>
                                                 <InputGroup.Text>성함</InputGroup.Text>
-                                                <Form.Control value={user_uname} name="user_uname" onChange={onChangeForm}/>
+                                                <Form.Control value={user_uname} name="user_uname" onChange={onChangeForm} />
                                             </InputGroup>
                                             <InputGroup className='mb-2'>
                                                 <InputGroup.Text>전화번호</InputGroup.Text>
@@ -157,15 +159,15 @@ const UserUpdatePage = () => {
                                             </InputGroup>
                                             <InputGroup className='mb-2'>
                                                 <InputGroup.Text>주소</InputGroup.Text>
-                                                <Form.Control value={user_address1} name="user_address1" onChange={onChangeForm}/>
+                                                <Form.Control value={user_address1} name="user_address1" onChange={onChangeForm} />
                                             </InputGroup>
                                             <InputGroup className='mb-2'>
-                                                <Form.Control value={user_address2} name="user_address2" onChange={onChangeForm}/>
+                                                <Form.Control value={user_address2} name="user_address2" onChange={onChangeForm} />
                                                 <ModalAddress form={form} setform={setForm} />
                                             </InputGroup>
                                             <InputGroup className='mb-2'>
                                                 <InputGroup.Text>생년월일/성별</InputGroup.Text>
-                                                <Form.Control value={user_birth} name="user_birth" onChange={onChangeForm} type="date"/>
+                                                <Form.Control value={user_birth} name="user_birth" onChange={onChangeForm} type="date" />
                                                 <Form.Control value={user_gender === '남자' ? "남자" : "여자"} name="user_gender" readOnly />
                                             </InputGroup>
                                         </Card.Body>
@@ -178,7 +180,7 @@ const UserUpdatePage = () => {
                                             </InputGroup>
                                             <InputGroup className='mb-2'>
                                                 <InputGroup.Text>이메일</InputGroup.Text>
-                                                <Form.Control value={user_email} name="user_email" onChange={onChangeForm} type="email"/>
+                                                <Form.Control value={user_email} name="user_email" onChange={onChangeForm} type="email" />
                                             </InputGroup>
                                             <InputGroup className='mb-2'>
                                                 <InputGroup.Text>비밀번호 변경</InputGroup.Text>
@@ -186,13 +188,13 @@ const UserUpdatePage = () => {
                                             </InputGroup>
                                             <InputGroup className='mb-2'>
                                                 <InputGroup.Text>닉네임</InputGroup.Text>
-                                                <Form.Control value={user_nickname} name="user_nickname" onChange={onChangeForm}/>
+                                                <Form.Control value={user_nickname} name="user_nickname" onChange={onChangeForm} />
                                                 <Button onClick={onCheckNickname}>중복확인</Button>
                                             </InputGroup>
                                             <InputGroup className='mb-2'>
                                                 <InputGroup.Text>한줄소개</InputGroup.Text>
-                                                <Form.Control placeholder="한줄소개" onChange={onChangeForm} 
-                                                value={user_ment} name="user_ment"/>
+                                                <Form.Control placeholder="한줄소개" onChange={onChangeForm}
+                                                    value={user_ment} name="user_ment" />
                                             </InputGroup>
                                         </Card.Body>
                                     </Card>
@@ -205,7 +207,7 @@ const UserUpdatePage = () => {
             <div className='text-center'>
                 <Button className='me-4 px-5' onClick={onClickUpdate}>수정하기</Button>
                 <Button className='me-4 px-5' onClick={onClickReset}>취소하기</Button>
-                <Link to ={`/user/read/${user_uid}`}><Button className='px-5'>마이페이지로 돌아가기</Button></Link>
+                <Link to={`/user/read/${user_uid}`}><Button className='px-5'>마이페이지로 돌아가기</Button></Link>
             </div>
         </div>
     )

@@ -70,4 +70,20 @@
 	<select id="getLastInsertId" resultType="int">
 		select distinct(last_insert_id()) as last from mall
 	</select>
+	
+	<select id="listMallPhoto" resultType="hashmap">
+	 	select * from mallPhoto where mallPhoto_mall_key= #{mallPhto_key}
+	 </select>
+	 
+	 <update id="insertMainPhoto">
+	 	update mall set mall_photo=#{mall_photo} where mall_key=#{mall_key}
+	 </update>
+	 
+	 <select id="getMainPhoto" resultType="String">
+		select mall_photo from mall where mall_key=#{mall_key};
+	 </select>
+
+ 	<update id="updateMainPhoto">
+	 	update mall set mall_photo=#{mallPhoto_photo} where mall_key=#{mallPhoto_mall_key}
+	 </update>
 </mapper>
