@@ -1,10 +1,11 @@
 
 
 
+import { Margin } from '@mui/icons-material';
 import SlidePage from '../../../common/useful/SlidePage'
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { Card, Table,Row,Col, InputGroup, Button, Form } from 'react-bootstrap'
+import { Card, Table, Dropdown,Row,Col, InputGroup, Button, Form } from 'react-bootstrap'
 import Pagination from 'react-js-pagination';
 import { Link } from 'react-router-dom'; 
 
@@ -17,9 +18,12 @@ const ListPage = () => {
   const [count, setCount] = useState(0);
   const [list, setList] = useState([]);
   const [page, setPage] = useState(1);
-  const [size, setSize] = useState(4);
+  const [size, setSize] = useState(12);
   const [key, setKey] = useState('mall_title');
   const [word, setWord] = useState('');
+  const [orderBy,setOrderBy] = useState('desc');
+  const [trueList, setTrueList] = useState([]); // isEnd:true 안보이면좋겟음
+  const [falseList, setFalseList] = useState([]); // isEnd: false 아직날짜안지남
     const photoST ={
         width:"100%",
         border:"solid gray 5px"
@@ -33,12 +37,16 @@ const ListPage = () => {
 
     const callAPI= async()=>{ 
         setLoading(true);
-        const res= await axios.get(`/mall/list?key=${key}&word=${word}&page=${page}&size=${size}`)
-        console.log("ListPage : "+ JSON.stringify(res.data));
+        const res = await axios.get(`/mall/list?key=${key}&word=${word}&page=${page}&size=${size}&orderBy=${orderBy}`);
+        //console.log("ListPage : "+ JSON.stringify(res.data));
         setList(res.data.documents);
         setCount(res.data.total);
         setLoading(false);
+        console.log("ListPage : "+ list);
+        //console.log("trueList : "+ JSON.stringify(trueList));
+        //console.log("falseList : "+ JSON.stringify(falseList));
     }
+ 
  
 
     const onClickSearch=async(e)=>{
@@ -52,7 +60,7 @@ const ListPage = () => {
 
     useEffect(()=>{
         callAPI();
-    },[page])
+    },[page,orderBy])
 
     
 
@@ -66,9 +74,23 @@ const ListPage = () => {
         <SlidePage />
         <div>
             <Row>
-                <div style={countST}>검색수 : {count}건</div>
+                <Col>
+                    <div style={countST}>검색수 : {count}건</div>
+                </Col>
+                <Col>
+                <div className='text-end'><Link to="/mall/insert">♻마켓에 올리기♻</Link> </div>
+                </Col>
             </Row>
             <Row className='my-2'>
+                <Col xs={2} ms={2} lg={1}>
+                    <Dropdown className="me-1">
+                        <Dropdown.Toggle variant="">정렬</Dropdown.Toggle>
+                        <Dropdown.Menu>
+                            <Dropdown.Item onClick={()=>setOrderBy("desc")} value="desc" >최신순</Dropdown.Item>
+                            <Dropdown.Item onClick={()=>setOrderBy("asc")} value="asc">오래된순</Dropdown.Item> 
+                        </Dropdown.Menu>
+                    </Dropdown>
+                </Col>
                 <Col className='text-start'>
                     <div style={{border:"1px solid #ccc", borderRadius: "5px"}} >
                         <InputGroup>
@@ -82,10 +104,9 @@ const ListPage = () => {
                         </InputGroup>
                     </div>
                 </Col>
-                <Col xs={3} ms={3} lg={3}>
-                    <div className='text-end'><Link to="/mall/insert">♻마켓에 올리기♻</Link> </div>
-                </Col>
+               
             </Row>
+            
         </div>
         <Row >
             {list && 
@@ -102,6 +123,7 @@ const ListPage = () => {
                     </Col>
                 ))
             }
+
             {count===0 &&
                 <h1 className='my-5 text-muted'>해당하는 글이 없습니다.</h1>
             }   

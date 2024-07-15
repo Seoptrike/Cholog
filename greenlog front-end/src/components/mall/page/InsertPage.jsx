@@ -7,9 +7,12 @@ import axios from "axios";
 
 
 const InsertPage = () => {
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
   const uid = sessionStorage.getItem("uid");
+  const today = new Date(); //오늘
+  const tomorrowDate = new Date(today); 
+  tomorrowDate.setDate(today.getDate() + 1); //내일
+  const tomorrow = tomorrowDate.toISOString().split('T')[0]; //내일 형식변환본
+  const [edate,setEdate]=useState(tomorrow); // endDate값
   
   const [form, setForm] = useState({
     mall_seller :uid , 
@@ -20,7 +23,7 @@ const InsertPage = () => {
     mall_photo :"" , 
     mall_tstate :0 , 
     mall_pstate :0 ,
-    mall_endDate:tomorrow,
+    mall_endDate:edate,
   });
   const { mall_title, mall_info, mall_price, mall_photo, mall_tstate, mall_pstate, mall_endDate } = form;
 
@@ -37,6 +40,9 @@ const InsertPage = () => {
       [name]: name === "mall_price" ? parseInt(value) : value
     }));
   };
+  const onChangeEndDate =(e)=>{
+    setEdate(e.target.value);
+  }
 
   // 사진 변경
   const onChangeFiles = (e) => {
@@ -75,14 +81,7 @@ const InsertPage = () => {
 
 
 
-  // const dummyData = [
-  //  { aid: 1, filename: '/images/sorry.png' },
-  //   { aid: 2, filename: '/images/sorry.png' },
-  //   { aid: 3, filename: '/images/sorry.png' }
-  // ];
-
-  // 상태 변수와 이벤트 핸들러 등을 정의
-  const [photo, setPhoto] = useState("");
+  
 
   const imgStyle = {
     width: '90%',
@@ -102,7 +101,8 @@ const InsertPage = () => {
     // 경매 상품이면서 시드가 0일 경우 경고 메시지를 띄우고 함수를 종료합니다.
     try {
       // 게시글 등록
-      const response = await axios.post('/mall/insert', form);
+      const formData = {...form, mall_seller:uid, mall_endDate:edate}
+      const response = await axios.post('/mall/insert', formData);
       const insertedMallKey = response.data; // 삽입된 행의 자동 생성 키
       //첨부 파일 업로드 함수 호출
       if(insertedMallKey){
@@ -148,9 +148,9 @@ const InsertPage = () => {
                 required
                 fullWidth
               >
-                <MenuItem value={0}>나눔물품으로 올리기</MenuItem>
+                <MenuItem value={0}>일반나눔으로 올리기</MenuItem>
                 <MenuItem value={1}>무료나눔으로 올리기</MenuItem>
-                <MenuItem value={2}>내가 찾는 물품 올리기</MenuItem>
+                <MenuItem value={2}>구매글 올리기</MenuItem>
               </TextField>
             </Grid>
             <Grid item xs={3}>
@@ -168,33 +168,9 @@ const InsertPage = () => {
                 <MenuItem value={1}>미개봉,미사용</MenuItem>
               </TextField>
             </Grid>
-            {mall_tstate === 0 ?
-              <>
-                <Grid item xs={3}>
-                  <TextField
-                    label="Seed"
-                    type="number"
-                    name="mall_price"
-                    fullWidth
-                    value={mall_price}
-                    onChange={onChangeForm}
-                    required
-                  />
-                </Grid>
-                <Grid item xs={3}>
-                  <TextField
-                    label="나눔확정날짜"
-                    type="date"
-                    name="endDate"
-                    fullWidth
-                    value={mall_endDate instanceof Date ? mall_endDate.toISOString().split('T')[0] : ''}
-                    onChange={onChangeForm}
-                    required
-                  />
-                </Grid>
-              </>
-              :
-              <Grid item xs={6}>
+            {mall_tstate === 1 ?
+            
+              <Grid item xs={3}>
                 <TextField
                   label="Seed"
                   type="number"
@@ -202,22 +178,50 @@ const InsertPage = () => {
                   fullWidth
                   value={0}
                   onChange={onChangeForm}
+                  required
                   disabled
                 />
               </Grid>
+              :
+              <Grid item xs={3}>
+                <TextField
+                  label="Seed"
+                  type="number"
+                  name="mall_price"
+                  fullWidth
+                  required
+                  value={mall_price}
+                  onChange={onChangeForm}
+                />
+                </Grid>
+                
             }
 
-            <Grid item xs={12}>
-              <TextField
-                name="mall_info"
-                label="내용"
-                fullWidth
-                multiline
-                value={mall_info}
-                rows={4}
-                onChange={onChangeForm}
-              />
-            </Grid>
+                <Grid item xs={3}>
+                <TextField
+                  label="마감일"
+                  type="date"
+                  name="endDate"
+                  fullWidth
+                  value={edate}
+                  onChange={onChangeEndDate}
+                  inputProps={{
+                    min: tomorrow // 현재 날짜 이전의 날짜 선택 불가능
+                  }}
+                  required
+                />
+                </Grid>
+          <Grid item xs={12}>
+            <TextField
+              name="mall_info"
+              label="내용"
+              fullWidth
+              multiline
+              value={mall_info}
+              rows={4}
+              onChange={onChangeForm}
+            />
+          </Grid>
 
             <Grid item xs={12}>
               <Form.Group as={Row} className="mb-3">

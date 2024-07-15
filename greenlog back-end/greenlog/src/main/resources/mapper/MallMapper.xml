@@ -15,7 +15,12 @@
            mall_info like concat('%', #{word}, '%')
         </if>
     </where>
-		order by mall_regDate desc
+    	<if test="orderBy == 'desc'">
+        order by mall_regDate desc
+	    </if>
+	    <if test="orderBy == 'asc'">
+	        order by mall_regDate asc
+	    </if>
 		limit #{start}, #{size}
 	</select>
 	
@@ -54,7 +59,7 @@
 	
 	<update id="update">
 		update mall
-		set mall_title=#{mall_title},mall_info=#{mall_info},mall_uDate=now()
+		set mall_title=#{mall_title},mall_info=#{mall_info},mall_tstate=#{mall_tstate},mall_pstate=#{mall_pstate},mall_price=#{mall_price},mall_endDate=#{mall_endDate},mall_uDate=now()
 		where mall_key=#{mall_key}
 	</update>
 	
