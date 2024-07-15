@@ -48,12 +48,11 @@ const TotalPage = () => {
                 </Col>
                 <Col xs={2}>
                     <ListGroup>
-                        <ListGroup.Item>댓글/리뷰</ListGroup.Item>
-                        <ListGroup.Item> <Link to={"/reply/list.json"}>댓글리스트</Link></ListGroup.Item>
-                        <ListGroup.Item> <Link to={"/reply/insert"}>댓글작성</Link></ListGroup.Item>
-                        <ListGroup.Item> <Link to={"/review/list.json"}>리뷰리스트</Link></ListGroup.Item>
-                        <ListGroup.Item> <Link to={"/review/insert"}>리뷰작성</Link></ListGroup.Item>
-                        <ListGroup.Item> <Link to={"/review/update/:review_key"}>리뷰수정</Link></ListGroup.Item>
+                        <ListGroup.Item>경매</ListGroup.Item>
+                        <ListGroup.Item> <Link to={"/auction/list.json/:user_uid"}>개인경매목록</Link></ListGroup.Item>
+                        <ListGroup.Item> <Link to={"/auction/read/:auction_key"}>경매거래내역</Link></ListGroup.Item>
+                        <ListGroup.Item> <Link to={"/auction/admin/list.json"}>전체경매목록</Link></ListGroup.Item>
+                        <ListGroup.Item> <Link to={"/auction/update/:auction_key"}>경매내역수정</Link></ListGroup.Item>
                     </ListGroup>
                 </Col>
                 <Col xs={2}>
@@ -63,10 +62,7 @@ const TotalPage = () => {
                         <ListGroup.Item> <Link to={"/trade/list.json"}>개인거래내역</Link></ListGroup.Item>
                         <ListGroup.Item> <Link to={"/user/admin/seed/list.json"}>전체씨앗지갑목록</Link></ListGroup.Item>
                         <ListGroup.Item> <Link to={"/trade/admin/list.json"}>전체씨앗거래내역</Link></ListGroup.Item>
-                        <ListGroup.Item> <Link to={"/auction/list.json/:user_uid"}>개인경매목록</Link></ListGroup.Item>
-                        <ListGroup.Item> <Link to={"/auction/read/:auction_key"}>경매거래내역</Link></ListGroup.Item>
-                        <ListGroup.Item> <Link to={"/auction/admin/list.json"}>전체경매목록</Link></ListGroup.Item>
-                        <ListGroup.Item> <Link to={"/auction/update/:auction_key"}>경매내역수정</Link></ListGroup.Item>
+                       
                     </ListGroup>
                 </Col>
             </Row>

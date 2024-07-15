@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Row, Col, Button, FormControl, InputGroup } from 'react-bootstrap'
 import { Rating } from '@mui/material';
-import Spa from '@mui/icons-material/Spa';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { TbBrandSnapseed } from "react-icons/tb";
 
 const InsertPage = ({mall_key, mall_seller}) => {
     const uid = sessionStorage.getItem('uid');
@@ -77,10 +76,10 @@ const InsertPage = ({mall_key, mall_seller}) => {
                                     value={review_rating}
                                     precision={1}
                                     max={10}
-                                    size='large'
+                                    size='small'
                                     onChange={onChangeForm} 
-                                    icon={<Spa style={{color:"green"}}/>}
-                                    emptyIcon={<Spa/>}    
+                                    icon={<TbBrandSnapseed style={{color:"brown"}}/>}
+                                    emptyIcon={<TbBrandSnapseed/>}    
                                 />
                             </InputGroup.Text>
                             <FormControl

@@ -65,4 +65,27 @@ public class MallDAOImpl implements MallDAO {
 		return session.selectOne(namespace + ".getLastInsertId");
 	}
 
+	@Override
+	public List<HashMap<String, Object>> listMallPhoto(int mallPhoto_mall_key) {
+		return session.selectList(namespace + ".listMallPhoto", mallPhoto_mall_key);
+	}
+
+	@Override
+	public void insertMainPhoto(int mall_key, String mall_photo) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("mall_key", mall_key);
+		map.put("mall_photo", mall_photo);
+		session.update(namespace + ".insertMainPhoto", map);
+	}
+
+	@Override
+	public String getMainPhoto(int mall_key) {
+		return session.selectOne(namespace + ".getMainPhoto", mall_key);
+	}
+
+	@Override
+	public void updateMainPhoto(MallPhotoVO vo) {
+		session.update(namespace + ".updateMainPhoto", vo);
+	}
+
 }

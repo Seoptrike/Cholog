@@ -17,11 +17,15 @@ const QAList = () => {
     const res = await axios.get(`/qa/list.json?key=${key}&word=${word}&page=${page}&size=${size}`);
     setList(res.data.documents);
     setCount(res.data.total);
-  }
+
+    if (res.data.total === 0) {
+      alert('검색어가 없습니다');
+    }
+  };
 
   useEffect(() => {
     callAPI();
-  }, [page,word]);
+  }, [page]);
 
   const onClickSearch = async (e) => {
     e.preventDefault();
@@ -51,7 +55,7 @@ const QAList = () => {
         {sessionStorage.getItem('uid') &&
           <Col className='text-end'>
             <Link to="/community/qa/insert">
-              <Button size='sm'>글쓰기</Button>
+              <Button>질문하기</Button>
             </Link>
           </Col>
         }

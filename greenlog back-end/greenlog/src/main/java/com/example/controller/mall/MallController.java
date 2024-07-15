@@ -75,22 +75,31 @@ public class MallController {
 				folder.mkdirs(); // 폴더가 없으면 모든 부모 디렉토리까지 생성
 			}
 			List<MultipartFile> files = multi.getFiles("bytes");
-			for (MultipartFile file : files) {
-				if (!file.isEmpty()) {
-					String fileName = UUID.randomUUID().toString() + ".jpg";
-					File destFile = new File(uploadPath, fileName);
-					file.transferTo(destFile);
-					System.out.println("Uploaded file: " + fileName);
+			if (!files.isEmpty()) {
+				for (int i = 0; i < files.size(); i++) {
+					MultipartFile file = files.get(i);
+					if (!file.isEmpty()) {
+						String fileName = UUID.randomUUID().toString() + ".jpg";
+						File destFile = new File(uploadPath, fileName);
+						file.transferTo(destFile);
+						System.out.println("Uploaded file: " + fileName);
 
-					// 이미지 경로 설정 및 DB 삽입
-					MallPhotoVO vo = new MallPhotoVO();
-					vo.setMallPhoto_mall_key(Integer.parseInt(mallPhoto_mall_key));
-					vo.setMallPhoto_photo("/display?file=" + mallPhoto_mall_key + "/" + fileName);
-					mdao.insertPhoto(vo);
+						// 이미지 경로 설정 및 DB 삽입
+						MallPhotoVO vo = new MallPhotoVO();
+						vo.setMallPhoto_mall_key(Integer.parseInt(mallPhoto_mall_key));
+						vo.setMallPhoto_photo("/display?file=" + mallPhoto_mall_key + "/" + fileName);
 
-				} else {
-					System.out.println("Empty file detected");
+						// 첫 번째 파일은 mdao.insertMainPhoto와 mdao.insertPhoto 둘 다로 삽입
+						if (i == 0) {
+							mdao.insertMainPhoto(Integer.parseInt(mallPhoto_mall_key), vo.getMallPhoto_photo());
+						}
+						mdao.insertPhoto(vo); // 나머지 파일들도 mdao.insertPhoto로 삽입
+					} else {
+						System.out.println("Empty file detected");
+					}
 				}
+			} else {
+				System.out.println("No files uploaded");
 			}
 		} catch (Exception e) {
 			System.out.println("Attach 파일들 업로드" + e.toString());
@@ -99,16 +108,22 @@ public class MallController {
 
 	// attach 삭제
 	@PostMapping("/attach/delete")
-	public void deleteAttach(@RequestBody MallPhotoVO vo) {
+	public int deleteAttach(@RequestBody MallPhotoVO vo) {
 		try {
+			// 첫 번째 파일인지 확인
+			String mainPhotoPath = mdao.getMainPhoto(vo.getMallPhoto_mall_key());
+			if (vo.getMallPhoto_photo().equals(mainPhotoPath)) {
+				System.out.println("Main photo cannot be deleted: " + vo.getMallPhoto_photo());
+				return 1; // 삭제 실패를 나타내는 값 (예: 1)
+			}
 			// 파일 경로 처리
 			String displayPath = vo.getMallPhoto_photo();
-			int index = displayPath.indexOf("file=");
-			String relativePath = displayPath.substring(index + 5);
+			int index = displayPath.indexOf("/display?file=");
+			String relativePath = displayPath.substring(index + "/display?file=".length());
 
 			// 현재 작업 디렉토리 확인
 			String currentDir = System.getProperty("user.dir");
-			String filePath = currentDir + File.separator + relativePath;
+			String filePath = currentDir + File.separator + "upload" + File.separator + relativePath;
 
 			// 파일 자체를 삭제
 			File file = new File(filePath);
@@ -119,9 +134,57 @@ public class MallController {
 			// DB에서 삭제
 			mdao.deleteAttach(vo.getMallPhoto_key());
 
+			return 0; // 삭제 성공을 나타내는 값 (예: 0)
+
 		} catch (Exception e) {
 			System.out.println("첨부파일삭제:" + e.toString());
+			return 1; // 삭제 실패를 나타내는 값 (예: 1)
 		}
 	}
 
+	@GetMapping("/attach/list/{mall_key}")
+	public List<HashMap<String, Object>> listMallPhoto(@PathVariable("mall_key") String mall_key) {
+		int mallPhoto_mall_key = Integer.parseInt(mall_key);
+		return mdao.listMallPhoto(mallPhoto_mall_key);
+	}
+
+	// 1장의 파일 업로드하기
+	@PostMapping("/attachOne/{mall_key}")
+	public void attachOne(@PathVariable("mall_key") String mallPhoto_mall_key, MultipartHttpServletRequest multi) {
+		try {
+			String relativePath = "upload/" + mallPhoto_mall_key + "/";
+			String currentDir = System.getProperty("user.dir");
+			String uploadPath = currentDir + File.separator + relativePath;
+
+			File folder = new File(uploadPath);
+			if (!folder.exists()) {
+				folder.mkdirs(); // 폴더가 없으면 모든 부모 디렉토리까지 생성
+			}
+
+			MultipartFile file = multi.getFile("byte");
+			if (file != null && !file.isEmpty()) {
+				String fileName = UUID.randomUUID().toString() + ".jpg";
+				File destFile = new File(uploadPath, fileName);
+				file.transferTo(destFile);
+				System.out.println("Uploaded file: " + fileName);
+
+				// 이미지 경로 설정 및 DB 삽입
+				MallPhotoVO vo = new MallPhotoVO();
+				vo.setMallPhoto_mall_key(Integer.parseInt(mallPhoto_mall_key));
+				vo.setMallPhoto_photo("/display?file=" + mallPhoto_mall_key + "/" + fileName);
+
+				// 이미지 정보 DB에 삽입
+				mdao.insertPhoto(vo);
+			} else {
+				System.out.println("No file uploaded or file is empty");
+			}
+		} catch (Exception e) {
+			System.out.println("Attach 파일 업로드 오류: " + e.toString());
+		}
+	}
+
+	@PostMapping("/update/mainPhoto")
+	public void updateMainPhoto(@RequestBody MallPhotoVO vo) {
+		mdao.updateMainPhoto(vo);
+	}
 }

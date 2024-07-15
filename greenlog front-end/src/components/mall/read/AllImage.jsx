@@ -1,24 +1,27 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import '../mall.css'
+import axios from 'axios'
 
-const AllImage = () => {
-  const imagePaths = [
-    '/images/sorry.png',
-    '/images/sorry.png',
-    '/images/sorry.png',
-    '/images/sorry.png'
-    // 필요한 만큼 이미지 경로 추가
-  ];
+const AllImage = ({ mall_key }) => {
+  const [photos,setPhotos]= useState([]);
+  console.log(mall_key);
+  const callAPI = async () => {
+    const res = await axios.get(`/mall/attach/list/${mall_key}`)
+    setPhotos(res.data)
+    console.log(res.data)
+  }
+
+  useEffect(() => { callAPI() }, [])
+
   return (
     <div>
-    <div className="allImage mt-5">
-      {imagePaths.map((path, index) => (
-        <img key={index} src={process.env.PUBLIC_URL + path} alt={`Product ${index + 1}`} />
-      ))}
-    </div>
-  
+      <div className="allImage mt-5">
+        {photos.map(photo=>
+          <img src={photo.mallPhoto_photo}/>
+        )}
+      </div>
+
     </div>
   )
 }
-
 export default AllImage

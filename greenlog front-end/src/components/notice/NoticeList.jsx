@@ -1,87 +1,99 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Row, Col, InputGroup, Button, Table, Form, Tab, Tabs } from 'react-bootstrap';
+import Pagination from 'react-js-pagination';
+import { Row, Col, InputGroup, Button, Table, Form } from 'react-bootstrap';
 import axios from 'axios';
 import HeaderTabs from '../../common/useful/HeaderTabs';
-import Pagination from 'react-js-pagination';
 
 const NoticeList = () => {
-  const [activeKey, setActiveKey] = useState('전체');
-  const [list, setList] = useState([]);
+  const [allList, setAllList] = useState([]); // 모든 데이터를 저장하는 상태
+  const [list, setList] = useState([]); // 필터링된 데이터를 저장하는 상태
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(5);
   const [key, setKey] = useState('notice_title');
   const [word, setWord] = useState('');
+  const [category, setCategory] = useState('전체');
+
+  const adminIds = ['admin', 'seop', 'hanna', 'gr001231', 'laonmiku', 'ne4102'];
+  const currentUser = sessionStorage.getItem('uid');
 
   const callAPI = async () => {
     const res = await axios.get(`/notice/list.json?key=${key}&word=${word}&page=${page}&size=${size}`);
-    setList(res.data.documents);
-    setCount(res.data.total);
-  }
+    setAllList(res.data.documents); 
+    filterList(res.data.documents, category, 1); 
+  };
 
   useEffect(() => {
     callAPI();
-  }, [page,word]);
+  }, []);
 
-   const onClickSearch = async (e) => {
+  const onClickSearch = async (e) => {
     e.preventDefault();
-    setPage(1); 
+    setPage(1);
     callAPI();
   };
 
-  const filterNoticesByCategory = (category) => {
-    if (category === '전체') {
-      return list;
+  const filterList = (data, category, page) => {
+    let filtered = data;
+    if (category !== '전체') {
+      filtered = data.filter(item => item.notice_type === parseInt(category));
     }
-    return list.filter(notice => notice.notice_type === parseInt(category));
+    setList(filtered.slice((page - 1) * size, page * size));
+    setCount(filtered.length);
   };
+
+  const handleCategoryChange = (newCategory) => {
+    setCategory(newCategory);
+    setPage(1);
+    filterList(allList, newCategory, 1);
+  };
+
+  useEffect(() => {
+    filterList(allList, category, page);
+  }, [page, category, allList]);
+
+  const handlePageChange = (pageNumber) => {
+    setPage(pageNumber);
+    filterList(allList, category, pageNumber);
+  };
+
+  useEffect(() => {
+    console.log("Count:", count, "Size:", size, "Page:", page);
+  }, [count, size, page]);
 
   return (
     <div>
       <HeaderTabs />
-      <Row className="mb-3">
+      <Row className="mb-3 align-items-center">
         <Col md={10}>
           <InputGroup>
-            <Form.Select className='me-2' value={key} onChange={(e) => setKey(e.target.value)}>
-              <option value="notice_title">제목</option>
-              <option value="notice_contents">내용</option>
-              <option value="notice_writer">글쓴이</option>
-            </Form.Select>
             <Form.Control placeholder='검색어' value={word} onChange={(e) => setWord(e.target.value)} />
             <Button onClick={(e) => onClickSearch(e)} type='submit'>검색</Button>
           </InputGroup>
         </Col>
-        <Col>
-          검색수: {count}건
-        </Col>
-        {sessionStorage.getItem('uid') &&
-          <Col className='text-end'>
+        <Col md={2} className='text-end'>
+          {adminIds.includes(currentUser) && (
             <Link to="/community/notice/insert">
               <Button size='sm'>글쓰기</Button>
             </Link>
-          </Col>
-        }
+          )}
+        </Col>
+      </Row>
+      <Row className="mb-3">
+        <Col className="text-center">
+          <Button variant={category === '전체' ? 'primary' : 'outline-primary'} onClick={() => handleCategoryChange('전체')}>전체</Button>
+          <Button variant={category === '0' ? 'primary' : 'outline-primary'} onClick={() => handleCategoryChange('0')}>일반</Button>
+          <Button variant={category === '1' ? 'primary' : 'outline-primary'} onClick={() => handleCategoryChange('1')}>포인트</Button>
+          <Button variant={category === '2' ? 'primary' : 'outline-primary'} onClick={() => handleCategoryChange('2')}>이벤트</Button>
+        </Col>
       </Row>
       <Row className="mb-3">
         <Col>
-          <Tabs activeKey={activeKey} onSelect={k => { setActiveKey(k); setPage(1); }} className="mb-3" fill>
-            <Tab eventKey="전체" title="전체">
-              <NoticeTabContent list={filterNoticesByCategory('전체')} />
-            </Tab>
-            <Tab eventKey="0" title="일반">
-              <NoticeTabContent list={filterNoticesByCategory('0')} />
-            </Tab>
-            <Tab eventKey="1" title="포인트">
-              <NoticeTabContent list={filterNoticesByCategory('1')} />
-            </Tab>
-            <Tab eventKey="2" title="이벤트">
-              <NoticeTabContent list={filterNoticesByCategory('2')} />
-            </Tab>
-          </Tabs>
+          <NoticeTabContent list={list} />
         </Col>
       </Row>
-      {count > size &&
+      {count > size && (
         <Pagination
           activePage={page}
           itemsCountPerPage={size}
@@ -89,9 +101,9 @@ const NoticeList = () => {
           pageRangeDisplayed={5}
           prevPageText={"‹"}
           nextPageText={"›"}
-          onChange={(e) => setPage(e)}
+          onChange={handlePageChange}
         />
-      }
+      )}
     </div>
   );
 };
@@ -102,8 +114,8 @@ const NoticeTabContent = ({ list }) => {
       <thead>
         <tr>
           <th>번호</th>
-          <th>제목</th>
           <th>카테고리</th>
+          <th>제목</th>
           <th>작성일</th>
           <th>조회수</th>
         </tr>
@@ -112,10 +124,10 @@ const NoticeTabContent = ({ list }) => {
         {list.map((post, index) => (
           <tr key={post.notice_key}>
             <td>{list.length - index}</td>
+            <td>{post.notice_type === 0 ? '일반' : post.notice_type === 1 ? '포인트' : post.notice_type === 2 ? '이벤트' : ''}</td>
             <td>
               <Link to={`/community/notice/read/${post.notice_key}`}>{post.notice_title}</Link>
             </td>
-            <td>{post.notice_type === 0 ? '일반' : post.notice_type === 1 ? '포인트' : post.notice_type === 2 ? '이벤트' : ''}</td>
             <td>{post.notice_regDate}</td>
             <td>{post.notice_vcnt}</td>
           </tr>

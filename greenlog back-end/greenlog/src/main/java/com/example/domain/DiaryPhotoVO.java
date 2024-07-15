@@ -1,6 +1,6 @@
 package com.example.domain;
 
-public class DiaryPhotoVO {
+public class DiaryPhotoVO extends DiaryVO{
 	private int diaryPhoto_key;
 	private int diaryPhoto_diary_key;
 	private String diaryPhoto_filename;

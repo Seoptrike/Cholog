@@ -3,10 +3,10 @@ import { Card, Row, Col, InputGroup, Form, Button, Badge } from 'react-bootstrap
 import { FaRegThumbsUp } from "react-icons/fa";
 import { FaThumbsUp } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
-import SlidePage from '../../common/useful/SlidePage';
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 import { BsTrash } from "react-icons/bs";
+import DiarySlickSlider from './DiarySlickSlider';
 
 
 //슬릭슬라이더로 인스타처럼 사진 넘기기
@@ -102,7 +102,7 @@ const DiaryReadPage = () => {
                 </Col>
                 <hr />
                 <div className='text-center mb-3'>
-                  <SlidePage />
+                 <DiarySlickSlider/>
                 </div>
                 <hr />
                 <Col>

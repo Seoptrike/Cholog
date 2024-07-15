@@ -105,12 +105,12 @@ const InsertPage = () => {
       const response = await axios.post('/mall/insert', formData);
       const insertedMallKey = response.data; // 삽입된 행의 자동 생성 키
       //첨부 파일 업로드 함수 호출
-      if(insertedMallKey){
-      await uploadPhoto(insertedMallKey);
-      alert("게시글 등록 완료!");
-      window.location.href = '/mall/list.json';
+      if (insertedMallKey) {
+        await uploadPhoto(insertedMallKey);
+        alert("게시글 등록 완료!");
+        window.location.href = '/mall/list.json';
       }
-      
+
     } catch (error) {
       // 오류 발생 시 오류 메시지 출력
       console.error("게시글 등록 오류:", error);
@@ -234,6 +234,16 @@ const InsertPage = () => {
                 </Col>
               </Form.Group>
             </Grid>
+            <Grid item xs={12}>
+              <Row>
+                {files.map(f =>
+                  <Col key={f.name} xs={2} className='mb-2'>
+                    <img src={f.name} style={{ width: "10rem" }} />
+                  </Col>
+                )}
+              </Row>
+            </Grid>
+
 
             {/* //     <Row eventkey="photo" title="첨부한 파일">
         //     {photo.map(img => 

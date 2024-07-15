@@ -28,4 +28,12 @@ public interface MallDAO {
 
 	public int getLastInsertId();
 
+	public List<HashMap<String, Object>> listMallPhoto(int mallPhoto_mall_key);
+
+	public void insertMainPhoto(int mall_key, String mall_photo);
+
+	public String getMainPhoto(int mall_key);
+
+	public void updateMainPhoto(MallPhotoVO vo);
+
 }

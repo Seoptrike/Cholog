@@ -125,7 +125,7 @@ const DiaryListPage = () => {
                 </div>
               </Card.Header>
               <Card.Body>
-                <Link to={`/diary/read/${d.diary_key}`}><img src="http://via.placeholder.com/100x100" width="100%" /></Link>
+                <Link to={`/diary/read/${d.diary_key}`}><img src={d.diary_thumbnail ||"http://via.placeholder.com/100x100"} width="100%" /></Link>
                 <hr />
                 <Col>
                   <div class="ellipsis">{d.diary_contents}</div>

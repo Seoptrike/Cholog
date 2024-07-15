@@ -106,6 +106,7 @@ const ReadPage = () => {
                         </tr>
                         <tr>
                           <td className='w-50'>(유저아이콘){mall_seller}</td> 
+
                           <td style={{fontSize:"12px"}}>{fmtudate ? `${fmtudate}(수정됨)` : mall_regDate}</td>
                         </tr>
                     </tbody> 
@@ -149,7 +150,7 @@ const ReadPage = () => {
       {/* TabContent 컴포넌트 */}
       <TabContent>
         {activeTab === '1' && (
-          <AllImage />
+          <AllImage mall_key={mall_key}/>
         )}
         {activeTab === '2' && (
           <div>

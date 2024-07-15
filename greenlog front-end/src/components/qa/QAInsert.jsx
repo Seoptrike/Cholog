@@ -62,11 +62,16 @@ const QAInsert = () => {
             onChange={onChangeForm}
           />
         </InputGroup>
-        <CKEditor
-          editor={ClassicEditor}
-          data={qa_contents}
-          onChange={onChangeCKEditor}
-        />
+        <Form.Group controlId="qa_contents">
+          <Form.Label>내용</Form.Label>
+          <Form.Control
+            as="textarea"
+            rows={10}
+            name="qa_contents"
+            value={qa_contents}
+            onChange={onChangeForm}
+          />
+        </Form.Group>
         <Button type="submit" className="mt-3" disabled={loading}>
           {loading ? <Spinner animation="border" size="sm" /> : '등록'}
         </Button>
