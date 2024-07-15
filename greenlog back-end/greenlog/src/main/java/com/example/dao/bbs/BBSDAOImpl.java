@@ -14,7 +14,7 @@ import com.example.domain.QueryVO;
 public class BBSDAOImpl implements BBSDAO {
 
     @Autowired
-    private SqlSession session;
+    SqlSession session;
 
     private static final String NAMESPACE = "com.example.mapper.BBSMapper";
 
