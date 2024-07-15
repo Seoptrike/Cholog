@@ -6,6 +6,7 @@ public class QueryVO {
 	private int start;
 	private String key;
 	private String word;
+	private String orderBy;
 
 	public int getPage() {
 		return page;
@@ -51,6 +52,14 @@ public class QueryVO {
 	public String toString() {
 		return "QueryVO [page=" + page + ", size=" + size + ", start=" + start + ", key=" + key + ", word=" + word
 				+ "]";
+	}
+
+	public String getOrderBy() {
+		return orderBy;
+	}
+
+	public void setOrderBy(String orderBy) {
+		this.orderBy = orderBy;
 	}
 
 }

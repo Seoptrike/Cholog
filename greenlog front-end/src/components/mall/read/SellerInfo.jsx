@@ -13,10 +13,11 @@ const SellerInfo = ({mall_seller}) => {
     const [loading,setLoading]=useState(false);
     const [list, setList] = useState([]);
     const [page, setPage] = useState(1);
-    const [size, setSize] = useState(3);
+    const [size, setSize] = useState(6);
     const [key, setKey] = useState('mall_seller');
     const [word, setWord] = useState(mall_seller);
     const [form, setForm] = useState({});
+    const [orderBy,setOrderBy] = useState('desc');
 
 
     const callAPI=async()=>{ 
@@ -25,46 +26,33 @@ const SellerInfo = ({mall_seller}) => {
     console.log("****************************",res.data);
     setForm(res.data);
     
-    const res2= await axios.get(`/mall/list?key=${key}&word=${word}&page=${page}&size=${size}`)
+    const res2= await axios.get(`/mall/list?key=${key}&word=${word}&page=${page}&size=${size}&orderBy=${orderBy}`)
     //console.log("ListPage : "+ JSON.stringify(res.data));
     setList(res2.data.documents);
     setLoading(false);
     }
     useEffect(()=>{
         callAPI();
-    },[])
-    const settings = {
+    },[page])
+    
+    const sellerList = {
         dots: true,
         infinite: true,
         speed: 500,
-        slidesToShow: 1, // 한 번에 보여질 슬라이드 수
-        slidesToScroll: 1 // 슬라이드를 넘길 때 이동할 슬라이드 수
-      };
+        slidesToShow: 3,
+        slidesToScroll: 1
+    };
+
+
+    console.log("form.user_address1:>>>"+form.user_address1);
+    //
     
+   
+
     if(loading) return <h1 className='text-center'>로딩중...</h1>
     return (
     <>
-        <Slider {...settings}>
-        <div className='mt-5'>
-            <Row>
-               {list && 
-                list.map(card => (
-                    <Col key={card.mall_key} xs={4} md={4} lg={4}>
-                        <Card className="mb-3">
-                            <Card.Body>
-                                <Card.Title><img src={card.mall_photo ? card.mall_photo : "http://via.placeholder.com/100x100"} /></Card.Title>
-                                <Card.Text>
-                                    <Link to={`/mall/read/${card.mall_key}`}>[{card.mall_key}]{card.mall_title}</Link>
-                                </Card.Text>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                ))
-            } 
-            </Row>
-        </div>
-        </Slider>
-        <Card variant="outlined">
+    <Card variant="outlined" className='mt-5'>
         <CardContent className='report_parent'>
             <Row >
             <Col className="d-flex justify-content-center align-items-center"  xs={4} md={4} lg={4} >
@@ -78,7 +66,7 @@ const SellerInfo = ({mall_seller}) => {
                     내린온도?
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                    위치보기 누르면 지도를 얼럿이든뭐든 따로어버레이
+                    {form.user_address1}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                     뭐넣지,,
@@ -88,6 +76,28 @@ const SellerInfo = ({mall_seller}) => {
         </CardContent>
         </Card>
         <div className='report_child '>신고신고고고</div>
+        <div className='mt-5'>
+            <Row>
+             <div> 
+                <Slider {...sellerList}>
+                {list && 
+                    list.map(list => (
+                        <div className='mx-5'>
+                            <Card className="mx-3">
+                            <Card.Body>
+                                <Card.Title><img src={list.mall_photo ? list.mall_photo : "http://via.placeholder.com/100x100"} /></Card.Title>
+                                <Card.Text>
+                                    <Link to={`/mall/read/${list.mall_key}`}>[{list.mall_key}]{list.mall_title}</Link>
+                                </Card.Text>
+                            </Card.Body>
+                                </Card>
+                        </div>
+                ))}
+                </Slider>
+            </div>
+            </Row>
+         </div>
+       
     </>
     )
 }

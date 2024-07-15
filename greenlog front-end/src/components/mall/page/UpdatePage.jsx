@@ -7,8 +7,6 @@ import { useParams } from "react-router-dom";
 export const UpdatePage = () => {
   const { mall_key } = useParams();
   const [loading, setLoading] = useState(false);
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
   const uid = sessionStorage.getItem("uid");
   const [file, setfile] = useState({
     name: '',
@@ -283,11 +281,9 @@ export const UpdatePage = () => {
                 </Col>
               </Row>
             </Grid>
-
-            <Grid item xs={12} className="text-end">
-              <Button type="submit" variant="outline-secondary" >게시글 수정</Button>
-              <Button onClick={callAPI} variant="outline-secondary" >취소</Button>
-            </Grid>
+          <Grid item xs={12} className="text-end">
+              <Button   onClick={onClickUpdate} variant="outline-secondary" >게시글 수정</Button>
+            <Button  onClick={onClickCancel} variant="outline-secondary" >취소</Button>
           </Grid>
         </form>
       </Paper>

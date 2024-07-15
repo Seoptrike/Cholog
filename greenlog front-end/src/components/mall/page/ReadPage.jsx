@@ -19,7 +19,7 @@ const ReadPage = () => {
   const [form, setForm] = useState({});
 
   console.log("read!!!!!!!!!!!!!!"+form);
-  const {mall_uDate,mall_seller,mall_title,mall_info,mall_price,mall_regDate, mall_photo,mall_tstate,mall_pstate,mall_endDate} = form;
+  const {user_address1,fmtudate,mall_uDate,mall_seller,mall_title,mall_info,mall_price,mall_regDate, mall_photo,mall_tstate,mall_pstate,mall_endDate} = form;
   const [activeTab, setActiveTab] = useState('1');
   
   const handleTabClick = (tabName) => {
@@ -46,6 +46,7 @@ const ReadPage = () => {
     
   const onClickDelete=async()=>{
     //console.log("0000000000000000000000000>>>>>>>>>>>"+mall_key);
+    if(!window.confirm(`${mall_key}번 글을 정말 삭제하시겠습니까?`)) return;
     try {
       await axios.post(`/mall/delete/${mall_key}`);
       callAPI();
@@ -91,27 +92,22 @@ const ReadPage = () => {
                             }
                         </tr>
                         <tr>
-                            <td >{mall_tstate === 0 ? "나눔" : (mall_tstate === 1 ? "무료나눔" : (mall_tstate === 2 ? "구매" : ""))}</td> 
+                            <td >{mall_tstate === 0 ? "나눔" : (mall_tstate === 1 ? "무료나눔" : "구매")}</td> 
                             <td className='w-50' >{mall_pstate === 0 ? "중고상품" : "(미개봉,미사용)"}</td>
                         </tr>
                         <tr>
                             <td colSpan={2} style={{width:"100%",height:"80px"}}>
-                             { mall_info}
+                             { mall_info!=="" ? mall_info : "입력된내용이 없습니다!" }
                             </td>
-                        </tr> 
-                        {mall_tstate===0 &&
-                         <tr>
-                            <td className='w-50'>마감일:{mall_endDate}</td> 
-                            <td >{mall_price}씨드</td>
                         </tr>
-                        }
                          <tr>
                             <td className='w-50'>마감일:{mall_endDate}</td> 
                             <td >{mall_price}씨드</td>
                         </tr>
                         <tr>
                           <td className='w-50'>(유저아이콘){mall_seller}</td> 
-                          <td style={{fontSize:"12px"}}>{mall_uDate ? `${mall_uDate} (수정됨)` : mall_regDate}</td>
+
+                          <td style={{fontSize:"12px"}}>{fmtudate ? `${fmtudate}(수정됨)` : mall_regDate}</td>
                         </tr>
                     </tbody> 
                 </Table>
