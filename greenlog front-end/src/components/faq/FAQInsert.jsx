@@ -83,11 +83,16 @@ const FAQInsert = () => {
             onChange={onChangeForm}
           />
         </InputGroup>
-        <CKEditor
-          editor={ClassicEditor}
-          data={faq_answer}
-          onChange={onChangeCKEditor}
-        />
+        <Form.Group controlId="faq_answer">
+          <Form.Label>내용</Form.Label>
+          <Form.Control
+            as="textarea"
+            rows={10}
+            name="faq_answer"
+            value={faq_answer}
+            onChange={onChangeForm}
+          />
+        </Form.Group>
         <Button type="submit" className="mt-3" disabled={loading}>
           {loading ? <Spinner animation="border" size="sm" /> : '등록'}
         </Button>

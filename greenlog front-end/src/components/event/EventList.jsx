@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Pagination from 'react-js-pagination';
 import { Row, Col, InputGroup, FormControl, Button, Card, Form } from 'react-bootstrap';
 import axios from 'axios';
@@ -8,21 +8,28 @@ const EventList = () => {
   const [list, setList] = useState([]);
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
-  const [size, setSize] = useState(5); 
+  const [size, setSize] = useState(6);
   const [key, setKey] = useState('event_title');
   const [word, setWord] = useState('');
   const [category, setCategory] = useState('');
-  const [status, setStatus] = useState('all');
+
+  // 관리자 아이디 목록
+  const adminIds = ['admin', 'seop', 'hanna', 'gr001231', 'laonmiku', 'ne4102'];
+  const currentUser = sessionStorage.getItem('uid');
 
   const callAPI = async () => {
     const res = await axios.get(`/event/list.json?key=${key}&word=${word}&page=${page}&size=${size}`);
     setList(res.data.documents);
     setCount(res.data.total);
-  }
+
+    if (res.data.total === 0) {
+      alert('검색어가 없습니다');
+    }
+  };
 
   useEffect(() => {
     callAPI();
-  }, [page, word]);
+  }, [page]);
 
   const handleSearchChange = (e) => {
     setWord(e.target.value);
@@ -30,19 +37,19 @@ const EventList = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    setPage(1); 
+    setPage(1);
     callAPI();
   };
 
   const handleCategoryChange = (e) => {
     setCategory(e.target.value);
+    setPage(1);
+    callAPI();
   };
 
   const filterList = () => {
     return list.filter(item => {
-      const matchCategory = category === '' || item.event_type === parseInt(category);
-      const matchStatus = status === 'all' || (status === 'ongoing' && item.event_status === 'ongoing') || (status === 'ended' && item.event_status === 'ended');
-      return matchCategory && matchStatus;
+      return category === '' || item.event_type === parseInt(category);
     });
   };
 
@@ -68,15 +75,13 @@ const EventList = () => {
         <Col>
           검색수: {count}건
         </Col>
-        {sessionStorage.getItem('uid') && (  
+        {adminIds.includes(currentUser) && (
           <Col className='text-end'>
             <Link to="/community/event/insert">
               <Button size='sm'>글쓰기</Button>
             </Link>
           </Col>
         )}
-        <Button className='me-2' size='lg' >진행중</Button>
-        <Button size='lg'>종료</Button>
       </div>
       <hr />
       <Row>
@@ -93,14 +98,14 @@ const EventList = () => {
                   <span>작성일: {e.event_regDate} {e.event_type === 0 ? "이벤트" : "봉사"}</span>
                 </div>
                 <div>
-                  조회수:{e.event_vcnt}
+                  조회수: {e.event_vcnt}
                 </div>
               </Card.Body>
             </Card>
           </Col>
         ))}
       </Row>
-      {count > size && 
+      {count > size && (
         <Pagination
           activePage={page}
           itemsCountPerPage={size}
@@ -110,7 +115,7 @@ const EventList = () => {
           nextPageText={"›"}
           onChange={(e) => setPage(e)}
         />
-      }
+      )}
     </div>
   );
 };

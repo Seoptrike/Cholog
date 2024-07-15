@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import { Button, Card } from 'react-bootstrap';
+import { useParams, Link } from 'react-router-dom';
+import { Button, Card, Container, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
+import ReplyPage from '../reply/ReplyPage';
 
 const QARead = () => {
   const { qa_key } = useParams();
@@ -16,6 +17,10 @@ const QARead = () => {
   });
 
   const { qa_contents, qa_title, qa_writer, qa_regDate } = form;
+
+  // 관리자 아이디 목록
+  const adminIds = ['admin', 'seop', 'hanna', 'gr001231', 'laonmiku', 'ne4102'];
+  const currentUser = sessionStorage.getItem('uid');
 
   const callAPI = async () => {
     try {
@@ -45,20 +50,32 @@ const QARead = () => {
   };
 
   return (
-    <div className="d-flex justify-content-center">
-      <Card style={{ width: '50rem' }} className="mt-5">
-        <Card.Body>
-          <Card.Title>{qa_title}</Card.Title>
-          <Card.Subtitle className="mb-2 text-muted">작성자: {qa_writer}</Card.Subtitle>
-          <Card.Subtitle className="mb-2 text-muted">작성일: {qa_regDate}</Card.Subtitle>
-          <Card.Text>{qa_contents}</Card.Text>
-          <Link to={`/community/qa/update/${qa_key}`}>
-            <Button className='me-2'>수정</Button>
-          </Link>
-          <Button onClick={onDelete} className='me-2'>삭제</Button>
-        </Card.Body>
-      </Card>
-    </div>
+    <Container className="mt-5">
+      <Row className="justify-content-center">
+        <Col xs={12} md={10} lg={8}>
+          <Card>
+            <Card.Body>
+              <Card.Title>{qa_title}</Card.Title>
+              <Card.Subtitle className="mb-2 text-muted">작성자: {qa_writer}</Card.Subtitle>
+              <Card.Subtitle className="mb-2 text-muted">작성일: {qa_regDate}</Card.Subtitle>
+              <Card.Text>{qa_contents}</Card.Text>
+              {adminIds.includes(currentUser) && (
+                <>
+                  <Link to={`/community/qa/update/${qa_key}`}>
+                    <Button className='me-2'>수정</Button>
+                  </Link>
+                  <Button onClick={onDelete} className='me-2'>삭제</Button>
+                </>
+              )}
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+      <Row className="justify-content-center mt-3">
+        <Col xs={12} md={10} lg={8}>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

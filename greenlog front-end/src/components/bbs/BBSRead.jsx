@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Row, Col, Card, Button } from 'react-bootstrap';
 import ReplyPage from '../reply/ReplyPage';
 
@@ -8,36 +8,31 @@ const BBSRead = () => {
   const { bbs_key } = useParams();
   const [form, setForm] = useState(null);
 
-  const callAPI = async () => {
-    try {
-      const res = await axios.get(`/bbs/read/${bbs_key}`);
-      if (res.status === 200) {
-        console.log('Fetched data:', res.data);
-        setForm(res.data);
-      } else {
-        console.error('Failed to fetch data:', res.data);
-      }
-    } catch (error) {
-      console.error('There was an error fetching the post data!', error);
-    }
+  const callAPI = async (isCnt) => {
+    const res = await axios.get(`/bbs/read/${bbs_key}`, {
+      params: { isCnt }
+    });
+    setForm(res.data);
+    console.log(res.data);
   };
 
   useEffect(() => {
-    callAPI();
+    const viewedPosts = JSON.parse(sessionStorage.getItem('viewedPosts')) || [];
+    if (!viewedPosts.includes(bbs_key)) {
+      callAPI(true); // 처음 조회 시 조회수 증가
+      viewedPosts.push(bbs_key);
+      sessionStorage.setItem('viewedPosts', JSON.stringify(viewedPosts));
+    } else {
+      callAPI(false); // 이후 조회 시 조회수 증가하지 않음
+    }
   }, [bbs_key]);
-
-  
 
   const onDelete = async () => {
     if (!window.confirm(`${bbs_key}번 게시글을 삭제하실래요?`)) return;
     try {
-      const res = await axios.post(`/bbs/delete/${bbs_key}`);
-      if (res.status === 200) {
-        alert("게시글 삭제 완료!");
-        window.location.href='/community/bbs/list.json';
-      } else {
-        console.error('Failed to delete post:', res.data);
-      }
+      await axios.post(`/bbs/delete/${bbs_key}`);
+      alert("게시글 삭제 완료!");
+      window.location.href = '/community/bbs/list.json';
     } catch (error) {
       console.error('There was an error deleting the post!', error);
       alert('게시물 삭제 중 오류가 발생했습니다.');
@@ -45,10 +40,10 @@ const BBSRead = () => {
   };
 
   if (!form) {
-    return <div>Loading...</div>; // 데이터가 로드될 때까지 로딩 상태를 표시합니다.
+    return <div>Loading...</div>;
   }
 
-  const { bbs_contents, bbs_title, bbs_writer, bbs_regDate,bbs_uDate,bbs_vcnt } = form;
+  const { bbs_contents, bbs_title, bbs_writer, bbs_regDate, bbs_uDate, bbs_vcnt } = form;
 
   return (
     <div className='my-5'>
@@ -68,7 +63,7 @@ const BBSRead = () => {
             </Card.Body>
             <Card.Footer className='text-muted'>
               {bbs_writer} <br />
-              {bbs_regDate}<br/>
+              {bbs_regDate}<br />
               {bbs_uDate}
               조회수: {bbs_vcnt}
             </Card.Footer>
@@ -80,7 +75,7 @@ const BBSRead = () => {
             <Button onClick={onDelete}>삭제</Button>
           </div>
         </Col>
-        <ReplyPage bbs_key={bbs_key} bbs_writer={bbs_writer}/>
+        <ReplyPage bbs_key={bbs_key} bbs_writer={bbs_writer} />
       </Row>
     </div>
   );
