@@ -92,8 +92,24 @@ public class DiaryDAOImpl implements DiaryDAO{
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("diary_key", diary_key);
 		map.put("diary_thumbnail", diary_thumbnail);
-		session.insert(namespace + ".thumbnail", map);
+		session.update(namespace + ".thumbnail", map);
 		
+	}
+
+	@Override
+	public void photoDelete(int diaryPhoto_key) {
+		session.delete(namespace + ".photoDelete", diaryPhoto_key);
+	}
+
+	@Override
+	public List<HashMap<String, Object>> photoSelect(int diaryPhoto_diary_key) {
+		
+		return session.selectList(namespace + ".photoSelect", diaryPhoto_diary_key);
+	}
+
+	@Override
+	public String thumbnailSelect(int diary_key) {
+		return session.selectOne(namespace + ".thumbnailSelect", diary_key);
 	}
 
 	

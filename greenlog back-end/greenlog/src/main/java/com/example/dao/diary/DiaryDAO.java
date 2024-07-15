@@ -19,6 +19,9 @@ public interface DiaryDAO {
 	public void likePress(DiaryLikeVO vo);
 	public void likeCancel(DiaryLikeVO vo);
 	public void photoInsert(DiaryPhotoVO vo);
+	public void photoDelete(int diaryPhoto_key);
 	public int lastKey();
 	public void thumbnail(int diary_key, String diary_thumbnail);
+	public List<HashMap<String, Object>> photoSelect(int diaryPhoto_diary_key);
+	public String thumbnailSelect(int diary_key);
 }

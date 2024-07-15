@@ -50,12 +50,23 @@
 	<insert id="photoInsert">
 		insert into diaryPhoto(diaryPhoto_diary_key, diaryPhoto_filename) values (#{diaryPhoto_diary_key}, #{diaryPhoto_filename})
 	</insert>
+	<delete id="photoDelete">
+		delete from diaryPhoto where diaryPhoto_key= #{diaryPhto_key}
+	</delete>
 	
 	<select id="lastKey" resultType="int">
-		select distinct(last_insert_id()) last from diary;
+		select distinct(last_insert_id()) as last from diary;
 	</select>
 	
-	<insert id="thumbnail">
-		insert into diary(diary_thumbnail) value (#{diary_thumbnail}) where diary_key = #{diary_key};
-	</insert>
+	<update id="thumbnail">
+		update diary set diary_thumbnail=#{diary_thumbnail} where diary_key = #{diary_key};
+	</update>
+	
+	<select id="photoSelect" resultType="hashmap">
+		select * from diaryPhoto where diaryPhoto_diary_key = #{diaryPhoto_diary_key}
+	</select>
+	
+	<select id="thumbnailSelect" resultType="string">
+		select diary_thumbnail from diary where diary_key=#{diary_key}
+	</select>
 </mapper>
