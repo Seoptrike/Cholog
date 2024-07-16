@@ -23,17 +23,13 @@ public interface UserDAO {
 
 	public void updatePerson(UserVO vo);
 
-	public HashMap<String, Object> mypage1(String uid);
-
 	public List<HashMap<String, Object>> mypage2(String uid);
-
-	public HashMap<String, Object> mypage3(String uid);
-
-	public int mypage4(String uid1, String uid2);
 
 	public UserVO findid(UserVO vo);
 
 	public UserVO findpass(UserVO vo);
 
 	public void updatePass(UserVO vo);
+
+	public HashMap<String, Object> mypage(String uid);
 }
