@@ -3,9 +3,9 @@
 <mapper namespace="com.example.mapper.ReplyMapper">
 
 		<select id="replyList" resultType="hashmap">
-				select * 
-				from reply
-				where reply_bbs_key=#{reply_bbs_key}
+				select r.*, user_nickname, user_img 
+				from reply r, user u
+				where reply_writer= user_uid and reply_bbs_key=#{reply_bbs_key}
 				order by ${key}
 				limit #{start}, #{size};
 		</select>

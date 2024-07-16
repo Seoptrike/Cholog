@@ -32,7 +32,7 @@ const AdminReadPage = () => {
                                 <Card.Body>
                                     <Row>
                                         <Col lg={5}>
-                                            <Card.Img variant="top" src="/images/woman.jpg" width="100%" />
+                                            <Card.Img variant="top" src={form.user_img ||"/images/woman.jpg"} width="100%" />
                                             <Card.Title className='mt-2'>{form.user_uname} 님의 정보</Card.Title>
                                         </Col>
                                         <Col lg={6}>

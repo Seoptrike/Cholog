@@ -64,7 +64,7 @@ const UserListPage = () => {
                                 <Card.Body>
                                     <Row>
                                         <Col lg={5}>
-                                            <a href={`/user/admin/read/${user.user_uid}`}><Card.Img variant="top" src="/images/woman.jpg" width="100%" /></a>
+                                            <a href={`/user/admin/read/${user.user_uid}`}><Card.Img variant="top" src={user.user_img ||"/images/woman.jpg"} width="100%" /></a>
                                             <Card.Title className='mt-2'>{user.user_uname} 님의 정보</Card.Title>
                                         </Col>
                                         <Col lg={6}>

@@ -1,24 +1,38 @@
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react'
-import { Card, Row, Col, InputGroup, Form, Button } from 'react-bootstrap'
+import { Card, Row, Col, InputGroup, Form, Button, Badge } from 'react-bootstrap'
 import { useParams } from 'react-router-dom';
+import { MdOutlineCancel } from "react-icons/md";
+import { DragDropContext, Draggable, Droppable, } from 'react-beautiful-dnd';
 
 
 const DiaryUpdatePage = () => {
   const uid = sessionStorage.getItem("uid");
+
+  //파일추가시 미리보기
+  const refFile = useRef(null);
   const [file, setFile] = useState({
     name: "",
     byte: null
   });
-  const [photo, setPhoto]=useState([]);
-  
-  const callAttach = async()=>{
-    const res2 =await axios.get(`/diary/attach/${diary_key}`);
+
+  const onChangeFile = (e) => {
+    setFile({
+      name: URL.createObjectURL(e.target.files[0]),
+      byte: e.target.files[0]
+    });
+  }
+
+  //현재저장된 사진 가져오기
+  const [photo, setPhoto] = useState([]);
+
+  const callAttach = async () => {
+    const res2 = await axios.get(`/diary/attach/${diary_key}`);
     console.log(res2.data);
     setPhoto(res2.data);
   }
-  
-  const refFile = useRef(null);
+
+
   const [diary, setDiary] = useState({
     diary_title: "",
     diary_contents: "",
@@ -27,26 +41,17 @@ const DiaryUpdatePage = () => {
   });
   const { diary_key } = useParams();
 
+  //다이어리 정보 가져오기
   const callAPI = async () => {
     const res = await axios.get(`/diary/read/${diary_key}?user_uid=${uid}`)
     console.log(res.data);
     setDiary(res.data);
-    setFile({
-      name: res.data.diary_thumbnail,
-      byte: null
-    });
   }
 
   const { diary_contents, diary_title, diary_state, diary_thumbnail } = diary;
   const style = {
     border: '1px solid gray',
     width: '100%',
-  }
-
-  const style2 = {
-    border: '1px solid gray',
-    width: '100%',
-    cursor: 'pointer'
   }
 
   useEffect(() => {
@@ -58,69 +63,65 @@ const DiaryUpdatePage = () => {
     setDiary({ ...diary, [e.target.name]: e.target.value });
   }
 
-  const onChangeFile = (e) => {
-    setFile({
-      name: URL.createObjectURL(e.target.files[0]),
-      byte: e.target.files[0]
-    });
-  }
-
-
-  
-
-  
-
-  //파일 업로드 전 이미지 출력
-  const [files, setFiles] = useState([]);
-  const onChangeFiles = (e) => {
-    let selFiles = [];
-    for (let i = 0; i < e.target.files.length; i++) {
-      const file = {
-        name: URL.createObjectURL(e.target.files[i]),
-        byte: e.target.files[i]
-      }
-      selFiles.push(file);
-    }
-    setFiles(selFiles);
-  }
-
   //일기 썸네일 수정
-  const ThumbnailUpload = async (diary_key) => {
-    if (!window.confirm("변경된 이미지를 대표이미지로 수정하시겠습니까?")) return;
-    const thumbnail = new FormData();
-    thumbnail.append("byte", file);
-    const config = {
-      Headers: { 'content-type': 'multipart/form-data' }
-    }
-    await axios.post(`/diary/thumbnail/${diary_key}`, thumbnail, config);
+  const ThumbnailUpload = async (photo) => {
+    console.log(photo);
+    if (!window.confirm("선택하신 사진을 대표이미지로 수정하시겠습니까?")) return;
+    await axios.post(`/diary/update/thumbnail`, photo);
     alert("썸네일이 수정되었습니다.");
     callAttach();
     callAPI();
   }
 
   //사진삭제
-  const onClickDelete =async(photo)=>{
+  const onClickDelete = async (photo) => {
     console.log(photo);
-    if (!window.confirm("변경된 내용을 삭제하시겠습니까?")) return;
-    const res=  await axios.post('/diary/attach/delete', photo);
+    if (!window.confirm("선택하신 사진을 삭제하시겠습니까?")) return;
+    const res = await axios.post('/diary/attach/delete', photo);
     console.log(res.data);
-    if(res.data===0){
+    if (res.data === 0) {
       alert("대표사진은 삭제할 수 없습니다.")
-    }else{
+    } else {
       alert("삭제완료");
       callAttach();
     }
-    
+
+  }
+
+  const onClickImageSave = async () => {
+    if (file.byte === null) return;
+    if (!window.confirm("이 사진을 새로 저장하시겠습니까?")) return;
+    //이미지 업로드
+    const formData = new FormData();
+    formData.append("byte", file.byte);
+    console.log(formData);
+    await axios.post(`/diary/attachOne/${diary_key}`, formData);
+    alert("이미지저장 성공!")
+    setFile("");
+    callAttach();
   }
 
 
-
+  //일기수정
   const onClickUpdate = async () => {
     if (!window.confirm("변경된 내용을 수정하시겠습니까?")) return;
     await axios.post('/diary/update', { diary_title, diary_contents, diary_state, diary_writer: uid, diary_key });
+    await axios.post(`/diary/attach/${diary_key}`, photo);
     alert("수정했습니다!");
     window.location.href = `/diary/read/${diary_key}`;
   }
+
+  //드래그시 필수셋팅
+
+  const handleOnDragEnd = (result) => {    
+    if (!result.destination) return;
+    const items = [...photo];
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+    setPhoto(items);
+    console.log(result.destination.index);
+
+  };
 
 
 
@@ -157,31 +158,58 @@ const DiaryUpdatePage = () => {
                 </Form.Control>
                 <InputGroup className='mb-3'>
                   <InputGroup.Text>제목</InputGroup.Text>
-                  <Form.Control value={diary_title} onChange={onChangeForm} name="diary_title" />
+                  <Form.Control value={diary_title} onChange={onChangeFile} name="diary_title" />
                 </InputGroup>
                 <Row className='justify-content-center mb-3'>
-                 {photo.map(p=>
-                   <Col key={p.diaryPhoto_filename} lg={4} className='mb-2'>
-                   <Button size="sm" onClick={()=>ThumbnailUpload(p.diaryPhoto_diary_key)}>대표사진설정</Button>
-                   <img src={p.diaryPhoto_filename} style={style}/>
-                   <Button onClick={()=>onClickDelete(p)}>삭제</Button>
-                 </Col>
-                 )}
-                </Row>
-                <hr/>
-                <Row>
-                    {files.map(f =>
-                      <Col key={f.name} lg={4} className='mb-2'>
-                        <Button size="sm">대표사진설정</Button>
-                        <img src={f.name} style={style} />
-                      </Col>
-                    )}
+                  <div>
+                    <img src={file.name || "http://via.placeholder.com/200x200"} onClick={() => refFile.current.click()}
+                      style={{ width: "15rem", cursor: "pointer", position: "relative" }} />
+                    {file.name && <Badge onClick={onClickImageSave} bg='danger' style={{ position: "absolute", top: '300px', left: "30px" }}>
+                      이미지추가</Badge>
+                    }
+                  </div>
+                  <Form.Control type="file" ref={refFile} onChange={onChangeFile} style={{ display: 'none' }} />
 
-                  </Row>
-                <InputGroup className='mb-3'>
-                  <Form.Control type="file" onChange={onChangeFiles} multiple />
-                </InputGroup>
-                <div>슬라이더 사진 모달하나 만들어서 사진 파일들 삭제 및 수정 만들기</div>
+                  <DragDropContext onDragEnd={handleOnDragEnd}>
+                    <Droppable droppableId='p.diaryPhoto_filename'>
+                      {(provided) => (
+                        <div
+                          className='p.diaryPhoto_filename'
+                          {...provided.droppableProps} ref={provided.innerRef}
+                        >
+                          <Row>
+                          {photo.map((p, index) => {
+                            return(
+                            <Draggable key={p.diaryPhoto_filename} draggableId={p.diaryPhoto_filename} index={index}>
+                              {(provided) => (
+                              
+                                 <Col key={p.diaryPhoto_filename} lg={5} className='mb-2'
+                                 ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                                 <div style={{ position: "relative" }}>
+                                   {p.diaryPhoto_filename === diary_thumbnail ?
+                                     <Badge style={{ position: "absolute", top: '10px', right: "30px" }} bg='primary'>현재 대표이미지</Badge>
+                                     :
+                                     <Badge onClick={() => ThumbnailUpload(p)} style={{ cursor: "pointer", position: "absolute", top: '10px', right: "30px" }} bg='success'>썸네일 설정하기</Badge>
+                                   }
+                                   <img src={p.diaryPhoto_filename} style={style} />
+                                   <MdOutlineCancel onClick={() => onClickDelete(p)} style={{ cursor: "pointer", position: "absolute", top: '10px', right: "5px" }} />
+                                 </div>
+                               </Col>
+                              
+                          )}
+                            </Draggable>
+                         )}
+                         )}
+                        </Row>
+                          {provided.placeholder}
+                        </div>
+                      )}
+                    </Droppable>
+                  </DragDropContext>
+
+                 
+                </Row>
+                <hr />
                 <InputGroup className='mb-5'>
                   <Form.Control as="textarea" rows={20} value={diary_contents} onChange={onChangeForm} name="diary_contents" />
                 </InputGroup>

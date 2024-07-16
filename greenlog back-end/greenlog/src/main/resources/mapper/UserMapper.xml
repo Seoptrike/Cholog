@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.mapper.UserMapper">
-	<update id="updatePass">
-		update user set user_upass=#{user_upass} where user_uid=#{user_uid}
-	</update>
+   <update id="updatePass">
+      update user set user_upass=#{user_upass} where user_uid=#{user_uid}
+   </update>
 
-	<select id="findpass" resultType="com.example.domain.UserVO">
-		select * from user where user_uname=#{user_uname} and user_phone=#{user_phone} and user_email=#{user_email} and user_uid=#{user_uid}
-	</select>
+   <select id="findpass" resultType="com.example.domain.UserVO">
+      select * from user where user_uname=#{user_uname} and user_phone=#{user_phone} and user_email=#{user_email} and user_uid=#{user_uid}
+   </select>
 
-	<select id="findid" resultType="com.example.domain.UserVO">
-		select * from user where user_uname=#{user_uname} and user_phone=#{user_phone} and user_email=#{user_email}
-	</select>
+   <select id="findid" resultType="com.example.domain.UserVO">
+      select * from user where user_uname=#{user_uname} and user_phone=#{user_phone} and user_email=#{user_email}
+   </select>
 
-	<delete id="delete">
-		delete from user where user_key=#{user_key};
-	</delete>
-
+   <delete id="delete">
+      delete from user where user_key=#{user_key};
+   </delete>
+  
 	<select id="adminList" resultType="hashmap">
 		select * from user
 		<if test="key=='user_uid'"> where user_uid like concat('%', #{word}, '%')</if>
@@ -52,20 +52,39 @@
 		update user set user_img=#{user_img} where user_uid=#{user_uid}
 	</update>
 	
-	<select id="mypage1" resultType="hashmap">
-		select seed_point, count(auction_key) auction, user_nickname, user_img, user_ment
-		from seed, auction, user where user_uid=seed_uid and user_uid=#{user_uid}
-	</select>
 	<select id="mypage2" resultType="hashmap">
 		select * from diary where diary_writer=#{diary_writer}
 	</select>
 	
-	<select id="mypage3" resultType="hashmap">
-		select count(follow_from) as ftotal , count(follow_to) as ttotal from follow where follow_from = #{follow_from}
-	</select>
-	
-	<select id="mypage4" resultType="int">
-		select count(auction_key) from auction where auction_seller=#{auction_seller} or auction_buyer=#{auction_buyer}
-	</select>
-	
+	<select id="mypage" resultType="hashmap">
+    select
+    	u.user_ment, 
+        u.user_uid, 
+        u.user_nickname, 
+        u.user_img, 
+        u.user_ment, 
+        s.seed_point,
+        coalesce(a.auction_count, 0) as auction_count,
+        coalesce(f.following_count, 0) as following_count,
+        coalesce(f.follower_count, 0) as follower_count
+    from user u
+    left join 
+        seed s on u.user_uid = s.seed_uid
+    left join 
+        (select 
+            count(auction.auction_key) as auction_count
+         from 
+            (select auction_buyer as user_uid from auction
+             union all
+             select auction_seller as user_uid from auction) auction_user
+         inner join auction on auction_user.user_uid = auction.auction_buyer or auction_user.user_uid = auction.auction_seller
+         where auction_user.user_uid = #{uid}
+         group by auction_user.user_uid) a 
+    on u.user_uid = u.user_uid  <!-- 수정: a 서브쿼리에서는 u.user_uid를 그대로 사용 -->
+    left join 
+        (select 
+            (select count(*) from follow where follow_from = #{uid}) as following_count,
+            (select count(*) from follow where follow_to = #{uid}) as follower_count) f on u.user_uid = #{uid}
+    where u.user_uid = #{uid};
+</select>
 </mapper>

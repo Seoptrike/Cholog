@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Button, Card, Container, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
-import ReplyPage from '../reply/ReplyPage';
+import AList from '../answers/AList';
+import AInsert from '../answers/AInsert';
 
 const QARead = () => {
   const { qa_key } = useParams();
@@ -73,6 +74,7 @@ const QARead = () => {
       </Row>
       <Row className="justify-content-center mt-3">
         <Col xs={12} md={10} lg={8}>
+          <AList qa_key={qa_key} />
         </Col>
       </Row>
     </Container>

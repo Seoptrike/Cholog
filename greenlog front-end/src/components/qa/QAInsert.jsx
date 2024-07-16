@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form, Button, InputGroup, FormControl, Spinner } from 'react-bootstrap';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import axios from 'axios';
 
 const QAInsert = () => {
@@ -12,19 +10,18 @@ const QAInsert = () => {
   const [form, setForm] = useState({
     qa_title: '',
     qa_contents: '',
-    qa_writer: uid
+    qa_writer: uid,
+    qa_lock: 0 
   });
 
-  const { qa_title, qa_contents, qa_writer } = form;
+  const { qa_title, qa_contents, qa_writer, qa_lock } = form;
 
   const onChangeForm = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const onChangeCKEditor = (event, editor) => {
-    let data = editor.getData();
-    data = data.replace(/<\/?p>/g, '');  // <p> 태그를 제거
-    setForm({ ...form, qa_contents: data });
+  const onChangeCheckbox = (e) => {
+    setForm({ ...form, qa_lock: e.target.checked ? 1 : 0 });
   };
 
   const onSubmit = async (e) => {
@@ -70,6 +67,14 @@ const QAInsert = () => {
             name="qa_contents"
             value={qa_contents}
             onChange={onChangeForm}
+          />
+        </Form.Group>
+        <Form.Group controlId="qa_lock" className="mt-3">
+          <Form.Check 
+            type="checkbox" 
+            label="비밀글로 설정" 
+            checked={qa_lock === 1}
+            onChange={onChangeCheckbox} 
           />
         </Form.Group>
         <Button type="submit" className="mt-3" disabled={loading}>

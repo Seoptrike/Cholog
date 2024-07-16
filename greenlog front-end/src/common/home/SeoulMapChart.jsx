@@ -50,6 +50,16 @@ const SeoulMapChart = () => {
     });
 
     const option = {
+
+        title: {
+            text: 'Seoul Air Quality Map', // 제목 설정
+            left: 'center', // 제목을 가운데 정렬
+            top: 50, // 위에서부터 20px 아래로 설정
+            textStyle: {
+                fontSize: 20, // 제목 글자 크기
+                fontWeight: 'bold' // 제목 글자 두께
+            }
+        },
         tooltip: {
             trigger: 'item',
             formatter: '{b}: {c}'
@@ -95,7 +105,11 @@ const SeoulMapChart = () => {
     }
 
     return (
-        geoJSON ? <ReactECharts option={option} style={{ height: '30rem', width: '100%' }} /> : <div>Loading...</div>
+        geoJSON ?
+            <div>
+                <ReactECharts option={option} style={{ height: '30rem', width: '100%' }} />
+            </div>
+            : <div>Loading...</div>
     );
 }
 

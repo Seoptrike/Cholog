@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Button, Card, Dropdown } from 'react-bootstrap';
+import { Row, Col, Button, Card, Dropdown, Form } from 'react-bootstrap';
 import { SlLock, SlLockOpen } from "react-icons/sl";
 import Pagination from 'react-js-pagination';
 import { BsChevronDown, BsHandThumbsUp, BsHandThumbsDown, BsThreeDotsVertical, BsArrowReturnRight } from "react-icons/bs";
-import InsertPage from './InsertPage';
+import ReplyInsertPage from './ReplyInsertPage';
 import axios from 'axios';
+import RereplyInsertPage from '../rereply/RereplyInsertPage';
+import RereplyPage from '../rereply/RereplyPage';
 
 const ReplyPage = ({ bbs_key, bbs_writer }) => {
     const [page, setPage] = useState(1);
@@ -15,6 +17,7 @@ const ReplyPage = ({ bbs_key, bbs_writer }) => {
     const [reply, setReply] = useState([]);
     const uid = sessionStorage.getItem('uid');
     const [showReply, setShowReply] = useState(false);
+    const [showRep, setShowRep] = useState(false);
 
     const callAPI = async () => {
         const res = await axios.get(`/reply/plist/${bbs_key}?key=${key}&page=${page}&size=${size}`);
@@ -74,7 +77,7 @@ const ReplyPage = ({ bbs_key, bbs_writer }) => {
     //저장하기
     const onSave = async (reply) => {
         if (!window.confirm(`${reply.reply_key}번 댓글을 수정하실래요?`)) return;
-    
+
         try {
             await axios.post(`/reply/update/lock`, { reply_key: reply.reply_key, reply_lock: reply.lock });
             await axios.post('/reply/update', {
@@ -82,7 +85,7 @@ const ReplyPage = ({ bbs_key, bbs_writer }) => {
                 reply_contents: reply.text,
             });
             alert("댓글 수정 완료!");
-            callAPI(); 
+            callAPI();
         } catch (error) {
             console.error('댓글 수정 에러:', error);
         }
@@ -98,6 +101,10 @@ const ReplyPage = ({ bbs_key, bbs_writer }) => {
         setShowReply(!showReply);
     };
 
+    const toggleRep = () => {
+        setShowRep(!showRep);
+    };
+
     return (
         <Row className='justify-content-center mt-3'>
             <Col xs={8}>
@@ -110,7 +117,7 @@ const ReplyPage = ({ bbs_key, bbs_writer }) => {
                 <hr />
                 {showReply && (
                     <Card className='mt-3'>
-                        <InsertPage bbs_key={bbs_key} onNewReply={callAPI} />
+                        <ReplyInsertPage bbs_key={bbs_key} callAPI={callAPI} />
                         <Row className='justify-content-center mt-3'>
                             <Col xs={12} className='text-end'>
                                 <Dropdown onKey={onKey}>
@@ -124,15 +131,16 @@ const ReplyPage = ({ bbs_key, bbs_writer }) => {
                                 </Dropdown>
                             </Col>
                         </Row>
+                        
                         {reply.map(reply => (
                             <Row key={reply.reply_key} className='justify-content-center mt-2'>
-                                <Col xs={9}>
+                                <Col xs={10}>
                                     <div className="d-flex align-items-center justify-content-between mb-2">
                                         <div className="d-flex align-items-center">
-                                            <img src="http://via.placeholder.com/20x20" width="50" className='me-3 rounded-circle' alt="profile" />
+                                            <img src={reply.user_img || "http://via.placeholder.com/20x20"} width="50" className='me-3 rounded-circle' alt="profile" />
                                             <div className="d-flex flex-column">
                                                 <div className="d-flex align-items-center">
-                                                    <span>{reply.reply_writer}</span>
+                                                    <span>{reply.user_nickname} ({reply.reply_writer})</span>
                                                     {!reply.isEdit && (
                                                         <>
                                                             {(uid === reply.reply_writer || uid === bbs_writer) && reply.reply_lock === 'lock' && (
@@ -161,7 +169,7 @@ const ReplyPage = ({ bbs_key, bbs_writer }) => {
                                                     )}
                                                 </div>
                                                 <div>
-                                                    <span>{reply.reply_udate ? `수정일 : ${reply.reply_udate}` : `등록일  : ${reply.reply_regdate}`} </span>
+                                                    <span>{reply.reply_udate ? `${reply.reply_udate}` : `${reply.reply_regdate}`} </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -208,9 +216,18 @@ const ReplyPage = ({ bbs_key, bbs_writer }) => {
                                     <div>
                                         <BsHandThumbsUp className='me-4' />
                                         <BsHandThumbsDown className='me-4' />
-                                        <Button type='button' onClick={() => (reply.reply_key)} variant='' size="sm">댓글 + 1</Button>
+                                        <Button type='button' onClick={toggleRep} variant='' size="sm">댓글 + 1</Button>
                                     </div>
                                     <hr />
+                                    <>
+                                        {showRep && (
+                                            <Row className='justify-content-center mt-3'>
+                                                <Col xs={12}>
+                                                    <RereplyPage reply_key={reply.reply_key} bbs_writer={bbs_writer}/>
+                                                </Col>
+                                            </Row>
+                                        )}
+                                    </>
                                 </Col>
                             </Row>
                         ))}

@@ -125,7 +125,9 @@ const DiaryListPage = () => {
                 </div>
               </Card.Header>
               <Card.Body>
-                <Link to={`/diary/read/${d.diary_key}`}><img src={d.diary_thumbnail ||"http://via.placeholder.com/100x100"} width="100%" /></Link>
+                <Link to={`/diary/read/${d.diary_key}`}>
+                <img src={d.diary_thumbnail ||"http://via.placeholder.com/100x100"} width="100%" height="310" />
+                </Link>
                 <hr />
                 <Col>
                   <div class="ellipsis">{d.diary_contents}</div>
@@ -138,8 +140,7 @@ const DiaryListPage = () => {
                   </div>
                 </Col>
                 <hr />
-                <span> 등록일 : {d.fmtDdate}
-                  / {d.fmtDdate === d.fmtUdate || `수정일: ${d.fmtUdate}`}</span>
+                {d.fmtUdate===d.fmtDdate ?  `등록일: ${d.fmtDdate}`: `수정일: ${d.fmtUdate}`}
               </Card.Body>
             </Card>
           </Col>

@@ -13,6 +13,9 @@ const QAList = () => {
   const [key, setKey] = useState('qa_title');
   const [word, setWord] = useState('');
 
+  const adminIds = ['admin', 'seop', 'hanna', 'gr001231', 'laonmiku', 'ne4102'];
+  const currentUser = sessionStorage.getItem('uid');
+
   const callAPI = async () => {
     const res = await axios.get(`/qa/list.json?key=${key}&word=${word}&page=${page}&size=${size}`);
     setList(res.data.documents);
@@ -60,26 +63,28 @@ const QAList = () => {
           </Col>
         }
       </Row>
-      <Table>
+      <Table className='text-center'>
         <thead>
           <tr>
             <th>번호</th>
             <th>제목</th>
             <th>글쓴이</th>
             <th>등록일</th>
-            <th>조회수</th>
           </tr>
         </thead>
         <tbody>
           {list.map((post, index) => (
-            <tr key={post.qa_key}>
+            <tr key={post.QA_key}>
               <td>{list.length - index}</td>
               <td>
-                <Link to={`/community/qa/read/${post.QA_key}`}>{post.QA_title}</Link>
+                {post.QA_lock === 1 && !adminIds.includes(currentUser) ? (
+                  <span>🔒 비밀글</span>
+                ) : (
+                  <Link to={`/community/qa/read/${post.QA_key}`}>{post.QA_title}</Link>
+                )}
               </td>
               <td>{post.QA_writer}</td>
               <td>{post.QA_regDate}</td>
-              <td>{post.QA_vcnt}</td>
             </tr>
           ))}
         </tbody>

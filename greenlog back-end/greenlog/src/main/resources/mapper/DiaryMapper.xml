@@ -69,4 +69,12 @@
 	<select id="thumbnailSelect" resultType="string">
 		select diary_thumbnail from diary where diary_key=#{diary_key}
 	</select>
+	
+	<update id="updateThumbnail">
+		update diary set diary_thumbnail=#{diaryPhoto_filename} where diary_key = #{diaryPhoto_diary_key};
+	</update>
+	
+	<update id="updatePhoto">
+		update diaryPhoto set 
+	</update>
 </mapper>
