@@ -112,6 +112,12 @@ public class DiaryDAOImpl implements DiaryDAO{
 		return session.selectOne(namespace + ".thumbnailSelect", diary_key);
 	}
 
+	@Override
+	public void updateThumbnail(DiaryPhotoVO vo) {
+		session.update(namespace + ".updateThumbnail", vo);
+		
+	}
+
 	
 
 

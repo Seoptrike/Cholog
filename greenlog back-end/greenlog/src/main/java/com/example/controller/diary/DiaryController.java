@@ -84,7 +84,8 @@ public class DiaryController {
 	public void likeCancel(@RequestBody DiaryLikeVO vo) {
 		dao.likeCancel(vo);
 	}
-
+	
+//사진 여러개 삽입
 	@PostMapping("/attach/{diaryPhoto_diary_key}")
 	public void photoInsert(@PathVariable("diaryPhoto_diary_key") String diaryPhoto_diary_key,
 			MultipartHttpServletRequest multi) {
@@ -100,6 +101,7 @@ public class DiaryController {
 			if (!files.isEmpty()) {
 				for (int i = 0; i < files.size(); i++) {
 					MultipartFile file = files.get(i);
+					
 					if (!file.isEmpty()) {
 						String fileName = UUID.randomUUID().toString() + ".jpg";
 						file.transferTo(new File(uploadPath + fileName));
@@ -193,38 +195,45 @@ public class DiaryController {
 
 		}
 	}
-
-	// 썸네일 수정
-	@PostMapping("/thumbnail/{diary_key}")
-	public void thumbnail(@PathVariable("diary_key") int diary_key, MultipartHttpServletRequest multi) {
-		MultipartFile file = multi.getFile("byte");
-
+	
+	//이미지하나삽입
+	@PostMapping("/attachOne/{diary_key}")
+	public void insertPhoto(@PathVariable("diary_key") int diary_key, MultipartHttpServletRequest multi) {
 		try {
 			String filePath = "diaryUpload/" + diary_key + "/";
-			String fileName = UUID.randomUUID().toString() + ".jpg";
-
 			String directory = System.getProperty("user.dir");
-			String uploadPath = directory + File.separator + "diaryUpload" + File.separator+ filePath;
-
-			File oldFile = new File(uploadPath + fileName);
+			String uploadPath = directory + File.separator + filePath;
+			
+			File oldFile = new File(uploadPath);
 			if (oldFile.exists()) {
 				oldFile.delete();
 			}
-
-			DiaryVO vo = new DiaryVO();
-			vo.setDiary_key(diary_key);
-			vo.setDiary_thumbnail("/diary/display?file=" + diary_key + "/" + fileName);
-			dao.thumbnail(vo.getDiary_key(), vo.getDiary_thumbnail());
-			System.out.println(",,,,,,,,,,,,,저장" + vo.toString());
-
-			File destFile = new File(uploadPath, fileName);
-			file.transferTo(destFile);
-
-			System.out.println(",,,,,,,,,,,," + destFile);
-
-		} catch (Exception e) {
-			System.out.println("대표썸네일업로드오류:" + e.toString());
+			
+			MultipartFile file = multi.getFile("byte");
+			if(file != null && !file.isEmpty()) {
+				String fileName = UUID.randomUUID().toString() + ".jpg";
+				File destFile = new File(uploadPath, fileName);
+				file.transferTo(destFile);
+				
+				DiaryPhotoVO vo = new DiaryPhotoVO();
+				vo.setDiaryPhoto_diary_key(diary_key);
+				vo.setDiaryPhoto_filename("/diary/display?file=" + diary_key + "/" + fileName);
+				
+				dao.photoInsert(vo);
+			}
+			
+			
+		}catch(Exception e) {
+			System.out.println("이미지하나삽입오류:" + e.toString());
 		}
+		
+	}
+	 
+	
+	
+	@PostMapping("/update/thumbnail")
+	public void updateThumbnail (@RequestBody DiaryPhotoVO vo) {
+		dao.updateThumbnail(vo);
 	}
 
 	@GetMapping("/lastKey")

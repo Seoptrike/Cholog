@@ -102,7 +102,7 @@ const DiaryReadPage = () => {
                 </Col>
                 <hr />
                 <div className='text-center mb-3'>
-                 <DiarySlickSlider/>
+                 <DiarySlickSlider diary={diary} setDiary={setDiary}/>
                 </div>
                 <hr />
                 <Col>
