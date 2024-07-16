@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.mapper.UserMapper">
-	<update id="updatePass">
-		update user set user_upass=#{user_upass} where user_uid=#{user_uid}
-	</update>
+   <update id="updatePass">
+      update user set user_upass=#{user_upass} where user_uid=#{user_uid}
+   </update>
 
-	<select id="findpass" resultType="com.example.domain.UserVO">
-		select * from user where user_uname=#{user_uname} and user_phone=#{user_phone} and user_email=#{user_email} and user_uid=#{user_uid}
-	</select>
+   <select id="findpass" resultType="com.example.domain.UserVO">
+      select * from user where user_uname=#{user_uname} and user_phone=#{user_phone} and user_email=#{user_email} and user_uid=#{user_uid}
+   </select>
 
-	<select id="findid" resultType="com.example.domain.UserVO">
-		select * from user where user_uname=#{user_uname} and user_phone=#{user_phone} and user_email=#{user_email}
-	</select>
+   <select id="findid" resultType="com.example.domain.UserVO">
+      select * from user where user_uname=#{user_uname} and user_phone=#{user_phone} and user_email=#{user_email}
+   </select>
 
-	<delete id="delete">
-		delete from user where user_key=#{user_key};
-	</delete>
-
+   <delete id="delete">
+      delete from user where user_key=#{user_key};
+   </delete>
+  
 	<select id="adminList" resultType="hashmap">
 		select * from user
 		<if test="key=='user_uid'"> where user_uid like concat('%', #{word}, '%')</if>
@@ -87,6 +87,4 @@
             (select count(*) from follow where follow_to = #{uid}) as follower_count) f on u.user_uid = #{uid}
     where u.user_uid = #{uid};
 </select>
-
-	
 </mapper>

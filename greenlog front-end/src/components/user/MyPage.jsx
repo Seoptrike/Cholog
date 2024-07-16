@@ -19,14 +19,16 @@ const MyPage = () => {
   const [diary, setDiary] = useState("");
   const [data,setData]= useState({});
 
+
   //일기내용 조회(슬라이더로 목록 만들기)
   const callAPI2 = async () => {
     const res = await axios.get(`/user/mypage2/${user_uid}`);
-   //console.log(res.data);
+    //console.log(res.data);
     setDiary(res.data);
   }
 
-  const callAPI4 = async ()=>{
+
+  const callAPI4 = async () => {
     const res = await axios.get(`/user/mypage/${user_uid}`);
     //console.log(res.data);
     setData(res.data);
@@ -96,7 +98,11 @@ const MyPage = () => {
         <h5 className='text-center'>{data.user_ment}</h5>
       </div>
       <div className='mt-3 mb-5'>
-        <SlidePage diary={diary} setDiary={setDiary}/>
+        <Row className='justify-content-center'>
+          <Col>
+            <SlidePage diary={diary} setDiary={setDiary} />
+          </Col>
+        </Row>
       </div>
       <div className='text-center'>
         <Link to="/diary/insert"><Button className='me-2'>일기쓰기</Button></Link>
