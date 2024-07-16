@@ -56,18 +56,8 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	@Override
-	public HashMap<String, Object> mypage1(String uid) {
-		return session.selectOne(namespace + ".mypage1", uid);
-	}
-
-	@Override
 	public List<HashMap<String, Object>> mypage2(String uid) {
 		return session.selectList(namespace + ".mypage2", uid);
-	}
-
-	@Override
-	public HashMap<String, Object> mypage3(String uid) {
-		return session.selectOne(namespace + ".mypage3", uid);
 	}
 
 	@Override
@@ -91,11 +81,8 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	@Override
-	public int mypage4(String uid1, String uid2) {
-		HashMap<String, Object> map = new HashMap<>();
-		map.put("auction_seller", uid1);
-		map.put("auction_buyer", uid2);
-		return session.selectOne(namespace + ".mypage4", map);
+	public HashMap<String, Object> mypage(String uid) {
+		return session.selectOne(namespace + ".mypage", uid);
 	}
 
 }

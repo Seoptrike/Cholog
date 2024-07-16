@@ -7,6 +7,7 @@ import SeoulMapChart from './SeoulMapChart';
 import O3Chart from './O3Chart';
 import MainSlider from './MainSlider';
 import MallSlider from './MallSlider';
+import ProjectSlider from './ProjectSlider';
 
 const MainPage = () => {
     const navigate = useNavigate();
@@ -14,7 +15,12 @@ const MainPage = () => {
     const handleClick = () => {
         navigate('/diary/insert');  // 원하는 경로로 변경하세요.
     }
-    
+    const textStyle = {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        height: '100%',  // 부모 요소인 Col의 높이를 100%로 설정하여 내부 요소를 수직 가운데 정렬합니다.
+    };
     return (
         <div>
             <div style={{
@@ -54,15 +60,30 @@ const MainPage = () => {
                 </div>
             </div>
             <Row>
+                <Col xs={3}>
+                    <div style={textStyle}>
+                        <span style={{ fontSize: "2.5rem" }}>GREENLOG Project</span>
+                        <br />
+                        <span style={{ fontSize: "0.8rem" }}>GREENLOG carry out projects with clear goals regarding domestic and global environmental issues.</span>
+                    </div>
+                </Col>
+                <Col xs={9}>
+                    <ProjectSlider />
+                </Col>
+            </Row>
+            <Row>
                 <Col xs={8}>
-                    <MallSlider/>
+                    <MallSlider />
                 </Col>
                 <Col xs={4}>
                     <MainSlider />
                 </Col>
             </Row>
             <Row>
-                <h5 className='text-center'>새로 올라온 피망</h5>
+                <h5 className='text-center'>봉사활동</h5>
+            </Row>
+            <Row>
+                <h5 className='text-center'>환경 뉴스</h5>
             </Row>
         </div>
     )

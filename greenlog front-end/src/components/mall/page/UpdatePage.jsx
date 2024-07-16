@@ -274,7 +274,7 @@ export const UpdatePage = () => {
                   </Col>
                 )}
                 <Col xs={2}>
-                  <img src={file.name || "/images/sorry.png"} style={{ borderRadius: "50%", width: "10rem", height: "10rem" }} onClick={() => refFile.current.click()} />
+                  <img src={file.name || "/images/plus.png"} style={{ borderRadius: "50%", width: "10rem", height: "10rem" }} onClick={() => refFile.current.click()} />
                   <input ref={refFile} type="file" onChange={onChangeFile} style={{ display: "none" }} />
                   {file.name &&
                     <div className="text-center mt-2"><Button onClick={onClickImageSave} size="sm">이미지 추가</Button></div>

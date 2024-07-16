@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.dao.seed.SeedDAO;
@@ -50,7 +49,7 @@ public class UserController {
 
 	@GetMapping("/admin/list")
 	public HashMap<String, Object> adminList(QueryVO vo) {
-		HashMap<String,Object> map=new HashMap<String,Object>();
+		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("total", udao.total(vo));
 		map.put("documents", udao.adminList(vo));
 		return map;
@@ -101,24 +100,13 @@ public class UserController {
 		return result;
 	}
 
-	// 마이페이지 포인트, 옥션, 유저정보
-	@GetMapping("/mypage1/{user_uid}")
-	public HashMap<String, Object> mypage1(@PathVariable("user_uid") String uid) {
-		return udao.mypage1(uid);
-	}
-
 	@GetMapping("/mypage2/{user_uid}")
 	public List<HashMap<String, Object>> mypage2(@PathVariable("user_uid") String uid) {
 		return udao.mypage2(uid);
 	}
 
-	@GetMapping("/mypage3/{user_uid}")
-	public HashMap<String, Object> mypage3(@PathVariable("user_uid") String uid) {
-		return udao.mypage3(uid);
-	}
-	
-	@GetMapping("/mypage4")
-	public int mypage4(@RequestParam("auction_seller") String uid1, @RequestParam("auction_buyer") String uid2) {
-		return udao.mypage4(uid1, uid2);
+	@GetMapping("/mypage/{user_uid}")
+	public HashMap<String, Object> mypage(@PathVariable("user_uid") String uid) {
+		return udao.mypage(uid);
 	}
 }
