@@ -20,93 +20,93 @@ import com.example.domain.UserVO;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-   @Autowired
-   UserDAO udao;
+	@Autowired
+	UserDAO udao;
 
-   @Autowired
-   SeedDAO sdao;
+	@Autowired
+	SeedDAO sdao;
 
-   @Autowired
-   PasswordEncoder encoder;
+	@Autowired
+	PasswordEncoder encoder;
 
-   @PostMapping("/updatePass")
-   public void updatePass(@RequestBody UserVO vo) {
-      // 비밀번호 암호화
-      String upass = encoder.encode(vo.getUser_upass());
-      vo.setUser_upass(upass);
-      udao.updatePass(vo);
-   }
+	@PostMapping("/updatePass")
+	public void updatePass(@RequestBody UserVO vo) {
+		// 비밀번호 암호화
+		String upass = encoder.encode(vo.getUser_upass());
+		vo.setUser_upass(upass);
+		udao.updatePass(vo);
+	}
 
-   @PostMapping("/findpass")
-   public UserVO findpass(@RequestBody UserVO vo) {
-      return udao.findpass(vo);
-   }
+	@PostMapping("/findpass")
+	public UserVO findpass(@RequestBody UserVO vo) {
+		return udao.findpass(vo);
+	}
 
-   @PostMapping("/findid")
-   public UserVO findid(@RequestBody UserVO vo) {
-      return udao.findid(vo);
-   }
+	@PostMapping("/findid")
+	public UserVO findid(@RequestBody UserVO vo) {
+		return udao.findid(vo);
+	}
 
-   @GetMapping("/admin/list")
-   public HashMap<String, Object> adminList(QueryVO vo) {
-      HashMap<String, Object> map = new HashMap<String, Object>();
-      map.put("total", udao.total(vo));
-      map.put("documents", udao.adminList(vo));
-      return map;
-   }
+	@GetMapping("/admin/list")
+	public HashMap<String, Object> adminList(QueryVO vo) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("total", udao.total(vo));
+		map.put("documents", udao.adminList(vo));
+		return map;
+	}
 
-   @PostMapping("/delete/{user_key}")
-   public void delete(@PathVariable("user_key") int user_key) {
-      udao.delete(user_key);
-   }
+	@PostMapping("/delete/{user_key}")
+	public void delete(@PathVariable("user_key") int user_key) {
+		udao.delete(user_key);
+	}
 
-   @PostMapping("/insert")
-   public void insert(@RequestBody UserVO vo) {
-      // 비밀번호 암호화
-      String upass = encoder.encode(vo.getUser_upass());
-      vo.setUser_upass(upass);
-      ;
-      udao.insert(vo);
-   }
+	@PostMapping("/insert")
+	public void insert(@RequestBody UserVO vo) {
+		// 비밀번호 암호화
+		String upass = encoder.encode(vo.getUser_upass());
+		vo.setUser_upass(upass);
+		;
+		udao.insert(vo);
+	}
 
-   @GetMapping("/read/{user_uid}")
-   public UserVO read(@PathVariable("user_uid") String uid) {
-      return udao.read(uid);
-   }
+	@GetMapping("/read/{user_uid}")
+	public UserVO read(@PathVariable("user_uid") String uid) {
+		return udao.read(uid);
+	}
 
-   // 관리자용 업데이트(권한/성별 수정가능)
-   @PostMapping("/admin/update")
-   public void update(@RequestBody UserVO vo) {
-      udao.update(vo);
-   }
+	// 관리자용 업데이트(권한/성별 수정가능)
+	@PostMapping("/admin/update")
+	public void update(@RequestBody UserVO vo) {
+		udao.update(vo);
+	}
 
-   // 개인정보 업데이트
-   @PostMapping("/update")
-   public void updatePerson(@RequestBody UserVO vo) {
-      udao.updatePerson(vo);
-   }
+	// 개인정보 업데이트
+	@PostMapping("/update")
+	public void updatePerson(@RequestBody UserVO vo) {
+		udao.updatePerson(vo);
+	}
 
-   @PostMapping("/login")
-   public int login(@RequestBody UserVO vo) {
-      int result = 0; // 아이디없음
-      UserVO user = udao.read(vo.getUser_uid());
-      if (user != null) {
-         if (encoder.matches(vo.getUser_upass(), user.getUser_upass())) {
-            result = 1; // 로그인 성공
-         } else {
-            result = 2; // 비밀번호 틀림
-         }
-      }
-      return result;
-   }
+	@PostMapping("/login")
+	public int login(@RequestBody UserVO vo) {
+		int result = 0; // 아이디없음
+		UserVO user = udao.read(vo.getUser_uid());
+		if (user != null) {
+			if (encoder.matches(vo.getUser_upass(), user.getUser_upass())) {
+				result = 1; // 로그인 성공
+			} else {
+				result = 2; // 비밀번호 틀림
+			}
+		}
+		return result;
+	}
 
-   @GetMapping("/mypage2/{user_uid}")
-   public List<HashMap<String, Object>> mypage2(@PathVariable("user_uid") String uid) {
-      return udao.mypage2(uid);
-   }
+	@GetMapping("/mypage2/{user_uid}")
+	public List<HashMap<String, Object>> mypage2(@PathVariable("user_uid") String uid) {
+		return udao.mypage2(uid);
+	}
 
-   @GetMapping("/mypage/{user_uid}")
-   public HashMap<String, Object> mypage(@PathVariable("user_uid") String uid) {
-      return udao.mypage(uid);
-   }
+	@GetMapping("/mypage/{user_uid}")
+	public HashMap<String, Object> mypage(@PathVariable("user_uid") String uid) {
+		return udao.mypage(uid);
+	}
 }

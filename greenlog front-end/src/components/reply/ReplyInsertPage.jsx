@@ -3,7 +3,7 @@ import { Row, Col, Button, FormControl, InputGroup } from 'react-bootstrap';
 import { SlLock, SlLockOpen } from "react-icons/sl";
 import axios from 'axios';
 
-const InsertPage = ({ bbs_key, onNewReply }) => {
+const ReplyInsertPage = ({ bbs_key, callAPI }) => {
     const [form, setForm] = useState({
         reply_bbs_key: bbs_key,
         reply_writer: sessionStorage.getItem('uid'),
@@ -40,11 +40,8 @@ const InsertPage = ({ bbs_key, onNewReply }) => {
                 reply_reaction: 'none'
             });
             setOnCancel(false);
+            callAPI();
 
-            // 부모 컴포넌트에서 댓글 목록 다시 불러오기
-            if (onNewReply) {
-                onNewReply();
-            }
         } catch (error) {
             console.error('댓글 등록 에러:', error);
         }
@@ -64,8 +61,7 @@ const InsertPage = ({ bbs_key, onNewReply }) => {
 
     return (
         <div>
-            <h5 className='text-center'></h5>
-            <Row className='justify-content-center'>
+            <Row className='justify-content-center mt-3'>
                 <Col xs={9}>
                     <div>
                         <form onSubmit={onSubmit} onReset={onClickCancel}>
@@ -98,4 +94,4 @@ const InsertPage = ({ bbs_key, onNewReply }) => {
     )
 }
 
-export default InsertPage;
+export default ReplyInsertPage;

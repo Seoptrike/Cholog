@@ -16,53 +16,49 @@
    <delete id="delete">
       delete from user where user_key=#{user_key};
    </delete>
-
-   <select id="adminList" resultType="hashmap">
-      select * from user
-      <if test="key=='user_uid'"> where user_uid like concat('%', #{word}, '%')</if>
-      <if test="key=='user_uname'">where user_uname like concat('%', #{word}, '%')</if>
-      <if test="key=='user_nickname'">where user_nickname like concat('%', #{word}, '%')</if>
-      <if test="key=='user_birth'">where user_birth like concat('%', #{word}, '%')</if>
-      order by user_regDate desc
-      limit #{start}, #{size} ;
-   </select>
-   
-   <select id="adminListTotal" resultType="int">
-      select count(*) from user;
-   </select>
-   
-   <insert id="insert" >
-      insert into user( user_uid, user_upass, user_uname, user_nickname, user_email, user_phone, user_gender, user_birth, user_address1, user_address2 )
-      value (#{user_uid},#{user_upass},#{user_uname},#{user_nickname},#{user_email},#{user_phone},#{user_gender},#{user_birth},#{user_address1},#{user_address2})
-   </insert>
-   
-   <select id="read" resultType="com.example.domain.UserVO">
-      select * from user where user_uid=#{uid}
-   </select>
-   
-   <update id="adminUpdate">
-      update user set user_nickname=#{user_nickname}, user_birth=#{user_birth}, user_gender=#{user_gender}, user_phone=#{user_phone}, user_email=#{user_email},
-      user_address1=#{user_address1}, user_address2=#{user_address2}, user_auth=#{user_auth} where user_uid=#{user_uid}
-   </update>
-   <update id="personUpdate">
-      update user set user_uname=#{user_uname}, user_phone=#{user_phone}, user_address1=#{user_address1}, user_address2=#{user_address2}, user_birth=#{user_birth},
-      user_nickname=#{user_nickname}, user_email=#{user_email}, user_ment=#{user_ment} where user_uid=#{user_uid}
-   </update>
-   <update id="imgUpdate">
-      update user set user_img=#{user_img} where user_uid=#{user_uid}
-   </update>
-   
-   <select id="mypage2" resultType="hashmap">
-      select *, date_format(diary_regDate,'%Y년%m월%d일 %T') as fmtDdate, 
-		date_format(diary_uDate,'%Y년%m월%d일 %T') as fmtUdate,
-		(select count(*) from diaryLike f where user_uid=#{user_uid} and f.diary_key=d.diary_key) ucnt, 
-		(select count(*) from diaryLike f where f.diary_key=d.diary_key) fcnt   
-		from diary d where d.diary_writer=#{diary_writer}
-   </select>
-   
-   <select id="mypage" resultType="hashmap">
+  
+	<select id="adminList" resultType="hashmap">
+		select * from user
+		<if test="key=='user_uid'"> where user_uid like concat('%', #{word}, '%')</if>
+		<if test="key=='user_uname'">where user_uname like concat('%', #{word}, '%')</if>
+		<if test="key=='user_nickname'">where user_nickname like concat('%', #{word}, '%')</if>
+		<if test="key=='user_birth'">where user_birth like concat('%', #{word}, '%')</if>
+		order by user_regDate desc
+		limit #{start}, #{size} ;
+	</select>
+	
+	<select id="adminListTotal" resultType="int">
+		select count(*) from user;
+	</select>
+	
+	<insert id="insert" >
+		insert into user( user_uid, user_upass, user_uname, user_nickname, user_email, user_phone, user_gender, user_birth, user_address1, user_address2 )
+		value (#{user_uid},#{user_upass},#{user_uname},#{user_nickname},#{user_email},#{user_phone},#{user_gender},#{user_birth},#{user_address1},#{user_address2})
+	</insert>
+	
+	<select id="read" resultType="com.example.domain.UserVO">
+		select * from user where user_uid=#{uid}
+	</select>
+	
+	<update id="adminUpdate">
+		update user set user_nickname=#{user_nickname}, user_birth=#{user_birth}, user_gender=#{user_gender}, user_phone=#{user_phone}, user_email=#{user_email},
+		user_address1=#{user_address1}, user_address2=#{user_address2}, user_auth=#{user_auth} where user_uid=#{user_uid}
+	</update>
+	<update id="personUpdate">
+		update user set user_uname=#{user_uname}, user_phone=#{user_phone}, user_address1=#{user_address1}, user_address2=#{user_address2}, user_birth=#{user_birth},
+		user_nickname=#{user_nickname}, user_email=#{user_email}, user_ment=#{user_ment} where user_uid=#{user_uid}
+	</update>
+	<update id="imgUpdate">
+		update user set user_img=#{user_img} where user_uid=#{user_uid}
+	</update>
+	
+	<select id="mypage2" resultType="hashmap">
+		select * from diary where diary_writer=#{diary_writer}
+	</select>
+	
+	<select id="mypage" resultType="hashmap">
     select
-       u.user_ment, 
+    	u.user_ment, 
         u.user_uid, 
         u.user_nickname, 
         u.user_img, 
@@ -91,6 +87,4 @@
             (select count(*) from follow where follow_to = #{uid}) as follower_count) f on u.user_uid = #{uid}
     where u.user_uid = #{uid};
 </select>
-
-   
 </mapper>

@@ -15,7 +15,7 @@ public class ReviewVO {
 	@JsonFormat(pattern="yyyy년MM월dd일 HH:mm:ss", timezone="Asia/Seoul")
 	private Date review_regDate;
 	@JsonFormat(pattern="yyyy년MM월dd일 HH:mm:ss", timezone="Asia/Seoul")
-	private Date review_udate;
+	private Date review_uDate;
 	
 	public int getReview_key() {
 		return review_key;
@@ -60,10 +60,10 @@ public class ReviewVO {
 		this.review_regDate = review_regDate;
 	}
 	public Date getReview_udate() {
-		return review_udate;
+		return review_uDate;
 	}
 	public void setReview_udate(Date review_udate) {
-		this.review_udate = review_udate;
+		this.review_uDate = review_udate;
 	}
 	
 	@Override
@@ -71,7 +71,7 @@ public class ReviewVO {
 		return "ReviewVO [review_key=" + review_key + ", review_mall_key=" + review_mall_key + ", review_writer="
 				+ review_writer + ", review_rating=" + review_rating + ", review_contents=" + review_contents
 				+ ", review_lock=" + review_lock + ", review_regDate=" + review_regDate + ", review_udate="
-				+ review_udate + "]";
+				+ review_uDate + "]";
 	}
 	
 	

@@ -42,9 +42,16 @@ const O3Chart = () => {
     };
 
     const options = {
-        chart: {
-            title: "Air Quality Data over Time",
-            subtitle: "오존, 이산화황, 일산화탄소, 이산화질소 levels",
+        title: "지난 일주일간의 금천구 대기변화", // 제목 설정
+        titleTextStyle: {
+            fontSize: 18,
+            bold: true,
+            textAlign: 'center', // 제목 가운데 정렬
+        },
+        chartArea: {
+            width: '80%',
+            height: '70%',
+            top: '100', // 픽셀 단위로 조정
         },
         series: {
             1: { curveType: 'function' },
@@ -57,7 +64,7 @@ const O3Chart = () => {
             <Chart
                 chartType="LineChart"
                 width="100%"
-                height="30rem"
+                height="25rem"
                 data={data}
                 options={options}
             />

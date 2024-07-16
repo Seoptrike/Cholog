@@ -22,14 +22,14 @@ public interface UserDAO {
    public void imgUpdate(UserVO vo);
 
    public void updatePerson(UserVO vo);
+  
+	public List<HashMap<String, Object>> mypage2(String uid);
 
-   public List<HashMap<String, Object>> mypage2(String uid);
+	public UserVO findid(UserVO vo);
 
-   public UserVO findid(UserVO vo);
+	public UserVO findpass(UserVO vo);
 
-   public UserVO findpass(UserVO vo);
+	public void updatePass(UserVO vo);
 
-   public void updatePass(UserVO vo);
-
-   public HashMap<String, Object> mypage(String uid);
+	public HashMap<String, Object> mypage(String uid);
 }

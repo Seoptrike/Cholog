@@ -16,8 +16,9 @@ import axios from 'axios';
 
 const MyPage = () => {
   const { user_uid } = useParams();
-  const [diary, setDiary] = useState([]);
-  const [data, setData] = useState({});
+  const [diary, setDiary] = useState("");
+  const [data,setData]= useState({});
+
 
   //일기내용 조회(슬라이더로 목록 만들기)
   const callAPI2 = async () => {
@@ -25,6 +26,7 @@ const MyPage = () => {
     //console.log(res.data);
     setDiary(res.data);
   }
+
 
   const callAPI4 = async () => {
     const res = await axios.get(`/user/mypage/${user_uid}`);
@@ -42,7 +44,7 @@ const MyPage = () => {
       <h1 className='text-center my-5'>{data.user_nickname}님 환영합니다</h1>
       <Row className='my-5'>
         <Col lg={5}>
-          <Link to={`/user/update/${user_uid}`}><img src={data.user_img || "http://via.placeholder.com/200x200"} width="100%" /></Link>
+          <Link to={`/user/update/${user_uid}`}><img src={data.user_img||"http://via.placeholder.com/200x200"} width="100%" /></Link>
         </Col>
         <Col lg={7}>
           <Card>

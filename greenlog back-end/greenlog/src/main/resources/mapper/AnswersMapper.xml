@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.mapper.AnswersMapper">
+    <insert id="insert">
+        INSERT INTO answers (answers_answer, content, QA_key)
+        VALUES (#{answers_answer}, #{content}, #{QA_key})
+    </insert>
+    
+    <update id="update">
+        update answers
+        set answers_answer = #{answers_answer}, content = #{content}
+        where answers_key = #{answers_key}
+    </update>
+    
+    <delete id="delete">
+        delete from answers where answers_key = #{answers_key}
+    </delete>
+    
+    <select id="read" resultType="com.example.domain.AnswersVO">
+        SELECT * FROM answers WHERE answers_key = #{answers_key}
+    </select>
+    
+    <select id="list" resultType="hashmap">
+        select * 
+        from answers
+        where QA_key = #{QA_key}
+    </select>
+    
+    <select id="total" resultType="int">
+        select count(*)
+        from answers
+        where QA_key = #{QA_key}
+    </select>
+</mapper>
