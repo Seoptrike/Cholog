@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.RereplyMapper">
+		
+		<select id="rereplyList" resultType="hashmap">
+				select r.*, user_nickname, user_img 
+				from rereply r, user u
+				where rereply_writer= user_uid and reply_key=#{reply_key}
+		</select>
+		
+		<insert id="insert">
+				insert into rereply ( reply_key, rereply_writer, rereply_contents )
+				value ( #{reply_key}, #{rereply_writer}, #{rereply_contents})
+		</insert>
+		
+		<delete id="delete">
+				delete from rereply where rereply_key=#{rereply_key};
+		</delete>
+		
+		<update id="update">
+				update rereply set rereply_contents=#{rereply_contents}, rereply_udate=now()
+				where rereply_key=#{rereply_key}
+		</update>
+		
+		<select id="total" resultType="int">
+				select count(*) as total from rereply where reply_key=#{reply_key} ;
+		</select>
+		
+</mapper>

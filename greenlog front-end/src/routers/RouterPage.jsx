@@ -11,6 +11,7 @@ import CommunityRouter from './CommunityRouter'
 import DiaryRouter from './DiaryRouter'
 import TradeRouter from './TradeRouter'
 import AuctionRouter from './AuctionRouter'
+import RereplyRouter from './RereplyRouter'
 
 
 const RouterPage = () => {
@@ -22,6 +23,7 @@ const RouterPage = () => {
             <Route path='/report/*' element={<ReportRouter />} />
             <Route path='/review/*' element={<ReviewRouter />} />
             <Route path='/reply/*' element={<ReplyRouter />} />
+            <Route path='/rereply/*' element={<RereplyRouter/>}/>
             <Route path='/about/*' element={<AboutRouter />} />
             <Route path='/community/*' element={<CommunityRouter />} />
             <Route path='/diary/*' element={<DiaryRouter />} />

@@ -131,7 +131,7 @@ const ReviewPage = ({ mall_key, mall_seller, seller_number }) => {
                             <Card.Body>
                                 <Row className='align-items-center'>
                                     <Col xs="auto">
-                                        <img src="http://via.placeholder.com/30x30" width="70" height="70" className='rounded-circle' alt="profile" />
+                                        <img src={review.user_img||"http://via.placeholder.com/30x30"} width="70" height="70" className='rounded-circle' alt="profile" />
                                         <div className='mt-2'>{review.review_writer}</div>
                                     </Col>
                                     <Col className="ps-2">
@@ -182,7 +182,7 @@ const ReviewPage = ({ mall_key, mall_seller, seller_number }) => {
                                             </Col>
                                         </Row>
                                         <Col>
-                                            <span>{review.review_udate ? `수정일 : ${review.review_udate}` : `등록일  : ${review.review_regDate}`} </span>
+                                            <span>{review.review_uDate ? `수정일 : ${review.review_uDate}` : `등록일  : ${review.review_regDate}`} </span>
                                         </Col>
                                         <Row className='align-items-center my-2'>
                                             <Col>
