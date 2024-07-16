@@ -135,7 +135,7 @@ export const UpdatePage = () => {
         if (!window.confirm('변경취소! 이전 페이지로 돌아갑니다!')) return;
         window.location.href = `/mall/read/${mall_key}`;
     }
-    
+
     useEffect(() => {
         callAPI();
         callAttach();
@@ -242,34 +242,33 @@ export const UpdatePage = () => {
                                 onChange={onChangeForm}
                             />
                         </Grid>
-                       <Grid item xs={12}>
-              <Row>
-                {photos.map(photo =>
-                  <Col key={photo.mallPhoto_key} xs={2} className='mt-2'>
-                    <div style={{ position: "relative" }}>
-                      <span>
-                        {mall_photo === photo.mallPhoto_photo ?
-                          <Badge style={{ position: "absolute", top: '10px', right: "30px" }} bg='primary'>현재 대표이미지</Badge>
-                          :
-                          <Badge onClick={() => onUpdateMainPhoto(photo)} style={{ cursor: "pointer", position: "absolute", top: '10px', right: "30px" }} bg='success'>썸네일 설정하기</Badge>
-                        }
-                        <Badge onClick={() => onClickDelete(photo)} style={{ cursor: "pointer", position: "absolute", top: '10px', right: "5px" }} bg='danger'>X</Badge>
-                      </span>
-                    </div>
+                        <Grid item xs={12}>
+                            <Row>
+                                {photos.map(photo =>
+                                    <Col key={photo.mallPhoto_key} xs={2} className='mt-2'>
+                                        <div style={{ position: "relative" }}>
+                                            <span>
+                                                {mall_photo === photo.mallPhoto_photo ?
+                                                    <Badge style={{ position: "absolute", top: '10px', right: "30px" }} bg='primary'>현재 대표이미지</Badge>
+                                                    :
+                                                    <Badge onClick={() => onUpdateMainPhoto(photo)} style={{ cursor: "pointer", position: "absolute", top: '10px', right: "30px" }} bg='success'>썸네일 설정하기</Badge>
+                                                }
+                                                <Badge onClick={() => onClickDelete(photo)} style={{ cursor: "pointer", position: "absolute", top: '10px', right: "5px" }} bg='danger'>X</Badge>
+                                            </span>
+                                        </div>
 
-                    <img src={photo.mallPhoto_photo} style={{ borderRadius: "50%", width: "10rem", height: "10rem" }} />
-                  </Col>
-                )}
-                <Col xs={2}>
-                  <img src={file.name || "/images/plus.png"} style={{ borderRadius: "50%", width: "10rem", height: "10rem" }} onClick={() => refFile.current.click()} />
-                  <input ref={refFile} type="file" onChange={onChangeFile} style={{ display: "none" }} />
-                  {file.name &&
-                    <div className="text-center mt-2"><Button onClick={onClickImageSave} size="sm">이미지 추가</Button></div>
-                  }
-                </Col>
-              </Row>
-            </Grid>
-
+                                        <img src={photo.mallPhoto_photo} style={{ borderRadius: "50%", width: "10rem", height: "10rem" }} />
+                                    </Col>
+                                )}
+                                <Col xs={2}>
+                                    <img src={file.name || "/images/plus.png"} style={{ borderRadius: "50%", width: "10rem", height: "10rem" }} onClick={() => refFile.current.click()} />
+                                    <input ref={refFile} type="file" onChange={onChangeFile} style={{ display: "none" }} />
+                                    {file.name &&
+                                        <div className="text-center mt-2"><Button onClick={onClickImageSave} size="sm">이미지 추가</Button></div>
+                                    }
+                                </Col>
+                            </Row>
+                        </Grid>
                         <Grid item xs={12} className="text-end">
                             <Button type="submit" variant="outline-secondary" >게시글 수정</Button>
                             <Button onClick={onClickCancel} variant="outline-secondary" >취소</Button>
