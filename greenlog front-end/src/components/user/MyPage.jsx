@@ -16,7 +16,7 @@ import axios from 'axios';
 
 const MyPage = () => {
   const { user_uid } = useParams();
-  const [diary, setDiary] = useState("");
+  const [diary, setDiary] = useState([]);
   const [data,setData]= useState({});
 
 
@@ -26,7 +26,6 @@ const MyPage = () => {
     //console.log(res.data);
     setDiary(res.data);
   }
-
 
   const callAPI4 = async () => {
     const res = await axios.get(`/user/mypage/${user_uid}`);
