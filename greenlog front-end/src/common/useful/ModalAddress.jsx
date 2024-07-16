@@ -9,7 +9,7 @@ const ModalAddress = (props) => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const onComplet= (e) => {
-        //console.log(e);
+        console.log(e);
         const address = e.buildingName ? `${e.address}(${e.buildingName})` : e.address;
         setform({...form, user_address1:address});
         handleClose();
