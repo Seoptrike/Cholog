@@ -23,6 +23,7 @@ const DiaryUpdatePage = () => {
     });
   }
 
+  const { diary_key } = useParams();
   //현재저장된 사진 가져오기
   const [photo, setPhoto] = useState([]);
 
@@ -39,7 +40,7 @@ const DiaryUpdatePage = () => {
     diary_state: "",
     diary_thumbnail: ""
   });
-  const { diary_key } = useParams();
+ 
 
   //다이어리 정보 가져오기
   const callAPI = async () => {
@@ -88,6 +89,25 @@ const DiaryUpdatePage = () => {
 
   }
 
+  
+ 
+  //드래그시 필수셋팅
+  const handleOnDragEnd = (result) => {    
+    if (!result.destination) return;
+    const items = [...photo];
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+    console.log("item", items);
+    const updateSequence = items.map((item, index)=>({
+      ...item,
+      diaryPhoto_sequence:index
+    }));
+    setPhoto(updateSequence);
+  };
+
+
+
+
   const onClickImageSave = async () => {
     if (file.byte === null) return;
     if (!window.confirm("이 사진을 새로 저장하시겠습니까?")) return;
@@ -103,25 +123,16 @@ const DiaryUpdatePage = () => {
 
 
   //일기수정
-  const onClickUpdate = async () => {
+  const onClickUpdate = async (photo) => {
     if (!window.confirm("변경된 내용을 수정하시겠습니까?")) return;
+    photo.forEach(async p => {
+      await axios.post('/diary/update/attach', p);
+      console.log(p);
+    });
     await axios.post('/diary/update', { diary_title, diary_contents, diary_state, diary_writer: uid, diary_key });
-    await axios.post(`/diary/attach/${diary_key}`, photo);
-    alert("수정했습니다!");
-    window.location.href = `/diary/read/${diary_key}`;
+    alert("수정완료");
+   window.location.href = `/diary/read/${diary_key}`;
   }
-
-  //드래그시 필수셋팅
-
-  const handleOnDragEnd = (result) => {    
-    if (!result.destination) return;
-    const items = [...photo];
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-    setPhoto(items);
-    console.log(result.destination.index);
-
-  };
 
 
 
@@ -158,20 +169,11 @@ const DiaryUpdatePage = () => {
                 </Form.Control>
                 <InputGroup className='mb-3'>
                   <InputGroup.Text>제목</InputGroup.Text>
-                  <Form.Control value={diary_title} onChange={onChangeFile} name="diary_title" />
+                  <Form.Control value={diary_title} onChange={onChangeForm} name="diary_title" />
                 </InputGroup>
                 <Row className='justify-content-center mb-3'>
-                  <div>
-                    <img src={file.name || "http://via.placeholder.com/200x200"} onClick={() => refFile.current.click()}
-                      style={{ width: "15rem", cursor: "pointer", position: "relative" }} />
-                    {file.name && <Badge onClick={onClickImageSave} bg='danger' style={{ position: "absolute", top: '300px', left: "30px" }}>
-                      이미지추가</Badge>
-                    }
-                  </div>
-                  <Form.Control type="file" ref={refFile} onChange={onChangeFile} style={{ display: 'none' }} />
-
                   <DragDropContext onDragEnd={handleOnDragEnd}>
-                    <Droppable droppableId='p.diaryPhoto_filename'>
+                    <Droppable droppableId='p.diaryPhoto_filename' direction="vertical"> 
                       {(provided) => (
                         <div
                           className='p.diaryPhoto_filename'
@@ -206,6 +208,14 @@ const DiaryUpdatePage = () => {
                       )}
                     </Droppable>
                   </DragDropContext>
+                  <div>
+                    <img src={file.name || "/images/plus.png"} onClick={() => refFile.current.click()}
+                      style={{ width: "15rem", cursor: "pointer", position: "relative" }} />
+                    {file.name && <Badge onClick={onClickImageSave} bg='danger' style={{ position: "absolute", bottom: '850px', left: "300px" }}>
+                      이미지추가</Badge>
+                    }
+                  </div>
+                  <Form.Control type="file" ref={refFile} onChange={onChangeFile} style={{ display: 'none' }} />
 
                  
                 </Row>
@@ -216,7 +226,7 @@ const DiaryUpdatePage = () => {
               </Col>
             </Row>
             <div className='text-center mb-5'>
-              <Button className='me-2 px-4' onClick={onClickUpdate}>수정</Button>
+              <Button className='me-2 px-4' onClick={()=>onClickUpdate(photo)}>수정</Button>
               <Button className='px-4'>취소</Button>
             </div>
           </Card>

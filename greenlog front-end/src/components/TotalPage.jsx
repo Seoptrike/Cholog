@@ -33,8 +33,9 @@ const TotalPage = () => {
                 <Col xs={2}>
                     <ListGroup>
                         <ListGroup.Item>다이어리</ListGroup.Item>
+                        <ListGroup.Item> <Link to={"/diary/list.json/:diary_writer"}>다이어리목록</Link></ListGroup.Item>
                         <ListGroup.Item> <Link to={"/diary/insert"}>다이어리작성</Link></ListGroup.Item>
-                        <ListGroup.Item> <Link to={"/diary/read/4"}>다이어리읽기</Link></ListGroup.Item>
+                        <ListGroup.Item> <Link to={"/diary/read/103"}>다이어리읽기</Link></ListGroup.Item>
                         <ListGroup.Item> <Link to={"/user/chat"}>채팅방</Link></ListGroup.Item>
                     </ListGroup>
                 </Col>
@@ -51,7 +52,6 @@ const TotalPage = () => {
                         <ListGroup.Item> <Link to={"/auction/list.json/:user_uid"}>개인경매목록</Link></ListGroup.Item>
                         <ListGroup.Item> <Link to={"/auction/read/:auction_key"}>경매거래내역</Link></ListGroup.Item>
                         <ListGroup.Item> <Link to={"/auction/admin/list.json"}>전체경매목록</Link></ListGroup.Item>
-                        <ListGroup.Item> <Link to={"/auction/update/:auction_key"}>경매내역수정</Link></ListGroup.Item>
                     </ListGroup>
                 </Col>
                 <Col xs={2}>
