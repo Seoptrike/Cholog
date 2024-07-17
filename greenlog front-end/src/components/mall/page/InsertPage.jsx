@@ -59,7 +59,7 @@ const InsertPage = () => {
 
     const uploadPhoto = async (mallPhoto_mall_key) => {
         if (files.length === 0) return;
-        if (!window.confirm(`${files.length} 개 파일을 업로드 하시겠습니까?`)) return;
+        if (!window.confirm(`${files.length} 개 파일을 업로드 하시겠습니까? 취소시 이미지는 올라가지 않습니다!`)) return;
 
         try {
             const formData = new FormData();

@@ -21,6 +21,15 @@ public class MallDAOImpl implements MallDAO {
 	public List<HashMap<String, Object>> list(QueryVO vo) {
 		return session.selectList(namespace + ".list", vo);
 	}
+	
+	@Override
+	public List<HashMap<String, Object>> sellerList(String mall_seller,int page,int size) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("mall_seller", mall_seller);
+		map.put("page", page);
+		map.put("size", size);
+		return session.selectList(namespace + ".sellerList",map);
+	}
 
 	@Override
 	public void insertInfo(MallVO vo) {
@@ -87,5 +96,7 @@ public class MallDAOImpl implements MallDAO {
 	public void updateMainPhoto(MallPhotoVO vo) {
 		session.update(namespace + ".updateMainPhoto", vo);
 	}
+
+	
 
 }

@@ -7,7 +7,7 @@ import SellerList from '../read/SellerList';
 import SellerInfo from '../read/SellerInfo';
 import Slider from "react-slick";
 
-import { useNavigate, useParams,Link } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import InsertPage from '../../review/InsertPage';
 import ReviewPage from '../../review/ReviewPage';
@@ -19,7 +19,8 @@ const ReadPage = () => {
     //console.log(mall_key);
     const [form, setForm] = useState({});
     const [list, setList] = useState([]);//슬라이드
-    
+
+
     console.log("read!!!!!!!!!!!!!!" + form);
 
     const [activeTab, setActiveTab] = useState('1');
@@ -38,12 +39,12 @@ const ReadPage = () => {
         const res2 = await axios.get(`/seed/read/${res.data.mall_seller}`)
         setSeedNumber(res2.data)
         //슬라이드
-        const res3 = await axios.get(`/mall/list?key=mall_seller&word=${mall_seller}&page=1&size=20&orderBy=desc`)
+        const res3 = await axios.get(`/mall/list/${res.data.mall_seller}?page=1&size=6`)
         //console.log("ListPage : "+ JSON.stringify(res.data));
-        setList(res3.data.documents);//슬라이드할 유저가 올린 테이블리스트
-        
-    }   
-    const {  fmtudate, mall_uDate, mall_seller, mall_title, mall_info, mall_price, mall_regDate, mall_photo, mall_tstate, mall_pstate, mall_endDate,user_uname, user_address1 } = form;
+        setList(res3.data);//슬라이드할 유저가 올린 테이블리스트
+
+    }
+    const { fmtudate, mall_uDate, mall_seller, mall_title, mall_info, mall_price, mall_regDate, mall_photo, mall_tstate, mall_pstate, mall_endDate, user_uname, user_address1 } = form;
     useEffect(() => {
         callAPI();
     }, [mall_key]) // 판매자정보에서 누르면 url만 바뀌고 안가서 넣어줘야함!
@@ -66,57 +67,63 @@ const ReadPage = () => {
     }
     const mapST = {
         width: '100%',
-        height: '7rem',
+        height: '100%',
         Padding: "0px 0px"
     };
     const photoST = {
-        width: '250px',
-        height: '250px'
+        width: '100%',
+        height: '100%'
     }
     const sellerList = {
         dots: true,
         infinite: false,
         speed: 500,
-        slidesToShow: 5,
+        slidesToShow: 3,
         slidesToScroll: 1
     };
 
-    const slideST = {
-        width: "4rem",
-        height: "4rem"
+    const slideImg = {
+        width: "7rem",
+        height: "7rem",
+        border:"1px solid green",
+        borderRadius:"20%"
     }
 
 
     return (
-
         <div className="read-page mb-5" >
             <h1>리드페이지</h1>
             <div className='my-5'>
                 <div>
-                    <Row className='text-center align-items-center'>
-                        <Col className='m-1'>
+                    <Row className=' align-items-center'>
+                        <Col className=' text-center  text-middle' xs={6} sm={6} md={6} lg={6} xl={6} style={{ whiteSpace: "nowrap" }}>
                             <img style={photoST} src={mall_photo ? mall_photo : ' http://via.placeholder.com/300x300'} alt='상품대표이미지' />
                         </Col>
-                        <Col >
-                            <Row>
+                        <Col className='' xs={6} sm={6} md={6} lg={6} xl={6} style={{ whiteSpace: "nowrap" }} >
+                            <Row className=''style={{height:"20rem"}} >
                                 <Table bordered>
                                     <tbody>
                                         <tr>
-                                            <td className='ellipsis' style={{ borderRight: "0px" }}>{mall_title}</td>
                                             {mall_seller === uid ?
-                                                <td className='text-end' style={{ width: "12%", borderLeft: "0px" }}>
-                                                    <DropdownButton id="dropdown-basic-button" title="수정" size='sm'>
-                                                        <Dropdown.Item onClick={onClickUpdate}>수정하기</Dropdown.Item>
-                                                        <Dropdown.Item onClick={(e) => onClickDelete(e)}>삭제하기</Dropdown.Item>
-                                                    </DropdownButton>
-                                                </td>
-                                                :
-                                                <td className='text-end' style={{ width: "12%", borderLeft: "0px" }}>신고</td>
+                                                <>
+                                                    <td className='ellipsis' style={{ width: "78%",borderRight: "0px",height:"4rem" }}>{mall_title}</td>
+                                                    <td className='text-end' style={{ width: "12%", borderLeft: "0px",height:"4rem" }}>
+                                                        <DropdownButton id="dropdown-basic-button" title="수정" size='sm'>
+                                                            <Dropdown.Item onClick={onClickUpdate}>수정하기</Dropdown.Item>
+                                                            <Dropdown.Item onClick={(e) => onClickDelete(e)}>삭제하기</Dropdown.Item>
+                                                        </DropdownButton>
+                                                    </td>
+                                                </>
+                                            :
+                                                <>
+                                                    <td className='ellipsis' style={{ borderRight: "0px",height:"100%" }}>{mall_title}</td>
+                                                    <td className='text-end' style={{ width: "12%", borderLeft: "0px" }}>신고</td>
+                                                </>
                                             }
                                         </tr>
                                         <tr>
-                                            <td >{mall_tstate === 0 ? "나눔" : (mall_tstate === 1 ? "무료나눔" : "구매")}</td>
-                                            <td className='w-50' >{mall_pstate === 0 ? "중고상품" : "(미개봉,미사용)"}</td>
+                                            <td  style={{ width: "50%"}} >{mall_tstate === 0 ? "나눔" : (mall_tstate === 1 ? "무료나눔" : "구매")}</td>
+                                            <td style={{ width: "50%"}} >{mall_pstate === 0 ? "중고상품" : "(미개봉,미사용)"}</td>
                                         </tr>
                                         <tr>
                                             <td colSpan={2} style={{ width: "100%", height: "80px" }}>
@@ -124,37 +131,31 @@ const ReadPage = () => {
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td className='w-50'>마감일:{mall_endDate}</td>
-                                            <td >{mall_price}씨드</td>
+                                            <td style={{ width: "50%"}}>마감일:{mall_endDate}</td>
+                                            <td style={{ width: "50%"}}>{mall_price}씨드</td>
                                         </tr>
                                         <tr>
-                                            <td className='w-50'>(유저아이콘){mall_seller}</td>
+                                            <td style={{ width: "50%"}}>(유저아이콘){mall_seller}</td>
 
-                                            <td style={{ fontSize: "12px" }}>{fmtudate ? `${fmtudate}(수정됨)` : mall_regDate}</td>
+                                            <td style={{ fontSize: "12px",width:"50%" }}>{fmtudate ? `${fmtudate}(수정됨)` : mall_regDate}</td>
                                         </tr>
                                     </tbody>
                                 </Table>
-
                             </Row>
-                            <Row className='text-center justify-content-center'>
+                            <Row className='' style={{height:"7rem"}} >
                                 <div style={mapST}>
-                                <Slider {...sellerList}>
-                                    {list &&
-                                        list.map(list => (
-                                            <div className='mx-5'>
-                                                <Card className="mx-3">
-                                                    <Card.Body>
-                                                        <Link to={`/mall/read/${list.mall_key}`}>
-                                                            <Card.Title>
-                                                                <img style={slideST} src={list.mall_photo ? list.mall_photo : "http://via.placeholder.com/100x100"} />
-                                                            </Card.Title>
-                                                        </Link>
-                                                    </Card.Body>
-                                                </Card>
-                                            </div>
-                                        ))}
-                                </Slider>
+                                    <Slider {...sellerList}>
+                                        {list &&
+                                            list.map(list => (
+                                                <div className='mx-5'>
+                                                    <Link to={`/mall/read/${list.mall_key}`}>
+                                                        <img style={slideImg} src={list.mall_photo ? list.mall_photo : "http://via.placeholder.com/100x100"} />
+                                                    </Link>
+                                                </div>
+                                            ))}
+                                    </Slider>
                                 </div>
+                                <div>(--------------------------누르면이동-------------------------)</div>
                             </Row>
                         </Col>
                     </Row>

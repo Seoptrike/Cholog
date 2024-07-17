@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -37,6 +38,12 @@ public class MallController {
 		map.put("documents", list);
 		map.put("total", mdao.total(vo));
 		return map;
+	}
+	
+	@GetMapping("/list/{mall_seller}")
+	public List<HashMap<String, Object>> sellerList (@PathVariable("mall_seller") String mall_seller, 
+													  @RequestParam("page") int page,@RequestParam("size") int size){
+		return mdao.sellerList(mall_seller,page,size);
 	}
 
 	@PostMapping("/insert")
@@ -89,7 +96,7 @@ public class MallController {
 						vo.setMallPhoto_mall_key(Integer.parseInt(mallPhoto_mall_key));
 						vo.setMallPhoto_photo("/display?file=" + mallPhoto_mall_key + "/" + fileName);
 
-						// 첫 번째 파일은 mdao.insertMainPhoto와 mdao.insertPhoto 둘 다로 삽입
+						// 첫 번째 파일은 mdao.와 mdao.insertPhoto 둘 다로 삽입
 						if (i == 0) {
 							mdao.insertMainPhoto(Integer.parseInt(mallPhoto_mall_key), vo.getMallPhoto_photo());
 						}

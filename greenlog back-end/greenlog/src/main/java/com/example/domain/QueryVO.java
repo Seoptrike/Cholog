@@ -7,6 +7,8 @@ public class QueryVO {
 	private String key;
 	private String word;
 	private String orderBy;
+	private String stateKey;
+	private int stateWord;
 
 	public int getPage() {
 		return page;
@@ -61,5 +63,23 @@ public class QueryVO {
 	public void setOrderBy(String orderBy) {
 		this.orderBy = orderBy;
 	}
+
+	public String getStateKey() {
+		return stateKey;
+	}
+
+	public void setStateKey(String stateKey) {
+		this.stateKey = stateKey;
+	}
+
+	public int getStateWord() {
+		return stateWord;
+	}
+
+	public void setStateWord(int stateWord) {
+		this.stateWord = stateWord;
+	}
+
+	
 
 }
