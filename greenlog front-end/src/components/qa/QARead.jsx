@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Button, Card, Container, Row, Col } from 'react-bootstrap';
+import { Button, Card, Container, Row, Col, Form, Spinner } from 'react-bootstrap';
 import axios from 'axios';
-import AList from '../answers/AList';
-import AInsert from '../answers/AInsert';
 
 const QARead = () => {
   const { qa_key } = useParams();
@@ -14,12 +12,13 @@ const QARead = () => {
     qa_writer: '',
     qa_regDate: '',
     qa_udate: '',
-    qid: ''
+    comments: ''
   });
 
-  const { qa_contents, qa_title, qa_writer, qa_regDate } = form;
+  const [comment, setComment] = useState(''); // 별도의 상태로 관리
+  const [loading, setLoading] = useState(false);
+  const [editingComment, setEditingComment] = useState(false); // 수정 모드 상태
 
-  // 관리자 아이디 목록
   const adminIds = ['admin', 'seop', 'hanna', 'gr001231', 'laonmiku', 'ne4102'];
   const currentUser = sessionStorage.getItem('uid');
 
@@ -27,9 +26,7 @@ const QARead = () => {
     try {
       const res = await axios.get(`/qa/read/${qa_key}`);
       setForm(res.data);
-      console.log(res.data);
     } catch (error) {
-      console.error('There was an error fetching the post data!', error);
       alert('게시물 데이터를 가져오는 중 오류가 발생했습니다.');
     }
   };
@@ -38,14 +35,61 @@ const QARead = () => {
     callAPI();
   }, [qa_key]);
 
-  const onDelete = async () => {
+  const handleSubmitComment = async (e) => {
+    e.preventDefault();
+    if (!comment) return alert("댓글을 입력하세요!");
+    setLoading(true);
+
+    try {
+      await axios.post(`/qa/update/${qa_key}`, { ...form, comments: comment });
+      setLoading(false);
+      setComment('');
+      callAPI();
+    } catch (error) {
+      setLoading(false);
+      alert('댓글 등록 중 오류가 발생했습니다.');
+    }
+  };
+
+  const handleEditComment = async (e) => {
+    e.preventDefault();
+    if (!comment) return alert("댓글을 입력하세요!");
+    setLoading(true);
+
+    try {
+      await axios.post(`/qa/update/${qa_key}`, { ...form, comments: comment });
+      setLoading(false);
+      setEditingComment(false);
+      callAPI();
+    } catch (error) {
+      setLoading(false);
+      alert('댓글 수정 중 오류가 발생했습니다.');
+    }
+  };
+
+  const handleDeleteComment = async () => {
+    if (!window.confirm("댓글을 삭제하시겠습니까?")) return;
+    setLoading(true);
+
+    try {
+      await axios.post(`/qa/update/${qa_key}`, { ...form, comments: '' });
+      setLoading(false);
+      setComment(''); // 댓글 입력 상태 초기화
+      setEditingComment(false); // 수정 모드 종료
+      callAPI();
+    } catch (error) {
+      setLoading(false);
+      alert('댓글 삭제 중 오류가 발생했습니다.');
+    }
+  };
+
+  const handleDeletePost = async () => {
     if (!window.confirm(`${qa_key}번 게시글을 삭제하실래요?`)) return;
     try {
       await axios.post(`/qa/delete/${qa_key}`);
       alert("게시글 삭제 완료!");
       window.location.href = '/community/qa/list.json';
     } catch (error) {
-      console.error('There was an error deleting the post!', error);
       alert('게시물 삭제 중 오류가 발생했습니다.');
     }
   };
@@ -56,25 +100,71 @@ const QARead = () => {
         <Col xs={12} md={10} lg={8}>
           <Card>
             <Card.Body>
-              <Card.Title>{qa_title}</Card.Title>
-              <Card.Subtitle className="mb-2 text-muted">작성자: {qa_writer}</Card.Subtitle>
-              <Card.Subtitle className="mb-2 text-muted">작성일: {qa_regDate}</Card.Subtitle>
-              <Card.Text>{qa_contents}</Card.Text>
+              <Card.Title>{form.qa_title}</Card.Title>
+              <Card.Subtitle className="mb-2 text-muted">작성자: {form.qa_writer}</Card.Subtitle>
+              <Card.Subtitle className="mb-2 text-muted">작성일: {form.qa_regDate}</Card.Subtitle>
+              <Card.Text>{form.qa_contents}</Card.Text>
               {adminIds.includes(currentUser) && (
                 <>
                   <Link to={`/community/qa/update/${qa_key}`}>
                     <Button className='me-2'>수정</Button>
                   </Link>
-                  <Button onClick={onDelete} className='me-2'>삭제</Button>
+                  <Button onClick={handleDeletePost} className='me-2'>삭제</Button>
                 </>
               )}
             </Card.Body>
           </Card>
-        </Col>
-      </Row>
-      <Row className="justify-content-center mt-3">
-        <Col xs={12} md={10} lg={8}>
-          <AList qa_key={qa_key} />
+
+          {adminIds.includes(currentUser) && !form.comments && (
+            <Card className="mt-4">
+              <Card.Body>
+                <Form onSubmit={handleSubmitComment}>
+                  <Form.Group controlId="comments">
+                    <Form.Control
+                      as="textarea"
+                      rows={3}
+                      value={comment}
+                      onChange={(e) => setComment(e.target.value)}
+                    />
+                  </Form.Group>
+                  <Button type="submit" className="mt-3" disabled={loading}>
+                    {loading ? <Spinner animation="border" size="sm" /> : '댓글 등록'}
+                  </Button>
+                </Form>
+              </Card.Body>
+            </Card>
+          )}
+
+          {form.comments && (
+            <Card className="mt-4">
+              <Card.Body>
+                <h5>답변</h5>
+                {!editingComment ? (
+                  <Card.Text>{form.comments}</Card.Text>
+                ) : (
+                  <Form onSubmit={handleEditComment}>
+                    <Form.Group controlId="editedComment">
+                      <Form.Control
+                        as="textarea"
+                        rows={3}
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                      />
+                    </Form.Group>
+                    <Button type="submit" className="mt-3" disabled={loading}>
+                      {loading ? <Spinner animation="border" size="sm" /> : '댓글 수정'}
+                    </Button>
+                  </Form>
+                )}
+                {adminIds.includes(currentUser) && !editingComment && (
+                  <>
+                    <Button onClick={() => { setEditingComment(true); setComment(form.comments); }} className='me-2'>댓글 수정</Button>
+                    <Button onClick={handleDeleteComment} className='me-2'>댓글 삭제</Button>
+                  </>
+                )}
+              </Card.Body>
+            </Card>
+          )}
         </Col>
       </Row>
     </Container>

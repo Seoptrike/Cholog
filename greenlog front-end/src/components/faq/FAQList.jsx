@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import Pagination from 'react-js-pagination';
 import { Row, Col, InputGroup, Button, Form, Accordion } from 'react-bootstrap';
 import axios from 'axios';
@@ -38,15 +37,15 @@ const FAQList = () => {
     callAPI();
   };
 
-  const handleWriteClick = () => {
+  const WriteClick = () => {
     window.location.href = '/community/faq/insert';
   };
 
-  const handleUpdateClick = (faq_key) => {
+  const UpdateClick = (faq_key) => {
     window.location.href = `/community/faq/update/${faq_key}`;
   };
 
-  const handleDeleteClick = async (faq_key) => {
+  const DeleteClick = async (faq_key) => {
     if (!window.confirm('정말로 이 FAQ를 삭제하시겠습니까?')) return;
     try {
       await axios.post(`/faq/delete/${faq_key}`);
@@ -57,8 +56,9 @@ const FAQList = () => {
     }
   };
 
-  const handleCategoryChange = (e) => {
+  const CategoryChange = (e) => {
     setCategory(e.target.value);
+    setPage(1);
   };
 
   const filterList = () => {
@@ -77,7 +77,7 @@ const FAQList = () => {
       <Row className="mb-3">
         <Col md={10}>
           <InputGroup>
-            <Form.Select className='me-2' value={category} onChange={handleCategoryChange}>
+            <Form.Select className='me-2' value={category} onChange={CategoryChange}>
               <option value="all">전체</option>
               <option value="회원">회원</option>
               <option value="포인트">포인트</option>
@@ -92,11 +92,11 @@ const FAQList = () => {
         </Col>
         {adminIds.includes(currentUser) && (
           <Col className='text-end'>
-            <Button size='sm' onClick={handleWriteClick}>글쓰기</Button>
+            <Button size='sm' onClick={WriteClick}>글쓰기</Button>
           </Col>
         )}
       </Row>
-      <Accordion defaultActiveKey="0">
+      <Accordion defaultActiveKey={null}>
         {filteredList.map((faq, index) => (
           <Accordion.Item eventKey={`${index}`} key={faq.FAQ_key}>
             <Accordion.Header>{faq.FAQ_category} - {faq.FAQ_question}</Accordion.Header>
@@ -104,8 +104,8 @@ const FAQList = () => {
               {faq.FAQ_answer}
               {adminIds.includes(currentUser) && (
                 <div className='mt-3'>
-                  <Button onClick={() => handleUpdateClick(faq.FAQ_key)} className='me-2'>수정</Button>
-                  <Button onClick={() => handleDeleteClick(faq.FAQ_key)}>삭제</Button>
+                  <Button onClick={() => UpdateClick(faq.FAQ_key)} className='me-2'>수정</Button>
+                  <Button onClick={() => DeleteClick(faq.FAQ_key)}>삭제</Button>
                 </div>
               )}
             </Accordion.Body>

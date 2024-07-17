@@ -2,12 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.mapper.QAMapper">
 	 <insert id="insert">
-        INSERT INTO QA (qa_writer, qa_title, qa_contents,qa_lock)
-        VALUES (#{qa_writer}, #{qa_title}, #{qa_contents},#{qa_lock})
+        INSERT INTO QA (qa_writer, qa_title, qa_contents,qa_lock,comments)
+        VALUES (#{qa_writer}, #{qa_title}, #{qa_contents},#{qa_lock},#{comments})
     </insert>
      <update id="update">
 		update QA
-		set qa_title= #{qa_title}, qa_contents=#{qa_contents},qa_lock=#{qa_lock}
+		set qa_title= #{qa_title}, qa_contents=#{qa_contents},qa_lock=#{qa_lock},comments=#{comments}
 		where qa_key=#{qa_key}
 	</update>
 	 <delete id="delete">

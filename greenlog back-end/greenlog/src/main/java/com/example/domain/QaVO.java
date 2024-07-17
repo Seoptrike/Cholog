@@ -16,7 +16,14 @@ public class QaVO {
     private int qa_lock;
     private int qa_state;
     private int qa_vcnt;
+    private String comments;
     
+	public String getComments() {
+		return comments;
+	}
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
 	public int getQa_vcnt() {
 		return qa_vcnt;
 	}
@@ -71,10 +78,11 @@ public class QaVO {
 	public void setQa_state(int qa_state) {
 		this.qa_state = qa_state;
 	}
+	
 	@Override
 	public String toString() {
 		return "QaVO [qa_key=" + qa_key + ", qa_writer=" + qa_writer + ", qa_title=" + qa_title + ", qa_contents="
 				+ qa_contents + ", qa_regDate=" + qa_regDate + ", qa_uDate=" + qa_uDate + ", qa_lock=" + qa_lock
-				+ ", qa_state=" + qa_state + "]";
+				+ ", qa_state=" + qa_state + ", qa_vcnt=" + qa_vcnt + ", comments=" + comments + "]";
 	}
 }
