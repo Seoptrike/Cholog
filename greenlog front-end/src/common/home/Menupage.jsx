@@ -35,10 +35,12 @@ const Menupage = () => {
                             <NavDropdown.Item href="/community/bbs/list.json">자유게시판</NavDropdown.Item>
                             <NavDropdown.Divider />
                             <NavDropdown.Item href="/community/event/list.json">이벤트,봉사</NavDropdown.Item>
+                            <NavDropdown.Divider />
                             <NavDropdown.Item href="/about/carspot">전기차 빌리기</NavDropdown.Item>
                         </NavDropdown>
                         <NavDropdown title="고객센터" id="basic-nav-dropdown">
                         <NavDropdown.Item href="/community/faq/list.json">FAQ,Q&A,공지사항</NavDropdown.Item>
+                        <NavDropdown.Divider />
                             <NavDropdown.Item href="/community/ask/list.json">1대1 문의하기</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>

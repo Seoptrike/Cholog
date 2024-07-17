@@ -24,8 +24,6 @@ import AskRead from '../components/ask/AskRead';
 import AskUpdate from '../components/ask/AskUpdate';
 import NoticeInsert from '../components/notice/NoticeInsert';
 import FAQRead from '../components/faq/FAQRead';
-import AList from '../components/answers/AList'
-import AInsert from '../components/answers/AInsert';
 
 const CommunityRouter = () => {
   return (
@@ -54,8 +52,6 @@ const CommunityRouter = () => {
       <Route path="/ask/list.json" element={<AskList />} />
       <Route path="/ask/read/:ask_key" element={<AskRead />} />
       <Route path="/ask/update/:ask_key" element={<AskUpdate />} />
-      <Route path="/answers/list.json" element={<AList/>} />
-      <Route path="/answers/insert" element={<AInsert/>} />
     </Routes>
   );
 };

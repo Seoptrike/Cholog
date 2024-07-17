@@ -77,8 +77,7 @@ const BBSInsert = () => {
         <CKEditor
           editor={ClassicEditor}
           data={bbs_contents}
-          onChange={onChangeCKEditor}
-        />
+          onChange={onChangeCKEditor}/>
         <Button type="submit" className="mt-3" disabled={loading}>
           {loading ? <Spinner animation="border" size="sm" /> : '등록'}
         </Button>

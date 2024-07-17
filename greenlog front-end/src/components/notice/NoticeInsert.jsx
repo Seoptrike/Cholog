@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form, Button, InputGroup, FormControl, Spinner } from 'react-bootstrap';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import axios from 'axios';
 
 const NoticeInsert = () => {
@@ -24,12 +22,6 @@ const NoticeInsert = () => {
 
   const onChangeCategory = (e) => {
     setForm({ ...form, notice_type: parseInt(e.target.value) });
-  };
-
-  const onChangeCKEditor = (event, editor) => {
-    let data = editor.getData();
-    data = data.replace(/<\/?p>/g, '');  // <p> 태그를 제거
-    setForm({ ...form, notice_contents: data });
   };
 
   const onSubmit = async (e) => {

@@ -77,7 +77,7 @@ const QAList = () => {
             <tr key={post.QA_key}>
               <td>{list.length - index}</td>
               <td>
-                {post.QA_lock === 1 && !adminIds.includes(currentUser) ? (
+                {post.QA_lock === 1 && !adminIds.includes(currentUser) && currentUser !== post.QA_writer ? (
                   <span>🔒 비밀글</span>
                 ) : (
                   <Link to={`/community/qa/read/${post.QA_key}`}>{post.QA_title}</Link>
