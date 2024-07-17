@@ -118,6 +118,12 @@ public class DiaryDAOImpl implements DiaryDAO{
 		
 	}
 
+	@Override
+	public void updatePhoto(DiaryPhotoVO vo) {
+		session.update(namespace + ".updatePhoto", vo);
+	}
+
+
 	
 
 

@@ -35,4 +35,14 @@ public class AuctionImpl implements AuctionDAO {
 	public int total(String uid) {
 		return session.selectOne(namespace + ".total", uid);
 	}
+
+	@Override
+	public List<HashMap<String, Object>> adminAList(QueryVO vo) {
+		return session.selectList(namespace + ".adminAList", vo);
+	}
+
+	@Override
+	public int admintotal() {
+		return session.selectOne(namespace + ".admintotal");
+	}
 }

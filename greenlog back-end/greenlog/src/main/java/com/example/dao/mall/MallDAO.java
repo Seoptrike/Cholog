@@ -35,5 +35,7 @@ public interface MallDAO {
 	public String getMainPhoto(int mall_key);
 
 	public void updateMainPhoto(MallPhotoVO vo);
+	
+	public void updatePhoto(MallPhotoVO vo);
 
 }

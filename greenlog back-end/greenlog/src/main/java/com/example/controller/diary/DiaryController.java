@@ -110,6 +110,7 @@ public class DiaryController {
 						DiaryPhotoVO vo = new DiaryPhotoVO();
 						vo.setDiaryPhoto_diary_key(Integer.parseInt(diaryPhoto_diary_key));
 						vo.setDiaryPhoto_filename("/diary/display?file=" + diaryPhoto_diary_key + "/" + fileName);
+						vo.setDiaryPhoto_sequence(i);
 
 						if (i == 0) {
 							dao.thumbnail(vo.getDiaryPhoto_diary_key(), vo.getDiaryPhoto_filename());
@@ -230,11 +231,18 @@ public class DiaryController {
 	}
 	 
 	
-	
+	//썸네일 업데이트
 	@PostMapping("/update/thumbnail")
 	public void updateThumbnail (@RequestBody DiaryPhotoVO vo) {
 		dao.updateThumbnail(vo);
 	}
+	
+	@PostMapping("/update/attach")
+	public void updatePhoto(@RequestBody DiaryPhotoVO vo) {
+		System.out.println("............................." + vo.toString());
+		dao.updatePhoto(vo);
+	}
+
 
 	@GetMapping("/lastKey")
 	public int lastKey() {

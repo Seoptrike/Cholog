@@ -1,23 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import { Card, Row, Col, Button } from 'react-bootstrap'
-import SlidePage from './SlidePage'
 import { FaSeedling } from "react-icons/fa";
-import { Padding } from '@mui/icons-material';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
+import MypageSlick from './MypageSlick';
+import { PiUserCirclePlus } from "react-icons/pi";
+import { PiUserCircleMinusThin } from "react-icons/pi";
+
 
 
 
 //이미지를 누르면 정보수정페이지로 이동
 //아이콘은 css로 움직일 예정
 //슬릭슬라이더는 css추가로 입체적으로 제작 예정
-//슬릭슬라이더를 누를 시, 일기읽기페이지로 이동
 //일기쓰기, 게시판쓰기 버튼을 누를시 각 쓰기 페이지로 이동 
 
 const MyPage = () => {
   const { user_uid } = useParams();
   const [diary, setDiary] = useState([]);
-  const [data,setData]= useState({});
+  const [data, setData] = useState({});
 
 
   //일기내용 조회(슬라이더로 목록 만들기)
@@ -41,18 +42,25 @@ const MyPage = () => {
   return (
     <div>
       <h1 className='text-center my-5'>{data.user_nickname}님 환영합니다</h1>
+     <div className='text-end'>
+      {}
+      <PiUserCirclePlus style={{cursor:"pointer", fontSize:"60px"}}/>
+      <PiUserCircleMinusThin style={{cursor:"pointer", fontSize:"60px"}}/>
+     </div>
       <Row className='my-5'>
         <Col lg={5}>
-          <Link to={`/user/update/${user_uid}`}><img src={data.user_img||"http://via.placeholder.com/200x200"} width="100%" /></Link>
+          <Link to={`/user/update/${user_uid}`}><img src={data.user_img || "http://via.placeholder.com/200x200"} width="100%" height="100%"/></Link>
         </Col>
         <Col lg={7}>
           <Card>
             <Card.Body>
-              <span>오늘도 탄소지킴이 역할을 톡톡히 하셨나요?</span>
+              <h3 className='text-center'>오늘도 탄소지킴이 역할을 톡톡히 하셨나요?</h3>
               <div className='mt-2'>
                 <Row>
+                  {user_uid === sessionStorage.getItem("uid") &&
+                  <Row>
                   <Col>
-                    <Card>
+                     <Card>
                       <Card.Body>
                         <Link to={`/user/wallet/${user_uid}`}>씨드: {data.seed_point}점</Link>
                       </Card.Body>
@@ -65,6 +73,8 @@ const MyPage = () => {
                       </Card.Body>
                     </Card>
                   </Col>
+                  </Row>
+                  }
                   <Col>
                     <Card>
                       <Card.Body>
@@ -99,7 +109,7 @@ const MyPage = () => {
       <div className='mt-3 mb-5'>
         <Row className='justify-content-center'>
           <Col>
-            <SlidePage diary={diary} setDiary={setDiary} />
+            <MypageSlick diary={diary} setDiary={setDiary} />
           </Col>
         </Row>
       </div>

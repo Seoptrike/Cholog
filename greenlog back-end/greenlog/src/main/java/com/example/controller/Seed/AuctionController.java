@@ -39,4 +39,14 @@ public class AuctionController {
 		map.put("total", adao.total(uid));
 		return map;
 	}
+	
+	@GetMapping("/admin/list")
+	public HashMap<String, Object> adminAList(QueryVO vo){
+		HashMap<String, Object> map = new HashMap<>();
+		List<HashMap<String, Object>> list = adao.adminAList(vo);
+		map.put("documents", list);
+		map.put("total", adao.admintotal());
+		return map;
+		
+	}
 }
