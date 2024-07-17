@@ -95,8 +95,9 @@ public class MallController {
 						MallPhotoVO vo = new MallPhotoVO();
 						vo.setMallPhoto_mall_key(Integer.parseInt(mallPhoto_mall_key));
 						vo.setMallPhoto_photo("/display?file=" + mallPhoto_mall_key + "/" + fileName);
-
-						// 첫 번째 파일은 mdao.와 mdao.insertPhoto 둘 다로 삽입
+						vo.setMallPhoto_sequence(i);
+						
+						// 첫 번째 파일은 mdao.insertMainPhoto와 mdao.insertPhoto 둘 다로 삽입
 						if (i == 0) {
 							mdao.insertMainPhoto(Integer.parseInt(mallPhoto_mall_key), vo.getMallPhoto_photo());
 						}
@@ -190,8 +191,15 @@ public class MallController {
 		}
 	}
 
+	//대표사진 수정
 	@PostMapping("/update/mainPhoto")
 	public void updateMainPhoto(@RequestBody MallPhotoVO vo) {
 		mdao.updateMainPhoto(vo);
+	}
+	
+	//사진순서 수정
+	@PostMapping("/update/photo")
+	public void updatePhoto(@RequestBody MallPhotoVO vo) {
+		mdao.updatePhoto(vo);
 	}
 }

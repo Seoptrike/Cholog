@@ -97,6 +97,9 @@ public class MallDAOImpl implements MallDAO {
 		session.update(namespace + ".updateMainPhoto", vo);
 	}
 
-	
+	@Override
+	public void updatePhoto(MallPhotoVO vo) {
+		session.update(namespace + ".updatePhoto", vo);
+	}
 
 }

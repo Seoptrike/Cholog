@@ -1,13 +1,11 @@
-import axios from 'axios';
-import React, { useEffect } from 'react'
-import { InputGroup, Form, Button, Row, Col } from 'react-bootstrap'
+import React from 'react'
+import { Form, Row, Col } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
-import SeoulMap from '../useful/SeoulMap';
-import SeoulMapChart from './SeoulMapChart';
-import O3Chart from './O3Chart';
 import MainSlider from './MainSlider';
 import MallSlider from './MallSlider';
 import ProjectSlider from './ProjectSlider';
+import Articles from './Articles';
+import FollowingDiaryList from '../../components/follow/FollowingDiaryList';
 
 const MainPage = () => {
     const navigate = useNavigate();
@@ -72,19 +70,27 @@ const MainPage = () => {
                 </Col>
             </Row>
             <Row>
+                <h5 className='text-center'>봉사활동</h5>
+            </Row>
+            <Row>
                 <Col xs={8}>
-                    <MallSlider />
+                    <FollowingDiaryList/>
                 </Col>
                 <Col xs={4}>
                     <MainSlider />
                 </Col>
             </Row>
             <Row>
-                <h5 className='text-center'>봉사활동</h5>
+                <Col xs={2}>
+                    <div className='text-center'>환경 주요뉴스</div>
+                    <Articles />
+                </Col>
+                <Col xs={10}>
+                    <MallSlider />
+                </Col>
             </Row>
-            <Row>
-                <h5 className='text-center'>환경 뉴스</h5>
-            </Row>
+
+
         </div>
     )
 }

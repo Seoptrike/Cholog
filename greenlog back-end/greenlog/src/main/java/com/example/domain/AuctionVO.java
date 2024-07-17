@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class AuctionVO {
+public class AuctionVO{
 	private int auction_key;
 	private int auction_mall_key;
 	private String auction_seller;

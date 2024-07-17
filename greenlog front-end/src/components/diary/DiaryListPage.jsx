@@ -1,4 +1,3 @@
-import { Input } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Card, Row, Col, InputGroup, Form, Button, Badge } from 'react-bootstrap'
@@ -9,7 +8,6 @@ import '../../common/useful/Paging.css';
 import Pagination from 'react-js-pagination'
 
 
-//대표사진 출력기능
 //스피너기능 넣기
 
 const DiaryListPage = () => {
@@ -17,7 +15,7 @@ const DiaryListPage = () => {
   const [list, setList] = useState([]);
   const [origin, setOrigin] = useState([]);
   const [checked, setChecked] = useState(0);
-  const [size, setSize] = useState(4);
+  const [size, setSize] = useState(8);
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(0);
   const { diary_writer } = useParams();
@@ -66,6 +64,7 @@ const DiaryListPage = () => {
         if (cnt === checked) {
           alert(`${cnt}개 일기가 삭제되었습니다`);
           callAPI();
+          setPage(1);
         }
       }
     })
@@ -103,7 +102,7 @@ const DiaryListPage = () => {
     <div>
       <h1 className='my-5 text-center'>행운일기목록</h1>
       <Row>
-        {count === 0 ||
+        {(count===0) || sessionStorage.getItem("uid")===diary_writer &&
           <>
             <div>
               <input type="checkbox" onClick={onChangeAll} checked={list.length === checked} className='me-2' /> 전체선택
@@ -114,8 +113,8 @@ const DiaryListPage = () => {
           </>
         }
         {list.map(d =>
-          <Col lg={3} key={d.diary_key}>
-            <Card className='mb-3'>
+          <Col lg={3} key={d.diary_key} className="mb-5 mt-3">
+            <Card className='mb-3' style={{height:"100%", width:"100%"}}>
               <Card.Header>
                 <input onChange={(e) => onChangeSingle(e, d.diary_key)}
                   type="checkbox" checked={d.checked} className='me-2' />

@@ -12,4 +12,8 @@ public interface AuctionDAO {
 	public List<HashMap<String, Object>> userAList(String uid, QueryVO vo);
 
 	public int total(String uid);
+	
+	public List<HashMap<String, Object>> adminAList(QueryVO vo);
+	
+	public int admintotal();
 }

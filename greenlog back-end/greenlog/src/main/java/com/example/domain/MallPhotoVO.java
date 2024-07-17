@@ -4,6 +4,15 @@ public class MallPhotoVO extends MallVO {
 	private int mallPhoto_key;
 	private int mallPhoto_mall_key;
 	private String mallPhoto_photo;
+	private int mallPhoto_sequence;
+
+	public int getMallPhoto_sequence() {
+		return mallPhoto_sequence;
+	}
+
+	public void setMallPhoto_sequence(int mallPhoto_sequence) {
+		this.mallPhoto_sequence = mallPhoto_sequence;
+	}
 
 	public int getMallPhoto_key() {
 		return mallPhoto_key;

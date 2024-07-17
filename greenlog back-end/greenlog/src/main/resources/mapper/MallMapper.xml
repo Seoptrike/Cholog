@@ -49,6 +49,15 @@
       insert into mall(mall_seller, mall_title, mall_info, mall_price, mall_photo, mall_tstate, mall_pstate, mall_endDate)
       values(#{mall_seller}, #{mall_title}, #{mall_info}, #{mall_price}, #{mall_photo}, #{mall_tstate}, #{mall_pstate}, #{mall_endDate})
    </insert>
+  
+	<insert id="insertPhoto">
+		insert into mallPhoto (mallPhoto_mall_key, mallPhoto_photo, mallPhoto_sequence) 
+		values (#{mallPhoto_mall_key},#{mallPhoto_photo}, #{mallPhoto_sequence})
+	</insert>
+
+	<update id="updatePhoto">
+		update mallPhoto set mallPhoto_sequence=#{mallPhoto_sequence} where mallPhoto_key=#{mallPhoto_key}
+	</update>
 	
 	<select id="total" resultType="int">
 		select count(*) as total
@@ -93,7 +102,7 @@
 	</select>
 	
 	<select id="listMallPhoto" resultType="hashmap">
-	 	select * from mallPhoto where mallPhoto_mall_key= #{mallPhto_key}
+	 	select * from mallPhoto where mallPhoto_mall_key= #{mallPhto_key} order by mallphoto_sequence;
 	 </select>
 	 
 	 <update id="insertMainPhoto">
