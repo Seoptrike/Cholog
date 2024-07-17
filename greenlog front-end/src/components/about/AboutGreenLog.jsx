@@ -3,13 +3,17 @@ import { Row, Col } from 'react-bootstrap'
 
 const AboutGreenLog = () => {
     return (
-        <Row className='justify-content-center mb-5'>
-            <Col xs={10}>
-                <div className='text-center'>
-                    <img src="/images/intro.png" width={"80%"} />
-                </div>
-            </Col>
-        </Row>
+        <div>
+            <Row className='justify-content-center mb-5'>
+                <Col xs={12}>
+                    <div className='text-center'>
+                        <img src="/images/about1.png" width={"100%"} />
+                        <img src="/images/about4.png" width={"100%"} />
+                        <img src="/images/about2.png" width={"100%"} />
+                    </div>
+                </Col>
+            </Row>
+        </div>
     )
 }
 
