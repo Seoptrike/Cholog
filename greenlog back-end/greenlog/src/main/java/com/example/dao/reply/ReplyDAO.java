@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.example.domain.QueryVO;
+import com.example.domain.ReplyLikeVO;
 import com.example.domain.ReplyVO;
 
 public interface ReplyDAO {
@@ -14,5 +15,6 @@ public interface ReplyDAO {
 	public void update(ReplyVO vo);
 	public void updateLock(ReplyVO vo);
 	public int total(int reply_bbs_key);
+	public void updatereplyLike (ReplyLikeVO vo);
 
 }

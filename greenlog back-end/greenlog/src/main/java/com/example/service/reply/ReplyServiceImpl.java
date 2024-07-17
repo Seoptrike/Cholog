@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.dao.reply.ReplyDAO;
 import com.example.domain.QueryVO;
+import com.example.domain.ReplyLikeVO;
 import com.example.domain.ReplyVO;
 
 @Service
@@ -36,6 +37,12 @@ public class ReplyServiceImpl implements ReplyService {
 	@Override
 	public void updateLock(ReplyVO vo) {
 			rdao.updateLock(vo);
+		
+	}
+
+	@Override
+	public void updatereplyLike(ReplyLikeVO vo) {
+			rdao.updatereplyLike(vo);
 		
 	}
 

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.dao.reply.ReplyDAO;
 import com.example.domain.QueryVO;
+import com.example.domain.ReplyLikeVO;
 import com.example.domain.ReplyVO;
 import com.example.service.reply.ReplyService;
 
@@ -45,6 +46,11 @@ public class ReplyController {
 		@PostMapping("/update/lock")
 		public void updateLock(@RequestBody ReplyVO vo) {
 				rservice.updateLock(vo);
+		}
+		
+		@PostMapping("/update/replyLike")
+		public void updatereplyLike(@RequestBody ReplyLikeVO vo) {
+				rservice.updatereplyLike(vo);
 		}
 		
 		@GetMapping("/list/{review_bbs_key}")

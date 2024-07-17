@@ -16,6 +16,7 @@ public class RereplyVO {
 		private Date rereply_udate;
 		private String rereply_lock;
 		private String rereply_reaction;
+		
 		public int getRereply_key() {
 			return rereply_key;
 		}
