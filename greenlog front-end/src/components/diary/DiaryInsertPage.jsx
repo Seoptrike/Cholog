@@ -47,7 +47,8 @@ const DiaryInsertPage = () => {
     for (let i = 0; i < e.target.files.length; i++) {
       const file = {
         name: URL.createObjectURL(e.target.files[i]),
-        byte: e.target.files[i]
+        byte: e.target.files[i],
+        sequence: i
       }
       selFiles.push(file);
     }
@@ -75,17 +76,6 @@ const DiaryInsertPage = () => {
     console.err("첨부파일업로드오류:" , error);
     alert("첨부파일 업로드 중 오류가 발생했습니다.");
   }
-  }
-
-  //일기대표사진저장
-  const ThumbnailUpload = async (diary_key) => {
-    if (!window.confirm("자동적으로 첫번째 사진이 대표 이미지가 됩니다. 다른 사진으로 수정하고 싶으신 경우, 수정에 가셔서 수정해주시면 됩니다."));
-    const thumbnail = new FormData();
-    thumbnail.append("byte", files[0].byte);
-    const config = {
-      Headers: { 'content-type': 'multipart/form-data' }
-    }
-    await axios.post(`/diary/thumbnail/${diary_key}`, thumbnail, config);
   }
 
 

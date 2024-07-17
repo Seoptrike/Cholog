@@ -11,6 +11,8 @@ public interface MallDAO {
 	// 리스트(+셀러물품들),리드(+사진만+셀러정보),업데이트,딜리트
 
 	public List<HashMap<String, Object>> list(QueryVO vo);
+	
+	public List<HashMap<String, Object>> sellerList(String mall_seller,int page,int size);
 
 	public void insertInfo(MallVO vo);
 
@@ -35,5 +37,7 @@ public interface MallDAO {
 	public String getMainPhoto(int mall_key);
 
 	public void updateMainPhoto(MallPhotoVO vo);
+	
+	public void updatePhoto(MallPhotoVO vo);
 
 }

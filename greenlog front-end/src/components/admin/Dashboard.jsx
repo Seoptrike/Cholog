@@ -1,12 +1,21 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Sidebar from './Sidebar'
 import { Row, Col, Button, Badge, ListGroup } from 'react-bootstrap'
 import PieChart from '../../common/useful/PieChart'
+import axios from 'axios'
+import ReportPage from './ReportPage'
+import FiberNewIcon from '@mui/icons-material/FiberNew';
 
 //전체데이터필요, 차트출력 및 뱃지데이터 출력
 //오늘의 할일을 버튼대신 listGroup을 사용할지 고민(넣어놓기만 함)
 //차트 컴포넌트 추가
 const Dashboard = () => {
+    const [reportCount, setReportCount] = useState('');
+    const callAPI = async () => {
+        const res = await axios.get("/report/count")
+        setReportCount(res.data)
+    }
+    useEffect(() => { callAPI() }, [])
     return (
         <div>
             <Row>
@@ -17,7 +26,11 @@ const Dashboard = () => {
                     <h2 className='text-center my-5'>관리자 000님 오늘도 초록데이</h2>
                     <div className='mb-3'><h4>오늘의 할일</h4></div>
                     <div className='today mb-5'>
-                        <Button className='px-5 me-5'>신고접수 <Badge bg="secondary">9</Badge></Button>
+                        <Button className='px-5 me-5'>
+                            {reportCount > 0 ? <FiberNewIcon style={{ color: "yellow" }} /> : null}
+                            신고접수
+                            <Badge bg="secondary">{reportCount}</Badge>
+                        </Button>
                         <Button className='px-5 me-5'>포인트관리 <Badge bg="secondary">9</Badge></Button>
                         <Button className='px-5 me-5'>1:1 <Badge bg="secondary">9</Badge></Button>
                         <Button className='px-5 me-5'>Q&A <Badge bg="secondary">9</Badge></Button>
@@ -71,7 +84,9 @@ const Dashboard = () => {
                                     </ListGroup.Item>
                                 </ListGroup>
                             </Col>
-                            <Col>신고접수내용</Col>
+                            <Col>
+                                <div>신고접수내용</div>
+                            </Col>
                         </Row>
                     </div>
                 </Col>

@@ -5,23 +5,38 @@
 		select *
 		from mall
 		 <where>
-        <if test="key == 'mall_seller'">
-           mall_seller like concat('%', #{word}, '%')
-        </if>
-        <if test="key == 'mall_title'">
-            mall_title like concat('%', #{word}, '%')
-        </if>
-        <if test="key == 'mall_info'">
-           mall_info like concat('%', #{word}, '%')
-        </if>
-    </where>
+	        <if test="key == 'mall_seller'">
+	           mall_seller like concat('%', #{word}, '%') 
+				
+	        </if>
+	        <if test="key == 'mall_title'">
+	            mall_title like concat('%', #{word}, '%') 
+	        </if>
+	        <if test="key == 'mall_info'">
+	           mall_info like concat('%', #{word}, '%') 
+	        </if>
+	         <if test="stateKey == 'mall_pstate'">
+                AND mall_pstate = #{stateWord}
+            </if>
+            <if test="stateKey == 'mall_tstate'">
+                AND mall_tstate = #{stateWord}
+            </if>
+    	</where>
     	<if test="orderBy == 'desc'">
-        order by mall_regDate desc
+        	order by mall_regDate desc
 	    </if>
 	    <if test="orderBy == 'asc'">
 	        order by mall_regDate asc
 	    </if>
 		limit #{start}, #{size}
+	</select>
+	
+	<select id="sellerList" resultType="hashmap">
+		select *
+		from mall
+        where mall_seller = #{mall_seller} and mall_endDate > now() 
+        order by mall_regDate desc
+		limit #{page}, #{size}
 	</select>
 	
 	<select id="read" resultType="hashmap">
@@ -34,27 +49,37 @@
       insert into mall(mall_seller, mall_title, mall_info, mall_price, mall_photo, mall_tstate, mall_pstate, mall_endDate)
       values(#{mall_seller}, #{mall_title}, #{mall_info}, #{mall_price}, #{mall_photo}, #{mall_tstate}, #{mall_pstate}, #{mall_endDate})
    </insert>
-   
-	
+  
 	<insert id="insertPhoto">
-		insert into mallPhoto (mallPhoto_mall_key, mallPhoto_photo) 
-		values (#{mallPhoto_mall_key},#{mallPhoto_photo})
+		insert into mallPhoto (mallPhoto_mall_key, mallPhoto_photo, mallPhoto_sequence) 
+		values (#{mallPhoto_mall_key},#{mallPhoto_photo}, #{mallPhoto_sequence})
 	</insert>
+
+	<update id="updatePhoto">
+		update mallPhoto set mallPhoto_sequence=#{mallPhoto_sequence} where mallPhoto_key=#{mallPhoto_key}
+	</update>
 	
 	<select id="total" resultType="int">
 		select count(*) as total
 		from mall
-		 <where>
-        <if test="key == 'mall_seller'">
-            mall_seller like concat('%', #{word}, '%')
-        </if>
-        <if test="key == 'mall_title'">
-            mall_title like concat('%', #{word}, '%')
-        </if>
-        <if test="key == 'mall_info'">
-            mall_info like concat('%', #{word}, '%')
-        </if>
-    </where>
+		  <where>
+	        <if test="key == 'mall_seller'">
+	           mall_seller like concat('%', #{word}, '%') 
+				
+	        </if>
+	        <if test="key == 'mall_title'">
+	            mall_title like concat('%', #{word}, '%') 
+	        </if>
+	        <if test="key == 'mall_info'">
+	           mall_info like concat('%', #{word}, '%') 
+	        </if>
+	         <if test="stateKey == 'mall_pstate'">
+                AND mall_pstate = #{stateWord}
+            </if>
+            <if test="stateKey == 'mall_tstate'">
+                AND mall_tstate = #{stateWord}
+            </if>
+    	</where>
 	</select>
 	
 	<update id="update">
@@ -77,7 +102,7 @@
 	</select>
 	
 	<select id="listMallPhoto" resultType="hashmap">
-	 	select * from mallPhoto where mallPhoto_mall_key= #{mallPhto_key}
+	 	select * from mallPhoto where mallPhoto_mall_key= #{mallPhto_key} order by mallphoto_sequence;
 	 </select>
 	 
 	 <update id="insertMainPhoto">
@@ -91,4 +116,5 @@
  	<update id="updateMainPhoto">
 	 	update mall set mall_photo=#{mallPhoto_photo} where mall_key=#{mallPhoto_mall_key}
 	 </update>
+	 
 </mapper>

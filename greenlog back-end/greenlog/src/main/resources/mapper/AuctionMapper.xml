@@ -18,4 +18,21 @@
 		select count(*) from auction where auction_seller=#{uid} or auction_seller=#{uid}
 	</select>
 	
+	<select id="adminAList" resultType="hashmap">
+		select *, date_format(Auction_regDate,'%Y.%m.%d %T') as fmtdate from auction, mall
+		where mall_key = auction_mall_key and
+		 <if test="key == 'auction_seller'">
+          auction_seller like concat('%', #{word}, '%')
+        </if>
+        <if test="key == 'auction_buyer'">
+          auction_buyer like concat('%', #{word}, '%')
+        </if>
+        order by auction_regDate desc
+        limit #{start}, #{size}
+	</select>
+	
+	<select id="admintotal" resultType="int">
+		select count(*) from auction
+	</select>
+	
 </mapper>

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 const MallSlider = () => {
     const [list, setList] = useState([]);
     const [page, setPage] = useState(1);
-    const [size, setSize] = useState(8);
+    const [size, setSize] = useState(12);
     const [count, setCount] = useState(0);
     const [orderBy,setOrderBy] = useState('desc');
     const [key, setKey] = useState('mall_title');
@@ -17,8 +17,8 @@ const MallSlider = () => {
     }
     useEffect(() => { callAPI(); }, [])
     return (
-        <div className='mt-5'>
-            <div className='text-center'>새로 올라온 피망</div>
+        <div className='mt-3'>
+            <div className='text-center mb-3'>새로 올라온 피망</div>
             <Row>
                 {list.map(card => (
                     <Col key={card.mall_key} xs={3}>

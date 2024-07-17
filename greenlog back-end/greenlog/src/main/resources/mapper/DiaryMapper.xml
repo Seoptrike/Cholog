@@ -48,7 +48,8 @@
 	</delete>
 	
 	<insert id="photoInsert">
-		insert into diaryPhoto(diaryPhoto_diary_key, diaryPhoto_filename) values (#{diaryPhoto_diary_key}, #{diaryPhoto_filename})
+		insert into diaryPhoto(diaryPhoto_diary_key, diaryPhoto_filename, diaryPhoto_sequence) 
+		values (#{diaryPhoto_diary_key}, #{diaryPhoto_filename}, #{diaryPhoto_sequence})
 	</insert>
 	<delete id="photoDelete">
 		delete from diaryPhoto where diaryPhoto_key= #{diaryPhto_key}
@@ -63,7 +64,7 @@
 	</update>
 	
 	<select id="photoSelect" resultType="hashmap">
-		select * from diaryPhoto where diaryPhoto_diary_key = #{diaryPhoto_diary_key}
+		select * from diaryPhoto where diaryPhoto_diary_key = #{diaryPhoto_diary_key} order by diaryPhoto_sequence asc;
 	</select>
 	
 	<select id="thumbnailSelect" resultType="string">
@@ -75,6 +76,6 @@
 	</update>
 	
 	<update id="updatePhoto">
-		update diaryPhoto set 
+		update diaryPhoto set diaryPhoto_sequence=#{diaryPhoto_sequence} where diaryPhoto_key=#{diaryPhoto_key}
 	</update>
 </mapper>
