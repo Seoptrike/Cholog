@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -37,6 +38,12 @@ public class MallController {
 		map.put("documents", list);
 		map.put("total", mdao.total(vo));
 		return map;
+	}
+	
+	@GetMapping("/list/{mall_seller}")
+	public List<HashMap<String, Object>> sellerList (@PathVariable("mall_seller") String mall_seller, 
+													  @RequestParam("page") int page,@RequestParam("size") int size){
+		return mdao.sellerList(mall_seller,page,size);
 	}
 
 	@PostMapping("/insert")

@@ -12,16 +12,14 @@ const SellerList = ({ mall_seller }) => {
     const [list, setList] = useState([]);
     const [page, setPage] = useState(1);
     const [size, setSize] = useState(6);
-    const [key, setKey] = useState('mall_seller');
-    const [word, setWord] = useState(mall_seller);
-    const [form, setForm] = useState({});
-    const [orderBy, setOrderBy] = useState('desc');
+
 
     const callAPI = async () => {
         setLoading(true);
-        const res = await axios.get(`/mall/list?key=${key}&word=${word}&page=${page}&size=${size}&orderBy=${orderBy}`)
+        const res = await axios.get(`/mall/list/${mall_seller}?page=${page}&size=${size}`)
         //console.log("ListPage : "+ JSON.stringify(res.data));
-        setList(res.data.documents);//슬라이드할 유저가 올린 테이블리스트
+        // 상태 업데이트
+        setList(res.data); // 전체 목록 업데이트
         setLoading(false);
     }
 
@@ -33,13 +31,13 @@ const SellerList = ({ mall_seller }) => {
         dots: true,
         infinite: false,
         speed: 500,
-        slidesToShow: 5,
+        slidesToShow: 2,
         slidesToScroll: 1
     };
 
     const slideST = {
-        width: "40rem",
-        height: "40rem"
+        width: "40px",
+        height: "40px"
     }
 
     if (loading) return <h1 className='text-center'>로딩중...</h1>
@@ -50,15 +48,9 @@ const SellerList = ({ mall_seller }) => {
                     {list &&
                         list.map(list => (
                             <div className='mx-5'>
-                                <Card className="mx-3">
-                                    <Card.Body>
-                                        <Link to={`/mall/read/${list.mall_key}`}>
-                                            <Card.Title>
-                                                <img style={slideST} src={list.mall_photo ? list.mall_photo : "http://via.placeholder.com/100x100"} />
-                                            </Card.Title>
-                                        </Link>
-                                    </Card.Body>
-                                </Card>
+                                <Link to={`/mall/read/${list.mall_key}`}>
+                                    <img style={slideST} src={list.mall_photo ? list.mall_photo : "http://via.placeholder.com/100x100"} />    
+                                </Link>
                             </div>
                         ))}
                 </Slider>
