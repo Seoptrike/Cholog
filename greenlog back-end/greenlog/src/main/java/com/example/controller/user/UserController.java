@@ -109,4 +109,14 @@ public class UserController {
 	public HashMap<String, Object> mypage(@PathVariable("user_uid") String uid) {
 		return udao.mypage(uid);
 	}
+
+	@GetMapping("/followingDiaryList/{user_uid}")
+	public List<HashMap<String, Object>> followingDiaryList(@PathVariable("user_uid") String uid, QueryVO vo) {
+		return udao.followingDiaryList(uid, vo);
+	}
+
+	@GetMapping("/AdminDiaryList/{user_uid}")
+	public List<HashMap<String, Object>> AdminDiaryList(@PathVariable("user_uid") String uid, QueryVO vo) {
+		return udao.AdminDiaryList(uid, vo);
+	}
 }

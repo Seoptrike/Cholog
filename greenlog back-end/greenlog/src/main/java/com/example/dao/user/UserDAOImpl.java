@@ -85,4 +85,22 @@ public class UserDAOImpl implements UserDAO {
 		return session.selectOne(namespace + ".mypage", uid);
 	}
 
+	@Override
+	public List<HashMap<String, Object>> followingDiaryList(String uid, QueryVO vo) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("uid", uid);
+		map.put("size", vo.getSize());
+		map.put("start", vo.getStart());
+		return session.selectList(namespace + ".followingDiaryList", map);
+	}
+
+	@Override
+	public List<HashMap<String, Object>> AdminDiaryList(String uid, QueryVO vo) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("uid", uid);
+		map.put("size", vo.getSize());
+		map.put("start", vo.getStart());
+		return session.selectList(namespace + ".AdminDiaryList", map);
+	}
+
 }

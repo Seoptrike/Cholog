@@ -90,5 +90,30 @@
             (select count(*) from follow where follow_from = #{uid}) as following_count,
             (select count(*) from follow where follow_to = #{uid}) as follower_count) f on u.user_uid = #{uid}
     where u.user_uid = #{uid};
-</select>
+	</select>
+	
+	<select id="followingDiaryList" resultType="hashmap">
+		select d.*, date_format(diary_regDate,'%m.%d') as fmtDdate, 
+		date_format(diary_uDate,'%m.%d') as fmtUdate,
+		(select count(*) from diaryLike f where user_uid=#{uid} and f.diary_key=d.diary_key) ucnt, 
+		(select count(*) from diaryLike f where f.diary_key=d.diary_key) fcnt,
+		u.user_img
+		from diary d
+		JOIN user u ON d.diary_writer = u.user_uid
+		where diary_writer in ( select follow_to from follow where follow_from = #{uid})
+		order by diary_regDate desc  
+        limit #{start}, #{size}	
+	</select>
+	
+	<select id="AdminDiaryList" resultType="hashmap">
+		select d.*, date_format(diary_regDate,'%m.%d') as fmtDdate, 
+		date_format(diary_uDate,'%m.%d') as fmtUdate,
+		(select count(*) from diaryLike f where user_uid=#{uid} and f.diary_key=d.diary_key) ucnt, 
+		(select count(*) from diaryLike f where f.diary_key=d.diary_key) fcnt,
+		u.user_img
+		from diary d
+		JOIN user u ON d.diary_writer = u.user_uid
+		order by diary_regDate desc 
+		limit #{start}, #{size}	
+	</select>
 </mapper>
