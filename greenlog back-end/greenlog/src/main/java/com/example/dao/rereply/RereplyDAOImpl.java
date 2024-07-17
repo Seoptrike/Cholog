@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.example.domain.QueryVO;
+import com.example.domain.RereplyLikeVO;
 import com.example.domain.RereplyVO;
 
 @Repository
@@ -42,6 +43,18 @@ public class RereplyDAOImpl implements RereplyDAO{
 	@Override
 	public int total(int reply_key) {
 			return session.selectOne(namespace + ".total", reply_key);
+	}
+
+	@Override
+	public void updaterereplyLike(RereplyLikeVO vo) {
+		session.update(namespace + ".updaterereplyLike", vo);
+		
+	}
+
+	@Override
+	public void updatereLock(RereplyVO vo) {
+		session.update(namespace + ".updatereLock", vo);
+		
 	}
 
 }

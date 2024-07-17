@@ -11,8 +11,8 @@
 		</select>
 		
 		<insert id="insert">
-				insert into reply ( reply_bbs_key, reply_writer, reply_contents, reply_lock, reply_reaction)
-				value ( #{reply_bbs_key}, #{reply_writer}, #{reply_contents}, #{reply_lock}, #{reply_reaction})
+				insert into reply ( reply_bbs_key, reply_writer, reply_contents)
+				value ( #{reply_bbs_key}, #{reply_writer}, #{reply_contents})
 		</insert>
 		
 		<update id="update">
@@ -31,4 +31,8 @@
 		<select id="total" resultType="int">
 				select count(*) as total from reply where reply_bbs_key=#{reply_bbs_key} ;
 		</select>
+		
+		<update id="updatereplyLike">
+				update reply set reply_reaction=#{reply_reaction} where reply_key=#{reply_key};
+		</update>
 </mapper>

@@ -26,4 +26,12 @@
 				select count(*) as total from rereply where reply_key=#{reply_key} ;
 		</select>
 		
+		<update id="updatereLock">
+				update rereply set rereply_lock=#{rereply_lock} where rereply_key=#{rereply_key}
+		</update>
+		
+		<update id="updaterereplyLike">
+				update rereply set rereply_reaction=#{rereply_reaction} where rereply_key=#{rereply_key};
+		</update>
+		
 </mapper>

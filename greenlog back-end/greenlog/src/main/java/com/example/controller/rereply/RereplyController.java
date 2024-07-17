@@ -12,7 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.dao.rereply.RereplyDAO;
+import com.example.domain.QueryVO;
+import com.example.domain.ReplyLikeVO;
+import com.example.domain.ReplyVO;
+import com.example.domain.RereplyLikeVO;
 import com.example.domain.RereplyVO;
+import com.example.service.rereply.RereplyService;
 
 @RestController
 @RequestMapping("/rereply")
@@ -20,6 +25,9 @@ public class RereplyController {
 	
 	@Autowired
 	RereplyDAO rrdao;
+	
+	@Autowired
+	RereplyService rrservice;
 	
 		@PostMapping("/insert")
 		public void insert (@RequestBody RereplyVO vo) {
@@ -33,12 +41,27 @@ public class RereplyController {
 		
 		@PostMapping("/update")
 		public void update (@RequestBody RereplyVO vo) {
-				rrdao.update(vo);
+				rrservice.update(vo);
 		}
 		
 		@GetMapping("/list/{reply_key}")
 		public List<HashMap<String, Object>> replyList(@PathVariable("reply_key") int reply_key) {
 				return rrdao.rereplyList(reply_key);
+		}
+		
+		@GetMapping("/plist/{reply_key}")
+		public HashMap<String, Object> plist(@PathVariable("reply_key") int reply_key) {
+				return rrservice.plist(reply_key);
+		}
+		
+		@PostMapping("/update/lock")
+		public void updatereLock(@RequestBody RereplyVO vo) {
+				rrservice.updatereLock(vo);
+		}
+		
+		@PostMapping("/update/rereplyLike")
+		public void updaterereplyLike(@RequestBody RereplyLikeVO vo) {
+				rrservice.updaterereplyLike(vo);
 		}
 		
 }
