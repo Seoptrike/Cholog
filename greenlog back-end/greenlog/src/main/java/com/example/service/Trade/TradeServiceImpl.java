@@ -1,11 +1,14 @@
 package com.example.service.Trade;
 
+import java.util.HashMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.dao.seed.SeedDAO;
 import com.example.dao.seed.TradeDAO;
+import com.example.domain.QueryVO;
 import com.example.domain.TradeVO;
 
 @Service
@@ -33,5 +36,14 @@ public class TradeServiceImpl implements TradeService {
 
 		tdao.insert(vo2);
 		sdao.update(vo2);
+	}
+
+	@Transactional
+	@Override
+	public HashMap<String, Object> UserList(String seed_number, QueryVO vo) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("doc", tdao.userList(seed_number, vo));
+		map.put("total", tdao.userListCount(seed_number, vo));
+		return map;
 	}
 }

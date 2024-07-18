@@ -7,6 +7,8 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import axios from 'axios';
 import '../../common/useful/Paging.css';
 import { TbBrandSnapseed } from "react-icons/tb";
+import ReportPage from '../admin/ReportPage';
+import ReportInsert from '../report/ReportInsert';
 
 const ReviewPage = ({ mall_key, mall_seller, seller_number }) => {
     const [list, setList] = useState([]);
@@ -16,7 +18,7 @@ const ReviewPage = ({ mall_key, mall_seller, seller_number }) => {
     const [key, setKey] = useState('review_regDate desc');
     console.log(key)
     const uid = sessionStorage.getItem('uid');
-
+    const root = "review"
     const callAPI = async () => {
         const res = await axios.get(`/review/plist/${mall_key}?key=${key}&page=${page}&size=${size}`);
         const data = res.data.documents.map(doc => ({ ...doc, isEdit: false, text: doc.review_contents, num: doc.review_rating }));
@@ -170,11 +172,11 @@ const ReviewPage = ({ mall_key, mall_seller, seller_number }) => {
                                                         uid === mall_seller ? (
                                                             <Dropdown.Menu>
                                                                 <Dropdown.Item onClick={() => onClickBuy(review.review_writer, review.review_rating, mall_seller)} eventKey="buy">낙찰하기</Dropdown.Item>
-                                                                <Dropdown.Item eventKey="warning">리뷰 신고하기</Dropdown.Item>
+                                                                <Dropdown.Item eventKey="warning"><ReportInsert uid={uid} writer={review.review_writer} root={root} origin={review.review_key}/></Dropdown.Item>
                                                             </Dropdown.Menu>
                                                         ) : (
                                                             <Dropdown.Menu>
-                                                                <Dropdown.Item eventKey="warning">리뷰 신고하기</Dropdown.Item>
+                                                                <Dropdown.Item eventKey="warning"><ReportInsert uid={uid} writer={review.review_writer} root={root} origin={review.review_key} /></Dropdown.Item>
                                                             </Dropdown.Menu>
                                                         )
                                                     )}

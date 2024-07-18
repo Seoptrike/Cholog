@@ -6,9 +6,8 @@ import axios from 'axios';
 import MypageSlick from './MypageSlick';
 import { PiUserCirclePlus } from "react-icons/pi";
 import { PiUserCircleMinusThin } from "react-icons/pi";
-
-
-
+import ModalFollower from '../follow/ModalFollower';
+import ModalFollowing from '../follow/ModalFollowing';
 
 //이미지를 누르면 정보수정페이지로 이동
 //아이콘은 css로 움직일 예정
@@ -39,17 +38,40 @@ const MyPage = () => {
     callAPI4();
   }, [])
 
+  const onAddFollow = async () => {
+    const res = await axios.post("/follow/addFollow", { follow_to: user_uid, follow_from: sessionStorage.getItem("uid") })
+    if (res.data === 1) {
+      alert("팔로우완료!")
+      window.location.reload();
+    } else {
+      alert("이미 팔로우한 친구입니다!")
+    }
+  }
+
+  const onUnFollow = async () => {
+    const res = await axios.post("/follow/unFollow", { follow_to: user_uid, follow_from: sessionStorage.getItem("uid") })
+    if (res.data === 1) {
+      alert("삭제완료!")
+      window.location.reload();
+    } else {
+      alert("팔로우하지 않은 친구입니다!")
+    }
+  }
+
   return (
     <div>
       <h1 className='text-center my-5'>{data.user_nickname}님 환영합니다</h1>
-     <div className='text-end'>
-      {}
-      <PiUserCirclePlus style={{cursor:"pointer", fontSize:"60px"}}/>
-      <PiUserCircleMinusThin style={{cursor:"pointer", fontSize:"60px"}}/>
-     </div>
+      <div className='text-end'>
+        {sessionStorage.getItem("uid") === user_uid &&
+          <div>
+            <PiUserCirclePlus style={{ cursor: "pointer", fontSize: "60px" }} onClick={onAddFollow} />
+            <PiUserCircleMinusThin style={{ cursor: "pointer", fontSize: "60px" }} onClick={onUnFollow} />
+          </div>
+        }
+      </div>
       <Row className='my-5'>
         <Col lg={5}>
-          <Link to={`/user/update/${user_uid}`}><img src={data.user_img || "http://via.placeholder.com/200x200"} width="100%" height="100%"/></Link>
+          <Link to={`/user/update/${user_uid}`}><img src={data.user_img || "http://via.placeholder.com/200x200"} width="100%" height="100%" /></Link>
         </Col>
         <Col lg={7}>
           <Card>
@@ -58,34 +80,34 @@ const MyPage = () => {
               <div className='mt-2'>
                 <Row>
                   {user_uid === sessionStorage.getItem("uid") &&
-                  <Row>
-                  <Col>
-                     <Card>
-                      <Card.Body>
-                        <Link to={`/user/wallet/${user_uid}`}>씨드: {data.seed_point}점</Link>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                  <Col>
-                    <Card>
-                      <Card.Body>
-                        <Link to={`/auction/list.json/${user_uid}`}>피망이용: {data.auction_count}건</Link>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                  </Row>
+                    <Row>
+                      <Col>
+                        <Card>
+                          <Card.Body>
+                            <Link to={`/user/wallet/${user_uid}`}>씨드: {data.seed_point}점</Link>
+                          </Card.Body>
+                        </Card>
+                      </Col>
+                      <Col>
+                        <Card>
+                          <Card.Body>
+                            <Link to={`/auction/list.json/${user_uid}`}>피망이용: {data.auction_count}건</Link>
+                          </Card.Body>
+                        </Card>
+                      </Col>
+                    </Row>
                   }
                   <Col>
                     <Card>
                       <Card.Body>
-                        <Link to={"/user/follower"}>팔로워:{data.follower_count}</Link>
+                        <span><ModalFollower uid={user_uid} cnt={data.follower_count} /></span>
                       </Card.Body>
                     </Card>
                   </Col>
                   <Col>
                     <Card>
                       <Card.Body>
-                        <Link to={"/user/following"}>팔로잉: {data.following_count}</Link>
+                        <span><ModalFollowing uid={user_uid} cnt={data.follower_count} /></span>
                       </Card.Body>
                     </Card>
                   </Col>

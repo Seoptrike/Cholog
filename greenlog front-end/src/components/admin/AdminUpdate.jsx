@@ -174,10 +174,6 @@ const AdminUpdate = () => {
                         <Form.Control value={user_uid} name="user_uid" disabled="true" />
                       </InputGroup>
                       <InputGroup className='mb-2'>
-                        <InputGroup.Text>비밀번호</InputGroup.Text>
-                        <Button>비밀번호수정</Button>
-                      </InputGroup>
-                      <InputGroup className='mb-2'>
                         <InputGroup.Text>이름</InputGroup.Text>
                         <Form.Control value={user_uname} name="user_uname" onChange={onChangeForm} />
                       </InputGroup>

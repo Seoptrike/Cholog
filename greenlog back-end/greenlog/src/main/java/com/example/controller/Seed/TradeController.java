@@ -1,16 +1,17 @@
 package com.example.controller.Seed;
 
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.dao.seed.TradeDAO;
+import com.example.domain.QueryVO;
 import com.example.domain.TradeVO;
 import com.example.service.Trade.TradeService;
 
@@ -29,9 +30,8 @@ public class TradeController {
 		Tservice.insert(vo);
 	}
 
-	@PostMapping("/userList")
-	public List<HashMap<String, Object>> userList(@RequestBody Map<String, String> requestBody) {
-		String seed_number = requestBody.get("seed_number");
-		return tdao.userList(seed_number);
+	@GetMapping("/userList/{seed_number}")
+	public HashMap<String, Object> userList(@PathVariable("seed_number") String seed_number, QueryVO vo) {
+		return Tservice.UserList(seed_number, vo);
 	}
 }
