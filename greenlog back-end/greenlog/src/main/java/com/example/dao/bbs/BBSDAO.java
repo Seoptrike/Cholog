@@ -13,4 +13,5 @@ public interface BBSDAO {
     public void update(BBSVO vo);
     public int total(QueryVO vo);
     public void updateViewcnt(int bbs_key);
+    public List<BBSVO> topList();
 }

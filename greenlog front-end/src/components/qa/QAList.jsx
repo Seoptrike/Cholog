@@ -9,7 +9,7 @@ const QAList = () => {
   const [list, setList] = useState([]);
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
-  const [size, setSize] = useState(5);
+  const [size, setSize] = useState(8);
   const [key, setKey] = useState('qa_title');
   const [word, setWord] = useState('');
 
@@ -58,7 +58,7 @@ const QAList = () => {
         {sessionStorage.getItem('uid') &&
           <Col className='text-end'>
             <Link to="/community/qa/insert">
-              <Button>질문하기</Button>
+              <Button size='sm'>질문하기</Button>
             </Link>
           </Col>
         }

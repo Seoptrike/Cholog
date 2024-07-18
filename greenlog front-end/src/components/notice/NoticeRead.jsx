@@ -54,7 +54,6 @@ const NoticeRead = () => {
           <Card.Title>{notice_title}</Card.Title>
           <Card.Subtitle className="mb-2 text-muted">작성자: {notice_writer}</Card.Subtitle>
           <Card.Subtitle className="mb-2 text-muted">작성일: {notice_regDate}</Card.Subtitle>
-          <Card.Subtitle className="mb-2 text-muted">조회수: {notice_vcnt}</Card.Subtitle>
           <Card.Text>{notice_contents}</Card.Text>
           {adminIds.includes(currentUser) && (
             <>

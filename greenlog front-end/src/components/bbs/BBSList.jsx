@@ -1,103 +1,108 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Pagination from 'react-js-pagination';
-import { Col, InputGroup, FormControl, Button, Table } from 'react-bootstrap';
+import { Col, InputGroup, FormControl, Button, Table, Row } from 'react-bootstrap';
 import axios from 'axios';
 
+// 게시판 리스트 컴포넌트 정의
 const BBSList = () => {
-  const [list, setList] = useState([]);
-  const [topList, setTopList] = useState([]);
-  const [count, setCount] = useState(0);
-  const [page, setPage] = useState(1);
-  const [size, setSize] = useState(5);
-  const [key, setKey] = useState('bbs_title');
-  const [word, setWord] = useState('');
-  const [category, setCategory] = useState('');
-  const [isAlertShown, setIsAlertShown] = useState(false);
+  // 상태 변수 선언
+  const [list, setList] = useState([]); // 게시글 목록
+  const [topList, setTopList] = useState([]); // 상위 2개의 게시글 목록
+  const [count, setCount] = useState(0); // 총 게시글 수
+  const [page, setPage] = useState(1); // 현재 페이지
+  const [size, setSize] = useState(10); // 페이지 당 게시글 수
+  const [key, setKey] = useState('bbs_title'); // 검색 키
+  const [word, setWord] = useState(''); // 검색어
+  const [category, setCategory] = useState(''); // 선택된 카테고리
+  const [isAlertShown, setIsAlertShown] = useState(false); // 알림 표시 여부
 
-  const callAPI = async (pageNum = page) => {
-    const res = await axios.get(`/bbs/list.json?key=${key}&word=${word}&page=${pageNum}&size=${size}`);
+  // API 호출 함수
+  const callAPI = async () => {
+    const res = await axios.get(`/bbs/list.json?key=${key}&word=${word}&page=${page}&size=${size}`);
+    console.log(res.data);
     const documents = res.data.documents;
 
     let filteredDocuments = documents;
+    // 카테고리 필터링
     if (category !== '') {
       filteredDocuments = documents.filter(post => post.bbs_type === parseInt(category));
     }
 
-    if (pageNum === 1) {
-      // 조회수 상위 2개 추출
-      const sortedByViews = [...filteredDocuments].sort((a, b) => b.bbs_vcnt - a.bbs_vcnt);
-      const topTwo = sortedByViews.slice(0, 2);
-      setTopList(topTwo);
+    // 상위 2개의 게시글을 가져오는 API 호출
+    const topRes = await axios.get('/bbs/top');
+    const topTwo = topRes.data;
+    setTopList(topTwo);
 
-      // 상위 2개를 제외한 나머지 게시글
-      const remainingPosts = filteredDocuments.filter(doc => !topTwo.includes(doc));
-      setList(remainingPosts.slice(0, size));
-      setCount(res.data.total - topTwo.length); // 전체 게시글 수에서 상위 2개 제외
-    } else {
-      setList(filteredDocuments);
-      setCount(res.data.total);
-    }
+    // 상위 게시글을 제외한 나머지 게시글 목록 설정
+    const remainingPosts = filteredDocuments.filter(doc => !topTwo.some(top => top.bbs_key === doc.bbs_key));
+    setList(remainingPosts.slice((page - 1) * size, page * size));
+    setCount(res.data.total); // 전체 게시글 수를 설정
 
-    if (res.data.total === 0 && !isAlertShown) {
+    // 검색 결과가 없을 때 알림 표시
+    if (res.data.total === 0) {
       setIsAlertShown(true);
       alert('검색어가 없습니다');
     }
   };
 
+  // 페이지와 카테고리가 변경될 때마다 API 호출
   useEffect(() => {
-    callAPI();
+    if (page === 1 || category !== '') {
+      callAPI();
+    }
     setIsAlertShown(false);
-  }, [page]);
+  }, [page, category]);
 
-  useEffect(() => {
-    setPage(1);
-    callAPI(1);
-  }, [category]);
-
+  // 검색어 변경 핸들러
   const handleSearchChange = (e) => {
     setWord(e.target.value);
   };
 
+  // 검색 버튼 클릭 핸들러
   const handleSearch = (e) => {
     e.preventDefault();
     setPage(1);
     setIsAlertShown(false);
-    callAPI(1);
+    callAPI();
   };
 
+  // 카테고리 변경 핸들러
   const handleCategoryChange = (e) => {
     setCategory(e.target.value);
+    setPage(1); // 카테고리가 변경될 때 페이지를 1로 설정
   };
 
   return (
     <div>
       <h1 className="text-center my-5">자유게시판</h1>
-      <InputGroup className="mb-3">
-        <FormControl as="select" value={category} onChange={handleCategoryChange}>
-          <option value="">전체</option>
-          <option value="0">꿀팁</option>
-          <option value="1">자유</option>
-        </FormControl>
-        <FormControl
-          placeholder="검색어를 입력하세요"
-          value={word}
-          onChange={handleSearchChange}
-        />
-        <Button onClick={handleSearch}>검색</Button>
-      </InputGroup>
-      <div className='text-end mb-3'>
-        <Col>
-          검색수: {count + (page === 1 ? topList.length : 0)}건
+      <Row className="mb-3">
+        <Col xs={10}>
+          <InputGroup>
+            <FormControl as="select" value={category} onChange={handleCategoryChange}>
+              <option value="">전체</option>
+              <option value="0">꿀팁</option>
+              <option value="1">자유</option>
+            </FormControl>
+            <FormControl
+              placeholder="검색어를 입력하세요"
+              value={word}
+              onChange={handleSearchChange}
+            />
+            <Button onClick={handleSearch}>검색</Button>
+          </InputGroup>
         </Col>
-        {sessionStorage.getItem('uid') && (
-          <Col className='text-end'>
+        <Col xs={2} className="text-end">
+          <div>
+            검색수: {count}건
+          </div>
+          {sessionStorage.getItem('uid') && (
             <Link to="/community/bbs/insert">
-              <Button size='sm'>글쓰기</Button>
+              <Button>글쓰기</Button>
             </Link>
-          </Col>
-        )}
-      </div>
+          )}
+        </Col>
+      </Row>
       <Table>
         <thead>
           <tr>
@@ -115,7 +120,9 @@ const BBSList = () => {
               <td>
                 <Link to={`/community/bbs/read/${post.bbs_key}?isCnt=true`}>{post.bbs_title}</Link>
               </td>
-              <td>{post.bbs_writer}</td>
+              <td>
+                <Link to={`/user/read/${post.uid}`}>{post.bbs_writer}</Link>
+              </td>
               <td>{post.bbs_regDate}</td>
               <td>{post.bbs_vcnt}</td>
             </tr>
@@ -126,14 +133,16 @@ const BBSList = () => {
               <td>
                 <Link to={`/community/bbs/read/${post.bbs_key}?isCnt=true`}>{post.bbs_title}</Link>
               </td>
-              <td>{post.bbs_writer}</td>
+              <td>
+                <Link to={`/user/read/${post.uid}`}>{post.bbs_writer}</Link>
+              </td>
               <td>{post.bbs_regDate}</td>
               <td>{post.bbs_vcnt}</td>
             </tr>
           ))}
         </tbody>
       </Table>
-      {count > 0 &&
+      {count > size &&
         <Pagination
           activePage={page}
           itemsCountPerPage={size}
@@ -141,8 +150,7 @@ const BBSList = () => {
           pageRangeDisplayed={5}
           prevPageText={"‹"}
           nextPageText={"›"}
-          onChange={(e) => setPage(e)}
-        />
+          onChange={(e) => setPage(e)} />
       }
     </div>
   );
