@@ -49,8 +49,8 @@ public class ReplyController {
 		}
 		
 		@PostMapping("/update/replyLike")
-		public void updatereplyLike(@RequestBody ReplyLikeVO vo) {
-				rservice.updatereplyLike(vo);
+		public void replyLikeUpdate(@RequestBody ReplyLikeVO vo) {
+				rservice.replyLikeUpdate(vo);
 		}
 		
 		@GetMapping("/list/{review_bbs_key}")
@@ -63,6 +63,23 @@ public class ReplyController {
 		@GetMapping("/plist/{review_bbs_key}")
 		public HashMap<String, Object> plist(@PathVariable("review_bbs_key") int review_bbs_key, QueryVO vo) {
 				return rservice.plist(review_bbs_key, vo);
+		}
+		
+		@PostMapping("/reactionInsert")
+		public void reactionInsert(@RequestBody ReplyLikeVO vo) {
+				rdao.reactionInsert(vo);
+		}
+		
+		@GetMapping("/reaction/like/{reply_key}")
+		public int replyLikeCount(@PathVariable("reply_key") int reply_key) {
+			return rdao.replyLikeCount(reply_key);
+			
+		}
+		
+		@GetMapping("/reaction/dislike/{reply_key}")
+		public int replyDisLikeCount(@PathVariable("reply_key") int reply_key) {
+			return rdao.replyDisLikeCount(reply_key);
+			
 		}
 
 }

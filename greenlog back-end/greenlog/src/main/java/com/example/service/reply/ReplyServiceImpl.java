@@ -41,8 +41,8 @@ public class ReplyServiceImpl implements ReplyService {
 	}
 
 	@Override
-	public void updatereplyLike(ReplyLikeVO vo) {
-			rdao.updatereplyLike(vo);
+	public void replyLikeUpdate(ReplyLikeVO vo) {
+			rdao.replyLikeUpdate(vo);
 		
 	}
 

@@ -48,11 +48,8 @@ const RereplyInsertPage = ({ reply_key, callAPI }) => {
         setForm({ ...form, rereply_contents: '' });
     }
 
-    const [showRep, setShowRep] = useState(false);
 
-    const toggleRep = () => {
-        setShowRep(!showRep);
-    };
+
 
     return (
         <Row className='justify-content-center'>
@@ -71,12 +68,10 @@ const RereplyInsertPage = ({ reply_key, callAPI }) => {
                         />
                     </div>
                     <div className='text-end mt-2'>
-                        <Button variant='' onClick={toggleRep} size="sm" className='text-end me-2'>답글 접기</Button>
                         <Button variant='' size="sm" className='text-end me-2' type='submit'>등록</Button>
                         <Button onClick={onClickCancel} variant='' size="sm" className='text-end' type='reset'>취소</Button>
                     </div>
                 </form>
-                <hr />
             </Col>
         </Row>
     );

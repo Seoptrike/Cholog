@@ -32,8 +32,8 @@ public class RereplyServiceImpl implements RereplyService {
 
 	@Transactional
 	@Override
-	public void updaterereplyLike(RereplyLikeVO vo) {
-			rdao.updaterereplyLike(vo);
+	public void rereplyLikeUpdate(RereplyLikeVO vo) {
+			rdao.rereplyLikeUpdate(vo);
 		
 	}
 
@@ -41,7 +41,7 @@ public class RereplyServiceImpl implements RereplyService {
 	public HashMap<String, Object> plist(int reply_key) {
 			 HashMap<String, Object> map = new  HashMap<>();
 			 map.put("documents",  rdao.rereplyList(reply_key));
-			 map.put("total", rdao.total(reply_key));
+			 map.put("rereplyCount", rdao.rereplyCount(reply_key));
 			return map;
 	}
 

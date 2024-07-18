@@ -32,7 +32,21 @@
 				select count(*) as total from reply where reply_bbs_key=#{reply_bbs_key} ;
 		</select>
 		
-		<update id="updatereplyLike">
-				update reply set reply_reaction=#{reply_reaction} where reply_key=#{reply_key};
+		<insert id="reactionInsert">
+				insert into replyLike ( reply_key, reply_writer, reply_reaction)
+				value (#{reply_key}, #{reply_writer}, #{reply_reaction})
+		</insert>
+		
+		<update id="replyLikeUpdate">
+				update replyLike set reply_reaction=#{reply_reaction} where reply_key=#{reply_key} and reply_writer=#{reply_writer};
 		</update>
+		
+		<select id="replyLikeCount" resultType="int">
+		    	select count(*) as total from replyLike where reply_key=#{reply_key} and reply_reaction="like";
+		</select>
+		
+		<select id="replyDisLikeCount" resultType="int">
+		    	select count(*) as total from replyLike where reply_key=#{reply_key} and reply_reaction="dislike";
+		</select>
+		
 </mapper>
