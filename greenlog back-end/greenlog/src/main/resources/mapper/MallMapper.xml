@@ -7,7 +7,6 @@
 		 <where>
 	        <if test="key == 'mall_seller'">
 	           mall_seller like concat('%', #{word}, '%') 
-				
 	        </if>
 	        <if test="key == 'mall_title'">
 	            mall_title like concat('%', #{word}, '%') 
@@ -20,6 +19,15 @@
             </if>
             <if test="stateKey == 'mall_tstate'">
                 AND mall_tstate = #{stateWord}
+            </if>
+            <if test="stateKey == 'all'">
+                AND mall_tstate >=0 AND mall_pstate >=0 
+            </if>
+            <if test="stateKey == 'isEndFalse'">
+                AND mall_tstate >=0 AND mall_pstate >=0 AND mall_endDate > now() 
+            </if>
+            <if test="stateKey == 'isEndTrue'">
+                AND mall_tstate >=0 AND mall_pstate >=0 AND now() > mall_endDate 
             </if>
     	</where>
     	<if test="orderBy == 'desc'">
@@ -65,7 +73,6 @@
 		  <where>
 	        <if test="key == 'mall_seller'">
 	           mall_seller like concat('%', #{word}, '%') 
-				
 	        </if>
 	        <if test="key == 'mall_title'">
 	            mall_title like concat('%', #{word}, '%') 
@@ -78,6 +85,15 @@
             </if>
             <if test="stateKey == 'mall_tstate'">
                 AND mall_tstate = #{stateWord}
+            </if>
+             <if test="stateKey == 'all'">
+                AND mall_tstate >=0 AND mall_pstate >=0 
+            </if>
+            <if test="stateKey == 'isEndFalse'">
+                AND mall_tstate >=0 AND mall_pstate >=0 AND mall_endDate > now() 
+            </if>
+            <if test="stateKey == 'isEndTrue'">
+                AND mall_tstate >=0 AND mall_pstate >=0 AND now() > mall_endDate 
             </if>
     	</where>
 	</select>

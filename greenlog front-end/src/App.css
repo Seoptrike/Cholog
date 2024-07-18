@@ -81,3 +81,26 @@
  .page-selection {
   width: 48px; height: 30px; color: #337ab7;
  }
+
+ /*피망몰 
+ 
+ 리스트페이지에 카드위에 불투명하게올린거*/
+ .mall_card_parent{
+  display: grid;
+ }
+ .mall_card_child{
+  width: 100%;
+  height: 100%;
+ }
+ /*피망몰 리드페이지 */
+ .mall_read_flexbox{
+  display: flex;
+  flex-direction: row;
+  background-color: #61dafb;
+ }
+ .mall_read_item{
+  text-align: center;
+ }
+ .sellerList .slick-dots {
+  display: none !important;
+}
