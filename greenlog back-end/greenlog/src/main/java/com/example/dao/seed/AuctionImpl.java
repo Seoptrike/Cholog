@@ -28,21 +28,43 @@ public class AuctionImpl implements AuctionDAO {
 		map.put("uid", uid);
 		map.put("start", vo.getStart());
 		map.put("size", vo.getSize());
+		map.put("word", vo.getWord());
+		map.put("key", vo.getKey());
 		return session.selectList(namespace + ".userAList", map);
 	}
 
 	@Override
-	public int total(String uid) {
-		return session.selectOne(namespace + ".total", uid);
+	public int total(String uid, QueryVO vo) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("uid", uid);
+		map.put("word", vo.getWord());
+		map.put("key", vo.getKey());
+		return session.selectOne(namespace + ".total", map);
 	}
 
 	@Override
 	public List<HashMap<String, Object>> adminAList(QueryVO vo) {
-		return session.selectList(namespace + ".adminAList", vo);
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("start", vo.getStart());
+		map.put("size", vo.getSize());
+		map.put("word", vo.getWord());
+		map.put("key", vo.getKey());
+		return session.selectList(namespace + ".adminAList", map);
 	}
 
 	@Override
-	public int admintotal() {
-		return session.selectOne(namespace + ".admintotal");
+	public int admintotal(QueryVO vo) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("start", vo.getStart());
+		map.put("size", vo.getSize());
+		map.put("word", vo.getWord());
+		map.put("key", vo.getKey());
+		return session.selectOne(namespace + ".admintotal", map);
+	}
+
+	@Override
+	public void updateState1(int auction_key) {
+		session.update(namespace + ".stateUpdate1", auction_key);
+		
 	}
 }

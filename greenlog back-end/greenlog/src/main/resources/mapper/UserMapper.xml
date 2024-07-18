@@ -28,7 +28,11 @@
 	</select>
 	
 	<select id="adminListTotal" resultType="int">
-		select count(*) from user;
+		select count(*) from user
+		<if test="key=='user_uid'"> where user_uid like concat('%', #{word}, '%')</if>
+		<if test="key=='user_uname'">where user_uname like concat('%', #{word}, '%')</if>
+		<if test="key=='user_nickname'">where user_nickname like concat('%', #{word}, '%')</if>
+		<if test="key=='user_birth'">where user_birth like concat('%', #{word}, '%')</if>
 	</select>
 	
 	<insert id="insert" >
