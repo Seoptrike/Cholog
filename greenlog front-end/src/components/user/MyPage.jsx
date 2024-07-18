@@ -62,7 +62,7 @@ const MyPage = () => {
     <div>
       <h1 className='text-center my-5'>{data.user_nickname}님 환영합니다</h1>
       <div className='text-end'>
-        {sessionStorage.getItem("uid") === user_uid &&
+        {!(sessionStorage.getItem("uid") === user_uid) &&
           <div>
             <PiUserCirclePlus style={{ cursor: "pointer", fontSize: "60px" }} onClick={onAddFollow} />
             <PiUserCircleMinusThin style={{ cursor: "pointer", fontSize: "60px" }} onClick={onUnFollow} />
