@@ -10,7 +10,7 @@ import com.example.domain.ReviewVO;
 public interface ReplyService {
 		public void update (ReplyVO vo);
 		public void updateLock (ReplyVO vo);
-		public void updatereplyLike (ReplyLikeVO vo);
+		public void replyLikeUpdate (ReplyLikeVO vo);
 		public HashMap<String, Object> plist(int reply_bbs_key, QueryVO vo);
 
 }

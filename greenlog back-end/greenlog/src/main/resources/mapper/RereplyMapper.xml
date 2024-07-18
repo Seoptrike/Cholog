@@ -13,25 +13,43 @@
 				value ( #{reply_key}, #{rereply_writer}, #{rereply_contents})
 		</insert>
 		
-		<delete id="delete">
-				delete from rereply where rereply_key=#{rereply_key};
-		</delete>
-		
 		<update id="update">
 				update rereply set rereply_contents=#{rereply_contents}, rereply_udate=now()
 				where rereply_key=#{rereply_key}
 		</update>
 		
-		<select id="total" resultType="int">
-				select count(*) as total from rereply where reply_key=#{reply_key} ;
-		</select>
-		
 		<update id="updatereLock">
 				update rereply set rereply_lock=#{rereply_lock} where rereply_key=#{rereply_key}
 		</update>
 		
-		<update id="updaterereplyLike">
-				update rereply set rereply_reaction=#{rereply_reaction} where rereply_key=#{rereply_key};
+		<delete id="delete">
+				delete from rereply where rereply_key=#{rereply_key};
+		</delete>
+		
+		<select id="rereplyCount" resultType="int">
+				select count(*) as total from rereply where reply_key=#{reply_key} ;
+		</select>
+		
+			<insert id="rereactionInsert">
+				insert into rereplyLike ( rereply_key, rereply_writer, rereply_reaction)
+				value (#{rereply_key}, #{rereply_writer}, #{rereply_reaction})
+		</insert>
+		
+		<update id="rereplyLikeUpdate">
+				update rereplyLike set rereply_reaction=#{rereply_reaction} where rereply_key=#{rereply_key} and rereply_writer=#{rereply_writer};
 		</update>
+		
+		<select id="rereplyLikeCount" resultType="int">
+		    	select count(*) as total from rereplyLike where rereply_key=#{rereply_key} and rereply_reaction="like";
+		</select>
+		
+		<select id="rereplyDisLikeCount" resultType="int">
+		    	select count(*) as total from rereplyLike where rereply_key=#{rereply_key} and rereply_reaction="dislike";
+		</select>
+		
+
+		
+
+		
 		
 </mapper>

@@ -57,9 +57,24 @@ public class ReplyDAOImpl implements ReplyDAO {
 		}
 
 		@Override
-		public void updatereplyLike(ReplyLikeVO vo) {
-				session.update(namespace + ".updatereplyLike", vo);
+		public void replyLikeUpdate(ReplyLikeVO vo) {
+				session.update(namespace + ".replyLikeUpdate", vo);
 			
 		}
 
+		@Override
+		public void reactionInsert(ReplyLikeVO vo) {
+				session.insert(namespace + ".reactionInsert", vo);
+			
+		}
+		
+		@Override
+		public int replyLikeCount(int reply_key) {
+				return session.selectOne(namespace + ".replyLikeCount", reply_key);
+		}
+
+		@Override
+		public int replyDisLikeCount(int reply_key) {
+			return session.selectOne(namespace + ".replyDisLikeCount", reply_key);
+		}
 }

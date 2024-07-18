@@ -41,20 +41,36 @@ public class RereplyDAOImpl implements RereplyDAO{
 	}
 
 	@Override
-	public int total(int reply_key) {
-			return session.selectOne(namespace + ".total", reply_key);
-	}
-
-	@Override
-	public void updaterereplyLike(RereplyLikeVO vo) {
-		session.update(namespace + ".updaterereplyLike", vo);
-		
-	}
-
-	@Override
 	public void updatereLock(RereplyVO vo) {
 		session.update(namespace + ".updatereLock", vo);
 		
+	}
+	
+	@Override
+	public int rereplyCount(int reply_key) {
+			return session.selectOne(namespace + ".rereplyCount", reply_key);
+	}
+
+	@Override
+	public void rereplyLikeUpdate(RereplyLikeVO vo) {
+			session.update(namespace + ".rereplyLikeUpdate", vo);
+		
+	}
+
+	@Override
+	public void rereactionInsert(RereplyLikeVO vo) {
+			session.insert(namespace + ".rereactionInsert", vo);
+		
+	}
+
+	@Override
+	public int rereplyLikeCount(int rereply_key) {
+			return session.selectOne(namespace + ".rereplyLikeCount", rereply_key);
+	}
+
+	@Override
+	public int rereplyDisLikeCount(int rereply_key) {
+			return session.selectOne(namespace + ".rereplyDisLikeCount", rereply_key);
 	}
 
 }

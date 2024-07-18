@@ -17,7 +17,9 @@ const ReplyPage = ({ bbs_key, bbs_writer }) => {
     const uid = sessionStorage.getItem('uid');
     const [showReply, setShowReply] = useState(false);
     const [showRep, setShowRep] = useState({});
-    const [rereplyParent, setRereplyParent] = useState(null); // 대댓글 부모 댓글을 저장할 상태
+    const [rereplyParent, setRereplyParent] = useState(null);
+    const [replyLikeCount, setReplyLikeCount] = useState(0);
+
 
     const callAPI = async () => {
         const res = await axios.get(`/reply/plist/${bbs_key}?key=${key}&page=${page}&size=${size}`);
@@ -32,6 +34,8 @@ const ReplyPage = ({ bbs_key, bbs_writer }) => {
             const last = Math.ceil(res.data.total / size);
             if (page > last) setPage(page - 1);
         }
+        //const res1 = await axios.get(`/reply/reaction/like/${reply_key}`);
+
     };
 
     useEffect(() => {
@@ -43,7 +47,6 @@ const ReplyPage = ({ bbs_key, bbs_writer }) => {
         setPage(1);
     };
 
-    // 삭제하기
     const onDelete = async (reply_key) => {
         if (!window.confirm(`${reply_key}번 댓글을 삭제하실래요?`)) return;
         await axios.post(`/reply/delete/${reply_key}`);
@@ -51,19 +54,16 @@ const ReplyPage = ({ bbs_key, bbs_writer }) => {
         callAPI();
     };
 
-    // 수정하기
     const onUpdate = (reply_key) => {
         const data = reply.map(reply => reply.reply_key === reply_key ? { ...reply, isEdit: true } : reply);
         setReply(data);
     };
 
-    // 수정할 때 내용 바꾸기
     const onChangeContents = (reply_key, reply_contents) => {
         const data = reply.map(reply => reply.reply_key === reply_key ? { ...reply, text: reply_contents } : reply);
         setReply(data);
     };
 
-    // 수정할 때 비밀 댓글 바꾸기
     const onChangeLock = async (reply_key, reply_lock) => {
         const lockState = reply_lock === 'unlock' ? 'lock' : 'unlock';
         if (window.confirm(`댓글의 상태를 ${lockState === 'unlock' ? '공개 댓글' : '비밀 댓글'}로 변경하시겠습니까?`)) {
@@ -72,28 +72,6 @@ const ReplyPage = ({ bbs_key, bbs_writer }) => {
         }
     };
 
-    // 좋아요/싫어요 기능
-    const onChangeReaction = async (reply_key, reply_reaction, newReaction) => {
-        let reactionState;
-        if (reply_reaction === newReaction) {
-            reactionState = 'none';
-        } else {
-            reactionState = newReaction; 
-        }
-        try {
-            await axios.post(`/reply/update/replyLike`, {
-                reply_key: reply_key,
-                reply_reaction: reactionState
-            });
-            const reaction = reply.map(reply => reply.reply_key === reply_key ? { ...reply, reaction: reactionState } : reply);
-            setReply(reaction);
-            callAPI();
-        } catch (error) {
-            console.error('리액션 변경 오류:', error);
-        }
-    };
-
-    // 저장하기
     const onSave = async (reply) => {
         if (!window.confirm(`${reply.reply_key}번 댓글을 수정하실래요?`)) return;
 
@@ -110,20 +88,34 @@ const ReplyPage = ({ bbs_key, bbs_writer }) => {
         }
     };
 
-    // 취소하기
     const onCancel = (reply_key) => {
         const data = reply.map(reply => reply.reply_key === reply_key ? { ...reply, isEdit: false, text: reply.reply_contents, lock: reply.reply_lock } : reply);
         setReply(data);
     };
 
-    // 대댓글 토글하기
     const toggleRep = (reply_key) => {
         setShowRep({ ...showRep, [reply_key]: !showRep[reply_key] });
         if (showRep[reply_key]) {
-            setRereplyParent(null); // 대댓글 닫을 때 부모 댓글 상태 초기화
+            setRereplyParent(null);
         } else {
-            setRereplyParent(reply_key); // 대댓글 열 때 부모 댓글 상태 업데이트
+            setRereplyParent(reply_key);
         }
+    };
+
+    const onReplyReactionInsert = async (reply_key, reaction) => {
+        try {
+            const res = await axios.post('/reply/reactionInsert', { reply_writer: uid, reply_key, reply_reaction: reaction });
+            alert('리액션 입력 완료')
+            callAPI();
+        } catch (error) {
+            console.error('리액션 삽입 오류:', error);
+        }
+    };
+
+    const handleReactionClick = (reply_key, currentReaction, newReaction) => {
+        const reaction = currentReaction === newReaction ? 'none' : newReaction;
+        onReplyReactionInsert(reply_key, reaction);
+        console.log(reply_key, reaction);
     };
 
     return (
@@ -238,12 +230,12 @@ const ReplyPage = ({ bbs_key, bbs_writer }) => {
                                         <span style={{ cursor: 'pointer' }}>
                                             {reply.reaction === 'like' ? (
                                                 <BsHandThumbsUpFill
-                                                    onClick={() => onChangeReaction(reply.reply_key, reply.reaction, 'like')}
+                                                    onClick={() => handleReactionClick(reply.reply_key, reply.reaction, 'like')}
                                                     className='me-4'
                                                 />
                                             ) : (
                                                 <BsHandThumbsUp
-                                                    onClick={() => onChangeReaction(reply.reply_key, reply.reaction, 'like')}
+                                                    onClick={() => handleReactionClick(reply.reply_key, reply.reaction, 'like')}
                                                     className='me-4'
                                                 />
                                             )}
@@ -251,13 +243,13 @@ const ReplyPage = ({ bbs_key, bbs_writer }) => {
                                         <span style={{ cursor: 'pointer' }}>
                                             {reply.reaction === 'dislike' ? (
                                                 <BsHandThumbsDownFill
-                                                    onClick={() => onChangeReaction(reply.reply_key, reply.reaction, 'dislike')}
+                                                    onClick={() => handleReactionClick(reply.reply_key, reply.reaction, 'dislike')}
                                                     className='me-4'
                                                 />
                                             ) : (
                                                 <BsHandThumbsDown
-                                                    onClick={() => onChangeReaction(reply.reply_key, reply.reaction, 'dislike')}
-                                                    className='me-4'
+                                                    onClick={() => handleReactionClick(reply.reply_key, reply.reaction, 'dislike')}
+                                                    className='ml-4'
                                                 />
                                             )}
                                         </span>
@@ -268,6 +260,7 @@ const ReplyPage = ({ bbs_key, bbs_writer }) => {
                                         <Row className='justify-content-center mt-3'>
                                             <Col xs={12}>
                                                 <RereplyPage reply_key={reply.reply_key} bbs_writer={bbs_writer} />
+                                                <hr />
                                             </Col>
                                         </Row>
                                     )}

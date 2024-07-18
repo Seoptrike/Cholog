@@ -60,8 +60,25 @@ public class RereplyController {
 		}
 		
 		@PostMapping("/update/rereplyLike")
-		public void updaterereplyLike(@RequestBody RereplyLikeVO vo) {
-				rrservice.updaterereplyLike(vo);
+		public void rereplyLikeUpdate(@RequestBody RereplyLikeVO vo) {
+				rrservice.rereplyLikeUpdate(vo);
+		}
+		
+		@PostMapping("/rereactionInsert")
+		public void rereactionInsert(@RequestBody RereplyLikeVO vo) {
+				rrdao.rereactionInsert(vo);
+		}
+		
+		@GetMapping("/reaction/like/{rereply_key}")
+		public int rereplyLikeCount(@PathVariable("rereply_key") int rereply_key) {
+			return rrdao.rereplyLikeCount(rereply_key);
+			
+		}
+		
+		@GetMapping("/reaction/dislike/{rereply_key}")
+		public int rereplyDisLikeCount(@PathVariable("rereply_key") int rereply_key) {
+			return rrdao.rereplyDisLikeCount(rereply_key);
+			
 		}
 		
 }
