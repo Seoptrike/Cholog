@@ -43,6 +43,9 @@ public class QueryVO {
 	}
 
 	public String getWord() {
+		if ("type".equals(this.key)) {
+			return this.word;
+		}
 		return "%" + word + "%";
 	}
 
@@ -79,7 +82,5 @@ public class QueryVO {
 	public void setStateWord(int stateWord) {
 		this.stateWord = stateWord;
 	}
-
-	
 
 }

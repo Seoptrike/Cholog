@@ -11,6 +11,7 @@ import { useNavigate, useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import InsertPage from '../../review/InsertPage';
 import ReviewPage from '../../review/ReviewPage';
+import ReportInsert from '../../report/ReportInsert';
 
 const ReadPage = () => {
     const navi = useNavigate();
@@ -19,7 +20,7 @@ const ReadPage = () => {
     //console.log(mall_key);
     const [form, setForm] = useState({});
     const [list, setList] = useState([]);//슬라이드
-
+    const root = "mall"
 
     console.log("read!!!!!!!!!!!!!!" + form);
 
@@ -48,7 +49,7 @@ const ReadPage = () => {
     useEffect(() => {
         callAPI();
     }, [mall_key]) // 판매자정보에서 누르면 url만 바뀌고 안가서 넣어줘야함!
-
+    console.log(mall_seller);
     const onClickUpdate = () => {
         navi(`/mall/update/${mall_key}`);
     }
@@ -85,8 +86,8 @@ const ReadPage = () => {
     const slideImg = {
         width: "7rem",
         height: "7rem",
-        border:"1px solid green",
-        borderRadius:"20%"
+        border: "1px solid green",
+        borderRadius: "20%"
     }
 
 
@@ -100,30 +101,34 @@ const ReadPage = () => {
                             <img style={photoST} src={mall_photo ? mall_photo : ' http://via.placeholder.com/300x300'} alt='상품대표이미지' />
                         </Col>
                         <Col className='' xs={6} sm={6} md={6} lg={6} xl={6} style={{ whiteSpace: "nowrap" }} >
-                            <Row className=''style={{height:"20rem"}} >
+                            <Row className='' style={{ height: "20rem" }} >
                                 <Table bordered>
                                     <tbody>
                                         <tr>
                                             {mall_seller === uid ?
                                                 <>
-                                                    <td className='ellipsis' style={{ width: "78%",borderRight: "0px",height:"4rem" }}>{mall_title}</td>
-                                                    <td className='text-end' style={{ width: "12%", borderLeft: "0px",height:"4rem" }}>
+                                                    <td className='ellipsis' style={{ width: "78%", borderRight: "0px", height: "4rem" }}>{mall_title}</td>
+                                                    <td className='text-end' style={{ width: "12%", borderLeft: "0px", height: "4rem" }}>
                                                         <DropdownButton id="dropdown-basic-button" title="수정" size='sm'>
                                                             <Dropdown.Item onClick={onClickUpdate}>수정하기</Dropdown.Item>
                                                             <Dropdown.Item onClick={(e) => onClickDelete(e)}>삭제하기</Dropdown.Item>
                                                         </DropdownButton>
                                                     </td>
                                                 </>
-                                            :
+                                                :
                                                 <>
-                                                    <td className='ellipsis' style={{ borderRight: "0px",height:"100%" }}>{mall_title}</td>
-                                                    <td className='text-end' style={{ width: "12%", borderLeft: "0px" }}>신고</td>
+                                                    <td className='ellipsis' style={{ borderRight: "0px", height: "100%" }}>{mall_title}</td>
+                                                    {uid && (
+                                                        <td className='text-end' style={{ width: "12%", borderLeft: "0px" }}>
+                                                            <ReportInsert uid={uid} writer={mall_seller} root={root} origin={mall_key} />
+                                                        </td>
+                                                    )}
                                                 </>
                                             }
                                         </tr>
                                         <tr>
-                                            <td  style={{ width: "50%"}} >{mall_tstate === 0 ? "나눔" : (mall_tstate === 1 ? "무료나눔" : "구매")}</td>
-                                            <td style={{ width: "50%"}} >{mall_pstate === 0 ? "중고상품" : "(미개봉,미사용)"}</td>
+                                            <td style={{ width: "50%" }} >{mall_tstate === 0 ? "나눔" : (mall_tstate === 1 ? "무료나눔" : "구매")}</td>
+                                            <td style={{ width: "50%" }} >{mall_pstate === 0 ? "중고상품" : "(미개봉,미사용)"}</td>
                                         </tr>
                                         <tr>
                                             <td colSpan={2} style={{ width: "100%", height: "80px" }}>
@@ -131,18 +136,18 @@ const ReadPage = () => {
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td style={{ width: "50%"}}>마감일:{mall_endDate}</td>
-                                            <td style={{ width: "50%"}}>{mall_price}씨드</td>
+                                            <td style={{ width: "50%" }}>마감일:{mall_endDate}</td>
+                                            <td style={{ width: "50%" }}>{mall_price}씨드</td>
                                         </tr>
                                         <tr>
-                                            <td style={{ width: "50%"}}>(유저아이콘){mall_seller}</td>
+                                            <td style={{ width: "50%" }}>(유저아이콘){mall_seller}</td>
 
-                                            <td style={{ fontSize: "12px",width:"50%" }}>{fmtudate ? `${fmtudate}(수정됨)` : mall_regDate}</td>
+                                            <td style={{ fontSize: "12px", width: "50%" }}>{fmtudate ? `${fmtudate}(수정됨)` : mall_regDate}</td>
                                         </tr>
                                     </tbody>
                                 </Table>
                             </Row>
-                            <Row className='' style={{height:"7rem"}} >
+                            <Row className='' style={{ height: "7rem" }} >
                                 <div style={mapST}>
                                     <Slider {...sellerList}>
                                         {list &&

@@ -94,7 +94,7 @@ const FollowingDiaryList = () => {
                                             <img style={{ width: "3rem", height: "3rem", borderRadius: "50%" }} src={d.user_img} />
                                         </Col>
                                         <Col xs={8}>
-                                            <span>{d.diary_writer} </span>
+                                            <span><a href={`/user/read/${d.diary_writer}`}> {d.diary_writer}</a></span>
                                             <div style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                                                 <span>{d.diary_title}</span>
                                             </div>
@@ -106,7 +106,6 @@ const FollowingDiaryList = () => {
                                                         <BsThreeDotsVertical />
                                                     </Dropdown.Toggle>
                                                     <Dropdown.Menu>
-                                                        <Dropdown.Item>팔로우</Dropdown.Item>
                                                         <Dropdown.Item><ReportInsert uid={user_uid} origin={d.diary_key} writer={d.diary_writer} root={root} /></Dropdown.Item>
                                                     </Dropdown.Menu>
                                                 </Dropdown>
