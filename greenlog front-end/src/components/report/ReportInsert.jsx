@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { Row, Col, InputGroup, Form, Button, Card } from 'react-bootstrap'
 import { PiSirenFill } from "react-icons/pi";
@@ -23,13 +23,29 @@ const ReportInsert = ({ uid, writer, root, origin }) => {
 
     const onClickReport = async () => {
         await axios.post("/report/insert", { report_from: uid, report_to: writer, report_root: root, report_origin: origin, report_contents })
+        setform({report_from: "",
+            report_to: "",
+            report_root: "",
+            report_origin: "",
+            report_contents: ''})
         alert("신고접수가 완료되었습니다")
         handleClose();
     }
+
+    useEffect(() => {
+        setform({
+            report_from: uid,
+            report_to: writer,
+            report_root: root,
+            report_origin: origin,
+            report_contents: ''
+        });
+    }, [uid, writer, root, origin]);
+    
     return (
         <>
-            <div onClick={handleShow}>
-                신고하기
+            <div onClick={handleShow} style={{cursor:"pointer"}}>
+                신고
                 <span><PiSirenFill style={{ color: "red" }} /></span>
             </div>
 

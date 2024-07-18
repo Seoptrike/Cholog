@@ -55,5 +55,9 @@ public class BBSDAOImpl implements BBSDAO {
 		session.update(NAMESPACE+".updateViewcnt",bbs_key);
 		
 	}
+	 @Override
+	    public List<BBSVO> topList() {
+	        return session.selectList(NAMESPACE + ".topList"); // 추가
+	    }
 
 }

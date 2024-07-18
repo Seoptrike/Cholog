@@ -40,8 +40,8 @@ const UserRouter = () => {
       <Route path='searchId' element={<SearchIdPage />} />
       <Route path='searchPass' element={<SearchPassPage />} />
       <Route path='update/:user_uid' element={<UserUpdatePage />} />
-      <Route path='following' element={<Following />} />
-      <Route path='follower' element={<Follow />} />
+      <Route path='following/:user_uid' element={<Following />} />
+      <Route path='follower/:user_uid' element={<Follow />} />
       <Route path='chat' element={<ChatRoom />} />
     </Routes>
   )

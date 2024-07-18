@@ -7,10 +7,6 @@ import '../../common/useful/Paging.css';
 import Pagination from 'react-js-pagination'
 
 
-//경매번호를 눌렀을 때 updatepage로 이동
-//상품명을 눌렀을 때 readpage로 이동
-
-
 
 const AuctionPage = () => {
   const [list, setList] = useState([]);
@@ -29,17 +25,13 @@ const AuctionPage = () => {
 
   useEffect(() => {
     callAPI();
-  }, [])
+  }, [page])
 
   const onSubmit = (e) => {
     e.preventDefault();
     callAPI();
-    setWord("");
   }
-  const onChangeForm = (e) => {
-    setList({ ...list, [e.target.name]: e.target.value })
-  }
-
+  
   return (
     <div>
       <Row>
@@ -55,8 +47,13 @@ const AuctionPage = () => {
                   <Form.Select value={key} name="key" onChange={(e) => setKey(e.target.value)}>
                     <option value="auction_seller">판매자</option>
                     <option value="auction_buyer">구매자</option>
+                    <option value="auction_regDate">거래일</option>
+                    <option value="auction_state">삭제상태</option>
                   </Form.Select>
+                  {key==="auction_regDate" ?
+                  <Form.Control type="date"  value={word} name="word" onChange={(e) => setWord(e.target.value)}/> :
                   <Form.Control value={word} name="word" onChange={(e) => setWord(e.target.value)} />
+                 }
                   <Button type="submit" size="sm" className="me-3">검색</Button>
                   <span> 총: {count}건</span>
                 </InputGroup>
@@ -69,11 +66,12 @@ const AuctionPage = () => {
                 <td><input type="checkbox" /></td>
                 <td>경매번호</td>
                 <td>상품번호</td>
-                <td>상품명</td>
+                <td colSpan={2}>상품명</td>
                 <td>판매자</td>
                 <td>구매자</td>
                 <td>등록일</td>
                 <td>거래씨드</td>
+                <td>상태</td>
               </tr>
             </thead>
             <tbody>
@@ -82,15 +80,16 @@ const AuctionPage = () => {
                   <td><input type="checkbox" /></td>
                   <td>{auc.auction_key}</td>
                   <td>{auc.auction_mall_key}</td>
-                  <td>{auc.mall_title}
-                  <Link to={`/mall/read/${auc.mall_key}`}>
-                    <img src={auc.mall_photo}  style={{ width: "100%", height: "10rem", objectFit: "contain" }} />
+                  <td>{auc.mall_title}</td>
+                  <td><Link to={`/mall/read/${auc.mall_key}`}>
+                    <img src={auc.mall_photo || "http://via.placeholder.com/200x200"}  style={{ width: "40%", height: "4rem", objectFit: "contain" }} />
                   </Link>
                   </td>
                   <td>{auc.auction_seller}</td>
                   <td>{auc.auction_buyer}</td>
                   <td>{auc.fmtdate}</td>
                   <td>{auc.auction_amount}씨드</td>
+                  <td>{auc.auction_state===1 ? "삭제" : ""}</td>
                 </tr>
               )}
             </tbody>

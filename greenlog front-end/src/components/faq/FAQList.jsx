@@ -8,7 +8,7 @@ const FAQList = () => {
   const [list, setList] = useState([]);
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
-  const [size, setSize] = useState(5);
+  const [size, setSize] = useState(10);
   const [key, setKey] = useState('faq_question');
   const [word, setWord] = useState('');
   const [category, setCategory] = useState('all');
@@ -18,18 +18,20 @@ const FAQList = () => {
   const currentUser = sessionStorage.getItem('uid');
 
   const callAPI = async () => {
-    const res = await axios.get(`/faq/list.json?key=${key}&word=${word}&page=${page}&size=${size}`);
+    const res = await axios.get(`/faq/list.json?key=${key}&word=${word}&category=${category}&page=${page}&size=${size}`);
     setList(res.data.documents);
     setCount(res.data.total);
+    const last = Math.ceil(res.data.total / size);
+    if (page > last) setPage(last);
 
     if (res.data.total === 0) {
       alert('검색어가 없습니다');
     }
-  };
+  }
 
   useEffect(() => {
     callAPI();
-  }, [page]);
+  }, [page, size, category]);
 
   const onClickSearch = async (e) => {
     e.preventDefault();
@@ -57,25 +59,33 @@ const FAQList = () => {
   };
 
   const CategoryChange = (e) => {
-    setCategory(e.target.value);
+    const selectedCategory = e.target.value;
+    setCategory(selectedCategory);
     setPage(1);
-  };
-
-  const filterList = () => {
-    if (category === 'all') {
-      return list;
+    // 카테고리별 size 설정
+    if (selectedCategory === '회원') {
+      setSize(10);
+    } else if (selectedCategory === '포인트') {
+      setSize(15);
+    } else if (selectedCategory === '참여방법') {
+      setSize(15);
+    } else {
+      setSize(5);
     }
-    return list.filter(faq => faq.FAQ_category === category);
   };
 
-  const filteredList = filterList();
+  const handlePageChange = (pageNumber) => {
+    setPage(pageNumber);
+  };
+
+  const filteredList = list.filter(faq => category === 'all' || faq.FAQ_category === category);
 
   return (
     <div>
       <HeaderTabs />
       <h1 className="text-center my-5">FAQ</h1>
-      <Row className="mb-3">
-        <Col md={10}>
+      <Row className="mb-3 align-items-center">
+        <Col md={8}>
           <InputGroup>
             <Form.Select className='me-2' value={category} onChange={CategoryChange}>
               <option value="all">전체</option>
@@ -84,17 +94,15 @@ const FAQList = () => {
               <option value="참여방법">참여방법</option>
             </Form.Select>
             <Form.Control placeholder='검색어' value={word} onChange={(e) => setWord(e.target.value)} />
-            <Button onClick={(e) => onClickSearch(e)}>검색</Button>
+            <Button onClick={onClickSearch}>검색</Button>
           </InputGroup>
         </Col>
-        <Col>
-          검색수: {count}건
-        </Col>
-        {adminIds.includes(currentUser) && (
-          <Col className='text-end'>
+        <Col md={4} className="text-end">
+          <span className="me-2">검색수: {count}건</span>
+          {adminIds.includes(currentUser) && (
             <Button size='sm' onClick={WriteClick}>글쓰기</Button>
-          </Col>
-        )}
+          )}
+        </Col>
       </Row>
       <Accordion defaultActiveKey={null}>
         {filteredList.map((faq, index) => (
@@ -120,7 +128,7 @@ const FAQList = () => {
           pageRangeDisplayed={5}
           prevPageText={"‹"}
           nextPageText={"›"}
-          onChange={(e) => setPage(e)}
+          onChange={handlePageChange}
         />
       )}
     </div>

@@ -58,7 +58,6 @@ const TotalPage = () => {
                     <ListGroup>
                         <ListGroup.Item>씨앗</ListGroup.Item>
                         <ListGroup.Item> <Link to={"/user/wallet/:user_uid"}>개인씨앗지갑</Link></ListGroup.Item>
-                        <ListGroup.Item> <Link to={"/trade/list.json"}>개인거래내역</Link></ListGroup.Item>
                         <ListGroup.Item> <Link to={"/user/admin/seed/list.json"}>전체씨앗지갑목록</Link></ListGroup.Item>
                         <ListGroup.Item> <Link to={"/trade/admin/list.json"}>전체씨앗거래내역</Link></ListGroup.Item>
                        

@@ -28,7 +28,11 @@
 	</select>
 	
 	<select id="adminListTotal" resultType="int">
-		select count(*) from user;
+		select count(*) from user
+		<if test="key=='user_uid'"> where user_uid like concat('%', #{word}, '%')</if>
+		<if test="key=='user_uname'">where user_uname like concat('%', #{word}, '%')</if>
+		<if test="key=='user_nickname'">where user_nickname like concat('%', #{word}, '%')</if>
+		<if test="key=='user_birth'">where user_birth like concat('%', #{word}, '%')</if>
 	</select>
 	
 	<insert id="insert" >
@@ -74,17 +78,14 @@
     from user u
     left join 
         seed s on u.user_uid = s.seed_uid
-    left join 
+     left join 
         (select 
-            count(auction.auction_key) as auction_count
+            count(*) as auction_count
          from 
-            (select auction_buyer as user_uid from auction
-             union all
-             select auction_seller as user_uid from auction) auction_user
-         inner join auction on auction_user.user_uid = auction.auction_buyer or auction_user.user_uid = auction.auction_seller
-         where auction_user.user_uid = #{uid}
-         group by auction_user.user_uid) a 
-    on u.user_uid = u.user_uid  <!-- 수정: a 서브쿼리에서는 u.user_uid를 그대로 사용 -->
+            auction
+         where 
+            auction_buyer = #{uid} or auction_seller = #{uid}) a 
+    on u.user_uid = #{uid}
     left join 
         (select 
             (select count(*) from follow where follow_from = #{uid}) as following_count,
