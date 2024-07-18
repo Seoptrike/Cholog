@@ -28,7 +28,7 @@ const SellerList = ({ mall_seller }) => {
     }, [page])
 
     const sellerList = {
-        dots: true,
+        dots: false,
         infinite: false,
         speed: 500,
         slidesToShow: 2,

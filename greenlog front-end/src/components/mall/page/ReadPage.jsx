@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Nav, TabContent, Row, Col, Table, Card } from 'react-bootstrap';
+import { Nav, TabContent, Row, Col, Table, Card, Button } from 'react-bootstrap';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import AllImage from '../read/AllImage';
-import SellerList from '../read/SellerList';
 import SellerInfo from '../read/SellerInfo';
 import Slider from "react-slick";
 
@@ -63,30 +62,44 @@ const ReadPage = () => {
         } catch (error) {
             alert("삭제실패! 댓글이 존재합니다!")
         }
-
     }
+
     const mapST = {
         width: '100%',
         height: '100%',
         Padding: "0px 0px"
     };
     const photoST = {
-        width: '100%',
-        height: '100%'
+        width: '30rem',
+        height: '30rem',
+        padding:"0.5rem"
     }
     const sellerList = {
         dots: true,
         infinite: false,
         speed: 500,
-        slidesToShow: 3,
+        slidesToShow: 5,
         slidesToScroll: 1
     };
-
     const slideImg = {
         width: "7rem",
         height: "7rem",
         border:"1px solid green",
         borderRadius:"20%"
+    }
+    const buttonST={
+        position: 'absolute', 
+        width:" 1rem",
+        height: "2rem",
+        top: '0.7rem',      
+        right: '5rem',
+    }
+    const reportbuttonST={
+        position: 'absolute', 
+        width:" 4rem",
+        height: "2.5rem",
+        top: '0.7rem',      
+        right: '2rem',
     }
 
 
@@ -95,20 +108,20 @@ const ReadPage = () => {
             <h1>리드페이지</h1>
             <div className='my-5'>
                 <div>
-                    <Row className=' align-items-center'>
-                        <Col className=' text-center  text-middle' xs={6} sm={6} md={6} lg={6} xl={6} style={{ whiteSpace: "nowrap" }}>
+                    <Row className=' align-items-center mall_read_flexbox'>
+                        <Col className=' text-center  text-middle  mall_read_item' xs={5} md={5} lg={5}  style={{ whiteSpace: "nowrap" }}>
                             <img style={photoST} src={mall_photo ? mall_photo : ' http://via.placeholder.com/300x300'} alt='상품대표이미지' />
                         </Col>
-                        <Col className='' xs={6} sm={6} md={6} lg={6} xl={6} style={{ whiteSpace: "nowrap" }} >
-                            <Row className=''style={{height:"20rem"}} >
+                        <Col className=' mall_read_item' xs={7} md={7} lg={7} style={{ whiteSpace: "nowrap",height:"100%",padding:"0px 2rem 0px 0px" }} >
+                            <Row className=''style={{height:"22rem"}} >
                                 <Table bordered>
                                     <tbody>
-                                        <tr>
+                                        <tr style={{ position: "relative"}}>
                                             {mall_seller === uid ?
                                                 <>
-                                                    <td className='ellipsis' style={{ width: "78%",borderRight: "0px",height:"4rem" }}>{mall_title}</td>
-                                                    <td className='text-end' style={{ width: "12%", borderLeft: "0px",height:"4rem" }}>
-                                                        <DropdownButton id="dropdown-basic-button" title="수정" size='sm'>
+                                                    <td className='' colSpan={2} style={{ width: "100%" }}>
+                                                        {mall_title}
+                                                        <DropdownButton  title="수정" style={buttonST}>
                                                             <Dropdown.Item onClick={onClickUpdate}>수정하기</Dropdown.Item>
                                                             <Dropdown.Item onClick={(e) => onClickDelete(e)}>삭제하기</Dropdown.Item>
                                                         </DropdownButton>
@@ -116,8 +129,10 @@ const ReadPage = () => {
                                                 </>
                                             :
                                                 <>
-                                                    <td className='ellipsis' style={{ borderRight: "0px",height:"100%" }}>{mall_title}</td>
-                                                    <td className='text-end' style={{ width: "12%", borderLeft: "0px" }}>신고</td>
+                                                    <td colSpan={2} style={{ width: "100%" }}>
+                                                        {mall_title}
+                                                        <Button style={reportbuttonST} className='px-2'>신고</Button>
+                                                    </td>
                                                 </>
                                             }
                                         </tr>
@@ -144,10 +159,10 @@ const ReadPage = () => {
                             </Row>
                             <Row className='' style={{height:"7rem"}} >
                                 <div style={mapST}>
-                                    <Slider {...sellerList}>
+                                    <Slider className='sellerList'{...sellerList}>
                                         {list &&
                                             list.map(list => (
-                                                <div className='mx-5'>
+                                                <div className=''>
                                                     <Link to={`/mall/read/${list.mall_key}`}>
                                                         <img style={slideImg} src={list.mall_photo ? list.mall_photo : "http://via.placeholder.com/100x100"} />
                                                     </Link>
@@ -155,8 +170,7 @@ const ReadPage = () => {
                                             ))}
                                     </Slider>
                                 </div>
-                                <div>(--------------------------누르면이동-------------------------)</div>
-                            </Row>
+                             </Row>
                         </Col>
                     </Row>
                 </div>

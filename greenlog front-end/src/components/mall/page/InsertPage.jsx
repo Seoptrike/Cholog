@@ -71,7 +71,7 @@ const InsertPage = () => {
 
             // 첨부 파일 업로드 요청
             await axios.post(`/mall/attach/${mallPhoto_mall_key}`, formData);
-            alert("첨부파일 업로드 완료!");
+            //alert("첨부파일 업로드 완료!");
             setFiles([]); // 파일 상태 초기화
         } catch (error) {
             console.error("첨부 파일 업로드 오류:", error);
