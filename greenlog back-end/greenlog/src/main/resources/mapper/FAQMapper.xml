@@ -20,22 +20,42 @@
  <select id="list" resultType="hashmap">
     select *
     from FAQ
-    <if test="key == 'faq_writer'">where faq_writer like #{word}</if>
-    <if test="key == 'faq_question'">where faq_question like #{word}</if>
-    <if test="key == 'faq_answer'">where faq_answer like #{word}</if>
-    <if test="key == 'faq_category'">where faq_category like #{word}</if>
+    <where>
+        <if test="key == 'faq_writer'">
+            faq_writer like concat('%', #{word}, '%')
+        </if>
+        <if test="key == 'faq_question'">
+            faq_question like concat('%', #{word}, '%')
+        </if>
+        <if test="key == 'faq_answer'">
+            faq_answer like concat('%', #{word}, '%')
+        </if>
+        <if test="key == 'faq_category'">
+            faq_category like concat('%', #{word}, '%')
+        </if>
+    </where>
     order by faq_key desc
     limit #{start}, #{size}
 </select>
-
 <select id="total" resultType="int">
     select count(*)
     from FAQ
-    <if test="key == 'faq_writer'">where faq_writer like #{word}</if>
-    <if test="key == 'faq_question'">where faq_question like #{word}</if>
-    <if test="key == 'faq_answer'">where faq_answer like #{word}</if>
-    <if test="key == 'faq_category'">where faq_category like #{word}</if>
-    </select>
+    <where>
+        <if test="key == 'faq_writer'">
+            faq_writer like concat('%', #{word}, '%')
+        </if>
+        <if test="key == 'faq_question'">
+            faq_question like concat('%', #{word}, '%')
+        </if>
+        <if test="key == 'faq_answer'">
+            faq_answer like concat('%', #{word}, '%')
+        </if>
+        <if test="key == 'faq_category'">
+            faq_category like concat('%', #{word}, '%')
+        </if>
+    </where>
+</select>
+
     <update id="updateViewcnt">
 		update FAQ
 		set faq_vcnt=faq_vcnt+1

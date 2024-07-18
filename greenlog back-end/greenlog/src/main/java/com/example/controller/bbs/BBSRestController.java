@@ -31,6 +31,11 @@ public class BBSRestController {
 	    return map;
 	}
     
+    @GetMapping("/top")
+    public List<BBSVO> topList() {
+        return bbsDAO.topList(); // 추가
+    }
+    
     @PostMapping("/update/{bbs_key}")
 	public void update(@RequestBody BBSVO vo) {
 		bbsDAO.update(vo);

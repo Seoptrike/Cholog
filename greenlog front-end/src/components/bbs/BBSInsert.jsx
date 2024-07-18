@@ -34,8 +34,12 @@ const BBSInsert = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (bbs_title === "") {
+    if (bbs_title.trim() === "") {
       alert("제목을 입력하세요!");
+      return;
+    }
+    if (bbs_contents.trim() === "") {
+      alert("내용을 입력하세요!");
       return;
     }
     if (!window.confirm("게시글을 등록하실래요?")) return;

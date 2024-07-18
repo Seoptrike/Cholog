@@ -18,22 +18,14 @@ const NoticeList = () => {
   const currentUser = sessionStorage.getItem('uid');
 
   const callAPI = async () => {
-    try {
-      const res = await axios.get(`/notice/list.json?key=${key}&word=${word}&page=${page}&size=${size}`);
-      setList(res.data.documents);
-      setCount(res.data.total);
+    const res = await axios.get(`/notice/list.json?key=${key}&word=${word}&category=${category}&page=${page}&size=${size}`);
+    setList(res.data.documents);
+    setCount(res.data.total);
+    const last = Math.ceil(res.data.total / size);
+    if (page > last) setPage(last);
 
-      if (res.data.total === 0) {
-        alert('검색어가 없습니다');
-      }
-
-      // 현재 페이지가 총 페이지 수를 초과하면 페이지를 마지막 페이지로 설정
-      const totalPages = Math.ceil(res.data.total / size);
-      if (page > totalPages) {
-        setPage(totalPages);
-      }
-    } catch (error) {
-      console.error('API 호출 중 에러 발생:', error);
+    if (res.data.total === 0) {
+      alert('검색어가 없습니다');
     }
   };
 
@@ -48,8 +40,20 @@ const NoticeList = () => {
   };
 
   const handleCategoryChange = (e) => {
-    setCategory(e.target.value);
+    const selectedCategory = e.target.value;
+    setCategory(selectedCategory);
     setPage(1);
+
+    // 카테고리별 size 설정
+    if (selectedCategory === '0') {
+      setSize(10); // 일반 카테고리
+    } else if (selectedCategory === '1') {
+      setSize(15); // 회원 카테고리
+    } else if (selectedCategory === '2') {
+      setSize(20); // 이벤트 카테고리
+    } else {
+      setSize(5); // 전체 또는 기타 카테고리
+    }
   };
 
   const filterList = () => {
