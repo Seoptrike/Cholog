@@ -1,14 +1,9 @@
 package com.example.service.chat;
 
-import java.util.List;
-
-import com.example.domain.ChatVO;
+import java.util.HashMap;
 
 public interface ChatService {
 
-	public void saveChat(ChatVO chatVO);
+	public HashMap<String, Object> List();
 
-	List<ChatVO> getAllChatsAfterSaving(ChatVO chatVO);
-
-	List<ChatVO> getAllChats();
 }
