@@ -77,4 +77,9 @@ public class ReplyDAOImpl implements ReplyDAO {
 		public int replyDisLikeCount(int reply_key) {
 			return session.selectOne(namespace + ".replyDisLikeCount", reply_key);
 		}
+
+		@Override
+		public String readReaction(ReplyLikeVO vo) {
+			return session.selectOne(namespace + ".readReaction", vo);
+		}
 }

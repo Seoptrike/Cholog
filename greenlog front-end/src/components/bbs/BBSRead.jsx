@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Row, Col, Card, Button } from 'react-bootstrap';
+import ReplyReadPage from '../reply/ReplyReadPage';
 import ReplyPage from '../reply/ReplyPage';
 
 const BBSRead = () => {
@@ -81,7 +82,7 @@ const BBSRead = () => {
             </div>
           )}
         </Col>
-        <ReplyPage bbs_key={bbs_key} bbs_writer={bbs_writer} />
+        <ReplyPage bbs_key={bbs_key} bbs_writer={bbs_writer}/>
       </Row>
     </div>
   );

@@ -4,6 +4,7 @@ import { SlLock, SlLockOpen } from "react-icons/sl";
 import { BsArrowReturnRight, BsHandThumbsUp, BsHandThumbsUpFill, BsHandThumbsDown, BsHandThumbsDownFill, BsThreeDotsVertical } from "react-icons/bs";
 import axios from 'axios';
 import RereplyInsertPage from './RereplyInsertPage';
+import { Link } from 'react-router-dom';
 
 const RereplyPage = ({ reply_key, bbs_writer }) => {
     const [rereply, setRereply] = useState([]);
@@ -20,6 +21,7 @@ const RereplyPage = ({ reply_key, bbs_writer }) => {
             setRereply(data);
             setRereplyCount(res.data.rereplyCount);   
         }
+        console.log(res.data.rereplyCount);
     };
     useEffect(() => {
         callAPI();
@@ -116,10 +118,10 @@ const RereplyPage = ({ reply_key, bbs_writer }) => {
                                                     <BsArrowReturnRight className='me-2' style={{ color: 'gray', fontSize: '1.5em' }} />
                                                 </Col>
                                             </Row>
-                                            <img src={rereply.user_img || "http://via.placeholder.com/20x20"} width="50" className='me-3 rounded-circle' alt="profile" />
+                                            <Link to={`/user/read/${uid}`}><img src={rereply.user_img || "http://via.placeholder.com/20x20"} width="50" className='me-3 rounded-circle'/></Link>
                                             <div className="d-flex flex-column">
                                                 <div className="d-flex align-items-center">
-                                                    <span>{rereply.user_nickname} ({rereply.rereply_writer})</span>
+                                                <Link to={`/user/read/${uid}`}><span>{rereply.user_nickname} ({rereply.rereply_writer})</span></Link>
                                                     {!rereply.isEdit && (
                                                         <>
                                                             {(uid === rereply.rereply_writer || uid === bbs_writer) && rereply.rereply_lock === 'lock' && (

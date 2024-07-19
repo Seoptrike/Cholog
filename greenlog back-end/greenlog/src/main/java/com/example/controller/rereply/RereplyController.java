@@ -81,4 +81,9 @@ public class RereplyController {
 			
 		}
 		
+		@GetMapping("/count/{reply_key}")
+		public int count(@PathVariable("reply_key") int reply_key) {
+			return rrdao.rereplyCount(reply_key);
+		}
+		
 }
