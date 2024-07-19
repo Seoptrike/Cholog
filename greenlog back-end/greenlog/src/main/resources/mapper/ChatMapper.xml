@@ -13,8 +13,12 @@
         SELECT * FROM chat where chat_endTime is null;
     </select>
     
+    <select id="listCount" resultType="int">
+    	select count(*) FROM chat where chat_endTime is null order by chat_key desc;
+    </select>
+    
      <select id="alreadylist" resultType="com.example.domain.ChatVO">
-        SELECT * FROM chat where chat_endTime is not null;
+        SELECT * FROM chat where chat_endTime is not null order by chat_key desc;
     </select>
     
     <update id="update">
@@ -22,5 +26,15 @@
     	where chat_key=#{chat_key};
     </update>
     
+    <insert id="insertChatlog">
+    	insert into chatlog (chat_sender, chat_key, chatlog_msg) value (#{chat_sender},#{chat_key},#{chatlog_msg})
+    </insert>
     
-</mapper>
+    <select id="listchatLog" resultType="hashmap">
+    	select c.*,user_nickname,user_img from chatlog c join user u on u.user_uid=c.chat_sender where chat_key=#{chat_key}
+    </select>
+    
+    <select id="searchChatkey" resultType="int">
+    	select chat_key from chat where chat_sender=#{uid} and chat_state='미처리'
+    </select>
+</mapper> 

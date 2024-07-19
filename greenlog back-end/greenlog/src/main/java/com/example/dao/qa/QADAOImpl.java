@@ -54,4 +54,19 @@ public class QADAOImpl implements QADAO{
 		session.update(NAMESPACE+".updateViewcnt",qa_key);
 		
 	}
+
+	@Override
+	public List<HashMap<String, Object>> qaList(QueryVO vo) {
+		return session.selectList(NAMESPACE+".qaList",vo);
+	}
+
+	@Override
+	public int qaListCount() {
+		return session.selectOne(NAMESPACE+".qaListCount");
+	}
+
+	@Override
+	public int qaListTotal(QueryVO vo) {
+		return session.selectOne(NAMESPACE+".qaListTotal",vo);
+	}
 }

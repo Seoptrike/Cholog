@@ -57,5 +57,15 @@ public class QAController {
     	model.addAttribute("qa",service.read(qid));
 		return QDAO.read(qid);
 	}
+    
+    @GetMapping("/qaListCount")
+    public int qaListCount() {
+    	return QDAO.qaListCount();
+    }
+    
+    @GetMapping("/qaList")
+    public HashMap<String,Object> QaList(QueryVO vo) {
+    	return service.QaList(vo);
+    }
 }
 

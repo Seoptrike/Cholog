@@ -8,6 +8,7 @@ import RouterPage from '../../routers/RouterPage';
 import TotalPage from '../../components/TotalPage';
 import BottomPage from './BottomPage';
 
+
 const Menupage = () => {
     const uid= sessionStorage.getItem("uid");
     const onClickLogout = () => {
@@ -42,6 +43,9 @@ const Menupage = () => {
                         <NavDropdown.Divider />
                             <NavDropdown.Item href="/community/ask/list.json">1대1 문의하기</NavDropdown.Item>
                         </NavDropdown>
+                    </Nav>
+                    <Nav>
+                        <span className='me-3'><Link to="/admin/Main">관리자페이지가기</Link></span>
                     </Nav>
                     <Nav>
                         {sessionStorage.getItem("uid") ?
