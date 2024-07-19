@@ -43,4 +43,14 @@ public class TradeDAOImpl implements TradeDAO {
 		return session.selectOne(namespace + ".userListCount", map);
 	}
 
+	@Override
+	public List<HashMap<String, Object>> AdminList(QueryVO vo) {
+		return session.selectList(namespace + ".adminList", vo);
+	}
+
+	@Override
+	public int adminListCount(QueryVO vo) {
+		return session.selectOne(namespace + ".adminListCount", vo);
+	}
+
 }
