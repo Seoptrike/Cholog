@@ -12,4 +12,8 @@ public interface TradeDAO {
 	public List<HashMap<String, Object>> userList(String seed_number, QueryVO vo);
 
 	public int userListCount(String seed_number, QueryVO vo);
+
+	public List<HashMap<String, Object>> AdminList(QueryVO vo);
+
+	public int adminListCount(QueryVO vo);
 }
