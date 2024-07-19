@@ -3,19 +3,19 @@
 
 <mapper namespace="com.example.mapper.BBSMapper">
     <insert id="insert">
-        INSERT INTO BBS (bbs_writer, bbs_title, bbs_contents, bbs_type)
-        VALUES (#{bbs_writer}, #{bbs_title}, #{bbs_contents}, #{bbs_type})
+        INSERT INTO BBS (bbs_writer, bbs_title, bbs_contents, bbs_type,bbs_photo)
+        VALUES (#{bbs_writer}, #{bbs_title}, #{bbs_contents}, #{bbs_type},#{bbs_photo})
     </insert>
    <update id="update">
 		update BBS
-		set bbs_title= #{bbs_title}, bbs_contents=#{bbs_contents}, bbs_type= #{bbs_type}
+		set bbs_title= #{bbs_title}, bbs_contents=#{bbs_contents}, bbs_type= #{bbs_type},bbs_photo=#{bbs_photo}
 		where bbs_key=#{bbs_key}
 	</update>
    <delete id="delete">
 		delete from BBS where bbs_key=#{bbs_key}
 	</delete>
     <select id="read" resultType="com.example.domain.BBSVO">
-        SELECT * FROM BBS WHERE bbs_key = #{bbs_key}
+        select * from BBS where bbs_key = #{bbs_key}
     </select>
    <select id="list" resultType="hashmap">
  		select * 
@@ -41,4 +41,17 @@
 	  <select id="topList" resultType="com.example.domain.BBSVO">
         select * from BBS order by bbs_vcnt desc limit 2
     </select>
+     <insert id="photoInsert">
+		insert into bbs_photo(bbsphoto_bbs_key, bbsphoto_filename, bbsphoto_sequence) 
+		values (#{bbsphoto_bbs_key}, #{bbsphoto_filename}, #{bbsphoto_sequence})
+	</insert>
+	<delete id="photoDelete">
+		delete from bbs_photo where bbsphoto_key= #{bbsphoto_key}
+	</delete>
+	<select id="photoSelect" resultType="hashmap">
+		select * from bbs_photo where bbsphoto_bbs_key = #{bbsphoto_bbs_key} order by bbsphoto_sequence asc;
+	</select>
+	<update id="updatePhoto">
+		update bbs_photo set bbsphoto_sequence=#{bbsphoto_sequence} where bbsphoto_key=#{bbsphoto_key}
+	</update>
 </mapper>

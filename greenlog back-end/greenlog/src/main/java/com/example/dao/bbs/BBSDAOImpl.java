@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.example.domain.BBSPhotoVO;
 import com.example.domain.BBSVO;
 import com.example.domain.QueryVO;
 
@@ -60,4 +61,26 @@ public class BBSDAOImpl implements BBSDAO {
 	        return session.selectList(NAMESPACE + ".topList"); // 추가
 	    }
 
+	@Override
+	public void photoInsert(BBSPhotoVO vo) {
+		session.insert(NAMESPACE + ".photoInsert", vo);
+		
+	}
+
+	@Override
+	public void photoDelete(int bbsPhoto_key) {
+		session.delete(NAMESPACE + ".photoDelete", bbsPhoto_key);		
+	}
+
+	@Override
+	public void updatePhoto(BBSPhotoVO vo) {
+		session.update(NAMESPACE + ".updatePhoto", vo);
+	}
+
+	@Override
+	public List<HashMap<String, Object>> photoSelect(int bbsphoto_bbs_key) {
+		return session.selectList(NAMESPACE + ".photoSelect", bbsphoto_bbs_key);
+	}
+
+	
 }

@@ -27,7 +27,7 @@ const UserRouter = () => {
       <Route path='updatePass/:user_uid' element={<NewPass/>} />
       <Route path='login' element={<LoginPage />} />
       <Route path='join' element={<JoinPage />} />
-      <Route path='read/:user_uid' element={<MyPage />} />
+      <Route path='read/:user_uid' element={<MyPage />} /> 
       <Route path='admin' element={<Dashboard />} />
       <Route path='chat/:user_uid' element={<AdminChat />} />
       <Route path='admin/list.json' element={<UserListPage />} />
