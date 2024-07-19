@@ -8,7 +8,5 @@ import com.example.domain.MallVO;
 import com.example.domain.QueryVO;
 
 public interface MallService {
-	//public void insertAll (MallVO vo,MallPhotoVO pvo);
-	
 	
 }
