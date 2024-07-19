@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.example.dao.mall.MallDAO;
 import com.example.domain.MallPhotoVO;
 import com.example.domain.MallVO;
+import com.example.domain.Query2VO;
 import com.example.domain.QueryVO;
 import com.example.service.mall.MallService;
 
@@ -32,7 +33,7 @@ public class MallController {
 	MallService mservice;
 
 	@GetMapping("/list")
-	public HashMap<String, Object> list(QueryVO vo) {
+	public HashMap<String, Object> list(Query2VO vo) {
 		HashMap<String, Object> map = new HashMap<>();
 		List<HashMap<String, Object>> list = mdao.list(vo);
 		map.put("documents", list);

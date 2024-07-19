@@ -131,12 +131,11 @@ const ReadPage = () => {
                                                 </>
                                                 :
                                                 <>
-
-                                                    <td className='ellipsis' style={{ borderRight: "0px", height: "100%" }}>{mall_title}</td>
+                                                    <td className='' colSpan={2} style={{ width: "100%" }}>{mall_title}</td>
                                                     {uid && (
-                                                        <td className='text-end' style={{ width: "12%", borderLeft: "0px" }}>
+                                                        <div className='text-end' style={reportbuttonST}>
                                                             <ReportInsert uid={uid} writer={mall_seller} root={root} origin={mall_key} />
-                                                        </td>
+                                                        </div>
                                                     )}
                                                 </>
                                             }
@@ -155,7 +154,7 @@ const ReadPage = () => {
                                             <td style={{ width: "50%" }}>{mall_price}씨드</td>
                                         </tr>
                                         <tr>
-                                            <td style={{ width: "50%" }}>(유저아이콘){mall_seller}</td>
+                                            <td style={{ width: "50%" }}><Link to={`/user/read/${mall_seller}`}>{mall_seller}</Link></td>
 
                                             <td style={{ fontSize: "12px", width: "50%" }}>{fmtudate ? `${fmtudate}(수정됨)` : mall_regDate}</td>
                                         </tr>
