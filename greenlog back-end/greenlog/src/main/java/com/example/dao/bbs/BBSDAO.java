@@ -2,7 +2,10 @@ package com.example.dao.bbs;
 
 import java.util.HashMap;
 import java.util.List;
+
+import com.example.domain.BBSPhotoVO;
 import com.example.domain.BBSVO;
+import com.example.domain.DiaryPhotoVO;
 import com.example.domain.QueryVO;
 
 public interface BBSDAO {
@@ -14,4 +17,9 @@ public interface BBSDAO {
     public int total(QueryVO vo);
     public void updateViewcnt(int bbs_key);
     public List<BBSVO> topList();
+    public void photoInsert(BBSPhotoVO vo);
+	public void photoDelete(int bbsphoto_key);
+	public void updatePhoto(BBSPhotoVO vo);
+	public List<HashMap<String, Object>> photoSelect(int bbsphoto_bbs_key);
+
 }

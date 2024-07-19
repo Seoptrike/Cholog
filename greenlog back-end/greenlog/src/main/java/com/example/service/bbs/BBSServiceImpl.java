@@ -25,4 +25,6 @@ public class BBSServiceImpl implements BBSService{
 	    public List<BBSVO> getTopList() {
 	        return bbsDAO.topList(); // 추가
 	    }
+
+	
 }

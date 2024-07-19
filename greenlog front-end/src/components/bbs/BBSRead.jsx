@@ -1,7 +1,7 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { Row, Col, Card, Button } from 'react-bootstrap';
+import axios from 'axios';
 import ReplyPage from '../reply/ReplyPage';
 
 const BBSRead = () => {
@@ -9,26 +9,20 @@ const BBSRead = () => {
   const [form, setForm] = useState(null);
   const [loggedInUser, setLoggedInUser] = useState(null);
 
-  const callAPI = async (isCnt) => {
-    const res = await axios.get(`/bbs/read/${bbs_key}`, {
-      params: { isCnt }
-    });
-    setForm(res.data);
-    console.log(res.data);
+  const callAPI = async () => {
+    try {
+      const res = await axios.get(`/bbs/read/${bbs_key}`);
+      setForm(res.data);
+      console.log(res.data); // 응답 데이터 로그 출력
+    } catch (error) {
+      console.error('There was an error fetching the post!', error);
+    }
   };
 
   useEffect(() => {
-    const user = sessionStorage.getItem('uid'); // 로그인한 사용자의 ID를 세션 스토리지에서 가져옴
+    const user = sessionStorage.getItem('uid'); 
     setLoggedInUser(user);
-
-    const viewedPosts = JSON.parse(sessionStorage.getItem('viewedPosts')) || [];
-    if (!viewedPosts.includes(bbs_key)) {
-      callAPI(true); // 처음 조회 시 조회수 증가
-      viewedPosts.push(bbs_key);
-      sessionStorage.setItem('viewedPosts', JSON.stringify(viewedPosts));
-    } else {
-      callAPI(false); // 이후 조회 시 조회수 증가하지 않음
-    }
+    callAPI();
   }, [bbs_key]);
 
   const onDelete = async () => {
@@ -47,7 +41,7 @@ const BBSRead = () => {
     return <div>Loading...</div>;
   }
 
-  const { bbs_contents, bbs_title, bbs_writer, bbs_regDate, bbs_uDate, bbs_vcnt } = form;
+  const { bbs_contents, bbs_title, bbs_writer, bbs_regDate, bbs_uDate, bbs_vcnt, bbs_photo } = form;
 
   return (
     <div className='my-5'>
@@ -63,7 +57,12 @@ const BBSRead = () => {
               </Row>
             </Card.Header>
             <Card.Body style={{ whiteSpace: 'pre-wrap' }}>
-              {bbs_contents}
+              {bbs_photo && (
+                <div className="text-center mb-3">
+                  <img src={bbs_photo} alt="첨부 이미지" style={{ maxWidth: '100%' }} />
+                </div>
+              )}
+              <div dangerouslySetInnerHTML={{ __html: bbs_contents }} />
             </Card.Body>
             <Card.Footer className='text-muted'>
               {bbs_writer} <br />

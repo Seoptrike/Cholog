@@ -88,8 +88,7 @@ const BBSUpdate = () => {
               <CKEditor
                 editor={ClassicEditor}
                 data={bbs_contents}
-                onChange={onChangeCKEditor}
-              />
+                onChange={onChangeCKEditor}/>
               <div className='text-center mt-3'>
                 <Button type="submit" className='px-5 me-2' disabled={loading}>
                   {loading ? '수정 중...' : '수정'}

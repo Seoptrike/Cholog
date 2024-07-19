@@ -6,5 +6,5 @@ import com.example.domain.BBSVO;
 
 public interface BBSService {
 	public BBSVO read(int bbs_key);
-	public List<BBSVO> getTopList(); 
+	public List<BBSVO> getTopList();
 }
