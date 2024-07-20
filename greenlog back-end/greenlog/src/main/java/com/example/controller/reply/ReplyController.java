@@ -53,21 +53,21 @@ public class ReplyController {
 				rservice.replyLikeUpdate(vo);
 		}
 		
-		@GetMapping("/list/{review_bbs_key}")
+		@GetMapping("/list/{reply_bbs_key}")
 		public List<HashMap<String, Object>> replyList(@PathVariable("reply_bbs_key") int reply_bbs_key, @RequestParam("key") String key, QueryVO vo) {
 				vo.setKey(key);
 				System.out.println("Received key: ---------------------- " + key);
 				return rdao.replyList(reply_bbs_key, vo);
 		}
 		
-		@GetMapping("/plist/{review_bbs_key}")
-		public HashMap<String, Object> plist(@PathVariable("review_bbs_key") int review_bbs_key, QueryVO vo) {
-				return rservice.plist(review_bbs_key, vo);
+		@GetMapping("/plist/{reply_bbs_key}")
+		public HashMap<String, Object> plist(@PathVariable("reply_bbs_key") int reply_bbs_key, QueryVO vo) {
+				return rservice.plist(reply_bbs_key, vo);
 		}
 		
 		@PostMapping("/reactionInsert")
 		public void reactionInsert(@RequestBody ReplyLikeVO vo) {
-				rdao.reactionInsert(vo);
+				rservice.reactionInsert(vo);
 		}
 		
 		@GetMapping("/reaction/like/{reply_key}")
@@ -79,7 +79,18 @@ public class ReplyController {
 		@GetMapping("/reaction/dislike/{reply_key}")
 		public int replyDisLikeCount(@PathVariable("reply_key") int reply_key) {
 			return rdao.replyDisLikeCount(reply_key);
-			
 		}
+		
+		@PostMapping("/readReaction")
+		public String readReaction(@RequestBody ReplyLikeVO vo) {
+			return rdao.readReaction(vo);
+	
+		}
+		
+		@GetMapping("/count/{reply_bbs_key}")
+		public int count(@PathVariable("reply_bbs_key") int reply_bbs_key) {
+			return rdao.total(reply_bbs_key);
+		}
+		
 
 }

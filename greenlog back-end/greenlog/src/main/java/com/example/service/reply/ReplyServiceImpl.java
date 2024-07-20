@@ -40,9 +40,17 @@ public class ReplyServiceImpl implements ReplyService {
 		
 	}
 
+	@Transactional
 	@Override
 	public void replyLikeUpdate(ReplyLikeVO vo) {
 			rdao.replyLikeUpdate(vo);
+		
+	}
+
+	@Transactional
+	@Override
+	public void reactionInsert(ReplyLikeVO vo) {
+			rdao.reactionInsert(vo);
 		
 	}
 

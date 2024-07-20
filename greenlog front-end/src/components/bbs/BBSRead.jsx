@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Row, Col, Card, Button } from 'react-bootstrap';
+import ReplyReadPage from '../reply/ReplyReadPage';
 import axios from 'axios';
-import ReplyPage from '../reply/ReplyPage';
+
 
 const BBSRead = () => {
   const { bbs_key } = useParams();
@@ -80,7 +81,7 @@ const BBSRead = () => {
             </div>
           )}
         </Col>
-        <ReplyPage bbs_key={bbs_key} bbs_writer={bbs_writer} />
+        <ReplyPage bbs_key={bbs_key} bbs_writer={bbs_writer}/>
       </Row>
     </div>
   );

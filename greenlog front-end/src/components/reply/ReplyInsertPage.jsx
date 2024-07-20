@@ -3,7 +3,8 @@ import { Row, Col, Button, FormControl, InputGroup } from 'react-bootstrap';
 import { SlLock, SlLockOpen } from "react-icons/sl";
 import axios from 'axios';
 
-const ReplyInsertPage = ({ bbs_key, callAPI }) => {
+const ReplyInsertPage = ({ bbs_key, callAPI, callAPI2}) => {
+    console.log(bbs_key)
     const [form, setForm] = useState({
         reply_bbs_key: bbs_key,
         reply_writer: sessionStorage.getItem('uid'),
@@ -41,6 +42,7 @@ const ReplyInsertPage = ({ bbs_key, callAPI }) => {
             });
             setOnCancel(false);
             callAPI();
+            callAPI2();
 
         } catch (error) {
             console.error('댓글 등록 에러:', error);

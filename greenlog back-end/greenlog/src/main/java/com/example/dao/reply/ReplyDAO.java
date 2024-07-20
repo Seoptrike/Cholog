@@ -19,5 +19,6 @@ public interface ReplyDAO {
 		public void reactionInsert (ReplyLikeVO vo);
 		public int replyLikeCount (int reply_key);
 		public int replyDisLikeCount (int reply_key);
+		public String readReaction(ReplyLikeVO vo);
 
 }
