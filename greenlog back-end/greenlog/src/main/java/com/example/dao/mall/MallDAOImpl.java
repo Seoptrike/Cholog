@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.example.domain.MallPhotoVO;
 import com.example.domain.MallVO;
+import com.example.domain.Query2VO;
 import com.example.domain.QueryVO;
 
 @Repository
@@ -18,7 +19,7 @@ public class MallDAOImpl implements MallDAO {
 	String namespace = "com.example.mapper.MallMapper";
 
 	@Override
-	public List<HashMap<String, Object>> list(QueryVO vo) {
+	public List<HashMap<String, Object>> list(Query2VO vo) {
 		return session.selectList(namespace + ".list", vo);
 	}
 	
@@ -52,7 +53,7 @@ public class MallDAOImpl implements MallDAO {
 	}
 
 	@Override
-	public int total(QueryVO vo) {
+	public int total(Query2VO vo) {
 		return session.selectOne(namespace + ".total", vo);
 	}
 

@@ -2,6 +2,8 @@ import React from 'react'
 import {Row, Col, Tab, Tabs} from 'react-bootstrap'
 import Sidebar from './Sidebar'
 import AdminAskList from './AdminAskList'
+import AdminQAList from './AdminQAList'
+import ReportPage from './ReportPage'
 
 //탭을 누를때 마다 페이지 변경, 
 const Question = () => {
@@ -21,11 +23,11 @@ const Question = () => {
                   <Tab eventKey="home" title="1:1">
                     <AdminAskList/>
                   </Tab>
-                  <Tab eventKey="profile" title="FAQ">
-                    FAQ수정페이지
+                  <Tab eventKey="profile" title="신고접수">
+                    <ReportPage/>
                   </Tab>
                   <Tab eventKey="longer-tab" title="Q&A">
-                    Q&A답변페이지 
+                    <AdminQAList/> 
                   </Tab>
              </Tabs>
         </Col>

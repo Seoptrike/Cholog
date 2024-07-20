@@ -16,8 +16,17 @@ public class BBSVO {
     private Date bbs_uDate;
     private int bbs_type;
     private int bbs_vcnt;
+    private String bbs_photo;
+    
+    public String getBbs_photo() {
+		return bbs_photo;
+	}
 
-    public int getBbs_vcnt() {
+	public void setBbs_photo(String bbs_photo) {
+		this.bbs_photo = bbs_photo;
+	}
+
+	public int getBbs_vcnt() {
 		return bbs_vcnt;
 	}
 
@@ -88,10 +97,11 @@ public class BBSVO {
         this.bbs_type = bbs_type;
     }
 
-    @Override
-    public String toString() {
-        return "BBSVO [bbs_key=" + bbs_key + ", bbs_category=" + bbs_category + ", bbs_writer=" + bbs_writer
-                + ", bbs_title=" + bbs_title + ", bbs_contents=" + bbs_contents + ", bbs_regDate=" + bbs_regDate
-                + ", bbs_uDate=" + bbs_uDate + ", bbs_photo=" + ", bbs_type=" + bbs_type + "]";
-    }
+	@Override
+	public String toString() {
+		return "BBSVO [bbs_key=" + bbs_key + ", bbs_category=" + bbs_category + ", bbs_writer=" + bbs_writer
+				+ ", bbs_title=" + bbs_title + ", bbs_contents=" + bbs_contents + ", bbs_regDate=" + bbs_regDate
+				+ ", bbs_uDate=" + bbs_uDate + ", bbs_type=" + bbs_type + ", bbs_vcnt=" + bbs_vcnt + ", bbs_photo="
+				+ bbs_photo + "]";
+	}
 }

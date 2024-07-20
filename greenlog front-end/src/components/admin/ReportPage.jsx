@@ -19,11 +19,8 @@ const ReportPage = () => {
     useEffect(() => { callAPI() }, [])
     return (
         <Row>
-            <Col lg={2}>
-                <Sidebar />
-            </Col>
             <Col>
-                <h5 className='mb-5'> 000 관리자님 환영합니다.</h5>
+                <h5 className='mb-5'> 신고접수 현황</h5>
                 <Table>
                     <thead>
                         <tr>

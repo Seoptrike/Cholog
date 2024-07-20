@@ -19,6 +19,7 @@ import ChatRoom from '../common/useful/ChatRoom'
 import AdminAskList from '../components/admin/AdminAskList'
 import AdminChat from '../components/admin/AdminChat'
 import NewPass from '../components/user/NewPass'
+import ReportPage from '../components/admin/ReportPage'
 
 
 const UserRouter = () => {
@@ -27,7 +28,7 @@ const UserRouter = () => {
       <Route path='updatePass/:user_uid' element={<NewPass/>} />
       <Route path='login' element={<LoginPage />} />
       <Route path='join' element={<JoinPage />} />
-      <Route path='read/:user_uid' element={<MyPage />} />
+      <Route path='read/:user_uid' element={<MyPage />} /> 
       <Route path='admin' element={<Dashboard />} />
       <Route path='chat/:user_uid' element={<AdminChat />} />
       <Route path='admin/list.json' element={<UserListPage />} />
@@ -36,6 +37,7 @@ const UserRouter = () => {
       <Route path='admin/update/:user_uid' element={<AdminUpdate />} />
       <Route path='admin/read/:user_uid' element={<AdminReadPage />} />
       <Route path='admin/seed/list.json' element={<SeedPage />} />
+      <Route path='admin/report' element={<ReportPage/>}/>
       <Route path='wallet/:user_uid' element={<SeedWallet />} />
       <Route path='searchId' element={<SearchIdPage />} />
       <Route path='searchPass' element={<SearchPassPage />} />

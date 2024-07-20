@@ -74,7 +74,7 @@ const MainPage = () => {
             </Row>
             <Row>
                 <Col xs={8}>
-                    <FollowingDiaryList/>
+                    <FollowingDiaryList />
                 </Col>
                 <Col xs={4}>
                     <MainSlider />

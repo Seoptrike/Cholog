@@ -9,4 +9,7 @@ public interface TradeService {
 	public void insert(TradeVO vo);
 
 	public HashMap<String, Object> UserList(String seed_number, QueryVO vo);
+
+	public HashMap<String, Object> AdminList(QueryVO vo);
+
 }

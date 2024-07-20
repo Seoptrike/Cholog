@@ -46,4 +46,12 @@ public class TradeServiceImpl implements TradeService {
 		map.put("total", tdao.userListCount(seed_number, vo));
 		return map;
 	}
+
+	@Override
+	public HashMap<String, Object> AdminList(QueryVO vo) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("doc", tdao.AdminList(vo));
+		map.put("total", tdao.adminListCount(vo));
+		return map;
+	}
 }

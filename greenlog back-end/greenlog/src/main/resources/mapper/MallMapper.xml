@@ -14,22 +14,24 @@
 	        <if test="key == 'mall_info'">
 	           mall_info like concat('%', #{word}, '%') 
 	        </if>
-	         <if test="stateKey == 'mall_pstate'">
-                AND mall_pstate = #{stateWord}
+	          <if test="pstateWord != null and pstateWord != ''">
+                AND mall_pstate in <foreach collection="pstateWord.split(',')" item="item" separator="," open="(" close=")">
+            #{item, jdbcType=INTEGER}
+        </foreach>
             </if>
-            <if test="stateKey == 'mall_tstate'">
-                AND mall_tstate = #{stateWord}
-            </if>
-            <if test="stateKey == 'all'">
-                AND mall_tstate >=0 AND mall_pstate >=0 
-            </if>
-            <if test="stateKey == 'isEndFalse'">
-                AND mall_tstate >=0 AND mall_pstate >=0 AND mall_endDate > now() 
-            </if>
-            <if test="stateKey == 'isEndTrue'">
-                AND mall_tstate >=0 AND mall_pstate >=0 AND now() > mall_endDate 
+             <if test="tstateWord != null and tstateWord != ''">
+                AND mall_tstate in <foreach collection="tstateWord.split(',')" item="item" separator="," open="(" close=")">
+            #{item, jdbcType=INTEGER}
+        </foreach>
             </if>
     	</where>
+    	<if test="itisEnd == 'false'">
+                AND mall_endDate > now() 
+        </if>
+        <if test="itisEnd == 'true'">
+                AND now() > mall_endDate 
+        </if>
+        
     	<if test="orderBy == 'desc'">
         	order by mall_regDate desc
 	    </if>
@@ -68,9 +70,9 @@
 	</update>
 	
 	<select id="total" resultType="int">
-		select count(*) as total
+		select count(*)
 		from mall
-		  <where>
+		 <where>
 	        <if test="key == 'mall_seller'">
 	           mall_seller like concat('%', #{word}, '%') 
 	        </if>
@@ -80,22 +82,24 @@
 	        <if test="key == 'mall_info'">
 	           mall_info like concat('%', #{word}, '%') 
 	        </if>
-	         <if test="stateKey == 'mall_pstate'">
-                AND mall_pstate = #{stateWord}
+	          <if test="pstateWord != null and pstateWord != ''">
+                AND mall_pstate in <foreach collection="pstateWord.split(',')" item="item" separator="," open="(" close=")">
+            #{item, jdbcType=INTEGER}
+        </foreach>
             </if>
-            <if test="stateKey == 'mall_tstate'">
-                AND mall_tstate = #{stateWord}
-            </if>
-             <if test="stateKey == 'all'">
-                AND mall_tstate >=0 AND mall_pstate >=0 
-            </if>
-            <if test="stateKey == 'isEndFalse'">
-                AND mall_tstate >=0 AND mall_pstate >=0 AND mall_endDate > now() 
-            </if>
-            <if test="stateKey == 'isEndTrue'">
-                AND mall_tstate >=0 AND mall_pstate >=0 AND now() > mall_endDate 
+             <if test="tstateWord != null and tstateWord != ''">
+                AND mall_tstate in <foreach collection="tstateWord.split(',')" item="item" separator="," open="(" close=")">
+            #{item, jdbcType=INTEGER}
+        </foreach>
             </if>
     	</where>
+    	<if test="itisEnd == 'false'">
+                AND mall_endDate > now() 
+        </if>
+        <if test="itisEnd == 'true'">
+                AND now() > mall_endDate 
+        </if>
+       
 	</select>
 	
 	<update id="update">

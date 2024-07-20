@@ -16,7 +16,7 @@ const AdminAskList = () => {
     useEffect(() => { callAPI() }, [])
 
     const onClickAdminChat = (sender) => {
-        window.location.href = `/user/chat/${sender}`
+        window.location.href = `/admin/chat/${sender}`
     }
 
     const onClickClear = async (key) => {

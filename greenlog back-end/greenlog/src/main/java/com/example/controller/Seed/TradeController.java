@@ -34,4 +34,9 @@ public class TradeController {
 	public HashMap<String, Object> userList(@PathVariable("seed_number") String seed_number, QueryVO vo) {
 		return Tservice.UserList(seed_number, vo);
 	}
+
+	@GetMapping("/adminList")
+	public HashMap<String, Object> AdminList(QueryVO vo) {
+		return Tservice.AdminList(vo);
+	}
 }

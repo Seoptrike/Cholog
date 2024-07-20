@@ -5,12 +5,13 @@ import java.util.List;
 
 import com.example.domain.MallPhotoVO;
 import com.example.domain.MallVO;
+import com.example.domain.Query2VO;
 import com.example.domain.QueryVO;
 
 public interface MallDAO {
 	// 리스트(+셀러물품들),리드(+사진만+셀러정보),업데이트,딜리트
 
-	public List<HashMap<String, Object>> list(QueryVO vo);
+	public List<HashMap<String, Object>> list(Query2VO vo);
 	
 	public List<HashMap<String, Object>> sellerList(String mall_seller,int page,int size);
 
@@ -22,7 +23,7 @@ public interface MallDAO {
 
 	public void delete(int mall_key);
 
-	public int total(QueryVO vo);
+	public int total(Query2VO vo);
 
 	public void insertPhoto(MallPhotoVO vo);
 

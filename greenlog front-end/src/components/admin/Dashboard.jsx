@@ -11,9 +11,15 @@ import FiberNewIcon from '@mui/icons-material/FiberNew';
 //차트 컴포넌트 추가
 const Dashboard = () => {
     const [reportCount, setReportCount] = useState('');
+    const [askCount, setaskCount] = useState('');
+    const [qaCount, setQaCount] = useState('');
     const callAPI = async () => {
         const res = await axios.get("/report/count")
+        const res1= await axios.get("/chat/listCount")
+        const res2= await axios.get("/qa/qaListCount")
+        setaskCount(res1.data)
         setReportCount(res.data)
+        setQaCount(res2.data)
     }
     useEffect(() => { callAPI() }, [])
     return (
@@ -32,8 +38,12 @@ const Dashboard = () => {
                             <Badge bg="secondary">{reportCount}</Badge>
                         </Button>
                         <Button className='px-5 me-5'>포인트관리 <Badge bg="secondary">9</Badge></Button>
-                        <Button className='px-5 me-5'>1:1 <Badge bg="secondary">9</Badge></Button>
-                        <Button className='px-5 me-5'>Q&A <Badge bg="secondary">9</Badge></Button>
+                        <Button className='px-5 me-5'>{askCount > 0 ? <FiberNewIcon style={{ color: "yellow" }} /> : null}
+                            1:1 문의
+                            <Badge bg="secondary">{qaCount}</Badge></Button>
+                            <Button className='px-5 me-5'>{qaCount > 0 ? <FiberNewIcon style={{ color: "yellow" }} /> : null}
+                            Q&A 답변하기
+                            <Badge bg="secondary">{qaCount}</Badge></Button>
                     </div>
                     <div className='chart text-center mb-5'>
                         <Row>
