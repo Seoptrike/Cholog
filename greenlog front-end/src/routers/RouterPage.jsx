@@ -13,6 +13,7 @@ import TradeRouter from './TradeRouter'
 import AuctionRouter from './AuctionRouter'
 import RereplyRouter from './RereplyRouter'
 import AdminRouter from './AdminRouter'
+import BBSRouter from './BBSRouter'
 
 
 
@@ -33,6 +34,7 @@ const RouterPage = () => {
             <Route path='/trade/*' element={<TradeRouter />} />
             <Route path='/auction/*' element={<AuctionRouter />} />
             <Route path='/admin/*' element={<AdminRouter />} />
+            <Route path='/bbs/*' element={<BBSRouter />} />
         </Routes>
     )
 }

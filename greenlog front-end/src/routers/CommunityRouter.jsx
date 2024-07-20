@@ -1,9 +1,5 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import BBSInsert from '../components/bbs/BBSInsert';
-import BBSList from '../components/bbs/BBSList';
-import BBSRead from '../components/bbs/BBSRead';
-import BBSUpdate from '../components/bbs/BBSUpdate';
 import FAQInsert from '../components/faq/FAQInsert';
 import FAQList from '../components/faq/FAQList';
 import FAQUpdate from '../components/faq/FAQUpdate';
@@ -28,10 +24,6 @@ import FAQRead from '../components/faq/FAQRead';
 const CommunityRouter = () => {
   return (
     <Routes>
-      <Route path="/bbs/insert" element={<BBSInsert />} />
-      <Route path="/bbs/list.json" element={<BBSList />} />
-      <Route path="/bbs/read/:bbs_key" element={<BBSRead />} />
-      <Route path="/bbs/update/:bbs_key" element={<BBSUpdate />} />
       <Route path="/faq/insert" element={<FAQInsert />} />
       <Route path="/faq/read/:{faq_key}" element={<FAQRead />} />
       <Route path="/faq/list.json" element={<FAQList />} />

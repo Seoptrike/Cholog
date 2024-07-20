@@ -6,7 +6,8 @@ public class QueryVO {
 	private int start;
 	private String key;
 	private String word;
-	
+	private String key2;
+
 	public int getPage() {
 		return page;
 	}
@@ -56,5 +57,12 @@ public class QueryVO {
 				+ "]";
 	}
 
-	
+	public String getKey2() {
+		return key2;
+	}
+
+	public void setKey2(String key2) {
+		this.key2 = key2;
+	}
+
 }

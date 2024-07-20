@@ -1,20 +1,40 @@
-import axios from 'axios'
-import React, { useEffect, useState, useRef } from 'react'
-import { Card, Row, Col, InputGroup, Form, Button, Badge, Dropdown } from 'react-bootstrap'
-import { FaRegThumbsUp } from "react-icons/fa";
-import { FaThumbsUp } from "react-icons/fa";
-import { Link, useParams } from 'react-router-dom';
-import Slider from "react-slick";
+import axios from 'axios';
+import React, { useEffect, useState, useRef } from 'react';
+import { Col } from 'react-bootstrap';
+import { FaThumbsUp, FaRegThumbsUp } from 'react-icons/fa'; // FaRegThumbsUp 제거
+import Slider from 'react-slick';
 import ReportInsert from '../report/ReportInsert';
-import { BsChevronDown, BsHandThumbsUp, BsHandThumbsDown, BsThreeDotsVertical, BsArrowReturnRight } from "react-icons/bs";
+import { styled, Card, CardHeader, CardMedia, CardContent, CardActions, Collapse, Avatar, IconButton, Typography, Chip } from '@mui/material';
+import { Favorite, MoreVert as MoreVertIcon } from '@mui/icons-material'; // 수정
+import { Divider } from 'antd';
+
+const chipColors = {
+    "개인컵/텀블러": "#FF6F61", // Coral
+    "리필스테이션/개인용기": "#6B5B95", // Slate Blue
+    "리사이클링 제작": "#88B04B", // Olive Green
+    "전자영수증": "#F7CAC9", // Light Pink
+    "친환경 제품구매": "#92A8D1", // Light Blue
+    "재활용품 배출": "#F0B27A", // Light Orange
+    "전기차 대여": "#E5E8E8", // Light Gray
+    "봉사활동/개인 환경활동": "#D5AAFF", // Light Purple
+};
+
+const StyledCard = styled(Card)(({ theme }) => ({
+    width: '25rem',
+    height: '27rem',
+    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+    '&:hover': {
+        transform: 'scale(1.03)',
+        boxShadow: theme.shadows[10],
+    },
+}));
 
 const FollowingDiaryList = () => {
     const [list, setList] = useState([]);
     const [loading, setLoading] = useState(false);
     const [size, setSize] = useState(10);
     const [page, setPage] = useState(1);
-    const [slideIndex, setSlideIndex] = useState(0);
-    const [updateCount, setUpdateCount] = useState(0);
+
     let root = "diary"
     let sliderRef = useRef(null);
     const settings = {
@@ -27,7 +47,9 @@ const FollowingDiaryList = () => {
         autoplaySpeed: 5000,
         cssEase: "linear"
     }
+
     let user_uid = sessionStorage.getItem("uid")
+
     const callAPI = async () => {
         if (!user_uid) {
             user_uid = "ghost"
@@ -75,67 +97,81 @@ const FollowingDiaryList = () => {
     }
     return (
         <div className="slider-container">
-            {user_uid ?
-                <div className='text-center mb-4'>내 친구의 초록</div>
-                :
-                <div className='text-center mb-4'>오늘의 추천 초록</div>
-            }
-            <Slider
-                ref={sliderRef}
-                {...settings}
-            >
+            <Divider orientation="center">
+                <Typography variant="h5" component="div" align="center" sx={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: 1 }}>
+                    {user_uid ?
+                        <span style={{ display: 'inline-flex', alignItems: 'center' }}>
+                            내 친구의
+                            <img
+                                src="/images/green.png"
+                                alt="icon"
+                                style={{ height: '2.5rem', objectFit: 'contain', margin: '0 10px', verticalAlign: 'middle' }}
+                            />
+                        </span>
+                        :
+                        <span style={{ display: 'inline-flex', alignItems: 'center' }}>
+                            오늘의 추천
+                            <img
+                                src="/images/green.png"
+                                alt="icon"
+                                style={{ height: '2rem', objectFit: 'contain', margin: '0 10px', verticalAlign: 'middle' }}
+                            />
+                        </span>
+                    }
+                </Typography>
+            </Divider>
+            <Slider ref={sliderRef} {...settings}>
                 {list.map(d => (
                     <div key={d.diary_key}>
                         <Col lg={12}>
-                            <Card className='mb-3 mx-3' style={{ height: "25rem", width: "25rem" }}>
-                                <Card.Header style={{ padding: "0.5rem 1rem" }}>
-                                    <Row>
-                                        <Col xs={2}>
-                                            <img style={{ width: "3rem", height: "3rem", borderRadius: "50%" }} src={d.user_img} />
-                                        </Col>
-                                        <Col xs={8}>
-                                            <span><a href={`/user/read/${d.diary_writer}`}> {d.diary_writer}</a></span>
-                                            <div style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                                                <span>{d.diary_title}</span>
-                                            </div>
-                                        </Col>
-                                        <Col xs={2}>
-                                            {user_uid &&
-                                                <Dropdown >
-                                                    <Dropdown.Toggle variant="" id="dropdown-basic">
-                                                        <BsThreeDotsVertical />
-                                                    </Dropdown.Toggle>
-                                                    <Dropdown.Menu>
-                                                        <Dropdown.Item><ReportInsert uid={user_uid} origin={d.diary_key} writer={d.diary_writer} root={root} /></Dropdown.Item>
-                                                    </Dropdown.Menu>
-                                                </Dropdown>
-                                            }
-                                        </Col>
-                                    </Row>
-                                </Card.Header>
-                                <Card.Body style={{ padding: "1rem", height: "18rem", overflowY: "auto" }}>
-                                    <Link to={`/diary/read/${d.diary_key}`}>
-                                        <img src={d.diary_thumbnail || "http://via.placeholder.com/100x100"} style={{ width: "100%", height: "10rem", objectFit: "contain" }} alt={d.diary_title} />
-                                    </Link>
-                                    <hr />
-                                    <div style={{ maxHeight: "6rem", overflow: "hidden", textOverflow: "ellipsis" }}>
-                                        {d.diary_contents}
+                            <StyledCard className='mt-2'>
+                                <CardHeader
+                                    avatar={
+                                        <Avatar src={d.user_img} aria-label="recipe" sx={{ width: 40, height: 40 }} />
+                                    }
+                                    action={
+                                        <IconButton aria-label="settings" sx={{ marginLeft: 'auto' }}>
+                                            <MoreVertIcon />
+                                        </IconButton>
+                                    }
+                                    title={<Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: '1.2rem' }}>
+                                        <a href={`/user/read/${d.diary_writer}`} style={{ textDecoration: 'none', color: 'inherit' }}>{d.diary_writer}</a>
+                                    </Typography>}
+                                    subheader={d.fmtUdate ? `${d.fmtDdate}` : `${d.fmtUdate}[수정됨]`}
+                                />
+                                <CardMedia
+                                    component="img"
+                                    height="194"
+                                    src={d.diary_thumbnail || "http://via.placeholder.com/100x100"}
+                                    alt={d.diary_title}
+                                />
+                                <CardActions disableSpacing sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <Chip
+                                        label={d.diary_state}
+                                        style={{ backgroundColor: chipColors[d.diary_state] || "#6B5B95", color: "#fff" }}
+                                    />
+                                    <div>
+                                        <IconButton
+                                            aria-label={d.ucnt === 0 ? "like" : "unlike"}
+                                            onClick={() => d.ucnt === 0 ? LikePress(d.diary_key) : LikeCancel(d.diary_key)}
+                                            sx={{ fontSize: 18 }}
+                                        >
+                                            {d.ucnt === 0 ? <FaRegThumbsUp /> : <FaThumbsUp />}
+                                        </IconButton>
+                                        <IconButton aria-label="report" sx={{ fontSize: 18 }}>
+                                            <ReportInsert uid={user_uid} origin={d.diary_key} writer={d.diary_writer} root={root} />
+                                        </IconButton>
                                     </div>
-                                    <Badge className='me-3'>{d.diary_state}</Badge>
-                                    <hr />
-                                    <span className='text-end' style={{ cursor: "pointer" }}>
-                                        {d.ucnt === 0 ? (
-                                            <FaRegThumbsUp style={{ fontSize: "20px" }} onClick={() => LikePress(d.diary_key)} />
-                                        ) : (
-                                            <FaThumbsUp style={{ fontSize: "20px" }} onClick={() => LikeCancel(d.diary_key)} />
-                                        )}
-                                        {d.fcnt}
-                                    </span>
-                                    <span style={{ float: "right" }}>
-                                        {d.fmtUdate ? `${d.fmtDdate}` : `${d.fmtUdate}[수정됨]`}
-                                    </span>
-                                </Card.Body>
-                            </Card>
+                                </CardActions>
+                                <CardContent sx={{ paddingBottom: 1, paddingTop: 0 }}>
+                                    <Typography variant="h6" sx={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: 1 }}>
+                                        {d.diary_title}
+                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary" sx={{ overflow: "hidden" }}>
+                                        <div className='ellipsis'>{d.diary_contents}</div>
+                                    </Typography>
+                                </CardContent>
+                            </StyledCard>
                         </Col>
                     </div>
                 ))}
