@@ -7,6 +7,7 @@ import ReplyInsertPage from './ReplyInsertPage';
 import axios from 'axios';
 import RereplyPage from '../rereply/RereplyPage';
 import ReplyReaction from './ReplyReaction';
+import ReportInsert from '../report/ReportInsert';
 
 const ReplyReadPage = ({bbs_key, bbs_writer, callAPI2}) => {
     const uid = sessionStorage.getItem('uid');
@@ -21,7 +22,7 @@ const ReplyReadPage = ({bbs_key, bbs_writer, callAPI2}) => {
     const [replyLikeCount, setReplyLikeCount] = useState(0);
     const [rereplyParent, setRereplyParent] = useState(null);
     const [Reaciton, setReaction] =useState([]);
-
+    const root="reply"
     const callAPI = async () => {
         const res = await axios.get(`/reply/plist/${bbs_key}?key=${key}&page=${page}&size=${size}`);
         if (res.data.total === 0) {
@@ -32,13 +33,6 @@ const ReplyReadPage = ({bbs_key, bbs_writer, callAPI2}) => {
             setReply(data);
             setCount(res.data.total);
             const last = Math.ceil(res.data.total / size);
-            console.log(res.data.documents[0].reply_key)
-            console.log(res.data.documents.length)
-            for (let i = 0; i < res.data.documents.length; i++){
-                const res2= await axios.post("/reply/readReaction",{reply_key:res.data.documents[i].reply_key, reply_writer:uid})
-                setReaction(res2.data)
-                console.log(res2.data)
-            }
             if (page > last) setPage(page - 1);
         }
         //const res1 = await axios.get(`/reply/reaction/like/${reply_key}`);
@@ -108,22 +102,6 @@ const ReplyReadPage = ({bbs_key, bbs_writer, callAPI2}) => {
         } else {
             setRereplyParent(reply_key);
         }
-    };
-
-    const onReplyReactionInsert = async (reply_key, reaction) => {
-        try {
-            const res = await axios.post('/reply/reactionInsert', { reply_writer: uid, reply_key, reply_reaction: reaction });
-            alert('리액션 입력 완료')
-            callAPI();
-        } catch (error) {
-            console.error('리액션 삽입 오류:', error);
-        }
-    };
-
-    const handleReactionClick = (reply_key, currentReaction, newReaction) => {
-        const reaction = currentReaction === newReaction ? 'none' : newReaction;
-        onReplyReactionInsert(reply_key, reaction);
-        console.log(reply_key, reaction);
     };
 
     return (
@@ -202,7 +180,7 @@ const ReplyReadPage = ({bbs_key, bbs_writer, callAPI2}) => {
                                                 </>
                                             ) : (
                                                 <Dropdown.Menu>
-                                                    <Dropdown.Item eventKey="warning">댓글 신고하기</Dropdown.Item>
+                                                    <Dropdown.Item eventKey="warning"><ReportInsert  uid={uid} writer={reply.reply_writer} root={root} origin={reply.reply_key}/></Dropdown.Item>
                                                 </Dropdown.Menu>
                                             )}
                                         </Dropdown>
@@ -222,36 +200,11 @@ const ReplyReadPage = ({bbs_key, bbs_writer, callAPI2}) => {
                                             </Col>
                                         </Row>
                                     </div>
-                                    {/*리액션 컴포넌트 만들어서 바꿔놓기*/}
                                     <div>
-                                         <span style={{ cursor: 'pointer' }}>
-                                            {reply.reaction === 'like' ? (
-                                                <BsHandThumbsUpFill
-                                                    onClick={() => handleReactionClick(reply.reply_key, reply.reaction, 'like')}
-                                                    className='me-4'
-                                                />
-                                            ) : (
-                                                <BsHandThumbsUp
-                                                    onClick={() => handleReactionClick(reply.reply_key, reply.reaction, 'like')}
-                                                    className='me-4'
-                                                />
-                                            )}
-                                        </span>
-                                        <span style={{ cursor: 'pointer' }}>
-                                            {reply.reaction === 'dislike' ? (
-                                                <BsHandThumbsDownFill
-                                                    onClick={() => handleReactionClick(reply.reply_key, reply.reaction, 'dislike')}
-                                                    className='me-4'
-                                                />
-                                            ) : (
-                                                <BsHandThumbsDown
-                                                    onClick={() => handleReactionClick(reply.reply_key, reply.reaction, 'dislike')}
-                                                    className='ml-4'
-                                                />
-                                            )}
-                                        </span>
-                                        <ReplyReaction reply_key={reply.reply_key} uid={uid}/>
-                                        <Button type='button' onClick={() => toggleRep(reply.reply_key)} variant='' size="sm">댓글 {reply.rereply_count}</Button>
+                                        <Row>
+                                            <Col> <Button type='button' onClick={() => toggleRep(reply.reply_key)} variant='' size="sm">댓글 {reply.rereply_count}</Button></Col>
+                                            <Col className='text-end'> <ReplyReaction reply_key={reply.reply_key} uid={uid}/></Col>
+                                        </Row>
                                     </div>
                                     <hr />
                                     {showRep[reply.reply_key] && (

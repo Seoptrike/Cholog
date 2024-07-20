@@ -5,9 +5,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 
-import org.hibernate.internal.build.AllowSysOut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -28,8 +29,6 @@ import com.example.dao.diary.DiaryDAO;
 import com.example.domain.DiaryLikeVO;
 import com.example.domain.DiaryPhotoVO;
 import com.example.domain.DiaryVO;
-import com.example.domain.MallPhotoVO;
-import com.example.domain.MallVO;
 import com.example.domain.QueryVO;
 
 @RestController
@@ -84,7 +83,7 @@ public class DiaryController {
 	public void likeCancel(@RequestBody DiaryLikeVO vo) {
 		dao.likeCancel(vo);
 	}
-	
+
 //사진 여러개 삽입
 	@PostMapping("/attach/{diaryPhoto_diary_key}")
 	public void photoInsert(@PathVariable("diaryPhoto_diary_key") String diaryPhoto_diary_key,
@@ -101,7 +100,7 @@ public class DiaryController {
 			if (!files.isEmpty()) {
 				for (int i = 0; i < files.size(); i++) {
 					MultipartFile file = files.get(i);
-					
+
 					if (!file.isEmpty()) {
 						String fileName = UUID.randomUUID().toString() + ".jpg";
 						file.transferTo(new File(uploadPath + fileName));
@@ -126,7 +125,6 @@ public class DiaryController {
 			System.out.println("다이어리사진업로드오류:" + e.toString());
 		}
 	}
-	
 
 	@GetMapping("/display") // 테스트 /diary/display?file=파일이름
 	public ResponseEntity<Resource> display(@RequestParam("file") String file) {
@@ -196,53 +194,50 @@ public class DiaryController {
 
 		}
 	}
-	
-	//이미지하나삽입
+
+	// 이미지하나삽입
 	@PostMapping("/attachOne/{diary_key}")
 	public void insertPhoto(@PathVariable("diary_key") int diary_key, MultipartHttpServletRequest multi) {
 		try {
 			String filePath = "diaryUpload/" + diary_key + "/";
 			String directory = System.getProperty("user.dir");
 			String uploadPath = directory + File.separator + filePath;
-			
+
 			File oldFile = new File(uploadPath);
 			if (oldFile.exists()) {
 				oldFile.delete();
 			}
-			
+
 			MultipartFile file = multi.getFile("byte");
-			if(file != null && !file.isEmpty()) {
+			if (file != null && !file.isEmpty()) {
 				String fileName = UUID.randomUUID().toString() + ".jpg";
 				File destFile = new File(uploadPath, fileName);
 				file.transferTo(destFile);
-				
+
 				DiaryPhotoVO vo = new DiaryPhotoVO();
 				vo.setDiaryPhoto_diary_key(diary_key);
 				vo.setDiaryPhoto_filename("/diary/display?file=" + diary_key + "/" + fileName);
-				
+
 				dao.photoInsert(vo);
 			}
-			
-			
-		}catch(Exception e) {
+
+		} catch (Exception e) {
 			System.out.println("이미지하나삽입오류:" + e.toString());
 		}
-		
+
 	}
-	 
-	
-	//썸네일 업데이트
+
+	// 썸네일 업데이트
 	@PostMapping("/update/thumbnail")
-	public void updateThumbnail (@RequestBody DiaryPhotoVO vo) {
+	public void updateThumbnail(@RequestBody DiaryPhotoVO vo) {
 		dao.updateThumbnail(vo);
 	}
-	
+
 	@PostMapping("/update/attach")
 	public void updatePhoto(@RequestBody DiaryPhotoVO vo) {
 		System.out.println("............................." + vo.toString());
 		dao.updatePhoto(vo);
 	}
-
 
 	@GetMapping("/lastKey")
 	public int lastKey() {
