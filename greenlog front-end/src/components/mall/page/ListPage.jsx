@@ -4,6 +4,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Card, Table, Dropdown, Row, Col, InputGroup, Button, Form } from 'react-bootstrap'
 import Pagination from 'react-js-pagination';
+import {Typography, Divider } from 'antd'; //카드를 가져와야함..
 import { Link } from 'react-router-dom';
 import { BsPencilSquare } from "react-icons/bs";
 import { red } from '@mui/material/colors';
@@ -58,7 +59,7 @@ const ListPage = () => {
         backgroundColor: "rgba(0, 0, 0, 0.3)",
         color: 'rgba(71, 123, 93, 0.74)',
         textAlign: "center",
-        fontSize: "4rem",
+        fontSize: "1.5rem",
         borderRadius: '5px',
         top: '0',      // 상단 여백
         right: '0',    // 오른쪽 여백 기본이 오른쪽아래로 쳐져잇어서 줘야댐..
@@ -178,27 +179,25 @@ const ListPage = () => {
                 </div>
                 <Row className='justify-content-center ' style={{width:"100%", height:"5rem", alignItems: "flex-start"}}>
                 <InputGroup className=" mt-2" style={stateBox}>
-                        <InputGroup.Checkbox onChange={onChangeChecked} name="checkT0" checked={form.checkT0} className='mall_stateBox'/>
-                        <Form.Control type="text" value="일반나눔" readOnly />
-                    </InputGroup>
-                                    <InputGroup className="mt-2" style={stateBox}>
-                        <InputGroup.Checkbox onChange={onChangeChecked} name="checkT1" checked={form.checkT1}  />
-                        <Form.Control type="text" value="무료나눔" readOnly />
-                    </InputGroup>
-                    <InputGroup className="mt-2" style={stateBox}>
-                        <InputGroup.Checkbox onChange={onChangeChecked} name="checkT2" checked={form.checkT2}  />
-                        <Form.Control type="text" value="구매글" readOnly />
+                        <input className='mall_stateBox_input' type="checkbox" id="ch1" onChange={onChangeChecked} name="checkT0" checked={form.checkT0} />
+                        <label for="ch1" className='mall_stateBox' >일반나눔</label>
                     </InputGroup>
                     <InputGroup className=" mt-2" style={stateBox}>
-                        <InputGroup.Checkbox onChange={onChangeChecked} name="checkP0" checked={form.checkP0}  />
-                        <Form.Control type="text" value="중고물품" readOnly />
+                        <input className='mall_stateBox_input' type="checkbox" id="ch2" onChange={onChangeChecked} name="checkT1" checked={form.checkT1} />
+                        <label for="ch2" className='mall_stateBox' >무료나눔</label>
                     </InputGroup>
                     <InputGroup className=" mt-2" style={stateBox}>
-                        <InputGroup.Checkbox onChange={onChangeChecked} name="checkP1" checked={form.checkP1} />
-                        <Form.Control type="text" value="새상품" readOnly />
+                        <input className='mall_stateBox_input' type="checkbox" id="ch3" onChange={onChangeChecked} name="checkT2" checked={form.checkT2} />
+                        <label for="ch3" className='mall_stateBox' >구매글</label>
                     </InputGroup>
-                    
-
+                    <InputGroup className=" mt-2" style={stateBox}>
+                        <input className='mall_stateBox_input' type="checkbox" id="ch4" onChange={onChangeChecked} name="checkP0" checked={form.checkP0} />
+                        <label for="ch4" className='mall_stateBox' >중고상품</label>
+                    </InputGroup>
+                    <InputGroup className=" mt-2" style={stateBox}>
+                        <input className='mall_stateBox_input' type="checkbox" id="ch5" onChange={onChangeChecked} name="checkP1" checked={form.checkP1} />
+                        <label for="ch5" className='mall_stateBox' >새상품</label>
+                    </InputGroup>
                 </Row>
             </div>
             <Row className='my-3'>
