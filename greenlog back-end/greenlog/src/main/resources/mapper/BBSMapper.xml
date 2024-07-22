@@ -3,42 +3,103 @@
 
 <mapper namespace="com.example.mapper.BBSMapper">
     <insert id="insert">
-        INSERT INTO BBS (bbs_writer, bbs_title, bbs_contents, bbs_type)
-        VALUES (#{bbs_writer}, #{bbs_title}, #{bbs_contents}, #{bbs_type})
+        INSERT INTO BBS (bbs_writer, bbs_title, bbs_contents, bbs_type,bbs_photo)
+        VALUES (#{bbs_writer}, #{bbs_title}, #{bbs_contents}, #{bbs_type},#{bbs_photo})
     </insert>
    <update id="update">
 		update BBS
-		set bbs_title= #{bbs_title}, bbs_contents=#{bbs_contents}, bbs_type= #{bbs_type}
+		set bbs_title= #{bbs_title}, bbs_contents=#{bbs_contents}, bbs_type= #{bbs_type},bbs_photo=#{bbs_photo}
 		where bbs_key=#{bbs_key}
 	</update>
    <delete id="delete">
 		delete from BBS where bbs_key=#{bbs_key}
 	</delete>
-    <select id="read" resultType="com.example.domain.BBSVO">
-        SELECT * FROM BBS WHERE bbs_key = #{bbs_key}
+    <select id="read" resultType="hashmap">
+        select b.*,u.user_nickname,u.user_img from BBS b join user u on bbs_writer=user_uid where bbs_key = #{bbs_key}
     </select>
-   <select id="list" resultType="hashmap">
- 		select * 
+	<select id="list" resultType="hashmap">
+		select *, date_format(bbs_regDate, '%Y.%m.%d') as fmtdate
 		from BBS
-		<if test="key=='bbs_writer'">where bbs_writer like #{word}</if>
-		<if test="key=='bbs_title'">where bbs_title like #{word}</if>
-		<if test="key=='bbs_contents'">where bbs_contents like #{word}</if>
+	<where>
+		<if test="key2 == 'all'">
+			<if test="key == 'writer'">bbs_writer LIKE #{word}</if>
+			<if test="key == 'title'">bbs_title LIKE #{word}</if>
+			<if test="key == 'contents'">bbs_contents LIKE #{word}</if>
+		</if>
+		<if test="key2 == 'free'">
+			<if test="key == 'writer'">bbs_writer LIKE #{word} AND bbs_type = 0</if>
+			<if test="key == 'title'">bbs_title LIKE #{word} AND bbs_type = 0</if>
+			<if test="key == 'contents'">bbs_contents LIKE #{word} AND bbs_type = 0</if>
+		</if>
+		<if test="key2 == 'tip'">
+			<if test="key == 'writer'">bbs_writer LIKE #{word} AND bbs_type = 1</if>
+			<if test="key == 'title'">bbs_title LIKE #{word} AND bbs_type = 1</if>
+			<if test="key == 'contents'">bbs_contents LIKE #{word} AND bbs_type = 1</if>
+		</if>
+	</where>
 		order by bbs_key desc
 		limit #{start}, #{size} ;
- 	</select>
+	</select>
  	<select id="total" resultType="int">
- 		select count(*)
- 		from BBS
- 		<if test="key=='bbs_writer'">where bbs_writer like #{word}</if>
-		<if test="key=='bbs_title'">where bbs_title like #{word}</if>
-		<if test="key=='bbs_contents'">where bbs_contents like #{word}</if>
- 	</select>
+	select count(*)
+	from BBS
+	<where>
+		<if test="key2 == 'all'">
+			<if test="key == 'writer'">bbs_writer LIKE #{word}</if>
+			<if test="key == 'title'">bbs_title LIKE #{word}</if>
+			<if test="key == 'contents'">bbs_contents LIKE #{word}</if>
+		</if>
+		<if test="key2 == 'free'">
+			<if test="key == 'writer'">bbs_writer LIKE #{word} AND bbs_type = 0</if>
+			<if test="key == 'title'">bbs_title LIKE #{word} AND bbs_type = 0</if>
+			<if test="key == 'contents'">bbs_contents LIKE #{word} AND bbs_type = 0</if>
+		</if>
+		<if test="key2 == 'tip'">
+			<if test="key == 'writer'">bbs_writer LIKE #{word} AND bbs_type = 1</if>
+			<if test="key == 'title'">bbs_title LIKE #{word} AND bbs_type = 1</if>
+			<if test="key == 'contents'">bbs_contents LIKE #{word} AND bbs_type = 1</if>
+		</if>
+	</where>
+	</select>
  	<update id="updateViewcnt">
 		update BBS
 		set bbs_vcnt=bbs_vcnt+1
 		where bbs_key=#{bbs_key}
 	</update>
-	  <select id="topList" resultType="com.example.domain.BBSVO">
-        select * from BBS order by bbs_vcnt desc limit 2
+	  <select id="topList" resultType="hashmap">
+        select *, date_format(bbs_regDate, '%Y.%m.%d') as fmtdate from BBS order by bbs_vcnt desc limit 3
     </select>
+    
+   	<insert id="insertPhoto">
+		insert into BBSPhoto (bbsPhoto_bbs_key, bbsPhoto_photo, bbsPhoto_sequence) 
+		values (#{bbsPhoto_bbs_key},#{bbsPhoto_photo}, #{bbsPhoto_sequence})
+	</insert>
+
+	<update id="updatePhoto">
+		update BBSPhoto set bbsPhoto_sequence=#{bbsPhoto_sequence} where bbsPhoto_key=#{bbsPhoto_key}
+	</update>
+
+	<delete id="deleteAttach">
+		delete from BBSPhoto where bbsPhoto_key= #{bbsPhoto_key}
+	</delete>
+	
+	<select id="getLastInsertId" resultType="int">
+		select distinct(last_insert_id()) as last from BBS
+	</select>
+	
+	<select id="listMallPhoto" resultType="hashmap">
+	 	select * from BBSPhoto where bbsPhoto_bbs_key= #{bbsPhoto_key} order by bbsPhoto_sequence;
+	 </select>
+	 
+	 <update id="insertMainPhoto">
+	 	update BBS set bbs_photo=#{bbs_photo} where bbs_key=#{bbs_key}
+	 </update>
+	 
+	 <select id="getMainPhoto" resultType="String">
+		select bbs_photo from BBS where bbs_key=#{bbs_key};
+	 </select>
+
+ 	<update id="updateMainPhoto">
+	 	update BBS set bbs_photo=#{bbsPhoto_photo} where bbs_key=#{bbsPhoto_bbs_key}
+	 </update>
 </mapper>

@@ -11,8 +11,8 @@
 		</select>
 		
 		<insert id="insert">
-				insert into reply ( reply_bbs_key, reply_writer, reply_contents)
-				value ( #{reply_bbs_key}, #{reply_writer}, #{reply_contents})
+				insert into reply ( reply_bbs_key, reply_writer, reply_contents, reply_lock)
+				value ( #{reply_bbs_key}, #{reply_writer}, #{reply_contents}, #{reply_lock})
 		</insert>
 		
 		<update id="update">
@@ -32,21 +32,34 @@
 				select count(*) as total from reply where reply_bbs_key=#{reply_bbs_key} ;
 		</select>
 		
-		<insert id="reactionInsert">
-				insert into replyLike ( reply_key, reply_writer, reply_reaction)
-				value (#{reply_key}, #{reply_writer}, #{reply_reaction})
+		<insert id="LikeInsert">
+				insert into replyLike (reply_key, reply_writer, reply_reaction)
+				values (#{reply_key}, #{reply_writer}, 1)
 		</insert>
 		
-		<update id="replyLikeUpdate">
-				update replyLike set reply_reaction=#{reply_reaction} where reply_key=#{reply_key} and reply_writer=#{reply_writer};
+		<insert id="HateInsert">
+				insert into replyLike (reply_key, reply_writer, reply_reaction)
+				values (#{reply_key}, #{reply_writer}, (-1) )
+		</insert>
+		
+		<update id="reactionUpdate">
+				update replyLike set reply_reaction= (reply_reaction*(-1)) where reply_key=#{reply_key} and reply_writer=#{reply_writer};
 		</update>
 		
-		<select id="replyLikeCount" resultType="int">
-		    	select count(*) as total from replyLike where reply_key=#{reply_key} and reply_reaction="like";
+		<delete id="reactionDelete">
+			delete from replyLike where reply_key=#{reply_key} and reply_writer=#{reply_writer}
+		</delete>
+		
+		<select id="readReaction" resultType="String">
+				select reply_reaction from replyLike where reply_writer=#{reply_writer} and reply_key=#{reply_key};
 		</select>
 		
-		<select id="replyDisLikeCount" resultType="int">
-		    	select count(*) as total from replyLike where reply_key=#{reply_key} and reply_reaction="dislike";
+		<select id="CountReaction" resultType="hashmap">
+		    select 
+		        sum(case when reply_reaction = 1 then 1 else 0 end) as likeCount,
+		        sum(case when reply_reaction = -1 then 1 else 0 end) as hateCount
+		    from replyLike 
+		    where reply_key = #{reply_key};
 		</select>
 		
 </mapper>

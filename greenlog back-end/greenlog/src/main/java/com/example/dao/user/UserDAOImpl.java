@@ -103,4 +103,8 @@ public class UserDAOImpl implements UserDAO {
 		return session.selectList(namespace + ".AdminDiaryList", map);
 	}
 
+	@Override
+	public HashMap<String, Object> chknickname(String user_nickname) {
+		return session.selectOne(namespace + ".chknickname", user_nickname);
+	}
 }

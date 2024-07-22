@@ -21,10 +21,10 @@
         select *
         from notice
         <where>
-            <if test="key == 'notice_writer'">notice_writer like #{word}</if>
-            <if test="key == 'notice_title'">notice_title like #{word}</if>
-            <if test="key == 'notice_contents'">notice_contents like #{word}</if>
-            <if test="key == 'notice_type' and word != '전체'">notice_type = #{word, jdbcType=INTEGER}</if>
+            <if test="key == 'all'"></if>
+            <if test="key == 'normal'">notice_type = 1</if>
+            <if test="key == 'member'">notice_type = 2 </if>
+            <if test="key == 'event'">notice_type = '' </if>
         </where>
         order by notice_key desc
         limit #{start}, #{size}
@@ -32,11 +32,11 @@
  <select id="total" resultType="int">
         select count(*)
         from notice
-        <where>
-            <if test="key == 'notice_writer'">notice_writer like #{word}</if>
-            <if test="key == 'notice_title'">notice_title like #{word}</if>
-            <if test="key == 'notice_contents'">notice_contents like #{word}</if>
-            <if test="key == 'notice_type' and word != '전체'">notice_type = #{word, jdbcType=INTEGER}</if>
+       <where>
+            <if test="key == 'all'"></if>
+            <if test="key == 'normal'">notice_type = 1</if>
+            <if test="key == 'member'">notice_type = 2 </if>
+            <if test="key == 'event'">notice_type = '' </if>
         </where>
     </select>
     <update id="updateViewcnt">
@@ -44,10 +44,4 @@
 		set notice_vcnt=notice_vcnt+1
 		where notice_key=#{notice_key}
 	</update>
-	<select id="categoryList" resultType="hashmap">
-		select * from notice 
-		<if test ="notice_state===0">
-			where notice_state===0
-		</if>
-	</select>
 </mapper>

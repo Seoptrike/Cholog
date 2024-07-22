@@ -10,11 +10,11 @@ const FAQInsert = () => {
   const [form, setForm] = useState({
     faq_question: '',
     faq_answer: '',
-    faq_category: '',
+    faq_type: '0',
     faq_writer: uid
   });
 
-  const { faq_question, faq_answer, faq_category } = form;
+  const { faq_question, faq_answer, faq_type } = form;
 
   const onChangeForm = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -26,18 +26,14 @@ const FAQInsert = () => {
       alert("질문을 입력하세요!");
       return;
     }
-    if (faq_category === "") {
-      alert("카테고리를 선택하세요!");
-      return;
-    }
     if (!window.confirm("FAQ를 등록하실래요?")) return;
     setLoading(true);
-  
+
     const updateForm = { ...form };
     try {
       const response = await axios.post("/faq/insert", updateForm);
       setLoading(false);
-  
+
       if (response.status === 200) {
         alert('FAQ가 등록되었습니다.');
         navigate(`/community/faq/list.json`);
@@ -58,14 +54,13 @@ const FAQInsert = () => {
         <InputGroup className="mb-3">
           <FormControl
             as="select"
-            name="faq_category"
-            value={faq_category}
+            name="faq_type"
+            value={faq_type}
             onChange={onChangeForm}
             style={{ maxWidth: '150px', marginRight: '10px' }}>
-            <option value="">카테고리를 선택하세요</option>
-            <option value="회원">회원</option>
-            <option value="포인트">포인트</option>
-            <option value="참여방법">참여방법</option>
+            <option value={1}>회원</option>
+            <option value={2}>포인트</option>
+            <option value={3}>참여방법</option>
           </FormControl>
           <FormControl
             type="text"

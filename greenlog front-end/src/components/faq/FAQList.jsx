@@ -9,16 +9,16 @@ const FAQList = () => {
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(10);
-  const [key, setKey] = useState('faq_question');
+  const [key, setKey] = useState('all');
   const [word, setWord] = useState('');
-  const [category, setCategory] = useState('all');
 
   // 관리자 아이디 목록
   const adminIds = ['admin', 'seop', 'hanna', 'gr001231', 'laonmiku', 'ne4102'];
   const currentUser = sessionStorage.getItem('uid');
 
   const callAPI = async () => {
-    const res = await axios.get(`/faq/list.json?key=${key}&word=${word}&category=${category}&page=${page}&size=${size}`);
+    const res = await axios.get(`/faq/list.json?key=${key}&word=${word}&page=${page}&size=${size}`);
+    console.log(res.data);
     setList(res.data.documents);
     setCount(res.data.total);
     const last = Math.ceil(res.data.total / size);
@@ -27,11 +27,11 @@ const FAQList = () => {
     if (res.data.total === 0) {
       alert('검색어가 없습니다');
     }
-  }
+  };
 
   useEffect(() => {
     callAPI();
-  }, [page, size, category]);
+  }, [page, size, key, word]);
 
   const onClickSearch = async (e) => {
     e.preventDefault();
@@ -58,28 +58,6 @@ const FAQList = () => {
     }
   };
 
-  const CategoryChange = (e) => {
-    const selectedCategory = e.target.value;
-    setCategory(selectedCategory);
-    setPage(1);
-    // 카테고리별 size 설정
-    if (selectedCategory === '회원') {
-      setSize(10);
-    } else if (selectedCategory === '포인트') {
-      setSize(15);
-    } else if (selectedCategory === '참여방법') {
-      setSize(15);
-    } else {
-      setSize(5);
-    }
-  };
-
-  const handlePageChange = (pageNumber) => {
-    setPage(pageNumber);
-  };
-
-  const filteredList = list.filter(faq => category === 'all' || faq.FAQ_category === category);
-
   return (
     <div>
       <HeaderTabs />
@@ -87,11 +65,11 @@ const FAQList = () => {
       <Row className="mb-3 align-items-center">
         <Col md={8}>
           <InputGroup>
-            <Form.Select className='me-2' value={category} onChange={CategoryChange}>
+            <Form.Select className='me-2' value={key} onChange={(e) => setKey(e.target.value)}>
               <option value="all">전체</option>
-              <option value="회원">회원</option>
-              <option value="포인트">포인트</option>
-              <option value="참여방법">참여방법</option>
+              <option value="member">회원</option>
+              <option value="point">포인트</option>
+              <option value="how">참여방법</option>
             </Form.Select>
             <Form.Control placeholder='검색어' value={word} onChange={(e) => setWord(e.target.value)} />
             <Button onClick={onClickSearch}>검색</Button>
@@ -105,9 +83,14 @@ const FAQList = () => {
         </Col>
       </Row>
       <Accordion defaultActiveKey={null}>
-        {filteredList.map((faq, index) => (
+        {list.map((faq, index) => (
           <Accordion.Item eventKey={`${index}`} key={faq.FAQ_key}>
-            <Accordion.Header>{faq.FAQ_category} - {faq.FAQ_question}</Accordion.Header>
+            <Accordion.Header>
+              <span>
+                {faq.FAQ_type === 0 ? '회원' : faq.FAQ_type === 2 ? '포인트' : '참여방법'}
+              </span> 
+              - {faq.FAQ_question}
+            </Accordion.Header>
             <Accordion.Body>
               {faq.FAQ_answer}
               {adminIds.includes(currentUser) && (
@@ -128,7 +111,7 @@ const FAQList = () => {
           pageRangeDisplayed={5}
           prevPageText={"‹"}
           nextPageText={"›"}
-          onChange={handlePageChange}
+          onChange={(e) => setPage(e)}
         />
       )}
     </div>

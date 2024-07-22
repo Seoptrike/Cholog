@@ -1,15 +1,14 @@
 import './App.css';
-import axios from 'axios';
-import { useEffect } from 'react';
 import { Container } from 'react-bootstrap';
 import Menupage from './common/home/Menupage';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-
+import { UserProvider } from './components/user/UserContext'; // UserProvider 가져오기
 function App() {
     return (
-        <Container>
-            <Menupage/>
-        </Container>
+        <UserProvider>
+            <Container>
+                <Menupage />
+            </Container>
+        </UserProvider>
     );
 }
 

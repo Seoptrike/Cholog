@@ -119,4 +119,9 @@ public class UserController {
 	public List<HashMap<String, Object>> AdminDiaryList(@PathVariable("user_uid") String uid, QueryVO vo) {
 		return udao.AdminDiaryList(uid, vo);
 	}
+
+	@GetMapping("/chknickname/{user_nickname}")
+	public HashMap<String, Object> chknickname(@PathVariable("user_nickname") String user_nickname) {
+		return udao.chknickname(user_nickname);
+	}
 }

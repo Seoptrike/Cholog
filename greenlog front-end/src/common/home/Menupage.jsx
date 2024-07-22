@@ -8,6 +8,7 @@ import RouterPage from '../../routers/RouterPage';
 import TotalPage from '../../components/TotalPage';
 import BottomPage from './BottomPage';
 
+
 const Menupage = () => {
     const uid= sessionStorage.getItem("uid");
     const onClickLogout = () => {
@@ -32,7 +33,7 @@ const Menupage = () => {
                             <NavDropdown.Item href="/mall/list.json">피망 몰</NavDropdown.Item>
                         </NavDropdown>
                         <NavDropdown title="클로버 숲" id="basic-nav-dropdown">
-                            <NavDropdown.Item href="/community/bbs/list.json">자유게시판</NavDropdown.Item>
+                            <NavDropdown.Item href="/bbs/list.json">자유게시판</NavDropdown.Item>
                             <NavDropdown.Divider />
                             <NavDropdown.Item href="/community/event/list.json">캠페인 소개</NavDropdown.Item>
                             <NavDropdown.Item href="/about/carspot">전기차 빌리기</NavDropdown.Item>

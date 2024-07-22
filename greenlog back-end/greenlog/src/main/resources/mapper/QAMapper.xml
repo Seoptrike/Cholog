@@ -37,4 +37,22 @@
 		set qa_vcnt=qa_vcnt+1
 		where qa_key=#{qa_key}
 	</update>
+	<select id="qaListCount" resultType="int">
+		select count(*) from QA 
+		where comments is null
+	</select>
+	<select id="qaList" resultType="hashmap">
+		select * from QA 
+		<if test="key=='qa_writer'">where comments is null and qa_writer like #{word}</if>
+		<if test="key=='qa_title'">where comments is null and qa_title like #{word}</if>
+		<if test="key=='qa_contents'">where comments is null and qa_contents like #{word}</if>
+		order by qa_key desc
+		limit #{start}, #{size} ;
+	</select>
+	<select id="qaListTotal" resultType="int">
+		select count(*) from QA 
+		<if test="key=='qa_writer'">where comments is null and qa_writer like #{word}</if>
+		<if test="key=='qa_title'">where comments is null and qa_title like #{word}</if>
+		<if test="key=='qa_contents'">where comments is null and qa_contents like #{word}</if>
+	</select>
 </mapper>

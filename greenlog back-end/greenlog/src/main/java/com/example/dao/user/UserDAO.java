@@ -36,4 +36,6 @@ public interface UserDAO {
 	public List<HashMap<String, Object>> followingDiaryList(String uid, QueryVO vo);
 
 	public List<HashMap<String, Object>> AdminDiaryList(String uid, QueryVO vo);
+
+	public HashMap<String, Object> chknickname(String user_nickname);
 }

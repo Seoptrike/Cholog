@@ -45,32 +45,44 @@ public class RereplyDAOImpl implements RereplyDAO{
 		session.update(namespace + ".updatereLock", vo);
 		
 	}
+
+	@Override
+	public int total(int reply_key) {
+		return session.selectOne(namespace + ".total", reply_key);
+	}
+
+	@Override
+	public String readReaction(RereplyLikeVO vo) {
+		return session.selectOne(namespace + ".readReaction", vo);
+	}
+
+	@Override
+	public void LikeInsert(RereplyLikeVO vo) {
+		session.insert(namespace + ".LikeInsert", vo);
+	}
+
+	@Override
+	public void HateInsert(RereplyLikeVO vo) {
+		session.insert(namespace + ".HateInsert", vo);
+		
+	}
+
+	@Override
+	public void reactionUpdate(RereplyLikeVO vo) {
+		session.update(namespace + ".reactionUpdate", vo);
+		
+	}
+
+	@Override
+	public void reactionDelete(RereplyLikeVO vo) {
+		session.delete(namespace + ".reactionDelete", vo);
+		
+	}
+
+	@Override
+	public HashMap<String, Object> CountReaction(int rereply_key) {
+		return session.selectOne(namespace + ".CountReaction", rereply_key);
+	}
 	
-	@Override
-	public int rereplyCount(int reply_key) {
-			return session.selectOne(namespace + ".rereplyCount", reply_key);
-	}
-
-	@Override
-	public void rereplyLikeUpdate(RereplyLikeVO vo) {
-			session.update(namespace + ".rereplyLikeUpdate", vo);
-		
-	}
-
-	@Override
-	public void rereactionInsert(RereplyLikeVO vo) {
-			session.insert(namespace + ".rereactionInsert", vo);
-		
-	}
-
-	@Override
-	public int rereplyLikeCount(int rereply_key) {
-			return session.selectOne(namespace + ".rereplyLikeCount", rereply_key);
-	}
-
-	@Override
-	public int rereplyDisLikeCount(int rereply_key) {
-			return session.selectOne(namespace + ".rereplyDisLikeCount", rereply_key);
-	}
 
 }

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Form, Row, Col } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import MainSlider from './MainSlider';
@@ -6,10 +6,12 @@ import MallSlider from './MallSlider';
 import ProjectSlider from './ProjectSlider';
 import Articles from './Articles';
 import FollowingDiaryList from '../../components/follow/FollowingDiaryList';
+import { useUserContext } from '../../components/user/UserContext';
 
 const MainPage = () => {
     const navigate = useNavigate();
-
+    const {userData} = useUserContext();
+    console.log(userData);
     const handleClick = () => {
         navigate('/diary/insert');  // 원하는 경로로 변경하세요.
     }
@@ -74,7 +76,7 @@ const MainPage = () => {
             </Row>
             <Row>
                 <Col xs={8}>
-                    <FollowingDiaryList/>
+                    <FollowingDiaryList />
                 </Col>
                 <Col xs={4}>
                     <MainSlider />

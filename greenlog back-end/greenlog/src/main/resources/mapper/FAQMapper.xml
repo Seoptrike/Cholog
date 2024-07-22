@@ -3,12 +3,12 @@
 
 <mapper namespace="com.example.mapper.FAQMapper">
     <insert id="insert">
-        INSERT INTO FAQ (faq_writer, faq_question, faq_answer,faq_category)
-        VALUES (#{faq_writer}, #{faq_question}, #{faq_answer},#{faq_category})
+        INSERT INTO FAQ (faq_writer, faq_question, faq_answer,faq_category,faq_type)
+        VALUES (#{faq_writer}, #{faq_question}, #{faq_answer},#{faq_category},#{faq_type})
     </insert>
    <update id="update">
 		update FAQ
-		set faq_question=#{faq_question}, faq_answer= #{faq_answer},faq_category=#{faq_category}
+		set faq_question=#{faq_question}, faq_answer= #{faq_answer},faq_category=#{faq_category},faq_type=#{faq_type}
 		where faq_key=#{faq_key}
 	</update>
    <delete id="delete">
@@ -20,42 +20,25 @@
  <select id="list" resultType="hashmap">
     select *
     from FAQ
-    <where>
-        <if test="key == 'faq_writer'">
-            faq_writer like concat('%', #{word}, '%')
-        </if>
-        <if test="key == 'faq_question'">
-            faq_question like concat('%', #{word}, '%')
-        </if>
-        <if test="key == 'faq_answer'">
-            faq_answer like concat('%', #{word}, '%')
-        </if>
-        <if test="key == 'faq_category'">
-            faq_category like concat('%', #{word}, '%')
-        </if>
-    </where>
+    	<where>
+            <if test="key == 'all'"></if>
+            <if test="key == 'member'">faq_type =1</if>
+            <if test="key == 'point'">faq_type =2 </if>
+            <if test="key == 'how'">faq_type =''</if>
+        </where>
     order by faq_key desc
     limit #{start}, #{size}
 </select>
 <select id="total" resultType="int">
     select count(*)
     from FAQ
-    <where>
-        <if test="key == 'faq_writer'">
-            faq_writer like concat('%', #{word}, '%')
-        </if>
-        <if test="key == 'faq_question'">
-            faq_question like concat('%', #{word}, '%')
-        </if>
-        <if test="key == 'faq_answer'">
-            faq_answer like concat('%', #{word}, '%')
-        </if>
-        <if test="key == 'faq_category'">
-            faq_category like concat('%', #{word}, '%')
-        </if>
-    </where>
+     <where>
+            <if test="key == 'all'"></if>
+            <if test="key == 'member'">faq_type =1</if>
+            <if test="key == 'point'">faq_type =2 </if>
+            <if test="key == 'how'">faq_type =''</if>
+        </where>
 </select>
-
     <update id="updateViewcnt">
 		update FAQ
 		set faq_vcnt=faq_vcnt+1

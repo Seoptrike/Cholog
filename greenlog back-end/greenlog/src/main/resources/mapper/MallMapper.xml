@@ -120,7 +120,7 @@
 	</delete>
 	
 	<delete id="deleteAttach">
-		delete from mallPhoto where mallPhoto_key= #{mallPhto_key}
+		delete from mallPhoto where mallPhoto_key= #{mallPhoto_key}
 	</delete>
 	
 	<select id="getLastInsertId" resultType="int">
@@ -128,7 +128,7 @@
 	</select>
 	
 	<select id="listMallPhoto" resultType="hashmap">
-	 	select * from mallPhoto where mallPhoto_mall_key= #{mallPhto_key} order by mallphoto_sequence;
+	 	select * from mallPhoto where mallPhoto_mall_key= #{mallPhoto_key} order by mallphoto_sequence;
 	 </select>
 	 
 	 <update id="insertMainPhoto">

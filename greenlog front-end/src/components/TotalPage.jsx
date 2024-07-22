@@ -6,28 +6,28 @@ import { Link } from 'react-router-dom';
 
 
 const TotalPage = () => {
-    const uid= sessionStorage.getItem("uid");
+    const uid = sessionStorage.getItem("uid");
     return (
         <div>
             <Row>
                 <Col xs={2}>
                     <ListGroup>
                         <ListGroup.Item >유저</ListGroup.Item>
+                        <ListGroup.Item> <Link to={"/user/step"}>스텝</Link></ListGroup.Item>
                         <ListGroup.Item> <Link to={"/user/login"}>로그인</Link></ListGroup.Item>
                         <ListGroup.Item> <Link to={`/user/read/${uid}`}>마이페이지</Link></ListGroup.Item>
                         <ListGroup.Item> <Link to={"/user/join"}>회원가입</Link></ListGroup.Item>
-                        <ListGroup.Item> <Link to={"/user/following"}>팔로잉</Link></ListGroup.Item>
-                        <ListGroup.Item> <Link to={"/user/follower"}>팔로워</Link></ListGroup.Item>
+                        <ListGroup.Item> <Link to={`/user/wallet/${uid}`}>개인씨앗지갑</Link></ListGroup.Item>
                     </ListGroup>
                 </Col>
                 <Col xs={2}>
                     <ListGroup>
                         <ListGroup.Item >관리자</ListGroup.Item>
-                        <ListGroup.Item> <Link to={"/user/admin"}>관리자대시보드</Link></ListGroup.Item>
-                        <ListGroup.Item> <Link to={"/user/admin/question"}>관리자1:1/FAQ/Q&A</Link></ListGroup.Item>
-                        <ListGroup.Item> <Link to={"/user/admin/list.json"}>관리자회원목록</Link></ListGroup.Item>
-                        <ListGroup.Item> <Link to={"/user/admin/read/:user_uid"}>관리자용 회원정보</Link></ListGroup.Item>
-                        <ListGroup.Item> <Link to={"/report/list.json"}>관리자용 신고접수</Link></ListGroup.Item>
+                        <ListGroup.Item> <Link to={"/admin/dash"}>관리자대시보드</Link></ListGroup.Item>
+                        <ListGroup.Item> <Link to={"/admin/question"}>관리자1:1/FAQ/Q&A</Link></ListGroup.Item>
+                        <ListGroup.Item> <Link to={"/admin/list.json"}>관리자회원목록</Link></ListGroup.Item>
+                        <ListGroup.Item> <Link to={"/admin/read/:user_uid"}>관리자용 회원정보</Link></ListGroup.Item>
+                        <ListGroup.Item> <Link to={"/admin/report"}>관리자용 신고접수</Link></ListGroup.Item>
                     </ListGroup>
                 </Col>
                 <Col xs={2}>
@@ -36,7 +36,6 @@ const TotalPage = () => {
                         <ListGroup.Item> <Link to={"/diary/list.json/:diary_writer"}>다이어리목록</Link></ListGroup.Item>
                         <ListGroup.Item> <Link to={"/diary/insert"}>다이어리작성</Link></ListGroup.Item>
                         <ListGroup.Item> <Link to={"/diary/read/103"}>다이어리읽기</Link></ListGroup.Item>
-                        <ListGroup.Item> <Link to={"/user/chat"}>채팅방</Link></ListGroup.Item>
                     </ListGroup>
                 </Col>
                 <Col xs={2}>
@@ -44,23 +43,25 @@ const TotalPage = () => {
                         <ListGroup.Item>피망몰</ListGroup.Item>
                         <ListGroup.Item> <Link to={"/mall/list.json"}>상품리스트</Link></ListGroup.Item>
                         <ListGroup.Item> <Link to={"/mall/insert"}>상품등록</Link></ListGroup.Item>
+                        <ListGroup.Item>경매</ListGroup.Item>
+                        <ListGroup.Item> <Link to={`/auction/list.json/${uid}`}>개인경매목록</Link></ListGroup.Item>
+                        <ListGroup.Item> <Link to={`/auction/read/${uid}`}>경매거래내역</Link></ListGroup.Item>
                     </ListGroup>
                 </Col>
                 <Col xs={2}>
                     <ListGroup>
-                        <ListGroup.Item>경매</ListGroup.Item>
-                        <ListGroup.Item> <Link to={"/auction/list.json/:user_uid"}>개인경매목록</Link></ListGroup.Item>
-                        <ListGroup.Item> <Link to={"/auction/read/:auction_key"}>경매거래내역</Link></ListGroup.Item>
-                        <ListGroup.Item> <Link to={"/auction/admin/list.json"}>전체경매목록</Link></ListGroup.Item>
+                        <ListGroup.Item>자유게시판</ListGroup.Item>
+                        <ListGroup.Item> <Link to={"/BBS/list.json"}>게시판목록</Link></ListGroup.Item>
+                        <ListGroup.Item> <Link to={"/BBS/insert"}>게시글등록</Link></ListGroup.Item>
                     </ListGroup>
                 </Col>
                 <Col xs={2}>
                     <ListGroup>
                         <ListGroup.Item>씨앗</ListGroup.Item>
-                        <ListGroup.Item> <Link to={"/user/wallet/:user_uid"}>개인씨앗지갑</Link></ListGroup.Item>
-                        <ListGroup.Item> <Link to={"/user/admin/seed/list.json"}>전체씨앗지갑목록</Link></ListGroup.Item>
+
+                        <ListGroup.Item> <Link to={"/admin/seed/list.json"}>전체씨앗지갑목록</Link></ListGroup.Item>
                         <ListGroup.Item> <Link to={"/trade/admin/list.json"}>전체씨앗거래내역</Link></ListGroup.Item>
-                       
+
                     </ListGroup>
                 </Col>
             </Row>

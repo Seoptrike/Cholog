@@ -14,4 +14,7 @@ public interface QADAO {
     public void update(QaVO vo);
     public int total(QueryVO vo);
     public void updateViewcnt(int qa_key);
+    public List<HashMap<String, Object>> qaList(QueryVO vo);
+    public int qaListCount();
+    public int qaListTotal(QueryVO vo);
 }

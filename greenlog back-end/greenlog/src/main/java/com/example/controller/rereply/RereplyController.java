@@ -44,6 +44,11 @@ public class RereplyController {
 				rrservice.update(vo);
 		}
 		
+		@PostMapping("/update/lock")
+		public void updatereLock(@RequestBody RereplyVO vo) {
+				rrservice.updatereLock(vo);
+		}
+		
 		@GetMapping("/list/{reply_key}")
 		public List<HashMap<String, Object>> replyList(@PathVariable("reply_key") int reply_key) {
 				return rrdao.rereplyList(reply_key);
@@ -54,31 +59,54 @@ public class RereplyController {
 				return rrservice.plist(reply_key);
 		}
 		
-		@PostMapping("/update/lock")
-		public void updatereLock(@RequestBody RereplyVO vo) {
-				rrservice.updatereLock(vo);
+		@PostMapping("/readReaction")
+		public String readReaction(@RequestBody RereplyLikeVO vo) {
+			return rrdao.readReaction(vo);
+
 		}
+
+		@GetMapping("/count/{reply_key}")
+		public int count(@PathVariable("reply_key") int reply_key) {
+			return rrdao.total(reply_key);
+		}
+
+		@PostMapping("/insert/like")
+		public int LikeInsert(@RequestBody RereplyLikeVO vo) {
+			try {
+				rrdao.LikeInsert(vo);
+				return 1;
+			} catch (Exception e) {
+				return 2;
+			}
+
+		}
+
+		@PostMapping("/insert/hate")
+		public int HateInsert(@RequestBody RereplyLikeVO vo) {
+			try {
+				rrdao.HateInsert(vo);
+				return 1;
+			} catch (Exception e) {
+				return 2;
+			}
+
+		}
+
+		@PostMapping("/reactionUpdate")
+		public void reactionUpdate(@RequestBody RereplyLikeVO vo) {
+			rrdao.reactionUpdate(vo);
+		}
+
+		@PostMapping("/reactionDelete")
+		public void reactionDelete(@RequestBody RereplyLikeVO vo) {
+			rrdao.reactionDelete(vo);
+		}
+
+		@GetMapping("/CountReaction/{rereply_key}")
+		public HashMap<String, Object> CountReaction(@PathVariable("rereply_key") int rereply_key) {
+			return rrdao.CountReaction(rereply_key);
+		}
+
 		
-		@PostMapping("/update/rereplyLike")
-		public void rereplyLikeUpdate(@RequestBody RereplyLikeVO vo) {
-				rrservice.rereplyLikeUpdate(vo);
-		}
-		
-		@PostMapping("/rereactionInsert")
-		public void rereactionInsert(@RequestBody RereplyLikeVO vo) {
-				rrdao.rereactionInsert(vo);
-		}
-		
-		@GetMapping("/reaction/like/{rereply_key}")
-		public int rereplyLikeCount(@PathVariable("rereply_key") int rereply_key) {
-			return rrdao.rereplyLikeCount(rereply_key);
-			
-		}
-		
-		@GetMapping("/reaction/dislike/{rereply_key}")
-		public int rereplyDisLikeCount(@PathVariable("rereply_key") int rereply_key) {
-			return rrdao.rereplyDisLikeCount(rereply_key);
-			
-		}
 		
 }
