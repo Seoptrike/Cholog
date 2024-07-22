@@ -55,9 +55,9 @@ const NoticeInsert = () => {
             value={notice_type}
             onChange={onChangeCategory}
             style={{ maxWidth: '150px', marginRight: '10px' }}>
-            <option value={0}>일반</option>
-            <option value={1}>포인트</option>
-            <option value={2}>이벤트</option>
+            <option value={1}>일반</option>
+            <option value={2}>회원</option>
+            <option value={3}>이벤트</option>
           </FormControl>
           <FormControl
             type="text"

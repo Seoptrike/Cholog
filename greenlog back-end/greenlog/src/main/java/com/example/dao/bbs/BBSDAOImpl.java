@@ -75,7 +75,6 @@ public class BBSDAOImpl implements BBSDAO {
 
 	@Override
 	public int getLastInsertId() {
-		// TODO Auto-generated method stub
 		return session.selectOne(NAMESPACE + ".getLastInsertId");
 	}
 
