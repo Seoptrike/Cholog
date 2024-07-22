@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.dao.bbs.BBSDAO;
-import com.example.domain.BBSVO;
 
 @Service
 public class BBSServiceImpl implements BBSService {
@@ -23,7 +22,7 @@ public class BBSServiceImpl implements BBSService {
 	}
 
 	@Override
-	public List<BBSVO> getTopList() {
+	public List<HashMap<String, Object>> getTopList() {
 		return bbsDAO.topList(); // 추가
 	}
 

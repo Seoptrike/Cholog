@@ -23,7 +23,7 @@ const BBSListPage = () => {
     const [page, setPage] = useState(1);
     const [size, setSize] = useState(10);
     const [key, setKey] = useState('title');
-    const [key2, setKey2] = useState("99");
+    const [key2, setKey2] = useState("all");
     const [word, setWord] = useState('');
 
     const callAPI = async () => {
@@ -32,8 +32,10 @@ const BBSListPage = () => {
         setCount(res.data.total);
         const res2 = await axios.get('/bbs/top');
         setTopList(res2.data);
-        console.log(res2.data)
+        //console.log(res2.data)
     };
+    console.log(key2);
+    console.log(key);
 
     useEffect(() => {
         callAPI();
@@ -70,9 +72,9 @@ const BBSListPage = () => {
                 <Col xs={6}>
                     <InputGroup >
                         <Form.Select className='me-2' value={key2} onChange={(e) => setKey2(e.target.value)}>
-                            <option value="99">전체</option>
-                            <option value="1">자유</option>
-                            <option value="2">꿀팁</option>
+                            <option value="all">전체</option>
+                            <option value="free">자유</option>
+                            <option value="tip">꿀팁</option>
                         </Form.Select>
                         <Form.Select className='me-2' value={key} onChange={(e) => setKey(e.target.value)}>
                             <option value="title">제목</option>

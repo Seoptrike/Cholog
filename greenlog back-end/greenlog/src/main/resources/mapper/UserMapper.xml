@@ -36,8 +36,20 @@
 	</select>
 	
 	<insert id="insert" >
-		insert into user( user_uid, user_upass, user_uname, user_nickname, user_email, user_phone, user_gender, user_birth, user_address1, user_address2 )
-		value (#{user_uid},#{user_upass},#{user_uname},#{user_nickname},#{user_email},#{user_phone},#{user_gender},#{user_birth},#{user_address1},#{user_address2})
+		insert into user( user_uid, user_upass, user_uname, user_nickname, user_email, user_phone, user_gender, user_address1, user_address2, user_birth )
+		value (#{user_uid},#{user_upass},#{user_uname},#{user_nickname},#{user_email},#{user_phone},#{user_gender},#{user_address1},#{user_address2},
+		DATE_ADD(
+            CONVERT_TZ(
+                STR_TO_DATE(
+                    REPLACE(REPLACE(#{user_birth}, 'T', ' '), 'Z', ''),
+                    '%Y-%m-%d %H:%i:%s'
+                ),
+                '+00:00',
+                'Asia/Seoul'
+            ),
+            INTERVAL 15 HOUR
+        )
+		)
 	</insert>
 	
 	<select id="read" resultType="com.example.domain.UserVO">
@@ -116,5 +128,9 @@
 		JOIN user u ON d.diary_writer = u.user_uid
 		order by diary_regDate desc 
 		limit #{start}, #{size}	
+	</select>
+	
+	<select id="chknickname" resultType="hashmap">
+		select * from user where user_nickname=#{user_nickname}
 	</select>
 </mapper>

@@ -6,7 +6,7 @@ import SyncAltIcon from '@mui/icons-material/SyncAlt';
 import Pagination from 'react-js-pagination';
 import '../../common/useful/Paging.css';
 import { Link } from 'react-router-dom';
-import Calendar from '../../common/useful/Calendar';
+
 
 
 
@@ -154,7 +154,7 @@ const AuctionList = () => {
                   <Form.Control value={word} name="word" onChange={(e) => setWord(e.target.value)} placeholder='' />
                 }
 
-                {(key === "null" || key === "auction_seller" || key === "auction_buyer" || key === "auction_regDate") ? null :
+                {/* {(key === "null" || key === "auction_seller" || key === "auction_buyer" || key === "auction_regDate") ? null :
                 <>
                 <Calendar
                   selectedDate={startDate}
@@ -166,7 +166,7 @@ const AuctionList = () => {
                   setSelectedDate={setEndDate}
                   selectedPeriod={selectedPeriod} />
                 </>
-                }
+                } */}
                 <Button type="submit" size="sm">검색</Button>
               </InputGroup>
             </form>

@@ -54,7 +54,7 @@ public class QueryVO {
 	@Override
 	public String toString() {
 		return "QueryVO [page=" + page + ", size=" + size + ", start=" + start + ", key=" + key + ", word=" + word
-				+ "]";
+				+ ", key2=" + key2 + "]";
 	}
 
 	public String getKey2() {

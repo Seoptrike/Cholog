@@ -17,50 +17,50 @@
     <select id="read" resultType="hashmap">
         select b.*,u.user_nickname,u.user_img from BBS b join user u on bbs_writer=user_uid where bbs_key = #{bbs_key}
     </select>
-   <select id="list" resultType="hashmap">
- 		select *, date_format(bbs_regDate, '%Y.%m.%d') as fmtdate
+	<select id="list" resultType="hashmap">
+		select *, date_format(bbs_regDate, '%Y.%m.%d') as fmtdate
 		from BBS
-		<where>
-		<if test="key2=='99'">
-			<if test="key=='writer'">bbs_writer like #{word}</if>
-			<if test="key=='title'">bbs_title like #{word}</if>
-			<if test="key=='contents'">bbs_contents like #{word}</if>
+	<where>
+		<if test="key2 == 'all'">
+			<if test="key == 'writer'">bbs_writer LIKE #{word}</if>
+			<if test="key == 'title'">bbs_title LIKE #{word}</if>
+			<if test="key == 'contents'">bbs_contents LIKE #{word}</if>
 		</if>
-		<if test="key2=='1'">
-			<if test="key=='writer'">bbs_writer like #{word} and bbs_type=0</if>
-			<if test="key=='title'">bbs_title like #{word} and bbs_type=0</if>
-			<if test="key=='contents'">bbs_contents like #{word} and bbs_type=0</if>
+		<if test="key2 == 'free'">
+			<if test="key == 'writer'">bbs_writer LIKE #{word} AND bbs_type = 0</if>
+			<if test="key == 'title'">bbs_title LIKE #{word} AND bbs_type = 0</if>
+			<if test="key == 'contents'">bbs_contents LIKE #{word} AND bbs_type = 0</if>
 		</if>
-		<if test="key2=='2'">
-			<if test="key=='writer'">bbs_writer like #{word} and bbs_type=1</if>
-			<if test="key=='title'">bbs_title like #{word} and bbs_type=1</if>
-			<if test="key=='contents'">bbs_contents like #{word} and bbs_type=1</if>
+		<if test="key2 == 'tip'">
+			<if test="key == 'writer'">bbs_writer LIKE #{word} AND bbs_type = 1</if>
+			<if test="key == 'title'">bbs_title LIKE #{word} AND bbs_type = 1</if>
+			<if test="key == 'contents'">bbs_contents LIKE #{word} AND bbs_type = 1</if>
 		</if>
-		</where>
+	</where>
 		order by bbs_key desc
 		limit #{start}, #{size} ;
- 	</select>
+	</select>
  	<select id="total" resultType="int">
- 		select count(*)
- 		from BBS
- 		<where>
-		<if test="key2=='99'">
-			<if test="key=='writer'">bbs_writer like #{word}</if>
-			<if test="key=='title'">bbs_title like #{word}</if>
-			<if test="key=='contents'">bbs_contents like #{word}</if>
+	select count(*)
+	from BBS
+	<where>
+		<if test="key2 == 'all'">
+			<if test="key == 'writer'">bbs_writer LIKE #{word}</if>
+			<if test="key == 'title'">bbs_title LIKE #{word}</if>
+			<if test="key == 'contents'">bbs_contents LIKE #{word}</if>
 		</if>
-		<if test="key2=='0'">
-			<if test="key=='writer'">bbs_writer like #{word} and bbs_state=0</if>
-			<if test="key=='title'">bbs_title like #{word} and bbs_state=0</if>
-			<if test="key=='contents'">bbs_contents like #{word} and bbs_state=0</if>
+		<if test="key2 == 'free'">
+			<if test="key == 'writer'">bbs_writer LIKE #{word} AND bbs_type = 0</if>
+			<if test="key == 'title'">bbs_title LIKE #{word} AND bbs_type = 0</if>
+			<if test="key == 'contents'">bbs_contents LIKE #{word} AND bbs_type = 0</if>
 		</if>
-		<if test="key2=='1'">
-			<if test="key=='writer'">bbs_writer like #{word} and bbs_state=1</if>
-			<if test="key=='title'">bbs_title like #{word} and bbs_state=1</if>
-			<if test="key=='contents'">bbs_contents like #{word} and bbs_state=1</if>
+		<if test="key2 == 'tip'">
+			<if test="key == 'writer'">bbs_writer LIKE #{word} AND bbs_type = 1</if>
+			<if test="key == 'title'">bbs_title LIKE #{word} AND bbs_type = 1</if>
+			<if test="key == 'contents'">bbs_contents LIKE #{word} AND bbs_type = 1</if>
 		</if>
-		</where>
- 	</select>
+	</where>
+	</select>
  	<update id="updateViewcnt">
 		update BBS
 		set bbs_vcnt=bbs_vcnt+1

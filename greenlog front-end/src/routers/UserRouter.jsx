@@ -20,6 +20,7 @@ import AdminAskList from '../components/admin/AdminAskList'
 import AdminChat from '../components/admin/AdminChat'
 import NewPass from '../components/user/NewPass'
 import ReportPage from '../components/admin/ReportPage'
+import StepPage from '../components/user/StepPage'
 
 
 const UserRouter = () => {
@@ -45,6 +46,7 @@ const UserRouter = () => {
       <Route path='following/:user_uid' element={<Following />} />
       <Route path='follower/:user_uid' element={<Follow />} />
       <Route path='chat' element={<ChatRoom />} />
+      <Route path='step' element={<StepPage />} />
     </Routes>
   )
 }
