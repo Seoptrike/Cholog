@@ -4,7 +4,7 @@ import { BsArrowReturnRight } from "react-icons/bs";
 import { SlLock, SlLockOpen } from "react-icons/sl";
 import axios from 'axios';
 
-const RereplyInsertPage = ({ reply_key, callAPI, callAPI2 }) => {
+const RereplyInsertPage = ({ reply_key, callList, callCount}) => {
     //console.log(reply_key)
     const [form, setForm] = useState({
         reply_key: reply_key,
@@ -41,8 +41,8 @@ const RereplyInsertPage = ({ reply_key, callAPI, callAPI2 }) => {
                 rereply_reaction: 'none'
             });
             setOnCancel(false);
-            callAPI();
-            callAPI2();
+            callCount();
+            callList();
 
         } catch (error) {
             console.error('대댓글 등록 에러:', error);

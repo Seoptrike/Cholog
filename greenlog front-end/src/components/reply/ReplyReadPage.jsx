@@ -10,35 +10,17 @@ import ReportInsert from '../report/ReportInsert';
 import { Link } from 'react-router-dom';
 import RereplyCount from './RereplyCount';
 
-const ReplyReadPage = ({ bbs_key, bbs_writer, callAPI2 }) => {
+const ReplyReadPage = ({ reply, bbs_writer, setReply, callCount, callList }) => {
     const uid = sessionStorage.getItem('uid');
-    const reply_bbs_key = bbs_key;
+    console.log(reply)
+    //const reply_bbs_key = bbs_key;
     const [page, setPage] = useState(1);
     const [size, setSize] = useState(3);
     const [key, setKey] = useState('reply_regdate desc');
     const [count, setCount] = useState(0);
-    const [reply, setReply] = useState([]);
     const [showRep, setShowRep] = useState({});
     const [rereplyCount, setRereplyCount] = useState("")
     const root = "reply";
-
-    const callAPI = async () => {
-        const res = await axios.get(`/reply/plist/${bbs_key}?key=${key}&page=${page}&size=${size}`);
-        if (res.data.total === 0) {
-            setCount(0);
-            setReply([]);
-        } else {
-            const data = res.data.documents.map(doc => ({ ...doc, isEdit: false, text: doc.reply_contents, lock: doc.reply_lock, reaction: doc.reply_reaction }));
-            setReply(data);
-            setCount(res.data.total);
-            const last = Math.ceil(res.data.total / size);
-            if (page > last) setPage(page - 1);
-        }
-    };
-
-    useEffect(() => {
-        callAPI();
-    }, [key, page, size]);
 
     const onKey = (key) => {
         setKey(key);
@@ -49,8 +31,8 @@ const ReplyReadPage = ({ bbs_key, bbs_writer, callAPI2 }) => {
         if (!window.confirm(`${reply_key}번 댓글을 삭제하실래요?`)) return;
         await axios.post(`/reply/delete/${reply_key}`);
         alert('댓글 삭제 완료!');
-        callAPI();
-        callAPI2();
+        callCount();
+        callList();
     };
 
     const onUpdate = (reply_key) => {
@@ -81,7 +63,9 @@ const ReplyReadPage = ({ bbs_key, bbs_writer, callAPI2 }) => {
                 reply_contents: reply.text,
             });
             alert("댓글 수정 완료!");
-            callAPI();
+            callCount();
+            callList();
+
         } catch (error) {
             console.error('댓글 수정 에러:', error);
         }
@@ -107,7 +91,7 @@ const ReplyReadPage = ({ bbs_key, bbs_writer, callAPI2 }) => {
                         <Col xs={10}>
                             <div className="d-flex align-items-center justify-content-between mb-2">
                                 <div className="d-flex align-items-center">
-                                    <Link to={`/user/read/${uid}`}><img src={reply.user_img || "http://via.placeholder.com/20x20"} width="50" className='me-3 rounded-circle'/></Link>
+                                    <Link to={`/user/read/${uid}`}><img src={reply.user_img || "http://via.placeholder.com/20x20"} width="50" className='me-3 rounded-circle' /></Link>
                                     <div className="d-flex flex-column">
                                         <div className="d-flex align-items-center">
                                             <Link to={`/user/read/${uid}`}><span>{reply.user_nickname} ({reply.reply_writer})</span></Link>
@@ -147,7 +131,7 @@ const ReplyReadPage = ({ bbs_key, bbs_writer, callAPI2 }) => {
                                     <Dropdown.Toggle variant="" id={`dropdown-basic-${reply.reply_key}`}>
                                         <BsThreeDotsVertical />
                                     </Dropdown.Toggle>
-                                    {uid === reply.reply_writer || uid === bbs_writer ? (
+                                    {uid === reply.reply_writer ? (
                                         <>
                                             {!reply.isEdit ? (
                                                 <Dropdown.Menu>
@@ -187,7 +171,7 @@ const ReplyReadPage = ({ bbs_key, bbs_writer, callAPI2 }) => {
                                 <Row>
                                     <Col>
                                         <Button type='button' variant="" onClick={() => toggleRereply(reply.reply_key)}>
-                                           <RereplyCount reply_key={reply.reply_key}/>
+                                            <RereplyCount reply_key={reply.reply_key} />
                                         </Button>
                                     </Col>
                                     <Col className='text-end'>

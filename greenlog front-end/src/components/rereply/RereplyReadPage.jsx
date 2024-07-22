@@ -5,34 +5,19 @@ import { BsArrowReturnRight, BsThreeDotsVertical } from "react-icons/bs";
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import RereplyReaction from './RereplyReaction';
+import ReportInsert from '../report/ReportInsert';
 
-const RereplyReadPage = ({ reply_key, reply_writer, callAPI2 }) => {
+const RereplyReadPage = ({ reply_key, reply_writer, callList, rereply, setRereply, callCount }) => {
     const uid = sessionStorage.getItem('uid');
     const [count, setCount] = useState(0);
-    const [rereply, setRereply] = useState([]);
     const root = "rereply"
-    const callAPI = async () => {
-        const res = await axios.get(`/rereply/plist/${reply_key}`);
-        if (res.data.total === 0) {
-            setCount(0);
-            setRereply([]);
-        } else {
-            const data = res.data.documents.map(doc => ({ ...doc, isEdit: false, text: doc.rereply_contents, lock: doc.rereply_lock, reaction: doc.rereply_reaction }));
-            setRereply(data);
-            setCount(res.data.total);
-        }
-    };
-
-    useEffect(() => {
-        callAPI();
-    }, []);
 
     // 삭제하기
     const onDelete = async (rereply_key) => {
         if (!window.confirm(`${rereply_key}번 대댓글을 삭제하실래요?`)) return;
         await axios.post(`/rereply/delete/${rereply_key}`);
-        callAPI();
-        callAPI2();
+        callCount();
+        callList();
     };
 
     // 수정하기
@@ -67,7 +52,8 @@ const RereplyReadPage = ({ reply_key, reply_writer, callAPI2 }) => {
                 rereply_contents: rereply.text,
             });
             alert("대댓글 수정 완료!");
-            callAPI();
+            callCount();
+            callList();
         } catch (error) {
             console.error('대댓글 수정 에러:', error);
         }
@@ -146,7 +132,7 @@ const RereplyReadPage = ({ reply_key, reply_writer, callAPI2 }) => {
                                         </>
                                     ) : (
                                         <Dropdown.Menu>
-                                            <Dropdown.Item eventKey="warning">댓글 신고하기</Dropdown.Item>
+                                            <Dropdown.Item eventKey="warning"><ReportInsert uid={uid} writer={rereply.rereply_writer} root={root} origin={rereply.rereply_key} /></Dropdown.Item>
                                         </Dropdown.Menu>
                                     )}
                                 </Dropdown>

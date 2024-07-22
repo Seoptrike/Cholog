@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Button, Card,Form, InputGroup } from 'react-bootstrap';
+import { Row, Col, Button, Card, Form, InputGroup } from 'react-bootstrap';
 import { BsChevronDown } from 'react-icons/bs';
 import ReplyInsertPage from './ReplyInsertPage';
 import ReplyReadPage from './ReplyReadPage';
@@ -16,19 +16,29 @@ const ReplyPage = ({ bbs_key, bbs_writer }) => {
     const [replyCount, setReplyCount] = useState("")
     let reply_bbs_key = bbs_key;
 
-    const callAPI = async () => {
-        const res= await axios.get(`/reply/count/${bbs_key}`)
+    const callCount = async () => {
+        const res = await axios.get(`/reply/count/${bbs_key}`)
         console.log(res.data)
         setReplyCount(res.data)
-        const res2= await axios.get(`/reply/plist/${reply_bbs_key}?size=${size}&page=${page}&key=${key}`)
-        const data = res2.data.documents.map(doc => ({ ...doc, isEdit: false, text: doc.reply_contents, lock: doc.reply_lock, reaction: doc.reply_reaction }));
-        setReply(data);
-        setCount(res2.data.total);
-        
     };
-    
+
+    const callList = async () => {
+        const res = await axios.get(`/reply/plist/${bbs_key}?key=${key}&page=1&size=3`);
+        if (res.data.total === 0) {
+            setCount(0);
+            setReply([]);
+        } else {
+            const data = res.data.documents.map(doc => ({ ...doc, isEdit: false, text: doc.reply_contents, lock: doc.reply_lock, reaction: doc.reply_reaction }));
+            setReply(data);
+            setCount(res.data.total);
+            const last = Math.ceil(res.data.total / size);
+            if (page > last) setPage(page - 1);
+        }
+    };
+
     useEffect(() => {
-        callAPI();
+        callCount();
+        callList();
     }, []);
 
     const toggleRep = () => {
@@ -59,9 +69,8 @@ const ReplyPage = ({ bbs_key, bbs_writer }) => {
         if (!window.confirm("댓글을 등록하실래요?")) return;
 
         try {
-            const res = await axios.post('/reply/insert', form);
+            await axios.post('/reply/insert', form);
             alert('댓글 등록 완료');
-            
             setForm({
                 reply_bbs_key: bbs_key,
                 reply_writer: sessionStorage.getItem('uid') || '',
@@ -73,7 +82,8 @@ const ReplyPage = ({ bbs_key, bbs_writer }) => {
         } catch (error) {
             console.error('댓글 등록 에러:', error);
         }
-        callAPI();
+        callList();
+        callCount();
     }
 
     const [onCancel, setOnCancel] = useState(false);
@@ -102,35 +112,35 @@ const ReplyPage = ({ bbs_key, bbs_writer }) => {
                 <hr />
                 {showReply && (
                     <Card className='mt-3'>
-                         <Row className='justify-content-center mt-3'>
-                <Col xs={9}>
-                    <div>
-                        <form onSubmit={onSubmit} onReset={onClickCancel}>
-                            <Form.Control
-                                name='reply_contents'
-                                value={reply_contents}
-                                as='textarea' rows={5}
-                                placeholder='내용을 입력해주세요.'
-                                onChange={onChangeForm}
-                                onFocus={() => setOnCancel(true)} />
-                            <InputGroup.Text>
-                                <Button
-                                    onClick={onClickLock}
-                                    variant=''
-                                    size="sm"
-                                    className='me-2'
-                                    type='button'
-                                    style={{ color: reply_lock === 'lock' ? 'green' : 'inherit' }}>
-                                    {reply_lock === 'lock' ? <SlLock /> : <SlLockOpen />} {reply_lock === 'lock' ? '비공개' : '공개'}
-                                </Button>
-                                <Button variant='' size="sm" className='text-end me-2' type='submit'>등록</Button>
-                                <Button onClick={onClickCancel} variant='' size="sm" className='text-end' type='reset' disabled={!onCancel}>취소</Button>
-                            </InputGroup.Text>
-                        </form>
-                    </div>
-                </Col>
-            </Row>
-                        <ReplyReadPage bbs_key={bbs_key} bbs_writer={bbs_writer} callAPI2={callAPI} />
+                        <Row className='justify-content-center mt-3'>
+                            <Col xs={9}>
+                                <div>
+                                    <form onSubmit={onSubmit} onReset={onClickCancel}>
+                                        <Form.Control
+                                            name='reply_contents'
+                                            value={reply_contents}
+                                            as='textarea' rows={5}
+                                            placeholder='내용을 입력해주세요.'
+                                            onChange={onChangeForm}
+                                            onFocus={() => setOnCancel(true)} />
+                                        <InputGroup.Text>
+                                            <Button
+                                                onClick={onClickLock}
+                                                variant=''
+                                                size="sm"
+                                                className='me-2'
+                                                type='button'
+                                                style={{ color: reply_lock === 'lock' ? 'green' : 'inherit' }}>
+                                                {reply_lock === 'lock' ? <SlLock /> : <SlLockOpen />} {reply_lock === 'lock' ? '비공개' : '공개'}
+                                            </Button>
+                                            <Button variant='' size="sm" className='text-end me-2' type='submit'>등록</Button>
+                                            <Button onClick={onClickCancel} variant='' size="sm" className='text-end' type='reset' disabled={!onCancel}>취소</Button>
+                                        </InputGroup.Text>
+                                    </form>
+                                </div>
+                            </Col>
+                        </Row>
+                        <ReplyReadPage reply={reply} setReply={setReply} bbs_writer={bbs_writer} callCount={callCount} callList={callList}/>
                     </Card>
                 )}
             </Col>
