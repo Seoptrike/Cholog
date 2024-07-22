@@ -15,6 +15,15 @@ public class RereplyServiceImpl implements RereplyService {
 	
 	@Autowired
 	RereplyDAO rdao;
+	
+	@Transactional
+	@Override
+	public HashMap<String, Object> plist(int reply_key) {
+			 HashMap<String, Object> map = new  HashMap<>();
+			 map.put("documents",  rdao.rereplyList(reply_key));
+			 map.put("total", rdao.total(reply_key));
+			return map;
+	}
 
 	@Transactional
 	@Override
@@ -30,19 +39,6 @@ public class RereplyServiceImpl implements RereplyService {
 		
 	}
 
-	@Transactional
-	@Override
-	public void rereplyLikeUpdate(RereplyLikeVO vo) {
-			rdao.rereplyLikeUpdate(vo);
-		
-	}
 
-	@Override
-	public HashMap<String, Object> plist(int reply_key) {
-			 HashMap<String, Object> map = new  HashMap<>();
-			 map.put("documents",  rdao.rereplyList(reply_key));
-			 map.put("rereplyCount", rdao.rereplyCount(reply_key));
-			return map;
-	}
 
 }

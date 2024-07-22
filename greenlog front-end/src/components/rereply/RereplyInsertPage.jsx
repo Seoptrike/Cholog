@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Row, Col, Button, FormControl } from 'react-bootstrap';
 import { BsArrowReturnRight } from "react-icons/bs";
+import { SlLock, SlLockOpen } from "react-icons/sl";
 import axios from 'axios';
 
-const RereplyInsertPage = ({ reply_key, callAPI }) => {
+const RereplyInsertPage = ({ reply_key, callAPI, callAPI2 }) => {
+    //console.log(reply_key)
     const [form, setForm] = useState({
         reply_key: reply_key,
         rereply_writer: sessionStorage.getItem('uid'),
@@ -12,10 +14,11 @@ const RereplyInsertPage = ({ reply_key, callAPI }) => {
         rereply_reaction: 'none'
     });
 
-    const { rereply_contents } = form;
+    const { rereply_contents, rereply_lock } = form;
 
     const onChangeForm = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
+        setOnCancel(true);
     }
 
     const onSubmit = async (e) => {
@@ -28,7 +31,7 @@ const RereplyInsertPage = ({ reply_key, callAPI }) => {
 
         try {
             const res = await axios.post('/rereply/insert', form);
-            alert('댓글 등록 완료');
+            alert('대댓글 등록 완료');
             
             setForm({
                 reply_key: reply_key,
@@ -37,19 +40,26 @@ const RereplyInsertPage = ({ reply_key, callAPI }) => {
                 rereply_lock: 'unlock',
                 rereply_reaction: 'none'
             });
-
+            setOnCancel(false);
             callAPI();
+            callAPI2();
+
         } catch (error) {
-            console.error('댓글 등록 에러:', error);
+            console.error('대댓글 등록 에러:', error);
         }
     }
 
+    const [onCancel, setOnCancel] = useState(false);
+
     const onClickCancel = () => {
         setForm({ ...form, rereply_contents: '' });
+        setOnCancel(false);
     }
 
-
-
+    const onClickLock = () => {
+        const lockState = rereply_lock === 'unlock' ? 'lock' : 'unlock';
+        setForm({ ...form, rereply_lock: lockState });
+    }
 
     return (
         <Row className='justify-content-center'>
@@ -61,15 +71,23 @@ const RereplyInsertPage = ({ reply_key, callAPI }) => {
                         <FormControl
                             name='rereply_contents'
                             value={rereply_contents}
-                            as='textarea'
-                            rows={3}
+                            as='textarea' rows={3}
                             placeholder='내용을 입력해주세요.'
                             onChange={onChangeForm}
-                        />
+                            onFocus={() => setOnCancel(true)} />
                     </div>
                     <div className='text-end mt-2'>
+                        <Button
+                            onClick={onClickLock}
+                            variant=''
+                            size="sm"
+                            className='me-2'
+                            type='button'
+                            style={{ color: rereply_lock === 'lock' ? 'green' : 'inherit' }}>
+                            {rereply_lock === 'lock' ? <SlLock /> : <SlLockOpen />} {rereply_lock === 'lock' ? '비공개' : '공개'}
+                        </Button>
                         <Button variant='' size="sm" className='text-end me-2' type='submit'>등록</Button>
-                        <Button onClick={onClickCancel} variant='' size="sm" className='text-end' type='reset'>취소</Button>
+                        <Button onClick={onClickCancel} variant='' size="sm" className='text-end' type='reset' disabled={!onCancel}>취소</Button>
                     </div>
                 </form>
             </Col>

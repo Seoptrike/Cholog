@@ -1,28 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Button, Card, Dropdown } from 'react-bootstrap';
+import { Row, Col, Button, Card, Dropdown, } from 'react-bootstrap';
 import { SlLock, SlLockOpen } from "react-icons/sl";
 import Pagination from 'react-js-pagination';
-import { BsChevronDown, BsHandThumbsUp, BsHandThumbsUpFill, BsHandThumbsDown, BsHandThumbsDownFill, BsThreeDotsVertical } from "react-icons/bs";
-import ReplyInsertPage from './ReplyInsertPage';
+import { BsChevronDown, BsThreeDotsVertical } from "react-icons/bs";
 import axios from 'axios';
 import RereplyPage from '../rereply/RereplyPage';
 import ReplyReaction from './ReplyReaction';
 import ReportInsert from '../report/ReportInsert';
+import { Link } from 'react-router-dom';
+import RereplyCount from './RereplyCount';
 
-const ReplyReadPage = ({bbs_key, bbs_writer, callAPI2}) => {
+const ReplyReadPage = ({ bbs_key, bbs_writer, callAPI2 }) => {
     const uid = sessionStorage.getItem('uid');
-    let reply_bbs_key = bbs_key;
-    //console.log(reply_bbs_key)
+    const reply_bbs_key = bbs_key;
     const [page, setPage] = useState(1);
     const [size, setSize] = useState(3);
     const [key, setKey] = useState('reply_regdate desc');
     const [count, setCount] = useState(0);
     const [reply, setReply] = useState([]);
     const [showRep, setShowRep] = useState({});
-    const [replyLikeCount, setReplyLikeCount] = useState(0);
-    const [rereplyParent, setRereplyParent] = useState(null);
-    const [Reaciton, setReaction] =useState([]);
-    const root="reply"
+    const [rereplyCount, setRereplyCount] = useState("")
+    const root = "reply";
+
     const callAPI = async () => {
         const res = await axios.get(`/reply/plist/${bbs_key}?key=${key}&page=${page}&size=${size}`);
         if (res.data.total === 0) {
@@ -35,8 +34,6 @@ const ReplyReadPage = ({bbs_key, bbs_writer, callAPI2}) => {
             const last = Math.ceil(res.data.total / size);
             if (page > last) setPage(page - 1);
         }
-        //const res1 = await axios.get(`/reply/reaction/like/${reply_key}`);
-
     };
 
     useEffect(() => {
@@ -95,149 +92,138 @@ const ReplyReadPage = ({bbs_key, bbs_writer, callAPI2}) => {
         setReply(data);
     };
 
-    const toggleRep = (reply_key) => {
-        setShowRep({ ...showRep, [reply_key]: !showRep[reply_key] });
-        if (showRep[reply_key]) {
-            setRereplyParent(null);
-        } else {
-            setRereplyParent(reply_key);
-        }
+    const toggleRereply = (reply_key) => {
+        setShowRep(prevState => ({
+            ...prevState,
+            [reply_key]: !prevState[reply_key]
+        }));
     };
 
     return (
         <div>
-        <Row className='justify-content-center mt-3'>
-            <Col xs={12} className='text-end'>
-                <Dropdown>
-                    <Dropdown.Toggle variant="" id="dropdown-basic">
-                        <BsThreeDotsVertical />
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                        <Dropdown.Item onClick={() => onKey('reply_regdate desc')}>최신순</Dropdown.Item>
-                        <Dropdown.Item onClick={() => onKey('reply_regdate asc')}>오래된순</Dropdown.Item>
-                    </Dropdown.Menu>
-                </Dropdown>
-            </Col>
-
-            {reply.map(reply => (
-                            <Row key={reply.reply_key} className='justify-content-center mt-2'>
-                                <Col xs={10}>
-                                    <div className="d-flex align-items-center justify-content-between mb-2">
+            <Row className='justify-content-center mt-3'>
+                {reply.map(reply => (
+                    <Row key={reply.reply_key} className='justify-content-center mt-2'>
+                        <Col xs={10}>
+                            <div className="d-flex align-items-center justify-content-between mb-2">
+                                <div className="d-flex align-items-center">
+                                    <Link to={`/user/read/${uid}`}><img src={reply.user_img || "http://via.placeholder.com/20x20"} width="50" className='me-3 rounded-circle'/></Link>
+                                    <div className="d-flex flex-column">
                                         <div className="d-flex align-items-center">
-                                            <img src={reply.user_img || "http://via.placeholder.com/20x20"} width="50" className='me-3 rounded-circle' alt="profile" />
-                                            <div className="d-flex flex-column">
-                                                <div className="d-flex align-items-center">
-                                                    <span>{reply.user_nickname} ({reply.reply_writer})</span>
-                                                    {!reply.isEdit && (
-                                                        <>
-                                                            {(uid === reply.reply_writer || uid === bbs_writer) && reply.reply_lock === 'lock' && (
-                                                                <span style={{ marginLeft: '8px', marginRight: '8px' }}>
-                                                                    <SlLock style={{ color: 'green' }} />
-                                                                </span>
-                                                            )}
-                                                            {(uid === reply.reply_writer || uid === bbs_writer) && reply.reply_lock !== 'lock' && (
-                                                                <span style={{ marginLeft: '8px', marginRight: '8px' }}>
-                                                                    <SlLockOpen style={{ color: 'black' }} />
-                                                                </span>
-                                                            )}
-                                                        </>
-                                                    )}
-
-                                                    {reply.isEdit && (uid === reply.reply_writer || uid === bbs_writer) && reply.lock === 'lock' && (
-                                                        <span onClick={() => onChangeLock(reply.reply_key, reply.lock)} style={{ cursor: 'pointer', marginLeft: '8px' }}>
+                                            <Link to={`/user/read/${uid}`}><span>{reply.user_nickname} ({reply.reply_writer})</span></Link>
+                                            {!reply.isEdit && (
+                                                <>
+                                                    {(uid === reply.reply_writer || uid === bbs_writer) && reply.reply_lock === 'lock' && (
+                                                        <span style={{ marginLeft: '8px', marginRight: '8px' }}>
                                                             <SlLock style={{ color: 'green' }} />
                                                         </span>
                                                     )}
-
-                                                    {reply.isEdit && (uid === reply.reply_writer || uid === bbs_writer) && reply.lock !== 'lock' && (
-                                                        <span onClick={() => onChangeLock(reply.reply_key, reply.lock)} style={{ cursor: 'pointer', marginLeft: '8px' }}>
+                                                    {(uid === reply.reply_writer || uid === bbs_writer) && reply.reply_lock !== 'lock' && (
+                                                        <span style={{ marginLeft: '8px', marginRight: '8px' }}>
                                                             <SlLockOpen style={{ color: 'black' }} />
                                                         </span>
                                                     )}
-                                                </div>
-                                                <div>
-                                                    <span>{reply.reply_udate ? `${reply.reply_udate}` : `${reply.reply_regdate}`} </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <Dropdown className="text-end">
-                                            <Dropdown.Toggle variant="" id={`dropdown-basic-${reply.reply_key}`}>
-                                                <BsThreeDotsVertical />
-                                            </Dropdown.Toggle>
-                                            {uid === reply.reply_writer || uid === bbs_writer ? (
-                                                <>
-                                                    {!reply.isEdit ? (
-                                                        <Dropdown.Menu>
-                                                            <Dropdown.Item onClick={() => onUpdate(reply.reply_key)} eventKey="update">수정하기</Dropdown.Item>
-                                                            <Dropdown.Item onClick={() => onDelete(reply.reply_key)} eventKey="delete">삭제하기</Dropdown.Item>
-                                                        </Dropdown.Menu>
-                                                    ) : (
-                                                        <Dropdown.Menu>
-                                                            <Dropdown.Item onClick={() => onSave(reply)} eventKey="save">등록</Dropdown.Item>
-                                                            <Dropdown.Item onClick={() => onCancel(reply.reply_key)} eventKey="cancel">취소</Dropdown.Item>
-                                                        </Dropdown.Menu>
-                                                    )}
                                                 </>
+                                            )}
+
+                                            {reply.isEdit && (uid === reply.reply_writer || uid === bbs_writer) && reply.lock === 'lock' && (
+                                                <span onClick={() => onChangeLock(reply.reply_key, reply.lock)} style={{ cursor: 'pointer', marginLeft: '8px' }}>
+                                                    <SlLock style={{ color: 'green' }} />
+                                                </span>
+                                            )}
+
+                                            {reply.isEdit && (uid === reply.reply_writer || uid === bbs_writer) && reply.lock !== 'lock' && (
+                                                <span onClick={() => onChangeLock(reply.reply_key, reply.lock)} style={{ cursor: 'pointer', marginLeft: '8px' }}>
+                                                    <SlLockOpen style={{ color: 'black' }} />
+                                                </span>
+                                            )}
+                                        </div>
+                                        <div>
+                                            <span>{reply.reply_udate ? `${reply.reply_udate}` : `${reply.reply_regdate}`} </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <Dropdown className="text-end">
+                                    <Dropdown.Toggle variant="" id={`dropdown-basic-${reply.reply_key}`}>
+                                        <BsThreeDotsVertical />
+                                    </Dropdown.Toggle>
+                                    {uid === reply.reply_writer || uid === bbs_writer ? (
+                                        <>
+                                            {!reply.isEdit ? (
+                                                <Dropdown.Menu>
+                                                    <Dropdown.Item onClick={() => onUpdate(reply.reply_key)} eventKey="update">수정하기</Dropdown.Item>
+                                                    <Dropdown.Item onClick={() => onDelete(reply.reply_key)} eventKey="delete">삭제하기</Dropdown.Item>
+                                                </Dropdown.Menu>
                                             ) : (
                                                 <Dropdown.Menu>
-                                                    <Dropdown.Item eventKey="warning"><ReportInsert  uid={uid} writer={reply.reply_writer} root={root} origin={reply.reply_key}/></Dropdown.Item>
+                                                    <Dropdown.Item onClick={() => onSave(reply)} eventKey="save">등록</Dropdown.Item>
+                                                    <Dropdown.Item onClick={() => onCancel(reply.reply_key)} eventKey="cancel">취소</Dropdown.Item>
                                                 </Dropdown.Menu>
                                             )}
-                                        </Dropdown>
-                                    </div>
-                                    <div className='my-3' style={{ whiteSpace: 'pre-wrap' }}>
-                                        <Row className='align-items-center my-2'>
-                                            <Col>
-                                                {reply.isEdit ? (
-                                                    <textarea
-                                                        name='contents'
-                                                        value={reply.text}
-                                                        onChange={(e) => onChangeContents(reply.reply_key, e.target.value)}
-                                                    />
-                                                ) : (
-                                                    reply.lock === 'lock' && (uid !== reply.reply_writer && uid !== bbs_writer) ? "비밀댓글입니다." : reply.reply_contents
-                                                )}
-                                            </Col>
-                                        </Row>
-                                    </div>
-                                    <div>
-                                        <Row>
-                                            <Col> <Button type='button' onClick={() => toggleRep(reply.reply_key)} variant='' size="sm">댓글 {reply.rereply_count}</Button></Col>
-                                            <Col className='text-end'> <ReplyReaction reply_key={reply.reply_key} uid={uid}/></Col>
-                                        </Row>
-                                    </div>
-                                    <hr />
-                                    {showRep[reply.reply_key] && (
-                                        <Row className='justify-content-center mt-3'>
-                                            <Col xs={12}>
-                                                <RereplyPage reply_key={reply.reply_key} bbs_writer={bbs_writer} />
-                                                <hr />
-                                            </Col>
-                                        </Row>
+                                        </>
+                                    ) : (
+                                        <Dropdown.Menu>
+                                            <Dropdown.Item eventKey="warning"><ReportInsert uid={uid} writer={reply.reply_writer} root={root} origin={reply.reply_key} /></Dropdown.Item>
+                                        </Dropdown.Menu>
                                     )}
-                                </Col>
-                            </Row>
-                        ))}
+                                </Dropdown>
+                            </div>
+                            <div className='my-3' style={{ whiteSpace: 'pre-wrap' }}>
+                                <Row className='align-items-center my-2'>
+                                    <Col>
+                                        {reply.isEdit ? (
+                                            <textarea
+                                                name='contents'
+                                                value={reply.text}
+                                                onChange={(e) => onChangeContents(reply.reply_key, e.target.value)}
+                                            />
+                                        ) : (
+                                            reply.lock === 'lock' && (uid !== reply.reply_writer && uid !== bbs_writer) ? "비밀댓글입니다." : reply.reply_contents
+                                        )}
+                                    </Col>
+                                </Row>
+                            </div>
+                            <div>
+                                <Row>
+                                    <Col>
+                                        <Button type='button' variant="" onClick={() => toggleRereply(reply.reply_key)}>
+                                           <RereplyCount reply_key={reply.reply_key}/>
+                                        </Button>
+                                    </Col>
+                                    <Col className='text-end'>
+                                        <ReplyReaction reply_key={reply.reply_key} uid={uid} />
+                                    </Col>
+                                </Row>
+                            </div>
+                            <hr />
+                            {showRep[reply.reply_key] && (
+                                <Row className='justify-content-center mt-3'>
+                                    <Col xs={12}>
+                                        <RereplyPage reply_key={reply.reply_key} reply_writer={reply.reply_writer} />
+                                        <hr />
+                                    </Col>
+                                </Row>
+                            )}
+                        </Col>
+                    </Row>
+                ))}
 
-            <div>
-                {count > size &&
-                    <Pagination
-                        activePage={page}
-                        itemsCountPerPage={size}
-                        totalItemsCount={count}
-                        pageRangeDisplayed={5}
-                        prevPageText={"‹"}
-                        nextPageText={"›"}
-                        onChange={(e) => setPage(e)}
-                    />
-                }
-            </div>
-        </Row>
+                <div>
+                    {count > size &&
+                        <Pagination
+                            activePage={page}
+                            itemsCountPerPage={size}
+                            totalItemsCount={count}
+                            pageRangeDisplayed={5}
+                            prevPageText={"‹"}
+                            nextPageText={"›"}
+                            onChange={(e) => setPage(e)}
+                        />
+                    }
+                </div>
+            </Row>
         </div>
-
-
-
-    )
+    );
 }
 
-export default ReplyReadPage
+export default ReplyReadPage;
