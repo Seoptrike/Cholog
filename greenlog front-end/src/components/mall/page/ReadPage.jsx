@@ -39,7 +39,7 @@ const ReadPage = () => {
         const res2 = await axios.get(`/seed/read/${res.data.mall_seller}`)
         setSeedNumber(res2.data)
         //슬라이드
-        const res3 = await axios.get(`/mall/list/${res.data.mall_seller}?page=1&size=6`)
+        const res3 = await axios.get(`/mall/list/${res.data.mall_seller}?page=0&size=8`)
         //console.log("ListPage : "+ JSON.stringify(res.data));
         setList(res3.data);//슬라이드할 유저가 올린 테이블리스트
 

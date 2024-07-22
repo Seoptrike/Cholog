@@ -20,6 +20,8 @@ public interface MallDAO {
 	public HashMap<String, Object> read(int mall_key);
 
 	public void update(MallVO vo);
+	
+	public void updateEndDate(int mall_key);
 
 	public void delete(int mall_key);
 

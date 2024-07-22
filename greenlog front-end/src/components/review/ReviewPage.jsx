@@ -90,7 +90,8 @@ const ReviewPage = ({ mall_key, mall_seller, seller_number }) => {
     };
     //낙찰하기
     const onClickBuy = async (review_writer, review_rating, mall_seller) => {
-        alert(review_writer, review_rating, mall_seller)
+        //alert(review_writer, review_rating, mall_seller)
+        if(!window.confirm(`[${review_writer}]님을 선택하시겠습니까?`))
         await axios.post('/auction/insert', {
             auction_mall_key: mall_key,
             auction_seller: mall_seller,
@@ -107,7 +108,11 @@ const ReviewPage = ({ mall_key, mall_seller, seller_number }) => {
                 seed_number: seller_number,
                 trade_state:1,
                 trade_info:"경매"
-              })
+            })
+            //마감
+            await axios.post(`/mall/updateEndDate/${mall_key}`)
+            alert("낙찰완료! 해당 글은 마감됩니다.");
+            window.location.href = `/mall/list.json`;
         }
 
     }

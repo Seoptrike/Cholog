@@ -130,6 +130,8 @@ const InsertPage = () => {
                                 onChange={onChangeForm}
                                 fullWidth
                                 required
+                                inputProps={{ maxLength: 20 }}
+                                helperText="최대 20자까지 입력 가능합니다."
                             />
                         </Grid>
                         <Grid item xs={3}>

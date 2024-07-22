@@ -63,6 +63,12 @@ public class MallController {
 	public void update(@RequestBody MallVO vo) {
 		mdao.update(vo);
 	}
+	
+	@PostMapping("/updateEndDate/{mall_key}")
+	public void updateEndDate(@PathVariable("mall_key") int mall_key) {
+		mdao.updateEndDate(mall_key);
+	}
+
 
 	@PostMapping("/delete/{mall_key}")
 	public void delete(@PathVariable("mall_key") int mall_key) {
