@@ -20,7 +20,7 @@ const BBSReadPage = () => {
             const res2 = await axios.get(`/bbs/attach/list/${bbs_key}`)
             setForm(res.data);
             setPhotos(res2.data)
-            console.log(res.data); // 응답 데이터 로그 출력
+            console.log(res.data);
         } catch (error) {
             console.error('There was an error fetching the post!', error);
         }
@@ -54,7 +54,7 @@ const BBSReadPage = () => {
                                     <h5>[{bbs_type === 0 ? "자유" : "꿀팁"}] {bbs_title}</h5>
                                 </Col>
                                 <Col className='text-end'>
-                                    {sessionStorage.getItem("uid") &&
+                                    {sessionStorage.getItem("uid")==!bbs_writer &&
                                         <Dropdown >
                                             <Dropdown.Toggle variant="" id="dropdown-basic">
                                                 <BsThreeDotsVertical />

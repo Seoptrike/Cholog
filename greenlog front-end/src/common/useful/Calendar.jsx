@@ -1,27 +1,13 @@
-import React from 'react'
-import { forwardRef } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import "./Calendar.css";
 
-const Calendar = (props) => {
-    const CustomInput = forwardRef((props, ref) => (
-        <button className="datepicker-input" onClick={props.onClick} ref={ref}>
-          {props.selectedPeriod === "전체" ? "YYYY/MM/DD" : props.value}
-        </button>
-      ));
+import React, { useState } from "react";
+import { Calendar } from 'primereact/calendar';
 
-  return (
-   <div>
-      <DatePicker
-        selected={props.selectedDate}
-        onChange={props.setSelectedDate}
-        dateFormat="yyyy/MM/dd"
-        customInput={<CustomInput selectedPeriod={props.selectedPeriod} />}
-        showPopperArrow={false}
-      />
-    </div>
-  )
+export default function FormatDemo() {
+    const [date, setDate] = useState(null);
+
+    return (
+        <div className="card flex justify-content-center">
+            <Calendar value={date} onChange={(e) => setDate(e.value)} dateFormat="dd/mm/yy" />
+        </div>
+    )
 }
-
-export default Calendar

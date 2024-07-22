@@ -52,6 +52,7 @@ public class BBSRestController {
 		List<HashMap<String, Object>> list = bbsDAO.list(vo);
 		map.put("documents", list);
 		map.put("total", bbsDAO.total(vo));
+		System.out.println("########################################################" + vo);
 		return map;
 	}
 

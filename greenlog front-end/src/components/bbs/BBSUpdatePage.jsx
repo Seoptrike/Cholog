@@ -52,7 +52,7 @@ const BBSUpdatePage = () => {
         else {
             // 기존 데이터와 폼 데이터 비교
             if (JSON.stringify(list) === JSON.stringify(form) && photos === attach) {
-                alert("변경된 내용이 없습니다! 마감일은 단일 수정이 불가합니다!");
+                alert("변경된 내용이 없습니다!");
                 return;
             }
             if (!window.confirm("내용을 수정하실래요?")) return;
@@ -117,13 +117,13 @@ const BBSUpdatePage = () => {
     }
     const onClickImageSave = async () => {
         if (file.byte === null) return;
-        if (!window.confirm("변경된 이미지를 저장하시겠습니까?")) return;
+        if (!window.confirm("이미지를 추가하시겠습니까?")) return;
         //이미지 업로드
         const formData = new FormData();
         formData.append("byte", file.byte);
         console.log(formData);
         await axios.post(`/bbs/attachOne/${bbs_key}`, formData);
-        alert("이미지 변경완료!")
+        alert("이미지 추가완료!")
         setfile("");
         setIsModified(true);
         callAttach();
@@ -176,9 +176,6 @@ const BBSUpdatePage = () => {
                     rows={10}
                     className="mb-3"
                 />
-                <InputGroup className='mb-3'>
-                    <Form.Control type="file" onChange={onChangeFile} multiple />
-                </InputGroup>
                 <DragDropContext onDragEnd={handleOnDragEnd}>
                     <Droppable droppableId='photo.mallPhoto_photo' direction="horizontal">
                         {(provided) => (
