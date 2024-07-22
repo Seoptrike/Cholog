@@ -10,30 +10,28 @@ const RereplyPage = ({ reply_key, reply_writer }) => {
     const [showRep, setShowRep] = useState(true);
     const [rereplyCount, setRereplyCount] = useState("")
 
-    const callAPI = async () => {
+    const callCount = async () => {
         const res= await axios.get(`/rereply/count/${reply_key}`)
-        //console.log(res.data, reply_key)
+        console.log(res.data)
         setRereplyCount(res.data)
     };
     
-    const callAPI2 = async()=>{
-        if(reply_key){
-        const res2= await axios.get(`/rereply/plist/${reply_key}`)
-        const data = res2.data.documents.map(doc => ({ ...doc, isEdit: false, text: doc.rereply_contents, lock: doc.rereply_lock, reaction: doc.rereply_reaction }));
-        setRereply(data);
-        setCount(res2.data.total);
+    const callList = async()=>{
+        const res = await axios.get(`/rereply/plist/${reply_key}`);
+        if (res.data.total === 0) {
+            setCount(0);
+            setRereply([]);
+        } else {
+            const data = res.data.documents.map(doc => ({ ...doc, isEdit: false, text: doc.rereply_contents, lock: doc.rereply_lock, reaction: doc.rereply_reaction }));
+            setRereply(data);
+            setCount(res.data.total);
         }
     }
 
     useEffect(()=>{
-        callAPI()
-        callAPI2()
+        callCount()
+        callList()
     },[])
-
-    useEffect(() => {
-        callAPI();
-    }, [rereplyCount]);
-
 
     const toggleRep = () => {
         setShowRep(!showRep);
@@ -44,8 +42,8 @@ const RereplyPage = ({ reply_key, reply_writer }) => {
             <Col xs={12}>
                 {showRep && (
                     <>
-                        <RereplyReadPage reply_key={reply_key} reply_writer={reply_writer} callAPI2={callAPI2} />    
-                        <RereplyInsertPage reply_key={reply_key} callAPI={callAPI} callAPI2={callAPI2} />
+                        <RereplyReadPage reply_key={reply_key} reply_writer={reply_writer} rereply={rereply} setRereply={setRereply} callList={callList} callCount={callCount} />    
+                        <RereplyInsertPage reply_key={reply_key} callCount={callCount} callList={callList} />
                         <Button variant='' onClick={toggleRep} size="sm" className='text-end me-2'>답글 접기</Button>
                     </>
                 )}

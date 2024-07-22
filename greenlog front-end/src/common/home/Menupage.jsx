@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom'
 import RouterPage from '../../routers/RouterPage';
 import TotalPage from '../../components/TotalPage';
 import BottomPage from './BottomPage';
-
+import { UserContext } from '../../components/user/UserContext';
 
 const Menupage = () => {
     const uid= sessionStorage.getItem("uid");
@@ -15,6 +15,8 @@ const Menupage = () => {
         sessionStorage.clear();
         window.location.href = '/'
     }
+    const {userData} =useContext(UserContext);
+    console.log(userData);
     return (
         <div>
             <Navbar bg="dark" data-bs-theme="dark" style={{ height: "3rem", margin: 0, padding: 0 }}>
@@ -47,7 +49,7 @@ const Menupage = () => {
                     <Nav>
                         {sessionStorage.getItem("uid") ?
                             <>
-                                <span className='me-3' style={{ float: "right" }}><a href={`/user/read/${uid}`}>{sessionStorage.getItem("uid")}님 </a></span>
+                                <span className='me-3' style={{ float: "right" }}><a href={`/user/read/${uid}`}>{userData.uname}님 </a></span>
                                 <span onClick={onClickLogout} className='me-3' style={{ float: "right" }}><a href='#'>로그아웃</a></span>
                             </>
                             :

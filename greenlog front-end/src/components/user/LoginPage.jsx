@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Row, Col, InputGroup, Form, Button, Card } from 'react-bootstrap'
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { useUserContext } from './UserContext';
-
 
 const LoginPage = () => {
-    const {setUserData} = useUserContext();
     const [userInfo, setUserInfo] = useState(null);
     const onKakaoLogin=()=>{
         window.location.href = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=02059f168b6e2f91d0014fde2e56581e&redirect_uri=http://localhost:8080/user/login/kakao";
@@ -25,6 +21,7 @@ const LoginPage = () => {
     const onClickLogin = async (form) => {
         console.log(form)
         const res = await axios.post('/user/login', { user_uid, user_upass })
+    
         console.log(res.data);
         if (res.data === 0) {
             alert("아이디가 없습니다")
@@ -32,8 +29,6 @@ const LoginPage = () => {
             alert("비밀번호가 일치하지 않습니다")
         } else if (res.data === 1) {
             sessionStorage.setItem("uid", user_uid);
-            const res2= await axios.get(`/user/read/${user_uid}`)
-            setUserData({auth:res2.data.user_auth, img:res2.data.user_img, uname:res2.data.user_uname, nickname:res2.data.user_nickname})
             alert("로그인 성공")
             if (sessionStorage.getItem('target')) {
                 window.location.href = sessionStorage.getItem('target')
