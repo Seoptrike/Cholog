@@ -46,6 +46,11 @@ public class MallDAOImpl implements MallDAO {
 	public void update(MallVO vo) {
 		session.update(namespace + ".update", vo);
 	}
+	
+	@Override
+	public void updateEndDate(int mall_key) {
+		session.delete(namespace + ".updateEndDate", mall_key);
+	}
 
 	@Override
 	public void delete(int mall_key) {
@@ -102,5 +107,7 @@ public class MallDAOImpl implements MallDAO {
 	public void updatePhoto(MallPhotoVO vo) {
 		session.update(namespace + ".updatePhoto", vo);
 	}
+
+	
 
 }

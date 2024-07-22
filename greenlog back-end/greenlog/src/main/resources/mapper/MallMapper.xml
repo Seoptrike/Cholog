@@ -108,6 +108,12 @@
 		where mall_key=#{mall_key}
 	</update>
 	
+	 <update id="updateEndDate">
+		update mall
+		set mall_endDate=now()
+		where mall_key=#{mall_key}
+	</update>
+	
 	<delete id="delete">
 		delete from mall
 		where mall_key=#{mall_key}
