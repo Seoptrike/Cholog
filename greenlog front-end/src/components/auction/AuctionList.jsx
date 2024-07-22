@@ -6,13 +6,17 @@ import SyncAltIcon from '@mui/icons-material/SyncAlt';
 import Pagination from 'react-js-pagination';
 import '../../common/useful/Paging.css';
 import { Link } from 'react-router-dom';
-import Calendar from '../../common/useful/Calendar';
+import { Calendar } from 'primereact/calendar';
+
+
+
 
 
 
 const AuctionList = () => {
-  //상품명과 이미지 넣기
+
   //처리상태 영구삭제요청 넣기(관리자에서 직접 해줄수있게끔)
+  //데이트타입 처리
   const uid = sessionStorage.getItem("uid")
   const [count, setCount] = useState(0);
   const [list, setList] = useState([]);
@@ -21,6 +25,7 @@ const AuctionList = () => {
   const [key, setKey] = useState("null");
   const [word, setWord] = useState("");
   const [checked, setChecked] = useState(0);
+  const [date, setDate]=useState("");
 
   const callAPI = async () => {
     const res = await axios.get(`/auction/list/${uid}?key=${key}&word=${word}&page=${page}&size=${size}`);
@@ -75,56 +80,7 @@ const AuctionList = () => {
     })
   }
 
-
-  const formatDate = (dateString, separator = "-") => {
-    const date = new Date(dateString);
-    if (isNaN(date)) return;
-
-    const yyyy = date.getFullYear();
-    const mm = String(date.getMonth() + 1).padStart(2, "0");
-    const dd = String(date.getDate()).padStart(2, "0");
-
-    return `${yyyy}${separator}${mm}${separator}${dd}`;
-  };
-
-  const PERIOD = [
-    { id: "ALL", name: "전체" },
-    { id: "1W", name: "1주일" },
-    { id: "1M", name: "1개월" },
-    { id: "3M", name: "3개월" },
-    { id: "6M", name: "6개월" }
-  ];
-
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [selectedPeriod, setSelectedPeriod] = useState(PERIOD[3].name);
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
-
-  const toggleDropdown = () => {
-    setIsDropdownOpen((prev) => !prev);
-  };
-
-  const onClickPeriod = (e) => {
-    const { value } = e.target;
-    setSelectedPeriod(value);
-    setDateRange(value);
-    toggleDropdown();
-  };
-
-  const setDateRange = (period) => {
-    const start = new Date(formatDate(new Date()));
-
-    if (period === "1주일") {
-      start.setDate(start.getDate() - 7);
-    } else if (period.includes("개월")) {
-      start.setMonth(start.getMonth() - Number(period[0]));
-    }
-
-    setStartDate(period === "전체" ? new Date("2022-01-01") : start);
-    setEndDate(new Date(formatDate(new Date())));
-  };
-
-
+ 
 
 
 
@@ -149,24 +105,13 @@ const AuctionList = () => {
                   </Form.Select>
                 </Col>
                 {key === "auction_regDate" ?
-                  <Form.Control type="date" value={word} name="word" onChange={(e) => setWord(e.target.value)} />
+                //  <Form.Control type="date" value={word} name="word" onChange={(e) => setWord(e.target.value)} />
+                <Calendar value={date} onChange={(e) => setDate(e.value)} dateFormat="yy-mm-dd" />
+
                   :
                   <Form.Control value={word} name="word" onChange={(e) => setWord(e.target.value)} placeholder='' />
                 }
 
-                {(key === "null" || key === "auction_seller" || key === "auction_buyer" || key === "auction_regDate") ? null :
-                <>
-                <Calendar
-                  selectedDate={startDate}
-                  setSelectedDate={setStartDate}
-                  selectedPeriod={selectedPeriod} />
-                  
-                <Calendar
-                  selectedDate={endDate}
-                  setSelectedDate={setEndDate}
-                  selectedPeriod={selectedPeriod} />
-                </>
-                }
                 <Button type="submit" size="sm">검색</Button>
               </InputGroup>
             </form>

@@ -84,7 +84,7 @@
          from 
             auction
          where 
-            auction_buyer = #{uid} or auction_seller = #{uid}) a 
+            (auction_buyer = #{uid} and auction_state=0) or (auction_seller = #{uid} and auction_state=0)) a 
     on u.user_uid = #{uid}
     left join 
         (select 

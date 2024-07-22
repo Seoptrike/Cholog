@@ -20,7 +20,7 @@ const ReportPage = () => {
     return (
         <Row>
             <Col>
-                <h5 className='mb-5'> 신고접수 현황</h5>
+                <h5 className='mb-5 text-center'> 신고접수 현황</h5>
                 <Table>
                     <thead>
                         <tr>

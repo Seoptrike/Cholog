@@ -1,5 +1,11 @@
 package com.example.domain;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class QueryVO {
 	private int page;
 	private int size;
@@ -7,6 +13,15 @@ public class QueryVO {
 	private String key;
 	private String word;
 	private String key2;
+	private Date date;
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
 
 	public int getPage() {
 		return page;
@@ -51,11 +66,6 @@ public class QueryVO {
 		this.word = word;
 	}
 
-	@Override
-	public String toString() {
-		return "QueryVO [page=" + page + ", size=" + size + ", start=" + start + ", key=" + key + ", word=" + word
-				+ "]";
-	}
 
 	public String getKey2() {
 		return key2;
@@ -65,4 +75,12 @@ public class QueryVO {
 		this.key2 = key2;
 	}
 
+	@Override
+	public String toString() {
+		return "QueryVO [page=" + page + ", size=" + size + ", start=" + start + ", key=" + key + ", word=" + word
+				+ ", key2=" + key2 + ", date=" + date + "]";
+	}
+
 }
+
+

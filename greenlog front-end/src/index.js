@@ -8,6 +8,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import './common/useful/Slick.css'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { LocalizationProvider } from '@mui/x-date-pickers';
+
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

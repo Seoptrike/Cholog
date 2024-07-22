@@ -44,7 +44,7 @@ const TotalPage = () => {
                         <ListGroup.Item> <Link to={"/mall/insert"}>상품등록</Link></ListGroup.Item>
                         <ListGroup.Item>경매</ListGroup.Item>
                         <ListGroup.Item> <Link to={`/auction/list.json/${uid}`}>개인경매목록</Link></ListGroup.Item>
-                        <ListGroup.Item> <Link to={`/auction/read/${uid}`}>경매거래내역</Link></ListGroup.Item>
+                        <ListGroup.Item> <Link to={`/auction/admin/list.json`}>전체경매목록</Link></ListGroup.Item>
                     </ListGroup>
                 </Col>
                 <Col xs={2}>

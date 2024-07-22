@@ -69,17 +69,6 @@ const DiaryReadPage = () => {
     alert("일기삭제완료")
   }
 
-  //뱃지색바꾸기 (list, read필요... bg에 먹지 않아 mui Badge를 써봤지만 다시시도해야할듯 )
-  const ChangeBadge =(diary_state,e)=>{
-    e.preventDefault();
-    switch (diary_state){
-      case "리필스테이션/개인용기":
-      return "info"
-
-      default :
-      return "primary"
-    }
-  }
 
 
   if (loading) return <h1>로딩중</h1>

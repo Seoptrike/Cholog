@@ -1,5 +1,6 @@
 package com.example.dao.seed;
 
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 
@@ -30,6 +31,7 @@ public class AuctionImpl implements AuctionDAO {
 		map.put("size", vo.getSize());
 		map.put("word", vo.getWord());
 		map.put("key", vo.getKey());
+		map.put("date", vo.getDate());
 		return session.selectList(namespace + ".userAList", map);
 	}
 

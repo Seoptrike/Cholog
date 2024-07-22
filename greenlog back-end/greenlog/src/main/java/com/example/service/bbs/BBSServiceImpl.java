@@ -23,7 +23,7 @@ public class BBSServiceImpl implements BBSService {
 	}
 
 	@Override
-	public List<BBSVO> getTopList() {
+	public List<HashMap<String, Object>> getTopList() {
 		return bbsDAO.topList(); // 추가
 	}
 

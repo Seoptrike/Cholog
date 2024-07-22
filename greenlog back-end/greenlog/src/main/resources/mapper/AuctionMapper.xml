@@ -13,52 +13,71 @@
 	<select id="userAList" resultType="hashmap">
 		select *, date_format(auction_regDate,'%Y-%m-%d %T') as fmtdate
 		from
-		auction join mall on auction_mall_key=mall_key 
-		where (auction_seller = #{uid} or auction_buyer = #{uid}) and auction_state=0
-			<if test="key == 'null'">
-				and (auction_seller like concat('%', #{word}, '%') or auction_buyer like concat('%', #{word}, '%'))
-			</if>
-			<if test="key == 'auction_seller'">
-				and auction_seller = #{uid}
-				and auction_seller like concat('%', #{word}, '%')
-			</if>
-			<if test="key == 'auction_buyer'">
-				and auction_buyer= #{uid}
-				and auction_seller like concat('%', #{word}, '%')
-			</if>
-			<if test="key == 'auction_regDate'">
-				and auction_regDate like concat('%', #{word}, '%')
-			</if>
-			<if test="key == 'auction_6month'">
-				and auction_regDate > date_sub(curdate(), interval 6 month)
-			</if>
+		auction join mall on auction_mall_key=mall_key
+		where (auction_seller = #{uid} or auction_buyer = #{uid}) and
+		auction_state=0
+		<if test="key == 'null'">
+			and (auction_seller like concat('%', #{word}, '%') or auction_buyer like
+			concat('%', #{word}, '%'))
+		</if>
+		<if test="key == 'auction_seller'">
+			and auction_seller = #{uid}
+			and auction_seller like concat('%', #{word}, '%')
+		</if>
+		<if test="key == 'auction_buyer'">
+			and auction_buyer= #{uid}
+			and auction_seller like concat('%', #{word}, '%')
+		</if>
+		<if test="key == 'auction_regDate'">
+			 and auction_regDate = DATE_ADD(
+            CONVERT_TZ(
+                STR_TO_DATE(
+                    REPLACE(REPLACE(#{date}, 'T', ' '), 'Z', ''),
+                    '%Y-%m-%d'
+                ),
+                '+00:00',
+                'Asia/Seoul'
+            ),
+            INTERVAL 15 HOUR
+        )
+      )
+		</if>
+		<if test="key == 'auction_3month'">
+			and auction_regDate > date_sub(curdate(), interval 3 month)
+		</if>
+		<if test="key == 'auction_6month'">
+			and auction_regDate > date_sub(curdate(), interval 6 month)
+		</if>
 		order by auction_regDate desc limit #{start}, #{size}
 	</select>
 
 	<update id="stateUpdate1">
-		update auction set auction_state=1 where auction_key=#{auction_key}; 
+		update auction set auction_state=1 where
+		auction_key=#{auction_key};
 	</update>
 
 	<select id="total" resultType="int">
 		select count(*) from auction where
-		(auction_seller=#{uid} or auction_buyer=#{uid})
-			<if test="key == 'null'">
-				and (auction_seller like concat('%', #{word}, '%') or auction_buyer like concat('%', #{word}, '%'))
-			</if>
-			<if test="key == 'auction_seller'">
-				and auction_seller = #{uid}
-				and auction_buyer like concat('%', #{word}, '%')
-			</if>
-			<if test="key == 'auction_buyer'">
-				and auction_buyer=#{uid} 
-				and auction_seller like concat('%', #{word}, '%')
-			</if>
-			<if test="key == 'auction_regDate'">
-				and auction_regDate like concat('%', #{word}, '%')
-			</if>
+		(auction_seller=#{uid} or
+		auction_buyer=#{uid})
+		<if test="key == 'null'">
+			and (auction_seller like concat('%', #{word}, '%') or auction_buyer like
+			concat('%', #{word}, '%'))
+		</if>
+		<if test="key == 'auction_seller'">
+			and auction_seller = #{uid}
+			and auction_buyer like concat('%', #{word}, '%')
+		</if>
+		<if test="key == 'auction_buyer'">
+			and auction_buyer=#{uid}
+			and auction_seller like concat('%', #{word}, '%')
+		</if>
+		<if test="key == 'auction_regDate'">
+			and auction_regDate like concat('%', #{word}, '%')
+		</if>
 	</select>
 
-	
+
 
 
 
@@ -84,7 +103,7 @@
 	</select>
 
 	<select id="admintotal" resultType="int">
-		select count(*) from auction 
+		select count(*) from auction
 		<if test="key == 'auction_seller'">
 			where auction_seller like concat('%', #{word}, '%')
 		</if>

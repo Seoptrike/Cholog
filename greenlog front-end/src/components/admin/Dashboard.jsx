@@ -5,22 +5,25 @@ import PieChart from '../../common/useful/PieChart'
 import axios from 'axios'
 import ReportPage from './ReportPage'
 import FiberNewIcon from '@mui/icons-material/FiberNew';
+import { Link } from 'react-router-dom'
 
-//전체데이터필요, 차트출력 및 뱃지데이터 출력
+//전체데이터필요, 차트출력
 //오늘의 할일을 버튼대신 listGroup을 사용할지 고민(넣어놓기만 함)
 //차트 컴포넌트 추가
 const Dashboard = () => {
     const [reportCount, setReportCount] = useState('');
     const [askCount, setaskCount] = useState('');
     const [qaCount, setQaCount] = useState('');
+    const uid=sessionStorage.getItem("uid");
     const callAPI = async () => {
         const res = await axios.get("/report/count")
-        const res1= await axios.get("/chat/listCount")
-        const res2= await axios.get("/qa/qaListCount")
+        const res1 = await axios.get("/chat/listCount")
+        const res2 = await axios.get("/qa/qaListCount")
         setaskCount(res1.data)
         setReportCount(res.data)
         setQaCount(res2.data)
     }
+
     useEffect(() => { callAPI() }, [])
     return (
         <div>
@@ -29,21 +32,26 @@ const Dashboard = () => {
                     <Sidebar />
                 </Col>
                 <Col>
-                    <h2 className='text-center my-5'>관리자 000님 오늘도 초록데이</h2>
+                    <h2 className='text-center my-5'>관리자 {uid}님 오늘도 초록데이</h2>
                     <div className='mb-3'><h4>오늘의 할일</h4></div>
-                    <div className='today mb-5'>
-                        <Button className='px-5 me-5'>
-                            {reportCount > 0 ? <FiberNewIcon style={{ color: "yellow" }} /> : null}
-                            신고접수
-                            <Badge bg="secondary">{reportCount}</Badge>
-                        </Button>
-                        <Button className='px-5 me-5'>포인트관리 <Badge bg="secondary">9</Badge></Button>
-                        <Button className='px-5 me-5'>{askCount > 0 ? <FiberNewIcon style={{ color: "yellow" }} /> : null}
-                            1:1 문의
-                            <Badge bg="secondary">{qaCount}</Badge></Button>
+                    <div className='today text-center mb-5'>
+                        <Link to="/admin/question#notice">
+                            <Button className='px-5 me-5'>
+                                {reportCount > 0 ? <FiberNewIcon style={{ color: "yellow" }} /> : null}
+                                신고접수
+                                <Badge bg="secondary">{reportCount}</Badge>
+                            </Button></Link>
+                        <Link to="/admin/question#1:1">
+                            <Button className='px-5 me-5'>{askCount > 0 ? <FiberNewIcon style={{ color: "yellow" }} /> : null}
+                                1:1 문의
+                                <Badge bg="secondary">{qaCount}</Badge>
+                            </Button>
+                        </Link>
+                        <Link to="/admin/question#Q&A">
                             <Button className='px-5 me-5'>{qaCount > 0 ? <FiberNewIcon style={{ color: "yellow" }} /> : null}
-                            Q&A 답변하기
-                            <Badge bg="secondary">{qaCount}</Badge></Button>
+                                Q&A 답변하기
+                                <Badge bg="secondary">{qaCount}</Badge></Button>
+                        </Link>
                     </div>
                     <div className='chart text-center mb-5'>
                         <Row>
@@ -54,7 +62,7 @@ const Dashboard = () => {
                     </div>
                     <div>
                         <Row>
-                            <Col>포인트관리
+                            <Col>일기새로추가목록
                                 <ListGroup as="ol" numbered>
                                     <ListGroup.Item
                                         as="li"
@@ -95,7 +103,7 @@ const Dashboard = () => {
                                 </ListGroup>
                             </Col>
                             <Col>
-                                <div>신고접수내용</div>
+                                <div>신규회원목록</div>
                             </Col>
                         </Row>
                     </div>
