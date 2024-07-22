@@ -9,8 +9,8 @@
 		</select>
 		
 		<insert id="insert">
-				insert into rereply ( reply_key, rereply_writer, rereply_contents )
-				value ( #{reply_key}, #{rereply_writer}, #{rereply_contents})
+				insert into rereply ( reply_key, rereply_writer, rereply_contents, rereply_lock )
+				value ( #{reply_key}, #{rereply_writer}, #{rereply_contents}, #{rereply_lock})
 		</insert>
 		
 		<update id="update">
@@ -26,30 +26,38 @@
 				delete from rereply where rereply_key=#{rereply_key};
 		</delete>
 		
-		<select id="rereplyCount" resultType="int">
+		<select id="total" resultType="int">
 				select count(*) as total from rereply where reply_key=#{reply_key} ;
 		</select>
 		
-			<insert id="rereactionInsert">
-				insert into rereplyLike ( rereply_key, rereply_writer, rereply_reaction)
-				value (#{rereply_key}, #{rereply_writer}, #{rereply_reaction})
+		<insert id="LikeInsert">
+				insert into rereplyLike (rereply_key, rereply_writer, rereply_reaction)
+				values (#{rereply_key}, #{rereply_writer}, 1)
 		</insert>
 		
-		<update id="rereplyLikeUpdate">
-				update rereplyLike set rereply_reaction=#{rereply_reaction} where rereply_key=#{rereply_key} and rereply_writer=#{rereply_writer};
+		<insert id="HateInsert">
+				insert into rereplyLike (rereply_key, rereply_writer, rereply_reaction)
+				values (#{rereply_key}, #{rereply_writer}, (-1) )
+		</insert>
+		
+		<update id="reactionUpdate">
+				update rereplyLike set rereply_reaction= (rereply_reaction*(-1)) where rereply_key=#{rereply_key} and rereply_writer=#{rereply_writer};
 		</update>
 		
-		<select id="rereplyLikeCount" resultType="int">
-		    	select count(*) as total from rereplyLike where rereply_key=#{rereply_key} and rereply_reaction="like";
+		<delete id="reactionDelete">
+			delete from rereplyLike where rereply_key=#{rereply_key} and rereply_writer=#{rereply_writer}
+		</delete>
+		
+		<select id="readReaction" resultType="String">
+				select rereply_reaction from rereplyLike where rereply_writer=#{rereply_writer} and rereply_key=#{rereply_key};
 		</select>
 		
-		<select id="rereplyDisLikeCount" resultType="int">
-		    	select count(*) as total from rereplyLike where rereply_key=#{rereply_key} and rereply_reaction="dislike";
+		<select id="CountReaction" resultType="hashmap">
+		    select 
+		        sum(case when rereply_reaction = 1 then 1 else 0 end) as likeCount,
+		        sum(case when rereply_reaction = -1 then 1 else 0 end) as hateCount
+		    from rereplyLike 
+		    where rereply_key = #{rereply_key};
 		</select>
-		
-
-		
-
-		
-		
+	
 </mapper>

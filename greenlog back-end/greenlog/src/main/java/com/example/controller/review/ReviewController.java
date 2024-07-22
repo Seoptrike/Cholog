@@ -33,9 +33,7 @@ public class ReviewController {
 		}
 		
 		@GetMapping("/list/{review_mall_key}")
-		public List<HashMap<String, Object>> reviewList(@PathVariable("review_mall_key") int review_mall_key, @RequestParam("key") String key, QueryVO vo) {
-				vo.setKey(key);
-				System.out.println("Received key: ---------------------- " + key);
+		public List<HashMap<String, Object>> reviewList(@PathVariable("review_mall_key") int review_mall_key, QueryVO vo) {
 				return rdao.reviewList(review_mall_key,vo);
 		}
 		

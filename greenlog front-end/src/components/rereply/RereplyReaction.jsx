@@ -1,21 +1,21 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap'
-const ReplyReaction = ({ reply_key, uid }) => {
+
+const RereplyReaction = ({rereply_key, uid}) => {
     const [reaction, setReaction] = useState([]);
     const [likeCount, setLikeCount] = useState('');
     const [hateCount, setHateCount] = useState('');
     const callAPI = async () => {
-        const res = await axios.post("/reply/readReaction", { reply_key, reply_writer: uid })
-        const res2 = await axios.get(`/reply/CountReaction/${reply_key}`)
+        const res = await axios.post("/rereply/readReaction", { rereply_key, rereply_writer: uid })
+        const res2 = await axios.get(`/rereply/CountReaction/${rereply_key}`)
         setReaction(res.data)
         //console.log(res2.data)
         setLikeCount(res2.data.likeCount)
         setHateCount(res2.data.hateCount)
     }
-    //console.log(likeCount)
     const onInsertLike = async()=>{
-        const res = await axios.post("/reply/insert/like",{reply_key, reply_writer: uid})
+        const res = await axios.post("/rereply/insert/like",{rereply_key, rereply_writer: uid})
         if(res.data===1){
             alert("좋아요")
             callAPI();
@@ -25,7 +25,7 @@ const ReplyReaction = ({ reply_key, uid }) => {
     }
 
     const onInsertHate = async()=>{
-        const res = await axios.post("/reply/insert/hate",{reply_key, reply_writer: uid})
+        const res = await axios.post("/rereply/insert/hate",{rereply_key, rereply_writer: uid})
         if(res.data===1){
             alert("싫어요")
             callAPI();
@@ -35,12 +35,12 @@ const ReplyReaction = ({ reply_key, uid }) => {
     }
 
     const onReactionUpdate = async()=>{
-        await axios.post("/reply/reactionUpdate",{reply_key, reply_writer: uid})
+        await axios.post("/rereply/reactionUpdate",{rereply_key, rereply_writer: uid})
         callAPI();
     }
     
     const onReactionDelete = async()=>{
-        await axios.post("/reply/reactionDelete",{reply_key, reply_writer: uid})
+        await axios.post("/rereply/reactionDelete",{rereply_key, rereply_writer: uid})
         callAPI();
     }
 
@@ -74,4 +74,4 @@ const ReplyReaction = ({ reply_key, uid }) => {
     )
 }
 
-export default ReplyReaction
+export default RereplyReaction

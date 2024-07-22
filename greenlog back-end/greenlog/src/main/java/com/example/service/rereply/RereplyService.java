@@ -7,7 +7,8 @@ import com.example.domain.RereplyVO;
 
 public interface RereplyService {
 		public void update (RereplyVO vo);
+		
 		public void updatereLock (RereplyVO vo);
-		public void rereplyLikeUpdate (RereplyLikeVO vo);
+		
 		public HashMap<String, Object> plist(int reply_key);
 }

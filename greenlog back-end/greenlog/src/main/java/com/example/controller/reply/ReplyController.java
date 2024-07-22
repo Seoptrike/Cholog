@@ -104,8 +104,8 @@ public class ReplyController {
 		rdao.reactionDelete(vo);
 	}
 
-	@GetMapping("/countReaction/{reply_key}")
-	public HashMap<String, Object> countReaction(@PathVariable("reply_key") int reply_key) {
-		return rdao.countReaction(reply_key);
+	@GetMapping("/CountReaction/{reply_key}")
+	public HashMap<String, Object> CountReaction(@PathVariable("reply_key") int reply_key) {
+		return rdao.CountReaction(reply_key);
 	}
 }
