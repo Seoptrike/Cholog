@@ -16,7 +16,14 @@ public class FAQVO {
     @JsonFormat(pattern="yyyy년MM월dd일 HH:mm:ss", timezone="Asia/Seoul")
     private Date faq_uDate;
     private int faq_vcnt;
+    private int faq_type;
     
+	public int getFaq_type() {
+		return faq_type;
+	}
+	public void setFaq_type(int faq_type) {
+		this.faq_type = faq_type;
+	}
 	public int getFaq_vcnt() {
 		return faq_vcnt;
 	}
@@ -69,6 +76,7 @@ public class FAQVO {
 	public String toString() {
 		return "FAQVO [faq_key=" + faq_key + ", faq_category=" + faq_category + ", faq_writer=" + faq_writer
 				+ ", faq_question=" + faq_question + ", faq_answer=" + faq_answer + ", faq_regDate=" + faq_regDate
-				+ ", faq_uDate=" + faq_uDate + "]";
+				+ ", faq_uDate=" + faq_uDate + ", faq_vcnt=" + faq_vcnt + ", faq_type=" + faq_type + "]";
 	}
+	
 }
