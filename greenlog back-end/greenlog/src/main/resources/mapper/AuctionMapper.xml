@@ -41,7 +41,7 @@
 
 	<select id="total" resultType="int">
 		select count(*) from auction where
-		(auction_seller=#{uid} or auction_buyer=#{uid})
+		(auction_seller=#{uid} or auction_buyer=#{uid}) and auction_state=0
 			<if test="key == 'null'">
 				and (auction_seller like concat('%', #{word}, '%') or auction_buyer like concat('%', #{word}, '%'))
 			</if>

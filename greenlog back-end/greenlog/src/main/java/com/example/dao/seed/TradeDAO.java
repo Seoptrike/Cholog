@@ -16,4 +16,6 @@ public interface TradeDAO {
 	public List<HashMap<String, Object>> AdminList(QueryVO vo);
 
 	public int adminListCount(QueryVO vo);
+	
+	public void updateStatus(int trade_key);
 }

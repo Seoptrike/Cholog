@@ -17,6 +17,7 @@
 	    join user u_from on s_from.seed_uid = u_from.user_uid
 	    join user u_to on s_to.seed_uid = u_to.user_uid
 	    <where>
+	    t.trade_status= 0 and
 	        <if test="key == 'id'">
 	            ((t.trade_to = #{seed_number}) and u_from.user_nickname like concat('%', #{word}, '%'))
 	            or ((t.trade_to = #{seed_number}) and u_from.user_uid like concat('%', #{word}, '%'))
@@ -93,5 +94,9 @@
         </if>
    		</where>
 	</select>
+	
+	<update id="statusUpdate1">
+		update trade set trade_status=1 where trade_key=#{trade_key}
+	</update>
 
 </mapper>

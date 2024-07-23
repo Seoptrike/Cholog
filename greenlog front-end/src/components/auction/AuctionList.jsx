@@ -63,7 +63,7 @@ const AuctionList = () => {
     let cnt = 0;
     list.forEach(async list => {
       if (list.checked) {
-        await axios.post(`/auction/delete/${list.auction_key}`);
+        await axios.post(`/auction/update/${list.auction_key}`);
         cnt++
 
         if (cnt === checked) {

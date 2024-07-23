@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.GraphMapper">
+	<select id="diaryCount" resultType="hashmap">
+		SELECT
+		COUNT(diary_key) AS diary_count,
+		DATE_FORMAT(diary_regDate, '%Y-%m-%d') AS diary_date,diary_state
+		FROM diary
+		GROUP BY DATE_FORMAT(diary_regDate, '%Y-%m-%d'), diary_state
+		ORDER BY diary_date;
+	</select>
+
+</mapper>

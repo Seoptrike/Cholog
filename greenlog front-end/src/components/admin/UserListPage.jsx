@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Row, Col, Button, Badge, InputGroup, Form, Card } from 'react-bootstrap'
 import Sidebar from './Sidebar'
 import axios from 'axios';
 import { MdOutlineSettings } from "react-icons/md";
 import '../../common/useful/Paging.css';
 import Pagination from 'react-js-pagination'
+import { UserContext } from '../user/UserContext';
 
 //이미지 클릭 시 관리자용 회원정보읽기페이지로 이동
 //설정아이콘 클릭 시 관리자용 회원정보수정페이지로 이동 
 
 const UserListPage = () => {
+    const {userData, setUserData} = useContext(UserContext);
     const [list, setList] = useState([]);
     const [key, setKey] = useState("user_uid");
     const [count, setCount] = useState(0);
@@ -39,7 +41,7 @@ const UserListPage = () => {
                 <Sidebar />
             </Col>
             <Col>
-                <h5 className='mb-5'> 000 관리자님 환영합니다.</h5>
+                <h5 className='mb-5 mt-2'> {userData.uname} 관리자님 환영합니다.</h5>
 
                 <Row className='justify-content-center mb-5'>
                     <Col lg={5}>
@@ -59,7 +61,7 @@ const UserListPage = () => {
                 </Row>
                 {list.map(user => (
                     <Row className='justify-content-center'>
-                        <Col xs={12} sm={11} md={10} lg={9}  className='mb-3'>
+                        <Col xs={12} sm={11} md={10} lg={9}  className='mb-3' key={user.user_key}>
                             <Card className='text-center' border={user.user_gender === "남자" ? styleBlue : styleRed}>
                                 <Card.Body>
                                     <Row>
@@ -74,7 +76,7 @@ const UserListPage = () => {
                                                     <p>아이디: {user.user_uid}</p>
                                                     <p>이름: {user.user_uname}</p>
                                                     <p>닉네임: {user.user_nickname}</p>
-                                                    <p>생년월일: {user.user_birth}</p>
+                                                    <p>생년월일: {user.fmtDdate}</p>
                                                     <p>성별: {user.user_gender}</p>
                                                     <p>전화번호: {user.user_phone}</p>
                                                     <p>이메일: {user.user_email}</p>
@@ -85,7 +87,7 @@ const UserListPage = () => {
                                         </Col>
                                         <Col lg={1}>
                                             <a href={`/user/admin/update/${user.user_uid}`}>
-                                                <MdOutlineSettings style={{ fontSize: "20px" }} />
+                                                <MdOutlineSettings style={{ fontSize: "30px" }} />
                                             </a>
                                         </Col>
                                     </Row>

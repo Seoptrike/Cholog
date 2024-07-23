@@ -1,5 +1,8 @@
 package com.example.domain;
 
+import java.time.LocalDate;
+import java.util.Date;
+
 public class QueryVO {
 	private int page;
 	private int size;
@@ -7,7 +10,7 @@ public class QueryVO {
 	private String key;
 	private String word;
 	private String key2;
-
+	
 	public int getPage() {
 		return page;
 	}
