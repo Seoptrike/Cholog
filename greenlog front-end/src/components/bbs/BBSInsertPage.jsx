@@ -1,13 +1,22 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Form, Button, InputGroup, FormControl, Spinner, Row, Col,Tooltip } from 'react-bootstrap';
+import { Button, Box, TextField, InputLabel, MenuItem, Select, FormControl, IconButton, Grid, CircularProgress, Tooltip, ButtonGroup } from '@mui/material';
 import axios from 'axios';
+import { Editor } from 'primereact/editor';
+import { UserContext } from '../user/UserContext';
+import { MdCancel } from 'react-icons/md';
+import { AiOutlineUpload } from 'react-icons/ai';
+import { Form, InputGroup } from 'react-bootstrap';
 
+// BBSInsertPage 컴포넌트
 const BBSInsertPage = () => {
+    const { userData } = useContext(UserContext);
+    const auth = userData.auth;
     const [loading, setLoading] = useState(false);
     const [files, setFiles] = useState([]);
+    const [text, setText] = useState('');
     const navigate = useNavigate();
-    const uid = sessionStorage.getItem("uid");
+    const uid = sessionStorage.getItem('uid');
     const [form, setForm] = useState({
         bbs_title: '',
         bbs_contents: '',
@@ -15,17 +24,19 @@ const BBSInsertPage = () => {
         bbs_writer: uid
     });
 
-    const { bbs_title, bbs_contents, bbs_type, bbs_writer } = form;
+    const { bbs_title, bbs_type, bbs_writer } = form;
 
+    // 폼 입력 변경 핸들러
     const onChangeForm = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
+    // 카테고리 변경 핸들러
     const onChangeCategory = (e) => {
         setForm({ ...form, bbs_type: parseInt(e.target.value) });
     };
 
-    //파일 업로드 전 이미지 출력
+    // 파일 선택 핸들러
     const onChangeFile = (e) => {
         let selFiles = [];
         for (let i = 0; i < e.target.files.length; i++) {
@@ -33,11 +44,13 @@ const BBSInsertPage = () => {
                 name: URL.createObjectURL(e.target.files[i]),
                 byte: e.target.files[i],
                 sequence: i
-            }
+            };
             selFiles.push(file);
         }
         setFiles(selFiles);
-    }
+    };
+
+    // 사진 업로드 함수
     const uploadPhoto = async (bbsPhoto_bbs_key) => {
         if (files.length === 0) return;
         if (!window.confirm(`${files.length} 개 파일을 업로드 하시겠습니까? 취소시 이미지는 올라가지 않습니다!`)) return;
@@ -49,7 +62,6 @@ const BBSInsertPage = () => {
             }
             // 첨부 파일 업로드 요청
             await axios.post(`/bbs/attach/${bbsPhoto_bbs_key}`, formData);
-            //alert("첨부파일 업로드 완료!");
             setFiles([]); // 파일 상태 초기화
         } catch (error) {
             console.error("첨부 파일 업로드 오류:", error);
@@ -57,77 +69,97 @@ const BBSInsertPage = () => {
         }
     };
 
+    // 폼 제출 핸들러
     const onSubmit = async (e) => {
         e.preventDefault();
         if (!window.confirm("게시글을 등록하시겠습니까?")) return;
-        //console.log(form);
-        // 경매 상품이면서 시드가 0일 경우 경고 메시지를 띄우고 함수를 종료합니다.
+
         try {
             // 게시글 등록
-            const response = await axios.post('/bbs/insert', form);
+            const updatedForm = { ...form, bbs_contents: text.replace(/<\/?p>/g, '') };
+            const response = await axios.post('/bbs/insert', updatedForm);
             const insertedMallKey = response.data; // 삽입된 행의 자동 생성 키
-            //첨부 파일 업로드 함수 호출
+            // 첨부 파일 업로드 함수 호출
             if (insertedMallKey) {
                 await uploadPhoto(insertedMallKey);
                 alert("게시글 등록 완료!");
-                window.location.href = '/bbs/list.json';
+                navigate('/bbs/list.json');
             }
 
         } catch (error) {
-            // 오류 발생 시 오류 메시지 출력
             console.error("게시글 등록 오류:", error);
             alert("게시글 등록 중 오류가 발생했습니다.");
         }
-    }
-    const thumbnail = (props) => ( 
-        <Tooltip id="button-tooltip" {...props}>
-            가장 왼쪽에 있는 이미지가 대표이미지로 임의 지정됩니다.
-        </Tooltip>
+    };
+
+    // 미리보기 이미지 클릭 핸들러
+    const thumbnail = (props) => (
+        <Tooltip title="가장 왼쪽에 있는 이미지가 대표이미지로 임의 지정됩니다." {...props} />
     );
+
     return (
         <div>
             <h1 className="text-center my-5">글쓰기</h1>
-            <Form onSubmit={onSubmit}>
-                <InputGroup className="mb-3">
-                    <FormControl
-                        as="select"
-                        name="bbs_type"
-                        value={bbs_type}
-                        onChange={onChangeCategory}
-                        style={{ maxWidth: '150px', marginRight: '10px' }}>
-                        <option value={0}>자유</option>
-                        <option value={1}>꿀팁</option>
+            <Box component="form" onSubmit={onSubmit} sx={{ width: '100%', maxWidth: '600px', mx: 'auto' }}>
+                <Box sx={{ mb: 3, display: 'flex', alignItems: 'center' }}>
+                    <FormControl variant="outlined" sx={{ mr: 2, minWidth: 150 }}>
+                        <InputLabel>카테고리</InputLabel>
+                        <Select
+                            name="bbs_type"
+                            value={bbs_type}
+                            onChange={onChangeCategory}
+                            label="카테고리"
+                        >
+                            <MenuItem value={0}>자유</MenuItem>
+                            <MenuItem value={1}>꿀팁</MenuItem>
+                            {auth === "관리자" && <MenuItem value={2}>공지사항</MenuItem>}
+                        </Select>
                     </FormControl>
-                    <FormControl
-                        type="text"
+                    <TextField
                         name="bbs_title"
-                        placeholder="제목을 입력하세요"
+                        label="제목을 입력하세요"
+                        variant="outlined"
                         value={bbs_title}
                         onChange={onChangeForm}
+                        fullWidth
                     />
-                </InputGroup>
-                <FormControl
-                    as="textarea"
-                    name="bbs_contents"
-                    placeholder="내용을 입력하세요"
-                    value={bbs_contents}
-                    onChange={onChangeForm}
-                    rows={10}
-                    className="mb-3"
-                />
-                <Row>
-                    {files.map(f =>
-                        <Col key={f.name} xs={2} className='mb-2'>
-                            <img src={f.name} style={{ width: "10rem", height: "10rem" }} />
-                        </Col>
-                    )}
-                </Row>
-                <Button type="submit" className="mt-3" disabled={loading}>
-                    {loading ? <Spinner animation="border" size="sm" /> : '등록'}
-                </Button>
-            </Form>
+                </Box>
+                <div className="card">
+                    <Editor value={text} onTextChange={(e) => setText(e.htmlValue)} style={{ height: '320px' }} />
+                </div>
+                <Box sx={{ mb: 2 }}>
+                    <InputGroup className='my-2'>
+                        <Form.Control type="file" onChange={onChangeFile} multiple />
+                    </InputGroup>
+                </Box>
+                <Grid container spacing={2}>
+                    {files.map((f) => (
+                        <Grid item key={f.name} xs={4} sm={3} md={2}>
+                            <img src={f.name} alt="Preview" style={{ width: "100%", height: "auto", maxHeight: "150px", objectFit: "cover" }} />
+                        </Grid>
+                    ))}
+                </Grid>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
+                    <ButtonGroup variant="outlined">
+                        <Button
+                            type="submit"
+                            color="primary"
+                            disabled={loading}
+                            endIcon={loading ? <CircularProgress size="1rem" /> : null}
+                        >
+                            등록
+                        </Button>
+                        <Button
+                            color="error"
+                            onClick={() => navigate('/bbs/list.json')}
+                        >
+                            취소
+                        </Button>
+                    </ButtonGroup>
+                </Box>
+            </Box>
         </div>
-    )
-}
+    );
+};
 
-export default BBSInsertPage
+export default BBSInsertPage;

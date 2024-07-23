@@ -1,9 +1,9 @@
 import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { Row, Col, Card, Table, Button, InputGroup, Form } from 'react-bootstrap'
-import Pagination from 'react-js-pagination';
-
+import SearchIcon from '@mui/icons-material/Search';
+import InputAdornment from '@mui/material/InputAdornment';
+import { Card, CardContent, Container, TextField, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Avatar } from '@mui/material';
 const ModalFollower = ({ uid, cnt }) => {
     const [show, setShow] = useState(false);
 
@@ -29,6 +29,13 @@ const ModalFollower = ({ uid, cnt }) => {
         setWord("");
         callAPI();
     }
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            onClickSearch(e); // e를 전달
+        }
+    };
     return (
         <>
             <div onClick={handleShow}>
@@ -48,66 +55,81 @@ const ModalFollower = ({ uid, cnt }) => {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <div>
-                        <Row>
-                            <Col xs={12}>
-                                <Card>
-                                    <Row>
-                                        <Col xs={8} className='my-2 ms-2'>
-                                            <form onSubmit={onClickSearch}>
-                                                <InputGroup className='text-center'>
-                                                    <Form.Select
-                                                        value={key}
-                                                        onChange={(e) => {
-                                                            setKey(e.target.value)
-                                                        }}>
-                                                        <option value="id">아이디</option>
-                                                        <option value="nickname">닉네임</option>
-                                                    </Form.Select>
-                                                    <Form.Control onChange={(e) => { setWord(e.target.value) }} value={word} placeholder='검색어를 입력하세요'></Form.Control>
-                                                    <Button type='submit' size='sm'>검색</Button>
-                                                </InputGroup>
-                                            </form>
-                                        </Col>
-                                    </Row>
-                                    <Row className='justify-content-center'>
-                                        <Col xs={12}>
-                                            <Table>
-                                                <thead>
-                                                    <tr>
-                                                        <td>사진</td>
-                                                        <td>아이디(닉네임)</td>
-                                                        <td></td>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {list.map((f, index) =>
-                                                        <tr key={index}>
-                                                            <td><img src={f.user_img} style={{ width: "100%", height: "2rem", objectFit: "contain" }} /></td>
-                                                            <td>{f.user_uid}({f.user_nickname})</td>
-                                                            {uid === sessionStorage.getItem("uid") &&
-                                                                <td className='text-end'><Button variant='danger' size='sm'>삭제</Button></td>
-                                                            }
-                                                        </tr>
+                    <Container style={{ marginTop: '16px' }}>
+                        <Card style={{ padding: '16px' }}>
+                            <CardContent>
+                                <form onSubmit={onClickSearch} style={{ display: 'flex', alignItems: 'center', marginBottom: '16px' }}>
+                                    <TextField
+                                        label="검색어"
+                                        variant="outlined"
+                                        value={word}
+                                        onChange={(e) => setWord(e.target.value)}
+                                        onKeyDown={handleKeyDown} // Enter 키 입력 처리
+                                        sx={{ mr: 2, width: '300px' }}
+                                        InputProps={{
+                                            endAdornment: (
+                                                <InputAdornment position="end">
+                                                    <SearchIcon
+                                                        onClick={onClickSearch}
+                                                        style={{ cursor: 'pointer' }}
+                                                    />
+                                                </InputAdornment>
+                                            ),
+                                        }}
+                                    />
+                                </form>
+
+                                <TableContainer>
+                                    <Table>
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell>사진</TableCell>
+                                                <TableCell>아이디(닉네임)</TableCell>
+                                                <TableCell align='right'></TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {list.map((f, index) => (
+                                                <TableRow key={index}>
+                                                    <TableCell>
+                                                        <Avatar
+                                                            src={f.user_img || "/images/woman.jpg"}
+                                                            style={{ width: '50px', height: '50px' }}
+                                                        />
+                                                    </TableCell>
+                                                    <TableCell>{f.user_uid} ({f.user_nickname})</TableCell>
+                                                    {uid === sessionStorage.getItem("uid") && (
+                                                        <TableCell align='right'>
+                                                            <Button
+                                                                variant='contained'
+                                                                color='error'
+                                                                size='small'
+                                                                onClick={() => console.log(`Delete ${f.user_uid}`)}
+                                                            >
+                                                                삭제
+                                                            </Button>
+                                                        </TableCell>
                                                     )}
-                                                </tbody>
-                                            </Table>
-                                        </Col>
-                                    </Row>
-                                </Card>
-                            </Col>
-                        </Row>
-                        {count > size &&
-                            <Pagination
-                                activePage={page}
-                                itemsCountPerPage={size}
-                                totalItemsCount={count}
-                                pageRangeDisplayed={5}
-                                prevPageText={"‹"}
-                                nextPageText={"›"}
-                                onChange={(e) => setPage(e)} />
-                        }
-                    </div>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+
+                                {count > size && (
+                                    <TablePagination
+                                        rowsPerPageOptions={[size]}
+                                        component="div"
+                                        count={count}
+                                        rowsPerPage={size}
+                                        page={page - 1}
+                                        onPageChange={(event, newPage) => setPage(newPage + 1)}
+                                        style={{ marginTop: '16px' }}
+                                    />
+                                )}
+                            </CardContent>
+                        </Card>
+                    </Container>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>

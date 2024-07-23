@@ -119,12 +119,12 @@ const StepPage = () => {
                 <StepperPanel header="회원정보입력">
                     <div className="flex flex-column h-12rem">
                         <div className="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">
-                            <JoinPage/>
+                            <JoinPage setAgree={setAgree}/>
                         </div>
                     </div>
                     <div className="flex pt-4 justify-content-between">
                         <Button label="이전" severity="secondary" icon="pi pi-arrow-left" onClick={() => stepperRef.current.prevCallback()} />
-                        <Button label="회원가입하기" icon="pi pi-arrow-right" iconPos="right" onClick={() => stepperRef.current.nextCallback()} />
+                        <Button label="다음" icon="pi pi-arrow-right" iconPos="right" onClick={() => stepperRef.current.nextCallback()} />
                     </div>
                 </StepperPanel>
                 <StepperPanel header="회원가입완료">

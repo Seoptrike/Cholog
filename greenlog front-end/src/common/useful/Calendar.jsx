@@ -7,7 +7,7 @@ export default function FormatDemo() {
 
     return (
         <div className="card flex justify-content-center">
-            <Calendar value={date} onChange={(e) => setDate(e.value)} dateFormat="dd/mm/yy" />
+            <Calendar value={date} onChange={(e) => setDate(e.value)} dateFormat="yy/mm/dd" />
         </div>
     )
 }

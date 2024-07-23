@@ -61,6 +61,11 @@ public class BBSRestController {
 		return bbsDAO.topList();
 	}
 
+	@GetMapping("/notice")
+	public List<HashMap<String, Object>> noticeList() {
+		return bbsDAO.noticeList();
+	}
+
 	@PostMapping("/update/{bbs_key}")
 	public void update(@RequestBody BBSVO vo) {
 		bbsDAO.update(vo);

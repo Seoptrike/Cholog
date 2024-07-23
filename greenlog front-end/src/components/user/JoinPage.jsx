@@ -281,7 +281,7 @@ const JoinPage = () => {
                 </Grid>
                 <Grid item xs={12}>
                     <Button variant="contained" color="primary" onClick={onClickInsert}>
-                        회원가입하기
+                        정보 입력 완료!
                     </Button>
                 </Grid>
             </Grid>
