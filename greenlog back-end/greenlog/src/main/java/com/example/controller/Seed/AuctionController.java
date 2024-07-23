@@ -38,19 +38,19 @@ public class AuctionController {
 		map.put("documents", list);
 		map.put("total", adao.total(uid, vo));
 		return map;
-		
+
 	}
-	
+
 	@GetMapping("/admin/list")
-	public HashMap<String, Object> adminAList(QueryVO vo){
+	public HashMap<String, Object> adminAList(QueryVO vo) {
 		HashMap<String, Object> map = new HashMap<>();
 		List<HashMap<String, Object>> list = adao.adminAList(vo);
 		map.put("documents", list);
 		map.put("total", adao.admintotal(vo));
 		return map;
-		
+
 	}
-	
+
 	@PostMapping("/delete/{auction_key}")
 	public void updateState(@PathVariable("auction_key") int auction_key) {
 		adao.updateState1(auction_key);

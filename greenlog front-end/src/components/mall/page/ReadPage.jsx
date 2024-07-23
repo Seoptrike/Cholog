@@ -13,6 +13,8 @@ import ReviewPage from '../../review/ReviewPage';
 import ReportInsert from '../../report/ReportInsert';
 
 const ReadPage = () => {
+    const today =  new Date().toISOString().split('T')[0];
+    //데이타 같게바꿔서 마감처리해줘야함...
     const navi = useNavigate();
     const { mall_key } = useParams();
     const uid = sessionStorage.getItem("uid");
@@ -21,7 +23,7 @@ const ReadPage = () => {
     const [list, setList] = useState([]);//슬라이드
     const root = "mall"
 
-    console.log("read!!!!!!!!!!!!!!" + form);
+    //console.log("read!!!!!!!!!!!!!!" + form);
 
     const [activeTab, setActiveTab] = useState('1');
 
@@ -33,7 +35,7 @@ const ReadPage = () => {
     const { seed_number } = seedNumber
     const callAPI = async () => {
         const res = await axios.get(`/mall/read/${mall_key}`);
-        console.log("****************************", res.data);
+        //console.log("****************************", res.data);
         setForm(res.data);
         //경매시스템 위해서 넣어놓음 -인섭
         const res2 = await axios.get(`/seed/read/${res.data.mall_seller}`)
@@ -48,7 +50,7 @@ const ReadPage = () => {
     useEffect(() => {
         callAPI();
     }, [mall_key]) // 판매자정보에서 누르면 url만 바뀌고 안가서 넣어줘야함!
-    console.log(mall_seller);
+    console.log("endDate: "+mall_endDate+"//// today: "+today);
     const onClickUpdate = () => {
         navi(`/mall/update/${mall_key}`);
     }
@@ -73,8 +75,9 @@ const ReadPage = () => {
     const photoST = {
         width: '30rem',
         height: '30rem',
-        padding:"0.5rem"
-    }
+        padding:"0.5rem",
+        position:" relative",
+    };
     const sellerList = {
         dots: true,
         infinite: false,
@@ -102,27 +105,26 @@ const ReadPage = () => {
         top: '0.7rem',      
         right: '2rem',
     }
-
+    
 
     return (
         <div className="read-page mb-5" >
-            <h1>리드페이지</h1>
             <div className='my-5'>
                 <div>
                     <Row className=' align-items-center mall_read_flexbox'>
-                        <Col className=' text-center  text-middle  mall_read_item' xs={5} md={5} lg={5}  style={{ whiteSpace: "nowrap" }}>
-                            <img style={photoST} src={mall_photo ? mall_photo : ' http://via.placeholder.com/300x300'} alt='상품대표이미지' />
+                        
+                        <Col className=' text-center  text-middle  mall_read_item' xs={5} md={5} lg={5}  style={{ whiteSpace: "nowrap" }}>    
+                            <img  style={photoST} src={mall_photo ? mall_photo : ' http://via.placeholder.com/300x300'} alt='상품대표이미지' />
                         </Col>
                         <Col className=' mall_read_item' xs={7} md={7} lg={7} style={{ whiteSpace: "nowrap",height:"100%",padding:"0px 2rem 0px 0px" }} >
                             <Row className=''style={{height:"22rem"}} >
-
                                 <Table bordered>
                                     <tbody>
                                         <tr style={{ position: "relative"}}>
                                             {mall_seller === uid ?
                                                 <>
                                                     <td className='' colSpan={2} style={{ width: "100%" }}>
-                                                        {mall_title}
+                                                        { mall_endDate <= today ? ` [마감]  ` : mall_title }
                                                         <DropdownButton  title="수정" style={buttonST}>
                                                             <Dropdown.Item onClick={onClickUpdate}>수정하기</Dropdown.Item>
                                                             <Dropdown.Item onClick={(e) => onClickDelete(e)}>삭제하기</Dropdown.Item>

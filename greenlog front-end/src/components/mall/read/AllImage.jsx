@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import '../mall.css'
+
 import axios from 'axios'
 
 const AllImage = ({ mall_key }) => {
      const [photos, setPhotos] = useState([]);
-     console.log(mall_key);
+     //console.log(mall_key);
      const callAPI = async () => {
           const res = await axios.get(`/mall/attach/list/${mall_key}`)
           setPhotos(res.data)
-          console.log(res.data)
+          //console.log(res.data)
      }
 
-     useEffect(() => { callAPI() }, [])
+     useEffect(() => { callAPI() }, [mall_key])
 
      return (
           <div>

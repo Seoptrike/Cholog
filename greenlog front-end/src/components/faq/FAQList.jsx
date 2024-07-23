@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Pagination from 'react-js-pagination';
-import { Row, Col, InputGroup, Button, Form, Accordion } from 'react-bootstrap';
 import axios from 'axios';
 import HeaderTabs from '../../common/useful/HeaderTabs';
+import './FAQList.css'; // CSS 파일 추가
+import '@fortawesome/fontawesome-free/css/all.min.css'; // FontAwesome 아이콘 사용
 
 const FAQList = () => {
   const [list, setList] = useState([]);
@@ -11,6 +12,7 @@ const FAQList = () => {
   const [size, setSize] = useState(10);
   const [key, setKey] = useState('all');
   const [word, setWord] = useState('');
+  const [activeIndex, setActiveIndex] = useState(null); // 활성화된 아코디언 인덱스를 저장
 
   // 관리자 아이디 목록
   const adminIds = ['admin', 'seop', 'hanna', 'gr001231', 'laonmiku', 'ne4102'];
@@ -31,7 +33,7 @@ const FAQList = () => {
 
   useEffect(() => {
     callAPI();
-  }, [page, size, key, word]);
+  }, [page, size, key]);
 
   const onClickSearch = async (e) => {
     e.preventDefault();
@@ -58,51 +60,62 @@ const FAQList = () => {
     }
   };
 
+  const toggleAccordion = (index) => {
+    setActiveIndex(activeIndex === index ? null : index);
+  };
+
   return (
-    <div>
+    <div className="faq-list-container">
       <HeaderTabs />
       <h1 className="text-center my-5">FAQ</h1>
-      <Row className="mb-3 align-items-center">
-        <Col md={8}>
-          <InputGroup>
-            <Form.Select className='me-2' value={key} onChange={(e) => setKey(e.target.value)}>
-              <option value="all">전체</option>
-              <option value="member">회원</option>
-              <option value="point">포인트</option>
-              <option value="how">참여방법</option>
-            </Form.Select>
-            <Form.Control placeholder='검색어' value={word} onChange={(e) => setWord(e.target.value)} />
-            <Button onClick={onClickSearch}>검색</Button>
-          </InputGroup>
-        </Col>
-        <Col md={4} className="text-end">
-          <span className="me-2">검색수: {count}건</span>
+      <div className="search-container">
+        <div className="search-input-group">
+          <select className='me-2' value={key} onChange={(e) => setKey(e.target.value)}>
+            <option value="all">전체</option>
+            <option value="member">회원</option>
+            <option value="point">포인트</option>
+            <option value="how">참여방법</option>
+          </select>
+          <input type="text" placeholder='검색어' value={word} onChange={(e) => setWord(e.target.value)} />
+          <button className="search-button" onClick={onClickSearch}>
+            <i className="fas fa-search"></i>
+          </button>
+        </div>
+        <div className="search-info">
+          <span className="me-3">검색수: {count}건</span>
           {adminIds.includes(currentUser) && (
-            <Button size='sm' onClick={WriteClick}>글쓰기</Button>
+            <button className="write-button" onClick={WriteClick}>글쓰기</button>
           )}
-        </Col>
-      </Row>
-      <Accordion defaultActiveKey={null}>
+        </div>
+      </div>
+      <div className="accordion">
         {list.map((faq, index) => (
-          <Accordion.Item eventKey={`${index}`} key={faq.FAQ_key}>
-            <Accordion.Header>
-              <span>
+          <div 
+            className={`accordion-item ${activeIndex === index ? 'active' : ''}`} 
+            key={faq.FAQ_key}
+          >
+            <div 
+              className="accordion-header" 
+              onClick={() => toggleAccordion(index)}
+            >
+              <span className={`badge badge-${faq.FAQ_type === 0 ? 'member' : faq.FAQ_type === 2 ? 'point' : 'how'}`}>
                 {faq.FAQ_type === 0 ? '회원' : faq.FAQ_type === 2 ? '포인트' : '참여방법'}
               </span> 
-              - {faq.FAQ_question}
-            </Accordion.Header>
-            <Accordion.Body>
+              <span className="faq-question">{faq.FAQ_question}</span>
+              <i className={`fas fa-chevron-${activeIndex === index ? 'up' : 'down'}`}></i>
+            </div>
+            <div className="accordion-body">
               {faq.FAQ_answer}
               {adminIds.includes(currentUser) && (
                 <div className='mt-3'>
-                  <Button onClick={() => UpdateClick(faq.FAQ_key)} className='me-2'>수정</Button>
-                  <Button onClick={() => DeleteClick(faq.FAQ_key)}>삭제</Button>
+                  <button className="btn" onClick={() => UpdateClick(faq.FAQ_key)}>수정</button>
+                  <button className="btn" onClick={() => DeleteClick(faq.FAQ_key)}>삭제</button>
                 </div>
               )}
-            </Accordion.Body>
-          </Accordion.Item>
+            </div>
+          </div>
         ))}
-      </Accordion>
+      </div>
       {count > size && (
         <Pagination
           activePage={page}

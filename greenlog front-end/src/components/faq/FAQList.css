@@ -1,0 +1,95 @@
+.faq-list-container {
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+.accordion-item {
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+
+.accordion-header {
+  padding: 15px;
+  background-color: #fbfbfb;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.accordion-header .badge {
+  margin-right: 10px;
+}
+
+.accordion-header.active .faq-question {
+  font-weight: bold; /* 제목 글씨체 두껍게 */
+}
+
+.accordion-body {
+  padding: 15px;
+  display: none;
+  transition: max-height 0.5s ease-out; /* 부드러운 트랜지션 효과 */
+  overflow: hidden;
+}
+
+.accordion-item.active .accordion-body {
+  display: block;
+}
+
+.faq-question {
+  flex-grow: 1;
+}
+
+.search-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.search-input-group {
+  display: flex;
+  align-items: center;
+}
+
+.search-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 0 10px;
+}
+
+.write-button {
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+}
+
+.search-info {
+  display: flex;
+  align-items: center;
+  margin-left: auto; /* 오른쪽 정렬을 위해 추가 */
+}
+
+.search-count {
+  margin-right: auto; /* 왼쪽 정렬을 위해 추가 */
+}
+
+.badge-member {
+  background-color: #1E88E5;
+  color: white;
+}
+
+.badge-point {
+  background-color: #ffc107;
+  color: white;
+}
+
+.badge-how {
+  background-color: #28a745;
+  color: white;
+}

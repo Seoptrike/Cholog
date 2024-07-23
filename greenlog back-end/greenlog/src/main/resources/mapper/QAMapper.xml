@@ -17,7 +17,7 @@
         SELECT * FROM QA WHERE qa_key = #{qa_key}
     </select>
 		<select id="list" resultType="hashmap">
- 		select * 
+ 		select * , date_format(qa_regDate, '%Y.%m.%d') as fmtdate
 		from QA
 		<if test="key=='qa_writer'">where qa_writer like #{word}</if>
 		<if test="key=='qa_title'">where qa_title like #{word}</if>

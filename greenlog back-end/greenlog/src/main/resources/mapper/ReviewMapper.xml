@@ -3,7 +3,7 @@
 <mapper namespace="com.example.mapper.ReviewMapper">
 
 		<select id="reviewList" resultType="hashmap">
-			    select r.*, user_nickname, user_img 
+			    select r.*, user_nickname, user_img, user_uid 
 			    from review r, user u
 			    where review_writer= user_uid and review_mall_key=#{review_mall_key} 
 			    order by review_rating desc

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Button, Card, Container, Row, Col, Form, Spinner } from 'react-bootstrap';
 import axios from 'axios';
+import './QARead.css'; // CSS 파일 추가
 
 const QARead = () => {
   const { qa_key } = useParams();
@@ -15,9 +15,9 @@ const QARead = () => {
     comments: ''
   });
 
-  const [comment, setComment] = useState(''); // 별도의 상태로 관리
+  const [comment, setComment] = useState('');
   const [loading, setLoading] = useState(false);
-  const [editingComment, setEditingComment] = useState(false); // 수정 모드 상태
+  const [editingComment, setEditingComment] = useState(false);
 
   const adminIds = ['admin', 'seop', 'hanna', 'gr001231', 'laonmiku', 'ne4102'];
   const currentUser = sessionStorage.getItem('uid');
@@ -74,8 +74,8 @@ const QARead = () => {
     try {
       await axios.post(`/qa/update/${qa_key}`, { ...form, comments: '' });
       setLoading(false);
-      setComment(''); // 댓글 입력 상태 초기화
-      setEditingComment(false); // 수정 모드 종료
+      setComment('');
+      setEditingComment(false);
       callAPI();
     } catch (error) {
       setLoading(false);
@@ -95,79 +95,66 @@ const QARead = () => {
   };
 
   return (
-    <Container className="mt-5">
-      <Row className="justify-content-center">
-        <Col xs={12} md={10} lg={8}>
-          <Card>
-            <Card.Body>
-              <Card.Title>{form.qa_title}</Card.Title>
-              <Card.Subtitle className="mb-2 text-muted">작성자: {form.qa_writer}</Card.Subtitle>
-              <Card.Subtitle className="mb-2 text-muted">작성일: {form.qa_regDate}</Card.Subtitle>
-              <Card.Text>{form.qa_contents}</Card.Text>
-              {adminIds.includes(currentUser) && (
-                <>
-                  <Link to={`/community/qa/update/${qa_key}`}>
-                    <Button className='me-2'>수정</Button>
-                  </Link>
-                  <Button onClick={handleDeletePost} className='me-2'>삭제</Button>
-                </>
-              )}
-            </Card.Body>
-          </Card>
+    <div className="qa-read-container">
+      <h2 className="qa-title">{form.qa_title}</h2>
+      <div className="qa-subtitle">
+        <span>작성자: {form.qa_writer}</span>
+        <span>작성일: {form.qa_regDate}</span>
+      </div>
+      <hr />
+      <p>{form.qa_contents}</p>
+      {adminIds.includes(currentUser) && (
+        <div className="qa-buttons">
+          <Link to={`/community/qa/update/${qa_key}`}>
+            <button className='qa-button'>수정</button>
+          </Link>
+          <button onClick={handleDeletePost} className='qa-button'>삭제</button>
+        </div>
+      )}
 
-          {adminIds.includes(currentUser) && !form.comments && (
-            <Card className="mt-4">
-              <Card.Body>
-                <Form onSubmit={handleSubmitComment}>
-                  <Form.Group controlId="comments">
-                    <Form.Control
-                      as="textarea"
-                      rows={3}
-                      value={comment}
-                      onChange={(e) => setComment(e.target.value)}
-                    />
-                  </Form.Group>
-                  <Button type="submit" className="mt-3" disabled={loading}>
-                    {loading ? <Spinner animation="border" size="sm" /> : '댓글 등록'}
-                  </Button>
-                </Form>
-              </Card.Body>
-            </Card>
-          )}
+      {adminIds.includes(currentUser) && !form.comments && (
+        <div className="qa-comment-section">
+          <form onSubmit={handleSubmitComment}>
+            <textarea
+              rows={3}
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              placeholder="답변을 입력하세요."
+            />
+            <button type="submit" className="qa-button" disabled={loading}>
+              {loading ? '등록 중...' : '답변 등록'}
+            </button>
+          </form>
+        </div>
+      )}
 
-          {form.comments && (
-            <Card className="mt-4">
-              <Card.Body>
-                <h5>답변</h5>
-                {!editingComment ? (
-                  <Card.Text>{form.comments}</Card.Text>
-                ) : (
-                  <Form onSubmit={handleEditComment}>
-                    <Form.Group controlId="editedComment">
-                      <Form.Control
-                        as="textarea"
-                        rows={3}
-                        value={comment}
-                        onChange={(e) => setComment(e.target.value)}
-                      />
-                    </Form.Group>
-                    <Button type="submit" className="mt-3" disabled={loading}>
-                      {loading ? <Spinner animation="border" size="sm" /> : '댓글 수정'}
-                    </Button>
-                  </Form>
-                )}
-                {adminIds.includes(currentUser) && !editingComment && (
-                  <>
-                    <Button onClick={() => { setEditingComment(true); setComment(form.comments); }} className='me-2'>댓글 수정</Button>
-                    <Button onClick={handleDeleteComment} className='me-2'>댓글 삭제</Button>
-                  </>
-                )}
-              </Card.Body>
-            </Card>
+      {form.comments && (
+        <div className="qa-comment-section">
+          <h3>답변</h3>
+          {!editingComment ? (
+            <p>{form.comments}</p>
+          ) : (
+            <form onSubmit={handleEditComment}>
+              <textarea
+                rows={3}
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                placeholder="답변을 수정하세요."
+              />
+              <button type="submit" className="qa-button" disabled={loading}>
+                {loading ? '수정 중...' : '답변 수정'}
+              </button>
+            </form>
           )}
-        </Col>
-      </Row>
-    </Container>
+          {adminIds.includes(currentUser) && !editingComment && (
+            <div className="qa-buttons">
+              <button onClick={() => { setEditingComment(true); setComment(form.comments); }} className='qa-button'>답변 수정</button>
+              <button onClick={handleDeleteComment} className='qa-button'>답변 삭제</button>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
   );
 };
 

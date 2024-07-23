@@ -13,7 +13,7 @@ import './ReviewPage.css'; // Import the CSS file
 const ReviewPage = ({ mall_key, mall_seller, seller_number }) => {
     const [list, setList] = useState([]);
     const [page, setPage] = useState(1);
-    const [size, setSize] = useState(5);
+    const [size, setSize] = useState(3);
     const [count, setCount] = useState(0);
     const uid = sessionStorage.getItem('uid');
     const root = "review";
@@ -78,13 +78,13 @@ const ReviewPage = ({ mall_key, mall_seller, seller_number }) => {
 
     const onClickBuy = async (review_writer, review_rating, mall_seller) => {
         //alert(review_writer, review_rating, mall_seller)
-        if(!window.confirm(`[${review_writer}]님을 선택하시겠습니까?`))
-        await axios.post('/auction/insert', {
-            auction_mall_key: mall_key,
-            auction_seller: mall_seller,
-            auction_buyer: review_writer,
-            auction_amount: review_rating
-        });
+        if (!window.confirm(`[${review_writer}]님을 선택하시겠습니까?`))
+            await axios.post('/auction/insert', {
+                auction_mall_key: mall_key,
+                auction_seller: mall_seller,
+                auction_buyer: review_writer,
+                auction_amount: review_rating
+            });
         const res2 = await axios.get(`/seed/read/${review_writer}`);
         if (res2.data) {
             await axios.post('/trade/insert', {
@@ -92,8 +92,8 @@ const ReviewPage = ({ mall_key, mall_seller, seller_number }) => {
                 trade_from: res2.data.seed_number,
                 amount: review_rating,
                 seed_number: seller_number,
-                trade_state:1,
-                trade_info:"경매"
+                trade_state: 1,
+                trade_info: "경매"
             })
             //마감
             await axios.post(`/mall/updateEndDate/${mall_key}`)
@@ -111,11 +111,11 @@ const ReviewPage = ({ mall_key, mall_seller, seller_number }) => {
                             <div className="review-card-header">
                                 <Link to={`/user/read/${review.review_writer}`}><img src={review.user_img || "http://via.placeholder.com/70x70"} alt="User" /></Link>
                                 <div className="user-info">
-                                    <Link to={`/user/read/${review.review_writer}`}>{review.user_nickname}</Link>
+                                    <Link to={`/user/read/${review.review_writer}`}>{review.user_nickname} ({review.user_uid})</Link>
                                     <div><span>{review.review_uDate || review.review_regDate}</span></div>
                                 </div>
                                 <Dropdown>
-                                    <Dropdown.Toggle variant="link" id="dropdown-basic">
+                                    <Dropdown.Toggle variant="" id="dropdown-basic">
                                         <BsThreeDotsVertical />
                                     </Dropdown.Toggle>
                                     {uid === review.review_writer ? (
@@ -155,7 +155,7 @@ const ReviewPage = ({ mall_key, mall_seller, seller_number }) => {
                                         value={review.num || review.review_rating}
                                         precision={1}
                                         max={10}
-                                        size='small'
+                                        size='large'
                                         onChange={(e, newValue) => changeRating(review.review_key, newValue)}
                                         icon={<TbBrandSnapseed style={{ color: "brown" }} />}
                                         emptyIcon={<TbBrandSnapseed />}
@@ -176,21 +176,23 @@ const ReviewPage = ({ mall_key, mall_seller, seller_number }) => {
                         </Card>
                     ))}
                     <hr />
+                    {count > size &&
+                        <div className="pagination-container">
+                            <Pagination
+                                activePage={page}
+                                itemsCountPerPage={size}
+                                totalItemsCount={count}
+                                pageRangeDisplayed={5}
+                                prevPageText={"‹"}
+                                nextPageText={"›"}
+                                onChange={(e) => setPage(e)}
+                            />
+                        </div>
+                    }
                 </Col>
+
             </Row>
-            {count > size &&
-                <div className="pagination-container">
-                    <Pagination
-                        activePage={page}
-                        itemsCountPerPage={size}
-                        totalItemsCount={count}
-                        pageRangeDisplayed={5}
-                        prevPageText={"‹"}
-                        nextPageText={"›"}
-                        onChange={(e) => setPage(e)}
-                    />
-                </div>
-            }
+
         </div>
     );
 };
