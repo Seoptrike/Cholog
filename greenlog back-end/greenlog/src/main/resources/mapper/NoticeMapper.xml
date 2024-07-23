@@ -18,13 +18,13 @@
         SELECT * FROM notice WHERE notice_key = #{notice_key}
     </select>
  	  <select id="list" resultType="hashmap">
-        select *
+        select *, date_format(notice_regDate, '%Y.%m.%d') as fmtdate
         from notice
-        <where>
-            <if test="key == 'all'"></if>
-            <if test="key == 'normal'">notice_type = 1</if>
-            <if test="key == 'member'">notice_type = 2 </if>
-            <if test="key == 'event'">notice_type = '' </if>
+         <where>
+            <if test="key == 'all'">notice_title LIKE #{word}</if>
+            <if test="key == 'normal'">notice_title LIKE #{word} AND notice_type = 1</if>
+            <if test="key == 'member'">notice_title LIKE #{word} AND notice_type = 2 </if>
+            <if test="key == 'event'">notice_title LIKE #{word} AND notice_type = 3 </if>
         </where>
         order by notice_key desc
         limit #{start}, #{size}
@@ -33,10 +33,10 @@
         select count(*)
         from notice
        <where>
-            <if test="key == 'all'"></if>
-            <if test="key == 'normal'">notice_type = 1</if>
-            <if test="key == 'member'">notice_type = 2 </if>
-            <if test="key == 'event'">notice_type = '' </if>
+            <if test="key == 'all'">notice_title LIKE #{word}</if>
+            <if test="key == 'normal'">notice_title LIKE #{word} AND notice_type = 1</if>
+            <if test="key == 'member'">notice_title LIKE #{word} AND notice_type = 2 </if>
+            <if test="key == 'event'">notice_title LIKE #{word} AND notice_type = 3 </if>
         </where>
     </select>
     <update id="updateViewcnt">

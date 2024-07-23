@@ -37,6 +37,7 @@ public class NoticeController {
 	    return map;
 	}
 	
+	
 	    @PostMapping("/update/{notice_key}")
 		public void update(@RequestBody NoticeVO vo) {
 			NDAO.update(vo);
