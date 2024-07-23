@@ -89,6 +89,7 @@ const AdminSeedPage = () => {
                                         </Typography>
                                         입니다
                                     </Typography>
+                                    <Link to={`/user/wallet/${seed.seed_uid}`}> <Button size="sm">거래내역</Button></Link>
                                 </Box>
                             </CardContent>
                         </Card>
