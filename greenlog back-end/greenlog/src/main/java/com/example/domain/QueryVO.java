@@ -82,5 +82,3 @@ public class QueryVO {
 		return "QueryVO [page=" + page + ", size=" + size + ", start=" + start + ", key=" + key + ", word=" + word
 				+ ", key2=" + key2 + ", date1=" + date1 + ", date2=" + date2 + "]";
 	}
-
-}

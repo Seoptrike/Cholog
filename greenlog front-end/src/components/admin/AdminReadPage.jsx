@@ -5,9 +5,6 @@ import { MdOutlineSettings } from "react-icons/md";
 import axios from 'axios';
 
 
-//설정 아이콘 누를 시 회원수정페이지로 이동 
-//권한설정
-
 const AdminReadPage = () => {
     const {user_uid} =useParams();
     const [form, setForm]=useState("");
@@ -17,6 +14,7 @@ const AdminReadPage = () => {
     const callAPI=async()=>{
         const res = await axios.get(`/user/read/${user_uid}`);
         setForm(res.data);
+        console.log(res.data);
     }
 
     useEffect(()=>{
@@ -53,7 +51,7 @@ const AdminReadPage = () => {
                                         </Col>
                                         <Col lg={1}>
                                             <a href={`/user/admin/update/${form.user_uid}`}>
-                                                <MdOutlineSettings style={{ fontSize: "20px" }} />
+                                                <MdOutlineSettings style={{ fontSize: "30px" }} />
                                             </a>
                                         </Col>
                                     </Row>

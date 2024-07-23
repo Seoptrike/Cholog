@@ -39,4 +39,9 @@ public class TradeController {
 	public HashMap<String, Object> AdminList(QueryVO vo) {
 		return Tservice.AdminList(vo);
 	}
+	
+	@PostMapping("/update/{trade_key}")
+	public void updateStatus(@PathVariable("trade_key") int trade_key) {
+		tdao.updateStatus(trade_key);
+	}
 }

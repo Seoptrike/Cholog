@@ -9,6 +9,7 @@ public class TradeVO extends SeedVO {
 	private String trade_from;
 	private String trade_to;
 	private int amount;
+	
 
 	private String trade_info;
 
@@ -16,6 +17,15 @@ public class TradeVO extends SeedVO {
 	private LocalDateTime trade_date;
 
 	private int trade_state;
+	private int trade_status;
+
+	public int getTrade_status() {
+		return trade_status;
+	}
+
+	public void setTrade_status(int trade_status) {
+		this.trade_status = trade_status;
+	}
 
 	public int getTrade_key() {
 		return trade_key;

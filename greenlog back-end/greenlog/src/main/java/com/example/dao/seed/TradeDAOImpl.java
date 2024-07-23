@@ -53,4 +53,10 @@ public class TradeDAOImpl implements TradeDAO {
 		return session.selectOne(namespace + ".adminListCount", vo);
 	}
 
+	@Override
+	public void updateStatus(int trade_key) {
+		session.update(namespace + ".statusUpdate1", trade_key);
+		
+	}
+
 }
