@@ -1,7 +1,5 @@
 package com.example.domain;
 
-import java.time.LocalDate;
-import java.util.Date;
 
 public class QueryVO {
 	private int page;

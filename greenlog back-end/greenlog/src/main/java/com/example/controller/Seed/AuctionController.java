@@ -51,7 +51,7 @@ public class AuctionController {
 		
 	}
 	
-	@PostMapping("/update/{auction_key}")
+	@PostMapping("/delete/{auction_key}")
 	public void updateState(@PathVariable("auction_key") int auction_key) {
 		adao.updateState1(auction_key);
 	}
