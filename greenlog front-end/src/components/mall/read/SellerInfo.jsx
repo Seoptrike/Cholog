@@ -3,7 +3,7 @@ import { CardContent, Typography } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import { Col, Row, Card } from 'react-bootstrap';
 import { Link, useParams } from 'react-router-dom';
-import "../mall.css";
+
 import axios from 'axios';
 import Slider from "react-slick";
 

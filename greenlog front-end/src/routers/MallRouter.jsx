@@ -4,6 +4,7 @@ import ListPage from '../components/mall/page/ListPage'
 import ReadPage from '../components/mall/page/ReadPage'
 import InsertPage from '../components/mall/page/InsertPage'
 import UpdatePage from '../components/mall/page/UpdatePage'
+import PopularPage from '../components/mall/page/PopularPage'
 
 const MallRouter = () => {
     return (
@@ -12,6 +13,7 @@ const MallRouter = () => {
             <Route path='read/:mall_key' element={<ReadPage/>}/>
             <Route path='insert' element={<InsertPage/>}/>
             <Route path='update/:mall_key' element={<UpdatePage/>}/>
+            <Route path='pop' element={<PopularPage/>}/>
         </Routes>
     )
 }

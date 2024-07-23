@@ -1,16 +1,17 @@
 
 
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-import { Card, Table, Dropdown, Row, Col, InputGroup, Button, Form } from 'react-bootstrap'
+import React, { useContext, useEffect, useState } from 'react'
+import { Table, Dropdown, Row, Col, InputGroup, Button, Form } from 'react-bootstrap'
 import Pagination from 'react-js-pagination';
-import {Typography, Divider } from 'antd'; //카드를 가져와야함..
+import {Typography, Card, Divider } from 'antd'; //카드를 가져와야함..
 import { Link } from 'react-router-dom';
 import { BsPencilSquare } from "react-icons/bs";
-import { red } from '@mui/material/colors';
+import {UserContext} from '../../user/UserContext';
 
 
 const ListPage = () => {
+    const { Meta } = Card;
     const [loading, setLoading] = useState(false);
     const uid = sessionStorage.getItem("uid");
     const [count, setCount] = useState(0);
@@ -18,6 +19,8 @@ const ListPage = () => {
     const [page, setPage] = useState(1);
     const [size, setSize] = useState(16);
     const [dropDown, setDropDown] = useState('정렬조건');
+    const {userData} =useContext(UserContext); 
+    //console.log(userData);
     //패스로보낼값
     const [key, setKey] = useState('mall_title');
     const [word, setWord] = useState('');
@@ -33,41 +36,6 @@ const ListPage = () => {
         checkP0: false,
         checkP1: false
     });
-
-    const photoST = {
-        width: "100px",
-        height: "100px",
-        border: "solid gray 5px"
-    }
-    const countST = {
-        width: "100%",
-        textAlign: "left",
-        color: "gray"
-    }
-    const badgeST = {
-        position: 'absolute',
-        backgroundColor: "rgba(0, 0, 0, 0.3)",
-        color: 'rgba(71, 123, 93, 0.74)',
-        textAlign: "center",
-        fontSize: "5rem",
-        borderRadius: '5px',
-        top: '0',      // 상단 여백
-        right: '0',    // 오른쪽 여백 기본이 오른쪽아래로 쳐져잇어서 줘야댐..
-    }
-    const adminST = { //클릭되게 작게만들기
-        position: 'absolute',
-        backgroundColor: "rgba(0, 0, 0, 0.3)",
-        color: 'rgba(71, 123, 93, 0.74)',
-        textAlign: "center",
-        fontSize: "1.5rem",
-        borderRadius: '5px',
-        top: '0',      // 상단 여백
-        right: '0',    // 오른쪽 여백 기본이 오른쪽아래로 쳐져잇어서 줘야댐..
-    }
-    const stateBox = {
-        width: "10rem",
-        margin: "2rem "
-    }
 
     const today = new Date(); // 오늘 날짜
     const filterData = (documents) => {
@@ -125,6 +93,41 @@ const ListPage = () => {
         callAPI();
         console.log(page, orderBy, itisEnd, pstateWord, tstateWord, count);
     }, [page, orderBy, itisEnd, pstateWord, tstateWord]);
+
+    const countST = {
+        width: "100%",
+        textAlign: "left",
+        color: "gray"
+    }
+    const badgeST = {
+        width: "100%",
+        height: "100%",
+        position: 'absolute',
+        backgroundColor: "rgba(0, 0, 0, 0.3)",
+        color: 'rgba(71, 123, 93, 0.74)',
+        textAlign: "center",
+        fontSize: "5rem",
+        borderRadius: '5px',
+        top: '0',      // 상단 여백
+        right: '0',    // 오른쪽 여백 기본이 오른쪽아래로 쳐져잇어서 줘야댐..
+    }
+    const adminST = { //클릭되게 작게만들기
+        width: "100%",
+        height: "10%",
+        position: 'absolute',
+        backgroundColor: "rgba(0, 0, 0, 1)",
+        color: 'white',
+        textAlign: "center",
+        fontSize: "1rem",
+        borderRadius: '5px',
+        top: '0%',      // 상단 여백
+        right: '0%',    // 오른쪽 여백 기본이 오른쪽아래로 쳐져잇어서 줘야댐..
+    }
+    const stateBox = {
+        width: "10rem",
+        margin: "2rem "
+    }
+
 
     if (loading) return <h1 className='text-center'>로딩중...</h1>
     return (
@@ -207,24 +210,41 @@ const ListPage = () => {
                 {list &&
                     list.map(card => (
                         <Col key={card.mall_key} xs={3} md={3} lg={3} className='' >
-                            <Card className="mb-3 mall_card_parent" style={{ padding: '10px' }}>
-                            {card.isEnd && (
-                                uid === "laonmiku" ? (
-                                    <div className="badge mall_card_child2" style={adminST}>
-                                        마감 
+                            <Card
+                                hoverable
+                                style={{   width: '17rem',
+                                    height: '15rem',
+                                    margin: '0.5rem',
+                                    display: 'flex',
+                                    flexDirection: 'column'}}
+                                cover={
+                                    <a href={`/mall/read/${card.mall_key}`} style={{ display: 'block', height: '10rem', overflow: 'hidden' }}>
+                                        <img
+                                            alt="mall"
+                                            src={card.mall_photo ? card.mall_photo : "http://via.placeholder.com/100x100"}
+                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                        />
+                                    </a>
+                                }
+                            >
+                                {card.isEnd && (
+                                userData.auth === "관리자" ? (
+                                    <div  style={adminST}>
+                                        마감
                                     </div>
-                                ) : (
-                                    <div className="badge mall_card_child" style={badgeST}>
-                                        마감 
-                                    </div>
-                                )
-                            )}
-                                <Card.Body >
-                                    <Card.Title><img src={card.mall_photo ? card.mall_photo : "http://via.placeholder.com/100x100"} style={photoST} /></Card.Title>
-                                    <Card.Text>
-                                        <Link to={`/mall/read/${card.mall_key}`} className='ellipsis'>[p:{card.mall_pstate}][t:{card.mall_tstate}][{card.mall_key}]{card.mall_title}</Link>
-                                    </Card.Text>
-                                </Card.Body>
+                                    ) : (
+                                        <div style={badgeST} >
+                                            마감 
+                                        </div>
+                                    )
+                                )}
+
+                                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', textAlign: 'center' }}>
+                                    <Meta
+                                        title={`[${card.mall_key}] ${card.mall_title}`}
+                                        style={{ fontSize: '0.75rem', margin: 0 }}
+                                    />
+                                </div>
                             </Card>
                         </Col>
                     ))

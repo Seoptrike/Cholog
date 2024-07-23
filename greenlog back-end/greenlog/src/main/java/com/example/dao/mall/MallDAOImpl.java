@@ -19,6 +19,12 @@ public class MallDAOImpl implements MallDAO {
 	String namespace = "com.example.mapper.MallMapper";
 
 	@Override
+	public List<HashMap<String, Object>> reviewCount() {
+		return session.selectList(namespace+".reviewCount");
+	}
+
+	
+	@Override
 	public List<HashMap<String, Object>> list(Query2VO vo) {
 		return session.selectList(namespace + ".list", vo);
 	}
@@ -108,6 +114,7 @@ public class MallDAOImpl implements MallDAO {
 		session.update(namespace + ".updatePhoto", vo);
 	}
 
+	
 	
 
 }
