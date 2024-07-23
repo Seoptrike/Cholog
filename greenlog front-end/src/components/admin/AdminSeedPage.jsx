@@ -4,6 +4,7 @@ import { Card, CardContent, Typography, Avatar, Box } from '@mui/material';
 import axios from 'axios';
 import Pagination from 'react-js-pagination';
 import { TbBrandSnapseed } from "react-icons/tb";
+import { Link } from 'react-router-dom';
 const AdminSeedPage = () => {
     const [list, setList] = useState([]);
     const [count, setCount] = useState(0);
@@ -89,7 +90,7 @@ const AdminSeedPage = () => {
                                         </Typography>
                                         입니다
                                     </Typography>
-                                    <Link to={`/user/wallet/${seed.seed_uid}`}> <Button size="sm">거래내역</Button></Link>
+                                    <Link to={`/user/wallet/${seed.seed_uid}`}> <Button size="sm">거래내역 {seed.seed_uid}</Button></Link>
                                 </Box>
                             </CardContent>
                         </Card>
