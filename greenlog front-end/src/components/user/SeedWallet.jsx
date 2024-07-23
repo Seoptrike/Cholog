@@ -5,7 +5,7 @@ import axios from 'axios'
 import { TbBrandSnapseed } from "react-icons/tb";
 
 const SeedWallet = () => {
-    const uid = sessionStorage.getItem("uid");
+    const uid = sessionStorage.getItem("uid")
     const [form, setForm] = useState({
         seed_point: '',
         seed_uid: '',
