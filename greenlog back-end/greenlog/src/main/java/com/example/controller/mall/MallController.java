@@ -32,6 +32,12 @@ public class MallController {
 	@Autowired
 	MallService mservice;
 
+	@GetMapping("/reviewCount")
+	public  List<HashMap<String, Object>> reviewCount (){
+		return mdao.reviewCount();
+	}
+		
+	
 	@GetMapping("/list")
 	public HashMap<String, Object> list(Query2VO vo) {
 		HashMap<String, Object> map = new HashMap<>();
