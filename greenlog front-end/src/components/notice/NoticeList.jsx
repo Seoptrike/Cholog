@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import Pagination from 'react-js-pagination';
 import { Link } from 'react-router-dom';
-import { Row, Col, InputGroup, Button, Form, Table } from 'react-bootstrap';
 import axios from 'axios';
 import HeaderTabs from '../../common/useful/HeaderTabs';
+import './NoticeList.css';  // 추가적인 CSS 스타일링 파일
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const NoticeList = () => {
   const [list, setList] = useState([]);
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
-  const [size, setSize] = useState(5);
+  const [size, setSize] = useState(10);
   const [key, setKey] = useState('all');
   const [word, setWord] = useState('');
+  const [searchClicked, setSearchClicked] = useState(false); // 검색 버튼 클릭 여부 상태 추가
 
   const adminIds = ['admin', 'seop', 'hanna', 'gr001231', 'laonmiku', 'ne4102'];
   const currentUser = sessionStorage.getItem('uid');
@@ -21,72 +23,86 @@ const NoticeList = () => {
     console.log(res.data);
     setList(res.data.documents);
     setCount(res.data.total);
-    const last = Math.ceil(res.data.total / size);
-    if (page > last) setPage(last);
 
-    if (res.data.total === 0) {
-      alert('검색어가 없습니다');
+    if (searchClicked && res.data.total === 0) {
+      alert('검색 결과가 없습니다');
+      setSearchClicked(false); // 검색 클릭 상태 초기화
     }
   };
 
   useEffect(() => {
     callAPI();
-  }, [page, key, size,word]);
+  }, [page, key, size]);
 
-  const onClickSearch = (e) => {
+  const onClickSearch = async (e) => {
     e.preventDefault();
     setPage(1);
+    setSearchClicked(true); // 검색 버튼 클릭 상태 설정 후 API 호출
     callAPI();
+  };
+
+  const getBadge = (type) => {
+    switch(type) {
+      case 1:
+        return <span className="badge badge-normal">일반</span>;
+      case 2:
+        return <span className="badge badge-member">회원</span>;
+      case 3:
+        return <span className="badge badge-event">이벤트</span>;
+      default:
+        return null;
+    }
   };
 
   return (
     <div>
       <HeaderTabs />
       <h1 className="text-center my-5">공지사항</h1>
-      <Row className="mb-3">
-        <Col md={10}>
-          <InputGroup>
-            <Form.Select className='me-2' value={key} onChange={(e) => setKey(e.target.value)} >
-              <option value="all">전체</option>
-              <option value="normal">일반</option>
-              <option value="member">회원</option>
-              <option value="event">이벤트</option>
-            </Form.Select>
-            <Form.Control placeholder='검색어' value={word} onChange={(e) => setWord(e.target.value)} />
-            <Button onClick={onClickSearch}>검색</Button>
-          </InputGroup>
-        </Col>
-        <Col>
+      <div className="search-container">
+        <div className="search-input-group">
+          <select className='me-2' value={key} onChange={(e) => setKey(e.target.value)} >
+            <option value="all">전체</option>
+            <option value="normal">일반</option>
+            <option value="member">회원</option>
+            <option value="event">이벤트</option>
+          </select>
+          <input type="text" placeholder='검색어를 입력하세요' value={word} onChange={(e) => setWord(e.target.value)} />
+          <button className="search-button" onClick={(e) => onClickSearch(e)}>
+            <i className="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+      <div className="actions-row">
+        <div className="search-count">
           검색수: {count}건
-        </Col>
+        </div>
         {adminIds.includes(currentUser) && (
-          <Col className='text-end'>
-            <Button size='sm' as={Link} to="/community/notice/insert">글쓰기</Button>
-          </Col>
+          <div>
+            <Link to="/community/notice/insert" className="write-button">글쓰기</Link>
+          </div>
         )}
-      </Row>
-      <Table>
+      </div>
+      <table className="notice-table">
         <thead>
           <tr>
             <th>번호</th>
-            <th>카테고리</th>
             <th>제목</th>
-            <th>작성일</th>
+            <th>등록일</th>
           </tr>
         </thead>
         <tbody>
           {list.map((item, index) => (
             <tr key={item.notice_key}>
               <td>{(page - 1) * size + index + 1}</td>
-              <td>{item.notice_type === 1 ? '일반' : item.notice_type === 2 ? '회원' : '이벤트'}</td>
-              <td>
-                <Link to={`/community/notice/read/${item.notice_key}`}>{item.notice_title}</Link>
+              <td className="title-cell">
+                {getBadge(item.notice_type)}{" "}
+                <Link to={`/community/notice/read/${item.notice_key}`} className="notice-link">{item.notice_title}</Link>
               </td>
-              <td>{item.notice_regDate}</td>
+              <td>{item.fmtdate}</td>
             </tr>
           ))}
         </tbody>
-      </Table>
+      </table>
       {count > size && (
         <Pagination
           activePage={page}
@@ -95,7 +111,9 @@ const NoticeList = () => {
           pageRangeDisplayed={5}
           prevPageText={"‹"}
           nextPageText={"›"}
-          onChange={(e) => setPage(e)}
+          onChange={(pageNumber) => setPage(pageNumber)}
+          itemClass="page-item"
+          linkClass="page-link"
         />
       )}
     </div>

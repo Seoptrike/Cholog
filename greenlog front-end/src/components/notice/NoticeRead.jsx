@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { Button, Card } from 'react-bootstrap';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import './NoticeRead.css'; // CSS 파일 추가
 
 const NoticeRead = () => {
   const { notice_key } = useParams();
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     notice_key: '',
     notice_title: '',
@@ -14,7 +15,7 @@ const NoticeRead = () => {
     notice_vcnt: 0
   });
 
-  const { notice_title, notice_contents, notice_writer, notice_regDate, notice_vcnt } = form;
+  const { notice_title, notice_contents, notice_writer, notice_regDate } = form;
 
   // 관리자 아이디 목록
   const adminIds = ['admin', 'seop', 'hanna', 'gr001231', 'laonmiku', 'ne4102'];
@@ -48,23 +49,29 @@ const NoticeRead = () => {
   };
 
   return (
-    <div className="d-flex justify-content-center">
-      <Card style={{ width: '50rem' }} className="mt-5">
-        <Card.Body>
-          <Card.Title>{notice_title}</Card.Title>
-          <Card.Subtitle className="mb-2 text-muted">작성자: {notice_writer}</Card.Subtitle>
-          <Card.Subtitle className="mb-2 text-muted">작성일: {notice_regDate}</Card.Subtitle>
-          <Card.Text>{notice_contents}</Card.Text>
-          {adminIds.includes(currentUser) && (
-            <>
-              <Link to={`/community/notice/update/${notice_key}`}>
-                <Button className='me-2'>수정</Button>
-              </Link>
-              <Button onClick={onDelete}>삭제</Button>
-            </>
-          )}
-        </Card.Body>
-      </Card>
+    <div className="notice-read-container">
+      <div className="notice-header">
+        <h2>{notice_title}</h2>
+        <div className="notice-meta">
+          <span>작성자: {notice_writer}</span>
+          <span>작성일: {notice_regDate}</span>
+        </div>
+        <hr className="divider" />
+      </div>
+      <div className="notice-content">
+        <p>{notice_contents}</p>
+      </div>
+      {adminIds.includes(currentUser) && (
+        <div className="notice-actions">
+          <Link to={`/community/notice/update/${notice_key}`}>
+            <button className="btn">수정</button>
+          </Link>
+          <button className="btn" onClick={onDelete}>삭제</button>
+        </div>
+      )}
+      <div className="notice-navigation">
+        <button className="btn" onClick={() => navigate('/community/notice/list.json')}>목록</button>
+      </div>
     </div>
   );
 };

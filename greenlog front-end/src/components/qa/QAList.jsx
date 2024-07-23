@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Pagination from 'react-js-pagination';
-import { Row, Col, InputGroup, Button, Table, Form } from 'react-bootstrap';
 import axios from 'axios';
 import HeaderTabs from '../../common/useful/HeaderTabs';
+import './QAList.css'; // CSS 파일 추가
+import '@fortawesome/fontawesome-free/css/all.min.css'; // FontAwesome 아이콘 사용
 
 const QAList = () => {
   const [list, setList] = useState([]);
@@ -28,42 +29,42 @@ const QAList = () => {
 
   useEffect(() => {
     callAPI();
-  }, [page]);
+  }, [page, key, word]);
 
   const onClickSearch = async (e) => {
     e.preventDefault();
-    setPage(1); 
+    setPage(1);
     callAPI();
   };
 
   return (
-    <div>
+    <div className="qa-list-container">
       <HeaderTabs />
       <h1 className="text-center my-5">Q&A</h1>
-      <Row className="mb-3">
-        <Col md={10}>
-          <InputGroup >
-            <Form.Select className='me-2' value={key} onChange={(e) => setKey(e.target.value)}>
-              <option value="qa_title">제목</option>
-              <option value="qa_contents">내용</option>
-              <option value="qa_writer">글쓴이</option>
-            </Form.Select>
-            <Form.Control placeholder='검색어' value={word} onChange={(e) => setWord(e.target.value)} />
-            <Button onClick={(e) => onClickSearch(e)} >검색</Button>
-          </InputGroup>
-        </Col>
-        <Col>
-          검색수: {count}건
-        </Col>
-        {sessionStorage.getItem('uid') &&
-          <Col className='text-end'>
+      <div className="search-container">
+        <div className="search-input-group">
+          <select className='me-2' value={key} onChange={(e) => setKey(e.target.value)}>
+            <option value="qa_title">제목</option>
+            <option value="qa_contents">내용</option>
+            <option value="qa_writer">글쓴이</option>
+          </select>
+          <input type="text" placeholder='검색어' value={word} onChange={(e) => setWord(e.target.value)} />
+          <button className="search-button" onClick={(e) => onClickSearch(e)}>
+            <i className="fas fa-search"></i>
+          </button>
+        </div>
+        <div className="search-info">
+          {currentUser && (
             <Link to="/community/qa/insert">
-              <Button size='sm'>질문하기</Button>
+              <button className="write-button">글쓰기</button>
             </Link>
-          </Col>
-        }
-      </Row>
-      <Table className='text-center'>
+          )}
+        </div>
+      </div>
+      <div className="search-count">
+        <span>검색수: {count}건</span>
+      </div>
+      <table className="qa-table">
         <thead>
           <tr>
             <th>번호</th>
@@ -75,20 +76,20 @@ const QAList = () => {
         <tbody>
           {list.map((post, index) => (
             <tr key={post.QA_key}>
-              <td>{list.length - index}</td>
+              <td>{count - ((page - 1) * size + index)}</td>
               <td>
                 {post.QA_lock === 1 && !adminIds.includes(currentUser) && currentUser !== post.QA_writer ? (
                   <span>🔒 비밀글</span>
                 ) : (
-                  <Link to={`/community/qa/read/${post.QA_key}`}>{post.QA_title}</Link>
+                  <Link to={`/community/qa/read/${post.QA_key}`} className="link-no-style">{post.QA_title}</Link>
                 )}
               </td>
               <td>{post.QA_writer}</td>
-              <td>{post.QA_regDate}</td>
+              <td>{post.fmtdate}</td>
             </tr>
           ))}
         </tbody>
-      </Table>
+      </table>
       {count > size &&
         <Pagination
           activePage={page}
@@ -97,7 +98,7 @@ const QAList = () => {
           pageRangeDisplayed={5}
           prevPageText={"‹"}
           nextPageText={"›"}
-          onChange={(e) => setPage(e)}
+          onChange={(pageNumber) => setPage(pageNumber)}
         />
       }
     </div>
