@@ -106,4 +106,9 @@ public class BBSDAOImpl implements BBSDAO {
 		session.update(NAMESPACE + ".updatePhoto", vo);
 	}
 
+	@Override
+	public List<HashMap<String, Object>> noticeList() {
+		return session.selectList(NAMESPACE + ".noticeList");
+	}
+
 }

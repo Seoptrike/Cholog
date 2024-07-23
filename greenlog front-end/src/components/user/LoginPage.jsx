@@ -79,7 +79,7 @@ const LoginPage = () => {
                                 </InputGroup >
                                 <InputGroup>
                                     <InputGroup.Text style={{ backgroundColor: "#002412", color: 'white' }} className='justify-content-center w-25'><b>PW</b></InputGroup.Text>
-                                    <Form.Control name="user_upass" value={user_upass} onChange={onChangeForm} />
+                                    <Form.Control type="password" name="user_upass" value={user_upass} onChange={onChangeForm} />
                                 </InputGroup>
                                 <Button style={{ backgroundColor: "#2BBEC6", borderColor: "#2BBEC6", color: 'white' }} className='w-100 mt-2' onClick={() => onClickLogin(form)} ><b>로그인</b></Button>
                                 <div className='text-center mt-2'>

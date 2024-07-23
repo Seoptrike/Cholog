@@ -40,4 +40,6 @@ public interface BBSDAO {
 
 	public void updatePhoto(BBSPhotoVO vo);
 
+	public List<HashMap<String, Object>> noticeList();
+
 }

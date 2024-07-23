@@ -58,8 +58,11 @@ const MainPage = () => {
             </div>
             <Row>
                 <Col xs={3}>
-                    <div style={textStyle}>
-                        <span style={{ fontSize: "2.5rem" }}>GREENLOG Project</span>
+                    <div style={textStyle} className='text-center'>
+                        <span style={{ fontSize: "2.5rem" }}>
+                        PROJECT
+                        <img src="/images/green.png" alt="Icon" style={{ width: "2.5rem", marginRight: "0.5rem" }} />
+                        </span>
                         <br />
                         <span style={{ fontSize: "0.8rem" }}>GREENLOG carry out projects with clear goals regarding domestic and global environmental issues.</span>
                     </div>
@@ -81,7 +84,6 @@ const MainPage = () => {
             </Row>
             <Row>
                 <Col xs={2}>
-                    <div className='text-center'>환경 주요뉴스</div>
                     <Articles />
                 </Col>
                 <Col xs={10}>

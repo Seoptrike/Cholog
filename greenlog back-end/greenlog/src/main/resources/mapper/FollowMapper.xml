@@ -14,11 +14,8 @@
 		select f.*,u.user_nickname,u.user_uid,u.user_img 
 		from follow f,user u 
 		 <where>
-	        <if test="key == 'nickname'">
-	          (follow_to=user_uid and follow_from = #{uid}) and user_nickname like concat('%', #{word}, '%') 
-	        </if>
 	        <if test="key == 'id'">
-	          (follow_to=user_uid and follow_from = #{uid}) and user_uid like concat('%', #{word}, '%') 
+	          (follow_to=user_uid and follow_from = #{uid}) and (user_nickname like concat('%', #{word}, '%') or user_uid like concat('%', #{word}, '%'))
 	        </if>
     	</where>
 		order by follow_date desc
@@ -29,11 +26,8 @@
 		select count(*) 
 		from follow f,user u
 		 <where>
-	        <if test="key == 'nickname'">
-	          (follow_to=user_uid and follow_from = #{uid}) and user_nickname like concat('%', #{word}, '%') 
-	        </if>
 	        <if test="key == 'id'">
-	          (follow_to=user_uid and follow_from = #{uid}) and user_uid like concat('%', #{word}, '%') 
+	          (follow_to=user_uid and follow_from = #{uid}) and (user_nickname like concat('%', #{word}, '%') or user_uid like concat('%', #{word}, '%'))
 	        </if>
     	</where>
     	order by follow_date desc
@@ -45,11 +39,8 @@
 		select f.*,u.user_nickname,u.user_uid,u.user_img
 		from follow f,user u
 		<where>
-			<if test="key == 'nickname'">
-				(follow_from=user_uid and follow_to = #{uid}) and user_nickname like concat('%', #{word}, '%')
-			</if>
 			<if test="key == 'id'">
-				(follow_from=user_uid and follow_to = #{uid}) and user_uid like concat('%', #{word}, '%')
+				(follow_from=user_uid and follow_to = #{uid}) and (user_nickname like concat('%', #{word}, '%') or user_uid like concat('%', #{word}, '%') )
 			</if>
 		</where>
 		order by follow_date desc
@@ -60,11 +51,8 @@
 		select count(*) 
 		from follow f,user u
 		<where>
-			<if test="key == 'nickname'">
-				(follow_from=user_uid and follow_to = #{uid}) and user_nickname like concat('%', #{word}, '%')
-			</if>
 			<if test="key == 'id'">
-				(follow_from=user_uid and follow_to = #{uid}) and user_uid like concat('%', #{word}, '%')
+				(follow_from=user_uid and follow_to = #{uid}) and (user_nickname like concat('%', #{word}, '%') or user_uid like concat('%', #{word}, '%') )
 			</if>
 		</where>
     	order by follow_date desc

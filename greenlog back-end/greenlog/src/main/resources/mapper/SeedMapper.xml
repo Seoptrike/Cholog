@@ -3,12 +3,12 @@
 <mapper namespace="com.example.mapper.SeedMapper">
 
 	<select id="list" resultType="hashmap">
-	    select s.*, u.user_nickname, u.user_img 
+	    select s.*, u.user_nickname, u.user_img,u.user_uname 
 	    from seed s
 	    join user u on s.seed_uid = u.user_uid 
 	    <where>
 	        <if test="key == 'id'">
-	            (seed_point > 0 and (user_uid like concat('%', #{word}, '%') or user_nickname like concat('%', #{word}, '%')))
+	            (seed_point > -1 and (user_uid like concat('%', #{word}, '%') or user_nickname like concat('%', #{word}, '%')))
 	        </if>
 	    </where>
 	    order by s.seed_key desc
@@ -20,7 +20,7 @@
 		join user u on s.seed_uid= u.user_uid 
 		<where>
 	        <if test="key == 'id'">
-	            (seed_point > 0 and (user_uid like concat('%', #{word}, '%') or user_nickname like concat('%', #{word}, '%')))
+	            (seed_point > -1 and (user_uid like concat('%', #{word}, '%') or user_nickname like concat('%', #{word}, '%')))
 	        </if>
 	    </where>
 	</select>

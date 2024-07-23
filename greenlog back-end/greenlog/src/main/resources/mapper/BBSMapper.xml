@@ -8,7 +8,7 @@
     </insert>
    <update id="update">
 		update BBS
-		set bbs_title= #{bbs_title}, bbs_contents=#{bbs_contents}, bbs_type= #{bbs_type},bbs_photo=#{bbs_photo}
+		set bbs_title= #{bbs_title}, bbs_contents=#{bbs_contents}, bbs_type= #{bbs_type}
 		where bbs_key=#{bbs_key}
 	</update>
    <delete id="delete">
@@ -68,6 +68,10 @@
 	</update>
 	  <select id="topList" resultType="hashmap">
         select *, date_format(bbs_regDate, '%Y.%m.%d') as fmtdate from BBS order by bbs_vcnt desc limit 3
+    </select>
+    
+     <select id="noticeList" resultType="hashmap">
+        select *, date_format(bbs_regDate, '%Y.%m.%d') as fmtdate from BBS where bbs_type=2 order by bbs_vcnt desc
     </select>
     
    	<insert id="insertPhoto">

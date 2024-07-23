@@ -9,7 +9,6 @@
 		#{auction_mall_key})
 	</insert>
 
-
 	<select id="userAList" resultType="hashmap">
 		select *, date_format(auction_regDate,'%Y-%m-%d %T') as fmtdate
 		from
@@ -27,10 +26,7 @@
 				and auction_seller like concat('%', #{word}, '%')
 			</if>
 			<if test="key == 'auction_regDate'">
-				and auction_regDate like concat('%', #{word}, '%')
-			</if>
-			<if test="key == 'auction_6month'">
-				and auction_regDate > date_sub(curdate(), interval 6 month)
+				and #{date2}>auction_regDate and auction_regDate>#{date1}
 			</if>
 		order by auction_regDate desc limit #{start}, #{size}
 	</select>
@@ -47,21 +43,16 @@
 			</if>
 			<if test="key == 'auction_seller'">
 				and auction_seller = #{uid}
-				and auction_buyer like concat('%', #{word}, '%')
+				and auction_seller like concat('%', #{word}, '%')
 			</if>
 			<if test="key == 'auction_buyer'">
-				and auction_buyer=#{uid} 
+				and auction_buyer= #{uid}
 				and auction_seller like concat('%', #{word}, '%')
 			</if>
 			<if test="key == 'auction_regDate'">
-				and auction_regDate like concat('%', #{word}, '%')
+				and #{date2}>auction_regDate and auction_regDate>#{date1}
 			</if>
 	</select>
-
-	
-
-
-
 
 	<select id="adminAList" resultType="hashmap">
 		select *, date_format(auction_regDate,'%Y.%m.%d %T') as fmtdate from

@@ -30,6 +30,8 @@ public class AuctionImpl implements AuctionDAO {
 		map.put("size", vo.getSize());
 		map.put("word", vo.getWord());
 		map.put("key", vo.getKey());
+		map.put("date1", vo.getDate1());
+		map.put("date2", vo.getDate2());
 		return session.selectList(namespace + ".userAList", map);
 	}
 
@@ -39,6 +41,8 @@ public class AuctionImpl implements AuctionDAO {
 		map.put("uid", uid);
 		map.put("word", vo.getWord());
 		map.put("key", vo.getKey());
+		map.put("date1", vo.getDate1());
+		map.put("date2", vo.getDate2());
 		return session.selectOne(namespace + ".total", map);
 	}
 
@@ -49,6 +53,8 @@ public class AuctionImpl implements AuctionDAO {
 		map.put("size", vo.getSize());
 		map.put("word", vo.getWord());
 		map.put("key", vo.getKey());
+		map.put("date1", vo.getDate1());
+		map.put("date2", vo.getDate2());
 		return session.selectList(namespace + ".adminAList", map);
 	}
 
@@ -59,12 +65,14 @@ public class AuctionImpl implements AuctionDAO {
 		map.put("size", vo.getSize());
 		map.put("word", vo.getWord());
 		map.put("key", vo.getKey());
+		map.put("date1", vo.getDate1());
+		map.put("date2", vo.getDate2());
 		return session.selectOne(namespace + ".admintotal", map);
 	}
 
 	@Override
 	public void updateState1(int auction_key) {
 		session.update(namespace + ".stateUpdate1", auction_key);
-		
+
 	}
 }
