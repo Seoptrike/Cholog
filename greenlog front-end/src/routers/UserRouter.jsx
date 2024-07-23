@@ -6,7 +6,6 @@ import MyPage from '../components/user/MyPage'
 import Dashboard from '../components/admin/Dashboard'
 import UserListPage from '../components/admin/UserListPage'
 import Question from '../components/admin/Question'
-import SeedPage from '../components/admin/SeedPage'
 import SeedWallet from '../components/user/SeedWallet'
 import SearchIdPage from '../components/user/SearchIdPage'
 import SearchPassPage from '../components/user/SearchPassPage'
@@ -37,7 +36,6 @@ const UserRouter = () => {
       <Route path='admin/question' element={<Question />} />
       <Route path='admin/update/:user_uid' element={<AdminUpdate />} />
       <Route path='admin/read/:user_uid' element={<AdminReadPage />} />
-      <Route path='admin/seed/list.json' element={<SeedPage />} />
       <Route path='admin/report' element={<ReportPage/>}/>
       <Route path='wallet/:user_uid' element={<SeedWallet />} />
       <Route path='searchId' element={<SearchIdPage />} />
