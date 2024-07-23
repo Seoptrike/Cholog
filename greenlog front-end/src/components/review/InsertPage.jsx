@@ -3,17 +3,11 @@ import { Row, Col, Button, Form } from 'react-bootstrap';
 import { Rating } from '@mui/material';
 import axios from 'axios';
 import { TbBrandSnapseed } from "react-icons/tb";
-import './ReviewPage.css'; // Import the updated CSS file
+import './ReviewPage.css';
 import { Link } from 'react-router-dom';
 
 const InsertPage = ({ mall_key, mall_seller, mall_photo }) => {
     const uid = sessionStorage.getItem('uid');
-
-    useEffect(() => {
-        if (uid === mall_seller) {
-            alert('자신의 게시글에는 댓글을 달 수 없습니다.');
-        }
-    }, [uid, mall_seller]);
 
     const [form, setForm] = useState({
         review_mall_key: mall_key,
@@ -36,6 +30,16 @@ const InsertPage = ({ mall_key, mall_seller, mall_photo }) => {
 
     const onSubmit = async (e) => {
         e.preventDefault();
+        const uid = sessionStorage.getItem('uid');
+        if(uid===mall_seller) {
+            alert("자신의 게시글에는 리뷰를 남길 수 없습니다.");
+            return;
+        }
+        if(!uid) {
+            alert("로그인이 필요합니다.");
+            return;
+        }
+
         if (review_contents === '' && review_rating === 0) {
             alert("리뷰나 포인트를 클릭하세요");
             return;
@@ -98,8 +102,8 @@ const InsertPage = ({ mall_key, mall_seller, mall_photo }) => {
                                         className="form-control-textarea"
                                     />
                                     <div className="button-group">
-                                        <Button type='submit' className='button button-submit' disabled={uid === mall_seller}>등록</Button>
-                                        <Button type='reset' className='button button-cancel' onClick={onClickCancel} disabled={!onCancel}>취소</Button>
+                                        <Button type='submit' variant='success' className='button button-submit'>등록</Button>
+                                        <Button type='reset' variant='success' className='button button-cancel' onClick={onClickCancel} disabled={!onCancel}>취소</Button>
                                     </div>
                                 </div>
                             </div>
@@ -107,7 +111,6 @@ const InsertPage = ({ mall_key, mall_seller, mall_photo }) => {
                     </div>
                 </Col>
             </Row>
-            <hr />
         </div>
     );
 };

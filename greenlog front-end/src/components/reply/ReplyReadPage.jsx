@@ -2,24 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { Row, Col, Button, Card, Dropdown, } from 'react-bootstrap';
 import { SlLock, SlLockOpen } from "react-icons/sl";
 import Pagination from 'react-js-pagination';
-import { BsChevronDown, BsThreeDotsVertical } from "react-icons/bs";
+import { BsThreeDotsVertical } from "react-icons/bs";
 import axios from 'axios';
 import RereplyPage from '../rereply/RereplyPage';
 import ReplyReaction from './ReplyReaction';
 import ReportInsert from '../report/ReportInsert';
 import { Link } from 'react-router-dom';
-import RereplyCount from './RereplyCount';
 
 const ReplyReadPage = ({ reply, bbs_writer, setReply, callCount, callList }) => {
     const uid = sessionStorage.getItem('uid');
-    console.log(reply)
-    //const reply_bbs_key = bbs_key;
     const [page, setPage] = useState(1);
     const [size, setSize] = useState(3);
     const [key, setKey] = useState('reply_regdate desc');
     const [count, setCount] = useState(0);
-    const [showRep, setShowRep] = useState({});
-    const [rereplyCount, setRereplyCount] = useState("")
+
     const root = "reply";
 
     const onKey = (key) => {
@@ -74,13 +70,6 @@ const ReplyReadPage = ({ reply, bbs_writer, setReply, callCount, callList }) => 
     const onCancel = (reply_key) => {
         const data = reply.map(reply => reply.reply_key === reply_key ? { ...reply, isEdit: false, text: reply.reply_contents, lock: reply.reply_lock } : reply);
         setReply(data);
-    };
-
-    const toggleRereply = (reply_key) => {
-        setShowRep(prevState => ({
-            ...prevState,
-            [reply_key]: !prevState[reply_key]
-        }));
     };
 
     return (
@@ -169,25 +158,15 @@ const ReplyReadPage = ({ reply, bbs_writer, setReply, callCount, callList }) => 
                             </div>
                             <div>
                                 <Row>
-                                    <Col>
-                                        <Button type='button' variant="" onClick={() => toggleRereply(reply.reply_key)}>
-                                            <RereplyCount reply_key={reply.reply_key} />
-                                        </Button>
+                                    <Col className='text-end' >
+                                        <ReplyReaction reply_key={reply.reply_key} uid={uid} /> 
                                     </Col>
-                                    <Col className='text-end'>
-                                        <ReplyReaction reply_key={reply.reply_key} uid={uid} />
-                                    </Col>
-                                </Row>
-                            </div>
-                            <hr />
-                            {showRep[reply.reply_key] && (
-                                <Row className='justify-content-center mt-3'>
                                     <Col xs={12}>
-                                        <RereplyPage reply_key={reply.reply_key} reply_writer={reply.reply_writer} />
-                                        <hr />
+                                        <RereplyPage bbs_writer={bbs_writer} reply_key={reply.reply_key} reply_writer={reply.reply_writer} /> 
                                     </Col>
                                 </Row>
-                            )}
+                                <hr />
+                            </div>
                         </Col>
                     </Row>
                 ))}

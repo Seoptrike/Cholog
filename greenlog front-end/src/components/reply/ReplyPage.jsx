@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Button, Card, Form, InputGroup } from 'react-bootstrap';
 import { BsChevronDown } from 'react-icons/bs';
-import ReplyInsertPage from './ReplyInsertPage';
 import ReplyReadPage from './ReplyReadPage';
 import axios from 'axios';
 import { SlLock, SlLockOpen } from "react-icons/sl";
@@ -62,26 +61,36 @@ const ReplyPage = ({ bbs_key, bbs_writer }) => {
 
     const onSubmit = async (e) => {
         e.preventDefault();
+        const uid = sessionStorage.getItem('uid');
+        if (!uid) {
+            alert("로그인이 필요합니다.");
+            return;
+        }
+
         if (reply_contents === '') {
             alert("댓글 내용을 입력해주세요!");
             return;
         }
-        if (!window.confirm("댓글을 등록하실래요?")) return;
 
+        if (!window.confirm("댓글을 등록하실래요?")) return;
+    
         try {
             await axios.post('/reply/insert', form);
             alert('댓글 등록 완료');
+    
             setForm({
                 reply_bbs_key: bbs_key,
-                reply_writer: sessionStorage.getItem('uid') || '',
+                reply_writer: uid,
                 reply_contents: '',
                 reply_lock: 'unlock',
                 reply_reaction: 'none'
             });
             setOnCancel(false);
+            
         } catch (error) {
             console.error('댓글 등록 에러:', error);
         }
+    
         callList();
         callCount();
     }
@@ -101,12 +110,12 @@ const ReplyPage = ({ bbs_key, bbs_writer }) => {
     return (
         <Row className='justify-content-center mt-3'>
             <Col xs={8}>
-                <h5 className='mt-5 text-center'></h5>
                 <Row className='justify-content-center mt-5'>
                     <Col>
                         <Button type='button' variant="" onClick={() => setShowReply(!showReply)}>
                             댓글 {replyCount} <BsChevronDown />
                         </Button>
+        
                     </Col>
                 </Row>
                 <hr />

@@ -7,9 +7,8 @@ import { Link } from 'react-router-dom';
 import RereplyReaction from './RereplyReaction';
 import ReportInsert from '../report/ReportInsert';
 
-const RereplyReadPage = ({ reply_key, reply_writer, callList, rereply, setRereply, callCount }) => {
+const RereplyReadPage = ({ reply_key, reply_writer, callList, rereply, setRereply, callCount, bbs_writer }) => {
     const uid = sessionStorage.getItem('uid');
-    const [count, setCount] = useState(0);
     const root = "rereply"
 
     // 삭제하기
@@ -82,12 +81,12 @@ const RereplyReadPage = ({ reply_key, reply_writer, callList, rereply, setRerepl
                                             <Link to={`/user/read/${uid}`}><span>{rereply.user_nickname} ({rereply.rereply_writer})</span></Link>
                                             {!rereply.isEdit && (
                                                 <>
-                                                    {(uid === rereply.rereply_writer || uid === reply_writer) && rereply.rereply_lock === 'lock' && (
+                                                    {(uid === rereply.rereply_writer || uid === bbs_writer) && rereply.rereply_lock === 'lock' && (
                                                         <span style={{ marginLeft: '8px', marginRight: '8px' }}>
                                                             <SlLock style={{ color: 'green' }} />
                                                         </span>
                                                     )}
-                                                    {(uid === rereply.rereply_writer || uid === reply_writer) && rereply.rereply_lock !== 'lock' && (
+                                                    {(uid === rereply.rereply_writer || uid === bbs_writer) && rereply.rereply_lock !== 'lock' && (
                                                         <span style={{ marginLeft: '8px', marginRight: '8px' }}>
                                                             <SlLockOpen style={{ color: 'black' }} />
                                                         </span>
@@ -95,13 +94,13 @@ const RereplyReadPage = ({ reply_key, reply_writer, callList, rereply, setRerepl
                                                 </>
                                             )}
 
-                                            {rereply.isEdit && (uid === rereply.rereply_writer || uid === reply_writer) && rereply.lock === 'lock' && (
+                                            {rereply.isEdit && (uid === rereply.rereply_writer || uid === bbs_writer) && rereply.lock === 'lock' && (
                                                 <span onClick={() => onChangeLock(rereply.rereply_key, rereply.lock)} style={{ cursor: 'pointer', marginLeft: '8px' }}>
                                                     <SlLock style={{ color: 'green' }} />
                                                 </span>
                                             )}
 
-                                            {rereply.isEdit && (uid === rereply.rereply_writer || uid === reply_writer) && rereply.lock !== 'lock' && (
+                                            {rereply.isEdit && (uid === rereply.rereply_writer || uid === bbs_writer) && rereply.lock !== 'lock' && (
                                                 <span onClick={() => onChangeLock(rereply.rereply_key, rereply.lock)} style={{ cursor: 'pointer', marginLeft: '8px' }}>
                                                     <SlLockOpen style={{ color: 'black' }} />
                                                 </span>
@@ -147,10 +146,12 @@ const RereplyReadPage = ({ reply_key, reply_writer, callList, rereply, setRerepl
                                                 onChange={(e) => onChangeContents(rereply.rereply_key, e.target.value)}
                                             />
                                         ) : (
-                                            rereply.lock === 'lock' && (uid !== rereply.rereply_writer && uid !== reply_writer) ? "비밀댓글입니다." : rereply.rereply_contents
+                                            rereply.lock === 'lock' && (uid !== rereply.rereply_writer && uid !== bbs_writer) ? "비밀댓글입니다." : rereply.rereply_contents
                                         )}
                                     </Col>
-                                    <Col className='text-end'> <RereplyReaction rereply_key={rereply.rereply_key} uid={uid} /></Col>
+                                    <Col className='text-end'>
+                                        <RereplyReaction rereply_key={rereply.rereply_key} uid={uid} />
+                                    </Col>
                                 </Row>
                             </div>
                             <hr />
