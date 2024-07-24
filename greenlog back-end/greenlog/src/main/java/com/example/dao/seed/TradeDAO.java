@@ -17,5 +17,7 @@ public interface TradeDAO {
 
 	public int adminListCount(QueryVO vo);
 	
-	public void updateStatus(int trade_key);
+	public void updateStatus1(int trade_key);
+	
+	public void updateStatus0(int trade_key);
 }

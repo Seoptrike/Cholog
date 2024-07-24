@@ -28,10 +28,14 @@
 	        <if test="key == null">
 	            t.trade_to = #{seed_number}
 	        </if>
+	        <if test="key == 'trade'">
+			(#{date2}>t.trade_date) and (t.trade_date>#{date1})
+		</if>
 	    </where>
 	    order by t.trade_date desc
 	    limit #{start}, #{size}
 	</select>
+	
 	
 	<select id="adminList" resultType="Hashmap">
 		 select t.*, s_to.seed_point as to_seed_point, s_from.seed_point as from_seed_point,
@@ -52,6 +56,12 @@
 	            (t.trade_state = 1 and (u_to.user_nickname like concat('%', #{word}, '%')))
 	            or  (t.trade_state = 1 and (u_to.user_uid like concat('%', #{word}, '%')))
 	        </if>
+	        <if test="key == 'trade'">
+			(#{date2}>t.trade_date) and (t.trade_date>#{date1})
+		</if>
+		<if test="key == 'status'">
+			t.trade_status=1
+		</if>
 	    </where>
 	    order by t.trade_date desc
 	    limit #{start}, #{size}
@@ -72,6 +82,12 @@
 	            (t.trade_state = 1 and (u_to.user_nickname like concat('%', #{word}, '%')))
 	            or  (t.trade_state = 1 and (u_to.user_uid like concat('%', #{word}, '%')))
 	        </if>
+	        <if test="key == 'trade'">
+			(#{date2}>t.trade_date) and (t.trade_date>#{date1})
+		</if>
+		<if test="key == 'status'">
+			t.trade_status=1
+		</if>
 	    </where>
 	</select>
 
@@ -82,6 +98,7 @@
     	join user u_from on s_from.seed_uid = u_from.user_uid
     	join user u_to on s_to.seed_uid = u_to.user_uid
 		 <where>
+		 t.trade_status= 0 and
         <if test="key == 'id'">
             ((t.trade_to = #{seed_number}) and u_from.user_nickname like concat('%', #{word}, '%'))
             or ((t.trade_to = #{seed_number}) and u_from.user_uid like concat('%', #{word}, '%'))
@@ -92,11 +109,18 @@
         <if test="key == null">
             t.trade_to = #{seed_number}
         </if>
+         <if test="key == 'trade'">
+			(#{date2}>t.trade_date) and (t.trade_date>#{date1})
+		</if>
    		</where>
 	</select>
 	
 	<update id="statusUpdate1">
 		update trade set trade_status=1 where trade_key=#{trade_key}
+	</update>
+	
+	<update id="statusUpdate0">
+		update trade set trade_status=0 where trade_key=#{trade_key}
 	</update>
 
 </mapper>

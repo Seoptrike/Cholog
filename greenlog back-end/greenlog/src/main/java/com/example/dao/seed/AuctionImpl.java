@@ -75,4 +75,10 @@ public class AuctionImpl implements AuctionDAO {
 		session.update(namespace + ".stateUpdate1", auction_key);
 
 	}
+
+	@Override
+	public void updateState0(int auction_key) {
+		session.update(namespace + ".stateUpdate0", auction_key);
+		
+	}
 }

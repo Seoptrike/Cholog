@@ -7,7 +7,10 @@ import { BrowserRouter } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import './common/useful/Slick.css'
+import './common/useful/Slick.css';
+import 'primereact/resources/themes/saga-blue/theme.css';  // 테마
+import 'primereact/resources/primereact.min.css';          // PrimeReact CSS
+import 'primeicons/primeicons.css'; 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

@@ -4,9 +4,10 @@ import TradeListPage from '../trade/TradeListPage'
 import axios from 'axios'
 import { Card, CardContent, Typography, Avatar, Box } from '@mui/material';
 import { TbBrandSnapseed } from 'react-icons/tb';
+import { useParams } from 'react-router-dom';
 
 const SeedWallet = () => {
-    const uid = sessionStorage.getItem("uid");
+    const {uid} =useParams();
     const [form, setForm] = useState({
         seed_point: '',
         seed_uid: '',

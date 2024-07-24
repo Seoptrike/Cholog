@@ -18,4 +18,7 @@ public interface AuctionDAO {
 	public int admintotal(QueryVO vo);
 	
 	public void updateState1(int auction_key);
+	
+	public void updateState0(int auction_key);
 }
+

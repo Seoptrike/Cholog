@@ -4,4 +4,6 @@ import java.util.*;
 
 public interface GraphDAO {
 	public List<HashMap<String,Object>> diaryChart();
+	
+	public List<HashMap<String,Object>> diaryChart2();
 }

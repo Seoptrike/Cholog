@@ -6,41 +6,59 @@ const DiaryChart = () => {
     const [data ,setData]= useState();
     const callAPI= async ()=>{
        const res= await axios.get('/graph/diary')
-       console.log(res.data)
-       let array=[];
-       array.push(['카테고리', '일기개수', '날짜'])
-       res.data.forEach(row=>array.push([row.diary_state, row.diary_count, row.diary_date]))
-       setData(array);
+       try{
+        const diaryData=[['date', 'daily dairy count', 'monthly diary count']]
+        const monthlyCounts={};
+        let lastMonth = '';
+
+        res.data.forEach(d=>{
+          const date = d.diary_date;
+          const month = date.slice(0,7);
+           
+          if (!monthlyCounts[month]) {
+            monthlyCounts[month] = d.monthly_count;
+            lastMonth = month;
+          }
+          // 월이 바뀌면 이전 월의 값을 넣지 않도록 설정
+          const monthlyCountForDay = month === lastMonth ? d.monthly_count : null;
+
+          diaryData.push([date, d.diary_count, monthlyCountForDay]);
+        });
+
+        setData(diaryData);
+       }catch(error){
+        console.error('Error fetching data:', error);
+       }
     }
 
     useEffect(()=>{
         callAPI();
     },[])
 
-    // const data = [
-    //     ["Year", "Sales", "Expenses", "Profit"],
-    //     ["2014", 1000, 400, 200],
-    //     ["2015", 1170, 460, 250],
-    //     ["2016", 660, 1120, 300],
-    //     ["2017", 1030, 540, 350],
-    // ];
 
    const options = {
-        title: "Population of Largest U.S. Cities",
-        chartArea: { width: "50%" },
-        colors: ["#b0120a", "#ffab91"],
-        hAxis: {
-          title: "Total Population",
-          minValue: 0,
-        },
-        vAxis: {
-          title: "City",
-        },
-      };
+    // Material design options
+    chart: {
+      title: "Diary count chart",
+      subtitle: "group by diary_regDate",
+    },
+    seriesType: 'line',
+          series: { 1: { type: 'bars' } },
+          vAxes: {
+            0: { title: 'Daily Count' },
+            1: { title: 'Monthly Count' },
+          },
+          hAxis: {
+            title: 'Date',
+            format: 'yyyy-MM-dd',
+          },
+          interpolateNulls: true,
+
+  };
 
     return (
         <Chart
-            chartType="BarChart"
+            chartType="ComboChart"
             width="100%"
             height="400px"
             data={data}

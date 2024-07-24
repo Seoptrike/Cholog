@@ -8,9 +8,9 @@ import '../../common/useful/Paging.css';
 import { Link } from 'react-router-dom';
 import { Calendar } from 'primereact/calendar';
 
+
 const AuctionList = () => {
-    //상품명과 이미지 넣기
-    //처리상태 영구삭제요청 넣기(관리자에서 직접 해줄수있게끔)
+
     const uid = sessionStorage.getItem("uid")
     const [count, setCount] = useState(0);
     const [list, setList] = useState([]);
@@ -31,7 +31,7 @@ const AuctionList = () => {
         console.log(res.data);
     }
 
-    //console.log(dates[0], dates[1])
+  
     const onSubmit = (e) => {
         e.preventDefault();
         setPage(1);
@@ -43,6 +43,7 @@ const AuctionList = () => {
         callAPI()
     }, [page])
 
+    //체크박스
     useEffect(() => {
         let cnt = 0;
         list.forEach(list => list.checked && cnt++);
@@ -60,22 +61,28 @@ const AuctionList = () => {
         setList(data);
     }
 
-    const onClickDelete = () => {
+//데이터삭제(update auction_state=1)
+    const onClickDelete = async () => {
         if (!window.confirm("거래내역은 복구하기 어렵습니다. 삭제하시겠습니까?")) return;
+        
+        const checkedItems = list.filter(item => item.checked);
+        if (checkedItems.length === 0) {
+            alert("선택하신 내역이 없습니다.");
+            return;
+        }
+    
         let cnt = 0;
-        list.forEach(async list => {
-            if (list.checked) {
-                await axios.post(`/auction/delete/${list.auction_key}`);
-                cnt++
+        for (const item of checkedItems) {
+            await axios.post(`/auction/delete/${item.auction_key}`);
+            cnt++;
+        }
+    
+        alert(`${cnt}개의 거래내역이 삭제되었습니다.`);
+        callAPI();
+        setPage(1);
+    };
 
-                if (cnt === checked) {
-                    alert(`${cnt}개 거래내역 삭제되었습니다`);
-                    callAPI();
-                    setPage(1);
-                }
-            }
-        })
-    }
+//달력날짜표시
     function fmtDate(dateString) {
         const date = new Date(dateString);
         const year = date.getFullYear();
@@ -84,14 +91,22 @@ const AuctionList = () => {
         return `${year}-${month}-${day}`;
     }
 
-    console.log(fmtDate(date1))
-    console.log(fmtDate(date2))
+    function fmtDate2(dateString) {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = ('0' + (date.getMonth() + 1)).slice(-2);
+        const day = ('0' + date.getDate()).slice(-2);
+        const hours = '23';
+        const minutes = '59';
+        const seconds = '59';
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
+
 
     const onChangedate = (e) => {
         setDates(e.value);
         setDate1(fmtDate(e.value[0]))
-        setDate2(fmtDate(e.value[1]))
-        //console.log("date1=" + e.value[0] + "......................................." + "date2=" + e.value[1])
+        setDate2(fmtDate2(e.value[1]))
     };
 
     return (
@@ -99,7 +114,7 @@ const AuctionList = () => {
             <Col>
                 <h1 className='text-center my-5'>개인경매목록</h1>
                 <Row className='justify-content-center mt-3'>
-                    <Col lg={8}>
+                    <Col lg={5}>
                         <form onSubmit={onSubmit}>
                             <InputGroup className="mb-5">
                                 <Col>
@@ -107,10 +122,10 @@ const AuctionList = () => {
                                         <option value="null">전체</option>
                                         <option value="auction_seller">판매한거래</option>
                                         <option value="auction_buyer">구매한거래</option>
-                                        <option value="auction_regDate">거래일지정</option>
+                                        <option value="auction_regDate">거래일</option>
                                     </Form.Select>
                                 </Col>
-                                {key === "auction_regDate" &&
+                                {key === "auction_regDate"&&
                                     <Calendar value={dates} onChange={onChangedate} selectionMode="range" dateFormat="yy/mm/dd" readOnlyInput hideOnRangeSelection />
                                 }
                                 <Button type="submit" size="sm">검색</Button>
@@ -123,7 +138,7 @@ const AuctionList = () => {
                     <Table>
                         <thead>
                             <tr>
-                                <td><input type="checkbox" onClick={onChangeAll} checked={list.length === checked} /></td>
+                               {count===0 || <td><input type="checkbox" onClick={onChangeAll} checked={list.length === checked} /></td>}
                                 <td>번호</td>
                                 <td colSpan={2}>상품명</td>
                                 <td>거래내역</td>

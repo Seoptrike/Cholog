@@ -10,7 +10,9 @@ const Sidebar = () => {
         { name: "씨드월렛관리", path: "/admin/seed/list.json"},
         { name: "씨드내역관리", path: "/trade/admin/list.json"},
         { name: "경매관리", path: "/auction/admin/list.json"},
-        { name: "1:1/신고접수/Q&A", path: "/admin/question#notice"}
+        { name: "1:1/신고접수/Q&A", path: "/admin/question#notice"},
+        { name: "FAQ", path: "/community/faq/list.json"},
+        { name: "공지사항", path: "/community/notice/list.json"}
       ];
   return (
     <div>

@@ -42,6 +42,11 @@ public class TradeController {
 	
 	@PostMapping("/update/{trade_key}")
 	public void updateStatus(@PathVariable("trade_key") int trade_key) {
-		tdao.updateStatus(trade_key);
+		tdao.updateStatus1(trade_key);
+	}
+	
+	@PostMapping("/restore/{trade_key}")
+	public void updateStatus0(@PathVariable("trade_key") int trade_key) {
+		tdao.updateStatus0(trade_key);
 	}
 }

@@ -28,6 +28,8 @@ const AdminSeedPage = () => {
     useEffect(() => {
         callAPI();
     }, [page]);
+
+    
     return (
         <div>
             <Row className='justify-content-center mt-3'>
@@ -91,6 +93,7 @@ const AdminSeedPage = () => {
                                         입니다
                                     </Typography>
                                     <Link to={`/user/wallet/${seed.seed_uid}`}> <Button size="sm">거래내역 {seed.seed_uid}</Button></Link>
+
                                 </Box>
                             </CardContent>
                         </Card>
