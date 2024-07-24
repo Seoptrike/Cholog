@@ -1,36 +1,79 @@
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import { Button, Col, Row } from 'react-bootstrap'
+import React, { useEffect, useState } from 'react';
+import { Container, Card, CardContent, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, Box } from '@mui/material';
+import axios from 'axios';
 
 const AskList = () => {
-    const [chk, setchk] = useState('');
+    const [chk, setChk] = useState('');
     const uid = sessionStorage.getItem("uid");
+    const [list, setList] = useState('');
     const onClickAsk = async () => {
-        if (chk) {
-            window.location.href = `/user/chat`
+        if (chk === 0) {
+            window.location.href = `/user/chat`;
+            await axios.post("/chat/insert", { chat_sender: uid });
         } else {
-            await axios.post("/chat/insert", { chat_sender: uid })
-            window.location.href = `/user/chat`
+            window.location.href = `/user/chat`;
         }
-
     }
+
     const callAPI = async () => {
         const res = await axios.get(`/chat/searchChatkey/${uid}`);
+        const res2 = await axios.get(`/chat/ulist/${uid}`)
         console.log(res.data);
-        setchk(res.data)
+        setChk(res.data);
+        setList(res2.data.doc)
     }
-    useEffect(() => { callAPI() }, [])
+
+    useEffect(() => {
+        callAPI();
+    }, [uid]);
 
     return (
-        <div className='my-5'>
-            <Row>
-                <Col className='text-center'>
-                    <h1>1대1 문의</h1>
-                    <Button onClick={onClickAsk}>문의하러가기</Button>
-                </Col>
-            </Row>
-        </div>
-    )
+        <Container sx={{ my: 5 }}>
+            <Card sx={{ maxWidth: 600, mx: 'auto', p: 3 }}>
+                <CardContent>
+                    <Typography variant="h5" component="div" gutterBottom align="center">
+                        1대1 문의 내역
+                    </Typography>
+                    {list.length > 0 ? (
+                        <TableContainer>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>no</TableCell>
+                                        <TableCell>문의일자</TableCell>
+                                        <TableCell>상태</TableCell>
+                                        <TableCell>대화내용보기</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {list.map((l, index) => (
+                                        <TableRow key={l.chat_key}>
+                                            <TableCell>{index + 1}</TableCell>
+                                            <TableCell>{l.chat_sendTime}</TableCell>
+                                            <TableCell>{l.chat_state === "미처리" ? "문의중" : "문의완료"}</TableCell>
+                                            <TableCell>{l.chat_state === "미처리" ? (
+                                                <Button variant="contained" color="primary" onClick={onClickAsk}>
+                                                    대화내용보기
+                                                </Button>
+                                            ) : (
+                                                "대화내용보기"
+                                            )}</TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    ) : (
+                        <Box textAlign="center" mt={3}>
+                            <Button variant="contained" color="primary" size="large" onClick={onClickAsk}>
+                                문의하러가기
+                            </Button>
+                        </Box>
+                    )}
+                </CardContent>
+            </Card>
+        </Container>
+    );
 }
 
-export default AskList
+export default AskList;
