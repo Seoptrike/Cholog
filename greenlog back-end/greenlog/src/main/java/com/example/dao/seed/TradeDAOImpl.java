@@ -29,6 +29,8 @@ public class TradeDAOImpl implements TradeDAO {
 		map.put("size", vo.getSize());
 		map.put("key", vo.getKey());
 		map.put("word", vo.getWord());
+		map.put("date1", vo.getDate1());
+		map.put("date2", vo.getDate2());
 		return session.selectList(namespace + ".userList", map);
 	}
 
@@ -40,6 +42,8 @@ public class TradeDAOImpl implements TradeDAO {
 		map.put("size", vo.getSize());
 		map.put("key", vo.getKey());
 		map.put("word", vo.getWord());
+		map.put("date1", vo.getDate1());
+		map.put("date2", vo.getDate2());
 		return session.selectOne(namespace + ".userListCount", map);
 	}
 
@@ -54,8 +58,14 @@ public class TradeDAOImpl implements TradeDAO {
 	}
 
 	@Override
-	public void updateStatus(int trade_key) {
+	public void updateStatus1(int trade_key) {
 		session.update(namespace + ".statusUpdate1", trade_key);
+		
+	}
+
+	@Override
+	public void updateStatus0(int trade_key) {
+		session.update(namespace + ".statusUpdate0", trade_key);
 		
 	}
 

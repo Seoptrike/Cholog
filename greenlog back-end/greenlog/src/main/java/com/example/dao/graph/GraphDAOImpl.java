@@ -19,4 +19,10 @@ public class GraphDAOImpl implements GraphDAO{
 		return session.selectList(namespace + ".diaryCount");
 	}
 
+	@Override
+	public List<HashMap<String, Object>> diaryChart2() {
+		
+		return session.selectList(namespace + ".categoryCount");
+	}
+
 }

@@ -6,7 +6,7 @@ import axios from 'axios'
 import '../../common/useful/Paging.css';
 import Pagination from 'react-js-pagination'
 import { UserContext } from '../user/UserContext';
-
+import { Calendar } from 'primereact/calendar';
 
 const AuctionPage = () => {
   const [list, setList] = useState([]);
@@ -17,9 +17,12 @@ const AuctionPage = () => {
   const [count, setCount] = useState(0);
   const { userData, setUserData } = useContext(UserContext);
   const [checked, setChecked] = useState(false);
+  const [dates, setDates] = useState(null);
+  const [date1, setDate1] = useState(null);
+  const [date2, setDate2] = useState(null);
 
   const callAPI = async () => {
-    const res = await axios.get(`/auction/admin/list?key=${key}&word=${word}&page=${page}&size=${size}`)
+    const res = await axios.get(`/auction/admin/list?key=${key}&word=${word}&page=${page}&size=${size}&date1=${date1}&date2=${date2}`)
     console.log(res.data);
     setCount(res.data.total);
     const data = res.data.documents.map(t => t && { ...t, checked: false });
@@ -35,6 +38,7 @@ const AuctionPage = () => {
     callAPI();
   }
 
+  //체크박스
   useEffect(() => {
     let cnt = 0;
     list.forEach(list => list.checked && cnt++);
@@ -51,22 +55,78 @@ const AuctionPage = () => {
     setList(data);
   }
 
-  const onClickUpdate = () => {
+//데이터삭제(update auction_state=1)
+  const onClickDelete = async () => {
     if (!window.confirm("거래내역은 복구하기 어렵습니다. 삭제하시겠습니까?")) return;
-    let cnt = 0;
-    list.forEach(async list => {
-      if (list.checked) {
-        await axios.post(`/auction/update/${list.auction_key}`);
-        cnt++
+    
+    const checkedItems = list.filter(item => item.checked);
+    if (checkedItems.length === 0) {
+        alert("선택하신 내역이 없습니다.");
+        return;
+    }
 
-        if (cnt === checked) {
-          alert(`${cnt}개의 거래내역이 삭제되었습니다`);
-          callAPI();
-          setPage(1);
-        }
-      }
-    })
+    let cnt = 0;
+    for (const item of checkedItems) {
+        await axios.post(`/auction/delete/${item.auction_key}`);
+        cnt++;
+    }
+
+    alert(`${cnt}개의 거래내역이 삭제되었습니다.`);
+    callAPI();
+    setPage(1);
+};
+
+
+//데이터복구(update auction_state=0)
+  const onClickRestore = async () => {
+    if (!window.confirm("거래내역을 복구하시겠습니까?")) return;
+    
+    const checkedItems = list.filter(item => item.checked);
+    if (checkedItems.length === 0) {
+        alert("선택하신 내역이 없습니다.");
+        return;
+    }
+
+    let cnt = 0;
+    for (const item of checkedItems) {
+        await axios.post(`/auction/restore/${item.auction_key}`);
+        cnt++;
+    }
+
+    alert(`${cnt}개의 거래내역이 복구되었습니다.`);
+    callAPI();
+    setPage(1);
+};
+
+
+
+//달력날짜표시
+  function fmtDate(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const day = ('0' + date.getDate()).slice(-2);
+    return `${year}-${month}-${day}`;
   }
+
+  function fmtDate2(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const day = ('0' + date.getDate()).slice(-2);
+    const hours = '23';
+    const minutes = '59';
+    const seconds = '59';
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
+  const onChangedate = (e) => {
+    setDates(e.value);
+    setDate1(fmtDate(e.value[0]))
+    setDate2(fmtDate2(e.value[1]))
+  };
+
+
 
   return (
     <div>
@@ -75,7 +135,7 @@ const AuctionPage = () => {
           <Sidebar />
         </Col>
         <Col>
-          <h5 className='mb-5 mt-2'> {userData.nickname} 관리자님 환영합니다.</h5>
+          <h5 className='mb-5 mt-2'> {userData.uname} 관리자님 환영합니다.</h5>
           <Row className='justify-content-center mt-3'>
             <Col xs={12} md={10} lg={8}>
               <form onSubmit={onSubmit}>
@@ -87,7 +147,7 @@ const AuctionPage = () => {
                     <option value="auction_state">삭제상태</option>
                   </Form.Select>
                   {key === "auction_regDate" ?
-                    <Form.Control type="date" value={word} name="word" onChange={(e) => setWord(e.target.value)} /> :
+                    <Calendar value={dates} onChange={onChangedate} selectionMode="range" dateFormat="yy/mm/dd" readOnlyInput hideOnRangeSelection /> :
                     <Form.Control value={word} name="word" onChange={(e) => setWord(e.target.value)} />
                   }
                   <Button type="submit" size="sm" className="me-3">검색</Button>
@@ -97,7 +157,8 @@ const AuctionPage = () => {
             </Col>
             <Col>
               <div className="text-end me-2 mt-2">
-                <Button size="sm" onClick={onClickUpdate}>선택삭제</Button>
+                <Button size="sm" className="me-2" onClick={onClickDelete}>선택삭제</Button>
+                <Button size="sm" onClick={onClickRestore}>선택복원</Button>
               </div>
             </Col>
           </Row>

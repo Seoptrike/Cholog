@@ -4,6 +4,7 @@ import { Row, Col, InputGroup, Button, Table, Form, Badge } from 'react-bootstra
 import Pagination from 'react-js-pagination';
 import { TbBrandSnapseed } from "react-icons/tb";
 import Sidebar from '../admin/Sidebar'
+import { Calendar } from 'primereact/calendar';
 
 const AdminTradeListPage = () => {
     const [count, setCount] = useState(0);
@@ -13,8 +14,12 @@ const AdminTradeListPage = () => {
     const [word, setWord] = useState("");
     const [list, setList] = useState([]);
     const [checked, setChecked]=useState(false);
+    const [dates, setDates] = useState(null);
+    const [date1, setDate1] = useState(null);
+    const [date2, setDate2] = useState(null);
+
     const callAPI = async () => {
-        const res = await axios.get(`/trade/adminList?key=${key}&word=${word}&page=${page}&size=${size}`)
+        const res = await axios.get(`/trade/adminList?key=${key}&word=${word}&page=${page}&size=${size}&date1=${date1}&date2=${date2}`)
         console.log(res.data.doc)
         const data =res.data.doc.map(t=> t && {...t, checked : false});
         setList(data);
@@ -26,6 +31,8 @@ const AdminTradeListPage = () => {
         callAPI();
     };
     useEffect(() => { callAPI() }, [page])
+
+    //체크박스
     useEffect(() => {
         let cnt = 0;
         list.forEach(list => list.checked && cnt++);
@@ -42,22 +49,77 @@ const AdminTradeListPage = () => {
         setList(data);
       }
 
-      const onClickUpdate = () => {
-        if (!window.confirm("선택하신 내역을 삭제하시겠습니까?")) return;
-        let cnt = 0;
-        list.forEach(async list => {
-          if (list.checked) {
-            await axios.post(`/trade/update/${list.trade_key}`);
-            cnt++
+
+      //데이터삭제(update trade_status=1)
+      const onClickDelete = async () => {
+        if (!window.confirm("거래내역은 복구하기 어렵습니다. 삭제하시겠습니까?")) return;
+        
+        const checkedItems = list.filter(item => item.checked);
+        if (checkedItems.length === 0) {
+            alert("선택하신 내역이 없습니다.");
+            return;
+        }
     
-            if (cnt === checked) {
-              alert(`${cnt}개의 거래내역이 삭제되었습니다`);
-              callAPI();
-              setPage(1);
-            }
-          }
-        })
-      }
+        let cnt = 0;
+        for (const item of checkedItems) {
+            await axios.post(`/trade/update/${item.trade_key}`);
+            cnt++;
+        }
+    
+        alert(`${cnt}개의 거래내역이 삭제되었습니다.`);
+        callAPI();
+        setPage(1);
+    };
+
+
+    //데이터복구(update trade_status=0)
+    const onClickRestore = async () => {
+        if (!window.confirm("거래내역을 복구하시겠습니까?")) return;
+        
+        const checkedItems = list.filter(item => item.checked);
+        if (checkedItems.length === 0) {
+            alert("선택하신 내역이 없습니다.");
+            return;
+        }
+    
+        let cnt = 0;
+        for (const item of checkedItems) {
+            await axios.post(`/trade/restore/${item.trade_key}`);
+            cnt++;
+        }
+    
+        alert(`${cnt}개의 거래내역이 복구되었습니다.`);
+        callAPI();
+        setPage(1);
+    };
+
+
+    //날짜표시
+    function fmtDate(dateString) {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = ('0' + (date.getMonth() + 1)).slice(-2); 
+        const day = ('0' + date.getDate()).slice(-2);
+        return `${year}-${month}-${day}`;
+    }
+
+    function fmtDate2(dateString) {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = ('0' + (date.getMonth() + 1)).slice(-2);
+        const day = ('0' + date.getDate()).slice(-2);
+        const hours = '23';
+        const minutes = '59';
+        const seconds = '59';
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
+
+
+    const onChangedate = (e) => {
+        setDates(e.value);
+        setDate1(fmtDate(e.value[0]))
+        setDate2(fmtDate2(e.value[1]))
+    };
 
     return (
         <div>
@@ -73,9 +135,13 @@ const AdminTradeListPage = () => {
                                 <Form.Select className='me-2' value={key} onChange={(e) => setKey(e.target.value)}>
                                     <option value="from">보내는 사람</option>
                                     <option value="to">받는 사람</option>
-
+                                    <option value="trade">거래일</option>
+                                    <option value="status">삭제상태</option>
                                 </Form.Select>
-                                <Form.Control placeholder='검색어' value={word} onChange={(e) => setWord(e.target.value)} />
+                                {key === "trade" ?
+                                    <Calendar value={dates} onChange={onChangedate} selectionMode="range" dateFormat="yy/mm/dd"  readOnlyInput={false} hideOnRangeSelection /> :
+                                    <Form.Control placeholder='검색어' value={word} onChange={(e) => setWord(e.target.value)} />
+                                }
                                 <Button onClick={(e) => onClickSearch(e)} >검색</Button>
                             </InputGroup>
                         </Col>
@@ -93,7 +159,9 @@ const AdminTradeListPage = () => {
                                 <td>받는 사람</td>
                                 <td>씨앗 <span style={{ fontSize: '15px', color:"brown" }}><TbBrandSnapseed /></span>  </td>
                                 <td>내용</td>
-                                <td><Button size="sm" onClick={onClickUpdate}>선택삭제</Button></td>
+                                <td><Button size="sm" className='me-2' onClick={onClickDelete}>선택삭제</Button>
+                                <Button size="sm" onClick={onClickRestore}>선택복구</Button>
+                                </td>
                             </tr>
                         </thead>
                         <tbody>

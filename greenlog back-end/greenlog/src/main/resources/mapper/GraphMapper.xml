@@ -2,12 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.mapper.GraphMapper">
 	<select id="diaryCount" resultType="hashmap">
-		SELECT
-		COUNT(diary_key) AS diary_count,
-		DATE_FORMAT(diary_regDate, '%Y-%m-%d') AS diary_date,diary_state
-		FROM diary
-		GROUP BY DATE_FORMAT(diary_regDate, '%Y-%m-%d'), diary_state
-		ORDER BY diary_date;
+SELECT 
+    COUNT(diary_regDate) AS diary_count, 
+    DATE_FORMAT(diary_regDate, '%Y-%m-%d') AS diary_date, 
+    (SELECT COUNT(*) FROM diary d2 WHERE DATE_FORMAT(d2.diary_regDate, '%Y-%m') = DATE_FORMAT(diary.diary_regDate, '%Y-%m')) AS monthly_count
+FROM 
+    diary
+GROUP BY 
+    DATE_FORMAT(diary_regDate, '%Y-%m-%d')
+ORDER BY 
+    diary_date;
+	</select>
+	
+	<select id="categoryCount" resultType="hashmap">
+	SELECT COUNT(diary_key) AS diary_count, diary_state
+	FROM diary
+	GROUP BY diary_state;
 	</select>
 
 </mapper>

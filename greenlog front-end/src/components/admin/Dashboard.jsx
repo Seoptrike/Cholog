@@ -8,6 +8,7 @@ import FiberNewIcon from '@mui/icons-material/FiberNew';
 import { Link, useLocation } from 'react-router-dom'
 import { UserContext } from '../user/UserContext';
 import DiaryChart from './DiaryChart'
+import DiaryPieChart from './DiaryPieChart'
 
 //전체데이터필요, 차트출력 및 뱃지데이터 출력
 //오늘의 할일을 버튼대신 listGroup을 사용할지 고민(넣어놓기만 함)
@@ -61,13 +62,12 @@ const Dashboard = () => {
                     <div className='chart text-center mb-5'>
                         <Row>
                             <Col><DiaryChart/></Col>
-                            <Col><PieChart /></Col>
-                            <Col><PieChart /></Col>
+                            <Col><DiaryPieChart/></Col>
                         </Row>
                     </div>
                     <div>
                         <Row>
-                            <Col>포인트관리
+                            <Col>오늘올라온물건
                                 <ListGroup as="ol" numbered>
                                     <ListGroup.Item
                                         as="li"
@@ -108,7 +108,15 @@ const Dashboard = () => {
                                 </ListGroup>
                             </Col>
                             <Col>
-                                <div>신고접수내용</div>
+                                <div>오늘올라온일기</div>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <div>이번달랭크(관리자 제외, 일반회원 씨드포인트 대량 or 좋아요를 가장 많이 받은 일기/게시물)</div>
+                            </Col>
+                            <Col>
+                                <div>이번달이벤트</div>
                             </Col>
                         </Row>
                     </div>
