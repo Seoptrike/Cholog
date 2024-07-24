@@ -5,7 +5,7 @@ import axios from 'axios';
 const LoginPage = () => {
     const [userInfo, setUserInfo] = useState(null);
     const onKakaoLogin=()=>{
-        window.location.href = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=02059f168b6e2f91d0014fde2e56581e&redirect_uri=http://localhost:8080/user/login/kakao";
+        window.location.href = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=92b5d7839ab9b4b0e8f2f0897d74aa3d&redirect_uri=http://localhost:8080/user/login/kakao/oauth"
     }
     const [form, setform] = useState({
         user_uid: '',
@@ -18,11 +18,9 @@ const LoginPage = () => {
         setform({ ...form, [e.target.name]: e.target.value })
     }
 
-    const onClickLogin = async (form) => {
-        console.log(form)
+    const onClickLogin = async (e) => {
+        e.preventDefault();
         const res = await axios.post('/user/login', { user_uid, user_upass })
-    
-        console.log(res.data);
         if (res.data === 0) {
             alert("아이디가 없습니다")
         } else if (res.data === 2) {
@@ -72,7 +70,7 @@ const LoginPage = () => {
                 <Row className='justify-content-center mb-5' >
                     <Col xs={12} md={10} lg={12} className='d-flex justify-content-center align-items-center'>
                         <div className='loginbox px-0'>
-                            <form>
+                            <form onSubmit={onClickLogin}>
                                 <InputGroup className='h-25'>
                                     <InputGroup.Text style={{ backgroundColor: "#002412", color: 'white' }} className=' justify-content-center w-25'><b>ID</b></InputGroup.Text>
                                     <Form.Control name="user_uid" value={user_uid} onChange={onChangeForm} />
@@ -81,7 +79,7 @@ const LoginPage = () => {
                                     <InputGroup.Text style={{ backgroundColor: "#002412", color: 'white' }} className='justify-content-center w-25'><b>PW</b></InputGroup.Text>
                                     <Form.Control type="password" name="user_upass" value={user_upass} onChange={onChangeForm} />
                                 </InputGroup>
-                                <Button style={{ backgroundColor: "#2BBEC6", borderColor: "#2BBEC6", color: 'white' }} className='w-100 mt-2' onClick={() => onClickLogin(form)} ><b>로그인</b></Button>
+                                <Button style={{ backgroundColor: "#2BBEC6", borderColor: "#2BBEC6", color: 'white' }} className='w-100 mt-2' type='submit' ><b>로그인</b></Button>
                                 <div className='text-center mt-2'>
                                     <div>
                                         <div>

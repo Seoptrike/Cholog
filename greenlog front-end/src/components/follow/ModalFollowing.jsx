@@ -3,13 +3,12 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
-import {Card,CardContent,Container,TextField,Button,Table,TableBody,TableCell,TableContainer,TableHead,TableRow,TablePagination,Avatar} from '@mui/material';
+import { Card, CardContent, Container, TextField, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Avatar } from '@mui/material';
 const ModalFollowing = ({ uid, cnt }) => {
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-
     const [word, setWord] = useState('');
     const [key, setKey] = useState('id');
     const [size, setSize] = useState(10);
@@ -36,6 +35,21 @@ const ModalFollowing = ({ uid, cnt }) => {
             onClickSearch(e); // e를 전달
         }
     };
+
+    const onClickID = (uid) => {
+        window.location.href = `/user/read/${uid}`
+        handleClose();
+    }
+
+    const onUnFollow = async (uid) => {
+        const res = await axios.post("/follow/unFollow", { follow_to: uid, follow_from: sessionStorage.getItem("uid") })
+        if (res.data === 1) {
+            alert("삭제완료!")
+            callAPI();
+        } else {
+            alert("팔로우하지 않은 친구입니다!")
+        }
+    }
     return (
         <>
             <div onClick={handleShow}>
@@ -81,13 +95,6 @@ const ModalFollowing = ({ uid, cnt }) => {
 
                                 <TableContainer>
                                     <Table>
-                                        <TableHead>
-                                            <TableRow>
-                                                <TableCell>사진</TableCell>
-                                                <TableCell>아이디(닉네임)</TableCell>
-                                                <TableCell align='right'></TableCell>
-                                            </TableRow>
-                                        </TableHead>
                                         <TableBody>
                                             {list.map((f, index) => (
                                                 <TableRow key={index}>
@@ -97,14 +104,14 @@ const ModalFollowing = ({ uid, cnt }) => {
                                                             style={{ width: '50px', height: '50px' }}
                                                         />
                                                     </TableCell>
-                                                    <TableCell>{f.user_uid} ({f.user_nickname})</TableCell>
+                                                    <TableCell style={{ cursor: "pointer" }} onClick={() => { onClickID(f.user_uid) }}>{f.user_uid} ({f.user_nickname})</TableCell>
                                                     {uid === sessionStorage.getItem("uid") && (
                                                         <TableCell align='right'>
                                                             <Button
                                                                 variant='contained'
                                                                 color='error'
                                                                 size='small'
-                                                                onClick={() => console.log(`Delete ${f.user_uid}`)}
+                                                                onClick={() => onUnFollow(f.user_uid)}
                                                             >
                                                                 삭제
                                                             </Button>

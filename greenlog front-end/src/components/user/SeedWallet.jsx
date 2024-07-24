@@ -7,7 +7,7 @@ import { TbBrandSnapseed } from 'react-icons/tb';
 import { useParams } from 'react-router-dom';
 
 const SeedWallet = () => {
-    const {uid} =useParams();
+    const { uid } = useParams();
     const [form, setForm] = useState({
         seed_point: '',
         seed_uid: '',
@@ -20,7 +20,7 @@ const SeedWallet = () => {
     const { seed_number, seed_point, seed_uid, user_img, user_nickname, user_uid, user_uname } = form;
     const callAPI = async () => {
         const res = await axios.get(`/seed/read/${uid}`)
-        console.log(res.data);
+        //console.log(res.data);
         setForm(res.data);
     }
     useEffect(() => { callAPI() }, [])

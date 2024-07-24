@@ -36,6 +36,21 @@ const ModalFollower = ({ uid, cnt }) => {
             onClickSearch(e); // e를 전달
         }
     };
+
+    const onClickID = (uid) => {
+        window.location.href=`/user/read/${uid}`
+        handleClose();
+    }
+
+    const onUnFollow = async (uid) => {
+        const res = await axios.post("/follow/unFollow", { follow_to: sessionStorage.getItem("uid"), follow_from: uid  })
+        if (res.data === 1) {
+          alert("삭제완료!")
+          callAPI();
+        } else {
+          alert("팔로우하지 않은 친구입니다!")
+        }
+      }
     return (
         <>
             <div onClick={handleShow}>
@@ -97,14 +112,14 @@ const ModalFollower = ({ uid, cnt }) => {
                                                             style={{ width: '50px', height: '50px' }}
                                                         />
                                                     </TableCell>
-                                                    <TableCell>{f.user_uid} ({f.user_nickname})</TableCell>
+                                                    <TableCell style={{cursor:"pointer"}} onClick={()=>{onClickID(f.user_uid)}}>{f.user_uid} ({f.user_nickname})</TableCell>
                                                     {uid === sessionStorage.getItem("uid") && (
                                                         <TableCell align='right'>
                                                             <Button
                                                                 variant='contained'
                                                                 color='error'
                                                                 size='small'
-                                                                onClick={() => console.log(`Delete ${f.user_uid}`)}
+                                                                onClick={() =>onUnFollow(f.user_uid)}
                                                             >
                                                                 삭제
                                                             </Button>
