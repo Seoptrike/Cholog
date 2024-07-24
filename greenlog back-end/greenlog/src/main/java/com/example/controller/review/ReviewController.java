@@ -37,6 +37,11 @@ public class ReviewController {
 				return rdao.reviewList(review_mall_key,vo);
 		}
 		
+		@GetMapping("/read/{review_key}")
+		public HashMap<String, Object> reviewRead(@PathVariable("review_key") int review_key) {
+				return rdao.reviewRead(review_key);
+		}
+		
 		@GetMapping("/plist/{review_mall_key}")
 		public HashMap<String, Object> plist(@PathVariable("review_mall_key") int review_mall_key, QueryVO vo) {
 				return rservice.plist(review_mall_key, vo);

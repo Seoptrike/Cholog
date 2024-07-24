@@ -107,6 +107,10 @@ public class RereplyController {
 			return rrdao.CountReaction(rereply_key);
 		}
 
+		@GetMapping("/read/{rereply_key}")
+		public HashMap<String, Object> rereplyRead(@PathVariable("rereply_key") int rereply_key) {
+			return rrdao.rereplyRead(rereply_key);
+		}
 		
 		
 }

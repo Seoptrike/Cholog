@@ -10,6 +10,12 @@
 			    limit #{start}, #{size}
 		</select>
 		
+		<select id="reviewRead" resultType="hashmap">
+			    select r.*, user_nickname, user_img, user_uid 
+			    from review r, user u
+			    where review_writer= user_uid and review_key=#{review_key} 
+		</select>	
+		
 		<insert id="insert">
 				insert into review ( review_mall_key, review_writer, review_rating, review_contents, review_lock )
 				value ( #{review_mall_key}, #{review_writer}, #{review_rating}, #{review_contents}, #{review_lock} )

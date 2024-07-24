@@ -28,6 +28,15 @@ const InsertPage = ({ mall_key, mall_seller, mall_photo }) => {
         setOnCancel(false);
     };
 
+    const Focus = () => {
+        const uid = sessionStorage.getItem('uid');
+        if (!uid) {
+            window.location = "/user/login";
+        } else {
+            setOnCancel(true);
+        }
+    };
+
     const onSubmit = async (e) => {
         e.preventDefault();
         const uid = sessionStorage.getItem('uid');
@@ -75,7 +84,7 @@ const InsertPage = ({ mall_key, mall_seller, mall_photo }) => {
                         <form onSubmit={onSubmit} onReset={onClickCancel}>
                             <div className="form-content">
                                 <div className="form-image">
-                                    <Link to={`/user/read/${uid}`}><img src={mall_photo || "http://via.placeholder.com/200x200"} alt="Review" className="review-image" /></Link>
+                                    <img src={mall_photo || "http://via.placeholder.com/200x200"} alt="Review" className="review-image" />
                                 </div>
                                 <div className="form-fields">
                                     <div className="rating-container">
@@ -87,6 +96,7 @@ const InsertPage = ({ mall_key, mall_seller, mall_photo }) => {
                                             max={10}
                                             size='small'
                                             onChange={(e, newValue) => setForm({ ...form, review_rating: newValue })}
+                                            onFocus={Focus}
                                             icon={<TbBrandSnapseed style={{ color: "brown", fontSize: '2rem' }} />}
                                             emptyIcon={<TbBrandSnapseed style={{ fontSize: '2rem' }} />}
                                         />
@@ -98,7 +108,7 @@ const InsertPage = ({ mall_key, mall_seller, mall_photo }) => {
                                         rows={2}
                                         placeholder='내용을 입력해주세요.'
                                         onChange={onChangeForm}
-                                        onFocus={() => setOnCancel(true)}
+                                        onFocus={Focus}
                                         className="form-control-textarea"
                                     />
                                     <div className="button-group">

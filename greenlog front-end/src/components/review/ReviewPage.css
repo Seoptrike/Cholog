@@ -2,8 +2,9 @@
 .review-page-container {
     padding: 30px;
     border-radius: 0px 0px 10px 10px;
-    background-color: #D0F0C0
+    background-color: #f9f9f9;
 }
+
 
 .review-card {
     margin-bottom: 1rem;
@@ -18,9 +19,9 @@
 .review-card-header {
     display: flex;
     align-items: center;
-    padding: 1rem;
-    background-color: #ffffff;
-    border-bottom: 1px solid #dee2e6;
+    padding: 15px;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
 }
 
 .review-card-header img {
@@ -48,6 +49,69 @@
     min-width: 150px;
 }
 
+.review-card-header img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    margin-right: 15px;
+}/* 컨테이너와 카드 스타일 */
+.review-page-container {
+    padding: 30px;
+    border-radius: 0px 0px 10px 10px;
+    background-color: #f9f9f9;
+}
+
+
+.review-card {
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* 카드 헤더 스타일 */
+.review-card-header {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+}
+
+.review-card-header img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    margin-right: 1rem;
+}
+
+.review-card-header .user-info {
+    flex: 1;
+}
+
+.review-card-header .user-info a {
+    font-weight: bold;
+    text-decoration: none;
+    color: #000000;
+}
+
+.review-card-header .user-info a:hover {
+    text-decoration: underline;
+}
+
+.review-card-header .dropdown-menu {
+    min-width: 150px;
+}
+
+.review-card-header img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
 /* 카드 본문 스타일 */
 .review-card-body {
     padding: 1rem;
@@ -73,17 +137,8 @@
     line-height: 1.5;
 }
 
-/* Pagination 스타일 */
-.pagination-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 1rem;
-    background-color: #ffffff;
-    border-radius: 8px;
-}
-
 .insert-page-container {
-    background: #D0F0C0;
+    background: #f9f9f9;
     padding: 30px;
     border-radius: 0px 0px 10px 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
@@ -180,3 +235,20 @@
         text-align: center;
     }
 }
+
+
+
+
+/* Pagination 스타일 */
+/* CSS for Pagination */
+.pagination-container {
+    display: flex;
+    justify-content: center; /* Center the pagination horizontally */
+    margin-top: 1rem; /* Optional: adjust top margin for spacing */
+  }
+  
+  .pagination-container .MuiPagination-root {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }

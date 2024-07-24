@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Dropdown, Card, Button } from 'react-bootstrap';
-import Pagination from 'react-js-pagination';
+import { Row, Col, Dropdown, Card } from 'react-bootstrap';
+import ReportInsert from '../report/ReportInsert';
+import axios from 'axios';
 import { Rating } from '@mui/material';
 import { BsThreeDotsVertical } from "react-icons/bs";
-import axios from 'axios';
-import '../../common/useful/Paging.css';
 import { TbBrandSnapseed } from "react-icons/tb";
-import ReportInsert from '../report/ReportInsert';
+import { Pagination as MuiPagination } from '@mui/material';
 import { Link } from 'react-router-dom';
-import './ReviewPage.css'; // Import the CSS file
+import './ReviewPage.css';
 
-const ReviewPage = ({ mall_key, mall_seller, seller_number }) => {
+const ReviewListPage = ({ mall_key, mall_seller, seller_number }) => {
     const [list, setList] = useState([]);
     const [page, setPage] = useState(1);
     const [size, setSize] = useState(3);
@@ -74,6 +73,10 @@ const ReviewPage = ({ mall_key, mall_seller, seller_number }) => {
             return review;
         });
         setList(data);
+    };
+
+    const handlePageChange = (event, value) => {
+        setPage(value);
     };
 
     const onClickBuy = async (review_writer, review_rating, mall_seller) => {
@@ -176,25 +179,24 @@ const ReviewPage = ({ mall_key, mall_seller, seller_number }) => {
                         </Card>
                     ))}
                     <hr />
-                    {count > size &&
-                        <div className="pagination-container">
-                            <Pagination
-                                activePage={page}
-                                itemsCountPerPage={size}
-                                totalItemsCount={count}
-                                pageRangeDisplayed={5}
-                                prevPageText={"‹"}
-                                nextPageText={"›"}
-                                onChange={(e) => setPage(e)}
-                            />
-                        </div>
-                    }
+                    {count > size && (
+                        <Row className="pagination-container">
+                            <Col xs={12} md={10}>
+                                <MuiPagination
+                                    count={Math.ceil(count / size)}
+                                    page={page}
+                                    onChange={handlePageChange}
+                                    color="standard"
+                                    variant="outlined"
+                                    shape="rounded"
+                                />
+                            </Col>
+                        </Row>
+                    )}
                 </Col>
-
             </Row>
-
         </div>
     );
 };
 
-export default ReviewPage;
+export default ReviewListPage;
