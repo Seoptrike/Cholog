@@ -21,8 +21,12 @@ public interface ChatDAO {
 
 	public List<HashMap<String, Object>> listchatLog(int Chat_key);
 
-	public int searchChatkey(String uid);
+	public Integer searchChatkey(String uid);
 
 	public int listCount();
+
+	public List<HashMap<String, Object>> userChatList(String uid);
+
+	public int userChatListCount(String uid);
 
 }

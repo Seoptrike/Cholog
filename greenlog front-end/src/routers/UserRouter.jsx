@@ -37,7 +37,7 @@ const UserRouter = () => {
       <Route path='admin/update/:user_uid' element={<AdminUpdate />} />
       <Route path='admin/read/:user_uid' element={<AdminReadPage />} />
       <Route path='admin/report' element={<ReportPage/>}/>
-      <Route path='wallet/:user_uid' element={<SeedWallet />} />
+      <Route path='wallet/:uid' element={<SeedWallet />} />
       <Route path='searchId' element={<SearchIdPage />} />
       <Route path='searchPass' element={<SearchPassPage />} />
       <Route path='update/:user_uid' element={<UserUpdatePage />} />

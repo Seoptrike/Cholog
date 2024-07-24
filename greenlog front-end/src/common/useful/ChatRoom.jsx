@@ -69,7 +69,9 @@ const ChatRoom = () => {
             stompClient.deactivate(); // Use deactivate() to properly close the connection
             console.log('WebSocket connection closed.');
         }
+        await axios.post("/chat/exit", { chat_path: uid , chat_sender:uid })
         await axios.post("/chat/delete", { chat_key: key })
+
         alert("처리완료되었습니다")
         window.location.href="/";
     };

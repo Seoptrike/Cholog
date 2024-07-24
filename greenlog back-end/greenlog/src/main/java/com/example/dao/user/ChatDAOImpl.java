@@ -55,13 +55,23 @@ public class ChatDAOImpl implements ChatDAO {
 	}
 
 	@Override
-	public int searchChatkey(String uid) {
+	public Integer searchChatkey(String uid) {
 		return session.selectOne(namespace + ".searchChatkey", uid);
 	}
 
 	@Override
 	public int listCount() {
 		return session.selectOne(namespace + ".listCount");
+	}
+
+	@Override
+	public List<HashMap<String, Object>> userChatList(String uid) {
+		return session.selectList(namespace + ".userChatList", uid);
+	}
+
+	@Override
+	public int userChatListCount(String uid) {
+		return session.selectOne(namespace + ".userChatListCount", uid);
 	}
 
 }

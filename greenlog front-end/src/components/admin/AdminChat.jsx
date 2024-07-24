@@ -24,9 +24,18 @@ const AdminChat = () => {
 
             stomp.subscribe(`/topic/${path}`, message => {
                 const receivedMessage = JSON.parse(message.body);
-                console.log('Received message:', receivedMessage);
-                setMessages(prevMessages => [...prevMessages, receivedMessage]);
-                setTimeout(scrollToBottom, 100);
+                if (receivedMessage.message) {
+                    // Handle ExitNotification
+                    setMessages(prevMessages => [
+                        ...prevMessages,
+                        { chat_sender: "System", chat_content: `${receivedMessage.uid} ${receivedMessage.message}` }
+                    ]);
+                } else {
+                    // Handle regular chat message
+                    console.log('Received message:', receivedMessage);
+                    setMessages(prevMessages => [...prevMessages, receivedMessage]);
+                    setTimeout(scrollToBottom, 100);
+                }
             });
         });
 
@@ -73,7 +82,7 @@ const AdminChat = () => {
 
     const handleDisconnect = async () => {
         if (stompClient) {
-            stompClient.deactivate(); // Use deactivate() to properly close the connection
+            stompClient.deactivate(); 
             console.log('WebSocket connection closed.');
         }
         await axios.post("/chat/delete", { chat_key: key })
@@ -92,7 +101,6 @@ const AdminChat = () => {
                 <Col xs={6}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
                         <span>관리자와 1:1 대화</span>
-                        <Button variant="danger" onClick={handleDisconnect}>대화종료</Button>
                     </div>
                     <div ref={chatContainerRef} style={{ height: '400px', overflowY: 'scroll', border: '1px solid #ddd', borderRadius: '10px', backgroundColor: '#fff', padding: '10px', marginBottom: '10px' }}>
                         {messages.map((msg, index) => (
@@ -110,7 +118,6 @@ const AdminChat = () => {
                                     borderRadius: '10px',
                                     wordBreak: 'break-word'
                                 }}>
-                                    {msg.chat_sender !== 'admin' && <img src={msg.user_img} alt="User" style={{ borderRadius: "50%", width: "1.5rem", height: "1.5rem", marginRight: '8px' }} />}
                                     <strong>{msg.chat_sender}</strong>: {msg.chatlog_msg || msg.chat_content}
                                 </div>
                             </div>
