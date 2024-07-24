@@ -71,13 +71,13 @@ const FAQUpdate = () => {
             <InputGroup className='mb-3'>
               <FormControl
                 as="select"
-                name="faq_category"
-                value={form.faq_category} 
+                name="faq_type"
+                value={form.faq_type} 
                 onChange={onChangeForm}
                 style={{ maxWidth: '150px', marginRight: '10px' }}>
-                <option value="회원">회원</option>
-                <option value="포인트">포인트</option>
-                <option value="참여방법">참여방법</option>
+                <option value="0">회원</option>
+                <option value="2">포인트</option>
+                <option value="3">참여방법</option>
               </FormControl>
               <FormControl
                 placeholder="질문을 입력하세요"

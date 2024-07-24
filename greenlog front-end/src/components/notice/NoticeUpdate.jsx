@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Form, Button, Row, Col, InputGroup, FormControl } from 'react-bootstrap';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 const NoticeUpdate = () => {
   const [loading, setLoading] = useState(false);
@@ -13,12 +11,12 @@ const NoticeUpdate = () => {
     notice_title: '',
     notice_contents: '',
     notice_writer: '',
-    notice_category: '',
+    notice_type: '',
     notice_regDate: '',
     notice_views: 0
   });
 
-  const { notice_title, notice_contents, notice_writer, notice_category } = form;
+  const { notice_title, notice_contents, notice_writer, notice_type } = form;
 
   const callAPI = async () => {
     try {
@@ -36,12 +34,6 @@ const NoticeUpdate = () => {
 
   const onChangeForm = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const onChangeCKEditor = (event, editor) => {
-    let data = editor.getData();
-    data = data.replace(/<\/?p>/g, '');  // <p> 태그를 제거
-    setForm({ ...form, notice_contents: data });
   };
 
   const onReset = () => {
@@ -79,13 +71,13 @@ const NoticeUpdate = () => {
               <InputGroup className='mb-3'>
                 <FormControl
                   as="select"
-                  name="notice_category"
-                  value={notice_category}
+                  name="notice_type"
+                  value={notice_type}
                   onChange={onChangeForm}
                   style={{ maxWidth: '150px', marginRight: '10px' }}>
-                  <option value="0">일반</option>
-                  <option value="1">이벤트</option>
-                  <option value="2">포인트</option>
+                  <option value="1">일반</option>
+                  <option value="2">회원</option>
+                  <option value="3">이벤트</option>
                 </FormControl>
                 <FormControl
                   placeholder="제목을 입력하세요"

@@ -82,10 +82,10 @@ const QAUpdate = () => {
                 />
               </Form.Group>
               <div className='text-center mt-3'>
-                <Button type="submit" className='px-5 me-2' disabled={loading}>
+                <Button type="submit" className='px-3 me-2' disabled={loading} variant='secondary'>
                   {loading ? '수정 중...' : '수정'}
                 </Button>
-                <Button type="reset" className='px-5' variant='secondary'>취소</Button>
+                <Button type="reset" className='px-3' variant='secondary'>취소</Button>
               </div>
             </Form>
           )}

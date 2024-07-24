@@ -17,28 +17,30 @@
     <select id="read" resultType="com.example.domain.FAQVO">
         SELECT * FROM FAQ WHERE faq_key = #{faq_key}
     </select>
- <select id="list" resultType="hashmap">
+<select id="list" resultType="hashmap">
     select *
     from FAQ
     	<where>
-            <if test="key == 'all'">faq_question LIKE #{word}</if>
-            <if test="key == 'member'">faq_question LIKE #{word} AND faq_type =0</if>
-            <if test="key == 'point'">faq_question LIKE #{word} AND faq_type =2 </if>
-            <if test="key == 'how'">faq_question LIKE #{word} AND faq_type =3</if>
+            <if test="key == 'all' and word != null and word != ''">faq_question LIKE #{word}</if>
+            <if test="key == 'member' and word != null and word != ''">faq_question LIKE #{word} AND faq_type =0</if>
+            <if test="key == 'point' and word != null and word != ''">faq_question LIKE #{word} AND faq_type =2</if>
+            <if test="key == 'how' and word != null and word != ''">faq_question LIKE #{word} AND faq_type =3</if>
         </where>
     order by faq_key desc
     limit #{start}, #{size}
 </select>
+
 <select id="total" resultType="int">
-    select count(*)
-    from FAQ
-    <where>
-            <if test="key == 'all'">faq_question LIKE #{word}</if>
-            <if test="key == 'member'">faq_question LIKE #{word} AND faq_type =0</if>
-            <if test="key == 'point'">faq_question LIKE #{word} AND faq_type =2 </if>
-            <if test="key == 'how'">faq_question LIKE #{word} AND faq_type =3</if>
-        </where>
+  select count(*)
+  from FAQ
+  <where>
+    <if test="key == 'all' and word != null and word != ''">faq_question LIKE #{word}</if>
+    <if test="key == 'member' and word != null and word != ''">faq_question LIKE #{word} AND faq_type =0</if>
+    <if test="key == 'point' and word != null and word != ''">faq_question LIKE #{word} AND faq_type =2</if>
+    <if test="key == 'how' and word != null and word != ''">faq_question LIKE #{word} AND faq_type =3</if>
+  </where>
 </select>
+
     <update id="updateViewcnt">
 		update FAQ
 		set faq_vcnt=faq_vcnt+1

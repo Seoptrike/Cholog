@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './QARead.css'; // CSS 파일 추가
 
 const QARead = () => {
   const { qa_key } = useParams();
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     qa_key: '',
     qa_title: '',
@@ -96,7 +97,7 @@ const QARead = () => {
 
   return (
     <div className="qa-read-container">
-      <h2 className="qa-title">{form.qa_title}</h2>
+      <h3 className="qa-title">{form.qa_title}</h3>
       <div className="qa-subtitle">
         <span>작성자: {form.qa_writer}</span>
         <span>작성일: {form.qa_regDate}</span>
@@ -154,6 +155,9 @@ const QARead = () => {
           )}
         </div>
       )}
+       <div className="qa-navigation">
+        <button className="btn" onClick={() => navigate('/community/qa/list.json')}>목록</button>
+      </div>
     </div>
   );
 };

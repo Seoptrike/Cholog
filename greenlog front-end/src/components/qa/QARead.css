@@ -41,6 +41,26 @@
   .qa-comment-section {
     margin-top: 20px;
   }
+
+  .qa-navigation {
+    display: flex;
+    justify-content: flex-start; /* 왼쪽 정렬 */
+    margin-top: 20px;
+  }
+  
+  .qa-navigation .btn {
+    padding: 5px 20px;
+    border: none;
+    background-color: #2f855a;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none; /* 링크의 기본 밑줄 제거 */
+  }
+
+  .qa-navigation .btn:hover {
+    background-color: #276749;
+  }
   
   textarea {
     width: 100%;

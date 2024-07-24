@@ -77,7 +77,7 @@ const QAInsert = () => {
             onChange={onChangeCheckbox} 
           />
         </Form.Group>
-        <Button type="submit" className="mt-3" disabled={loading}>
+        <Button type="submit" className="mt-3" disabled={loading} variant="success">
           {loading ? <Spinner animation="border" size="sm" /> : '등록'}
         </Button>
       </Form>
