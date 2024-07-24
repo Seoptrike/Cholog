@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Nav, TabContent, Row, Col, Table, Card, Button } from 'react-bootstrap';
+import { Nav, TabContent, Row, Col, Table, Badge } from 'react-bootstrap';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import AllImage from '../read/AllImage';
@@ -11,6 +11,8 @@ import axios from 'axios';
 import InsertPage from '../../review/InsertPage';
 import ReviewListPage from '../../review/ReviewListPage';
 import ReportInsert from '../../report/ReportInsert';
+import { Watermark } from 'antd';
+import { Margin } from '@mui/icons-material';
 
 const ReadPage = () => {
     const today =  new Date().toISOString().split('T')[0];
@@ -21,7 +23,7 @@ const ReadPage = () => {
     //console.log(mall_key);
     const [form, setForm] = useState({});
     const [list, setList] = useState([]);//슬라이드
-    const root = "mall"
+    const root = "mall";
 
     //console.log("read!!!!!!!!!!!!!!" + form);
 
@@ -66,6 +68,16 @@ const ReadPage = () => {
             alert("삭제실패! 댓글이 존재합니다!")
         }
     }
+
+    const Badge = ({ text }) => (
+        <span style={{ backgroundColor: '', 
+                        color: 'red', 
+                        fontSize:"2rem", 
+                        padding:"0 0.5rem 0.5rem 0.5rem",
+                        borderRadius: '5px' }}>
+            {text}
+        </span>
+    );
 
     const mapST = {
         width: '100%',
@@ -113,8 +125,10 @@ const ReadPage = () => {
                 <div>
                     <Row className=' align-items-center mall_read_flexbox'>
                         
-                        <Col className=' text-center  text-middle  mall_read_item' xs={5} md={5} lg={5}  style={{ whiteSpace: "nowrap" }}>    
-                            <img  style={photoST} src={mall_photo ? mall_photo : ' http://via.placeholder.com/300x300'} alt='상품대표이미지' />
+                        <Col className=' text-center  text-middle  mall_read_item' xs={5} md={5} lg={5}  style={{ whiteSpace: "nowrap" }}>  
+                            <Watermark content="이미 마감된 글입니다!">
+                                <img  style={photoST} src={mall_photo ? mall_photo : ' http://via.placeholder.com/300x300'} alt='상품대표이미지' />
+                            </Watermark>
                         </Col>
                         <Col className=' mall_read_item' xs={7} md={7} lg={7} style={{ whiteSpace: "nowrap",height:"100%",padding:"0px 2rem 0px 0px" }} >
                             <Row className=''style={{height:"22rem"}} >
@@ -124,7 +138,8 @@ const ReadPage = () => {
                                             {mall_seller === uid ?
                                                 <>
                                                     <td className='' colSpan={2} style={{ width: "100%" }}>
-                                                        { mall_endDate <= today ? ` [마감]  ` : mall_title }
+                                                        { mall_endDate <= today ? <Badge text="[마감]" /> : null } 
+                                                        { mall_title }
                                                         <DropdownButton  title="수정" style={buttonST}>
                                                             <Dropdown.Item onClick={onClickUpdate}>수정하기</Dropdown.Item>
                                                             <Dropdown.Item onClick={(e) => onClickDelete(e)}>삭제하기</Dropdown.Item>
@@ -133,7 +148,10 @@ const ReadPage = () => {
                                                 </>
                                                 :
                                                 <>
-                                                    <td className='' colSpan={2} style={{ width: "100%" }}>{mall_title}</td>
+                                                    <td className='' colSpan={2} style={{ width: "100%" }}>
+                                                    { mall_endDate <= today ? <Badge text="[마감]" /> : null } 
+                                                    { mall_title }
+                                                    </td>
                                                     {uid && (
                                                         <div className='text-end' style={reportbuttonST}>
                                                             <ReportInsert uid={uid} writer={mall_seller} root={root} origin={mall_key} />

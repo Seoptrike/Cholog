@@ -2,8 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.mapper.MallMapper">
 	<select id="reviewCount" resultType="hashmap">
-		select mall_key, count(review_key) as count
+		select m.*, count(review_key) as count
 		from mall m left join review r on m.mall_key= r.review_mall_key
+		where mall_endDate > now()
 		group by mall_key
 		order by count desc
 	</select>

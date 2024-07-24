@@ -143,3 +143,50 @@
   width: 100%;
   height: 100%;
 }
+
+/*피망 인기리스트 */
+.mall-table-stand { /*배경로우*/
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  height: 300px; 
+  margin-bottom: 20px; /* 단상과 상품 리스트 사이의 간격 조절 */
+}
+.mall-stand-top {
+  width: 10rem; 
+  height: 50%;
+  background-color: #85d81883; 
+  border-radius:1rem 1rem 0rem 0rem;
+}
+.mall-stand-leg {
+  width:  10rem; 
+  height: 40%; 
+  background-color: #85d818d0; 
+  border-radius:1rem 1rem 0rem 0rem;
+}
+.mall-stand-row-leg {
+  width:  10rem; 
+  height: 30%;
+  background-color:  #85d818; 
+  border-radius:1rem 1rem 0rem 0rem;
+}
+.mall_pop_card2{
+  position: absolute;
+  top: -2rem;
+  left: 7%;
+}
+.mall_pop_card1{
+  position: absolute;
+  top: -4rem;
+  left: 50%; /* 가운데 정렬을 위한 왼쪽 위치 설정 */
+  transform: translateX(-50%); /* 가운데 정렬을 위해 왼쪽으로 이동 */
+}
+.mall_pop_card3{
+  position: absolute;
+  top:0rem;
+  right: 7%;
+}
+
+
+
