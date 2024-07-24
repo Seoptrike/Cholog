@@ -4,7 +4,7 @@ import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react'
 import { Table, Dropdown, Row, Col, InputGroup, Button, Form } from 'react-bootstrap'
 import Pagination from 'react-js-pagination';
-import {Typography, Card, Divider } from 'antd'; //카드를 가져와야함..
+import {Card } from 'antd'; 
 import { Link } from 'react-router-dom';
 import { BsPencilSquare } from "react-icons/bs";
 import {UserContext} from '../../user/UserContext';
