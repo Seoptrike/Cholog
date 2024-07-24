@@ -4,9 +4,6 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 const StyledTabs = styled(Tabs)`
-  .nav-item {
-    margin-right: 10px;
-  }
 
   .nav-link {
     padding: 10px 20px;

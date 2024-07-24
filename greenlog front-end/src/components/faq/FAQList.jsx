@@ -19,15 +19,26 @@ const FAQList = () => {
   const currentUser = sessionStorage.getItem('uid');
 
   const callAPI = async () => {
-    const res = await axios.get(`/faq/list.json?key=${key}&word=${word}&page=${page}&size=${size}`);
-    console.log(res.data);
-    setList(res.data.documents);
-    setCount(res.data.total);
-    const last = Math.ceil(res.data.total / size);
-    if (page > last) setPage(last);
+    try {
+      const res = await axios.get('/faq/list.json', {
+        params: {
+          key: key,
+          word: word || '%', // 검색어가 없을 경우 기본 값 설정
+          page: page,
+          size: size
+        }
+      });
+      console.log(res.data);
+      setList(res.data.documents);
+      setCount(res.data.total);
+      const last = Math.ceil(res.data.total / size);
+      if (page > last) setPage(last);
 
-    if (res.data.total === 0) {
-      alert('검색어가 없습니다');
+      if (res.data.total === 0) {
+        alert('검색 결과가 없습니다.');
+      }
+    } catch (error) {
+      console.error('Error fetching FAQ list:', error);
     }
   };
 
@@ -39,6 +50,13 @@ const FAQList = () => {
     e.preventDefault();
     setPage(1);
     callAPI();
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      onClickSearch(e); // e를 전달
+    }
   };
 
   const WriteClick = () => {
@@ -68,25 +86,31 @@ const FAQList = () => {
     <div className="faq-list-container">
       <HeaderTabs />
       <h1 className="text-center my-5">FAQ</h1>
-      <div className="search-container">
-        <div className="search-input-group">
+      <div className="faq-search-container">
+        <div className="faq-search-input-group">
           <select className='me-2' value={key} onChange={(e) => setKey(e.target.value)}>
             <option value="all">전체</option>
             <option value="member">회원</option>
             <option value="point">포인트</option>
             <option value="how">참여방법</option>
           </select>
-          <input type="text" placeholder='검색어' value={word} onChange={(e) => setWord(e.target.value)} />
-          <button className="search-button" onClick={onClickSearch}>
+          <input 
+            type="text" 
+            placeholder='검색어를 입력하세요' 
+            value={word} 
+            onChange={(e) => setWord(e.target.value)} 
+            onKeyDown={handleKeyDown} 
+          />
+          <button className="faq-search-button" onClick={onClickSearch} >
             <i className="fas fa-search"></i>
           </button>
         </div>
-        <div className="search-info">
-          <span className="me-3">검색수: {count}건</span>
-          {adminIds.includes(currentUser) && (
-            <button className="write-button" onClick={WriteClick}>글쓰기</button>
-          )}
-        </div>
+      </div>
+      <div className="search-info">
+        <span className="me-3">검색수: {count}건</span>
+        {adminIds.includes(currentUser) && (
+          <button className="write-button" onClick={WriteClick}>글쓰기</button>
+        )}
       </div>
       <div className="accordion">
         {list.map((faq, index) => (

@@ -1,13 +1,12 @@
 .notice-list-container {
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  margin: 20px;
+  max-width: 1200px; /* HeaderTabs와 동일한 최대 너비로 설정 */
+  margin: 0 auto;
+  padding: 0 20px; /* 좌우 여백 추가 */
 }
 
-h1 {
-  color: #000;
-  font-weight: bold; /* 글씨를 두껍게 설정 */
+.notice-list-container h1 {
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .search-container {
@@ -15,18 +14,49 @@ h1 {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  width: 100%; /* 검색 컨테이너 너비를 100%로 설정 */
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+  width: 100%; /* 버튼 그룹의 너비를 100%로 설정 */
+}
+
+.button-group button {
+  margin: 0 5px; /* 버튼 간의 간격 추가 */
+  cursor: pointer;
+  padding: 8px 100px;
+  font-size: 14px;
+  border-radius: 0;
+  background-color: #ffffff;
+  color: #000;
+  border: 1px solid #ddd;
+  flex: 1;
+  text-align: center;
+}
+
+.button-group .active {
+  background-color: #6da964;
+  color: #fff;
+}
+
+.button-group .event-button {
+  padding: 8px 100px;
+  white-space: nowrap;
 }
 
 .search-input-group {
   display: flex;
   align-items: center;
-  background-color: #E6F4EA; /* 검색 바 배경색 */
+  background-color: #E6F4EA;
   border-radius: 25px;
   padding: 10px;
-  width: 80%; /* 검색 바의 너비를 늘림 */
+  width: 100%; /* 검색 바의 너비를 100%로 설정 */
+  max-width: 800px; /* 검색 바의 최대 너비를 설정 */
 }
 
-.search-input-group select,
 .search-input-group input {
   border: none;
   background: none;
@@ -34,71 +64,54 @@ h1 {
   box-shadow: none;
   padding: 8px;
   border-radius: 5px;
-  flex: 1; /* 입력 필드와 선택 필드의 너비를 동일하게 맞춤 */
-}
-
-.search-input-group select {
-  max-width: 150px; /* 선택 필드의 최대 너비를 제한 */
+  flex: 1;
 }
 
 .search-button {
   background: none;
   border: none;
   color: #2f855a;
-  font-size: 18px;
+  font-size: 24px;
   cursor: pointer;
 }
 
 .search-button i {
-  font-size: 20px; /* 아이콘 크기 조정 */
+  font-size: 24px;
 }
 
 .actions-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 20px 10%;
+  margin: 20px 0; /* 상하 여백 설정 */
+  width: 100%;
 }
 
 .notice-table {
-  width: 80%;
-  margin: 20px auto; /* 테이블을 중앙에 배치 */
-  border-collapse: collapse; /* 테이블 셀 간격 제거 */
+  width: 100%; /* 테이블의 너비를 100%로 설정 */
+  margin: 20px auto;
+  border-collapse: collapse;
 }
 
 .notice-table th, .notice-table td {
   text-align: left;
   padding: 10px;
   border-bottom: 1px solid #e2e8f0;
-  color: #000; /* 글씨 색상을 검은색으로 설정 */
+  color: #000;
 }
 
 .notice-table th {
   background-color: #f7fafc;
-  font-weight: bold; /* 글씨를 볼드체로 설정 */
+  font-weight: bold;
 }
 
 .notice-link {
-  color: #000; /* 글씨 색상을 검은색으로 설정 */
+  color: #000;
   text-decoration: none;
 }
 
 .notice-link:hover {
-  text-decoration: underline;
-}
-
-.page-item.active .page-link {
-  background-color: #2f855a;
-  border-color: #2f855a;
-}
-
-.page-link {
-  color: #2f855a;
-  border: none;
-}
-
-.page-link:hover {
-  background-color: #e6fffa;
+  text-decoration: none;
 }
 
 .search-count {
@@ -111,9 +124,9 @@ h1 {
   border: none;
   color: white;
   padding: 5px 10px;
-  border-radius: 5px;
+  border-radius: 3px;
   cursor: pointer;
-  text-decoration: none; /* 링크의 기본 밑줄 제거 */
+  text-decoration: none;
 }
 
 .write-button:hover {
@@ -121,26 +134,31 @@ h1 {
 }
 
 .badge {
-  padding: 5px 10px; /* 뱃지 패딩을 늘려서 크기를 조정 */
-  border-radius: 5px; /* 둥근 모서리 */
-  font-size: 14px; /* 글씨 크기를 늘림 */
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
   font-weight: bold;
   display: inline-block;
-  margin-right: 8px; /* 제목과의 간격을 위한 마진 */
-  vertical-align: middle; /* 뱃지와 텍스트를 수직으로 정렬 */
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+.badge-all {
+  background-color: #e0e0e0;
+  color: #000;
 }
 
 .badge-normal {
-  background-color: #FFF176; /* 노란색 */
+  background-color: #FFF176;
   color: #0e0a0a;
 }
 
 .badge-member {
-  background-color: #95d5f8; /* 하늘색 */
+  background-color: #95d5f8;
   color: #fff;
 }
 
 .badge-event {
-  background-color: #F8BBD0; /* 핑크색 */
+  background-color: #F8BBD0;
   color: #fff;
 }

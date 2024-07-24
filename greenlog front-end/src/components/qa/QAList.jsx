@@ -29,7 +29,7 @@ const QAList = () => {
 
   useEffect(() => {
     callAPI();
-  }, [page, key, word]);
+  }, [page]);
 
   const onClickSearch = async (e) => {
     e.preventDefault();
@@ -37,23 +37,38 @@ const QAList = () => {
     callAPI();
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      onClickSearch(e); // e를 전달
+    }
+  };
+
   return (
     <div className="qa-list-container">
       <HeaderTabs />
       <h1 className="text-center my-5">Q&A</h1>
-      <div className="search-container">
-        <div className="search-input-group">
-          <select className='me-2' value={key} onChange={(e) => setKey(e.target.value)}>
-            <option value="qa_title">제목</option>
-            <option value="qa_contents">내용</option>
-            <option value="qa_writer">글쓴이</option>
-          </select>
-          <input type="text" placeholder='검색어' value={word} onChange={(e) => setWord(e.target.value)} />
-          <button className="search-button" onClick={(e) => onClickSearch(e)}>
-            <i className="fas fa-search"></i>
-          </button>
+      <div className="qa-search-wrapper">
+        <div className="qa-search-container">
+          <div className="qa-search-input-group">
+            <select className='me-2' value={key} onChange={(e) => setKey(e.target.value)}>
+              <option value="qa_title">제목</option>
+              <option value="qa_contents">내용</option>
+              <option value="qa_writer">글쓴이</option>
+            </select>
+            <input 
+              type="text" 
+              placeholder='검색어를 입력하세요' 
+              value={word} 
+              onChange={(e) => setWord(e.target.value)} 
+              onKeyDown={handleKeyDown} 
+            />
+            <button className="qa-search-button" onClick={(e) => onClickSearch(e)}>
+              <i className="fas fa-search"></i>
+            </button>
+          </div>
         </div>
-        <div className="search-info">
+        <div className="qa-write-button-container">
           {currentUser && (
             <Link to="/community/qa/insert">
               <button className="write-button">글쓰기</button>
@@ -61,8 +76,8 @@ const QAList = () => {
           )}
         </div>
       </div>
-      <div className="search-count">
-        <span>검색수: {count}건</span>
+      <div className="qa-search-info">
+        <span className="me-3">검색수: {count}건</span>
       </div>
       <table className="qa-table">
         <thead>

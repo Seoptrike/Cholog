@@ -41,6 +41,20 @@ const NoticeList = () => {
     callAPI();
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      onClickSearch(e); // e를 전달
+    }
+  };
+
+  const handleKeyClick = (newKey) => {
+    setKey(newKey);
+    setPage(1);
+    setSearchClicked(true);
+    callAPI();
+  };
+
   const getBadge = (type) => {
     switch(type) {
       case 1:
@@ -57,16 +71,22 @@ const NoticeList = () => {
   return (
     <div>
       <HeaderTabs />
-      <h1 className="text-center my-5">공지사항</h1>
+      <h1 className=" notice-list-container text-center my-5">공지사항</h1>
       <div className="search-container">
+        <div className="button-group">
+          <button className={key === 'all' ? 'active' : ''} onClick={() => handleKeyClick('all')}>전체</button>
+          <button className={key === 'normal' ? 'active' : ''} onClick={() => handleKeyClick('normal')}>일반</button>
+          <button className={key === 'member' ? 'active' : ''} onClick={() => handleKeyClick('member')}>회원</button>
+          <button className={`event-button ${key === 'event' ? 'active' : ''}`} onClick={() => handleKeyClick('event')}>이벤트</button>
+        </div>
         <div className="search-input-group">
-          <select className='me-2' value={key} onChange={(e) => setKey(e.target.value)} >
-            <option value="all">전체</option>
-            <option value="normal">일반</option>
-            <option value="member">회원</option>
-            <option value="event">이벤트</option>
-          </select>
-          <input type="text" placeholder='검색어를 입력하세요' value={word} onChange={(e) => setWord(e.target.value)} />
+          <input 
+            type="text" 
+            placeholder='검색어를 입력하세요' 
+            value={word} 
+            onChange={(e) => setWord(e.target.value)} 
+            onKeyDown={handleKeyDown} 
+          />
           <button className="search-button" onClick={(e) => onClickSearch(e)}>
             <i className="fas fa-search"></i>
           </button>
@@ -112,8 +132,6 @@ const NoticeList = () => {
           prevPageText={"‹"}
           nextPageText={"›"}
           onChange={(pageNumber) => setPage(pageNumber)}
-          itemClass="page-item"
-          linkClass="page-link"
         />
       )}
     </div>
