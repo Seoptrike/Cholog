@@ -9,15 +9,12 @@ const ReplyReaction = ({ reply_key, uid }) => {
         const res = await axios.post("/reply/readReaction", { reply_key, reply_writer: uid })
         const res2 = await axios.get(`/reply/CountReaction/${reply_key}`)
         setReaction(res.data)
-        //console.log(res2.data)
         setLikeCount(res2.data.likeCount)
         setHateCount(res2.data.hateCount)
     }
-    //console.log(likeCount)
     const onInsertLike = async()=>{
         const res = await axios.post("/reply/insert/like",{reply_key, reply_writer: uid})
         if(res.data===1){
-            alert("좋아요")
             callAPI();
         }else{
             alert("로그인이 필요합니다")
@@ -27,7 +24,6 @@ const ReplyReaction = ({ reply_key, uid }) => {
     const onInsertHate = async()=>{
         const res = await axios.post("/reply/insert/hate",{reply_key, reply_writer: uid})
         if(res.data===1){
-            alert("싫어요")
             callAPI();
         }else{
             alert("로그인이 필요합니다")
@@ -44,7 +40,10 @@ const ReplyReaction = ({ reply_key, uid }) => {
         callAPI();
     }
 
-    useEffect(() => { callAPI() }, [])
+    useEffect(() => { 
+        callAPI() 
+    }, [])
+    
     return (
         <div>
             {reaction ?

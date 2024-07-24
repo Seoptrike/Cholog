@@ -14,5 +14,6 @@ public interface ReviewDAO {
 	public void update (ReviewVO vo);
 	public void updateLock (ReviewVO vo);
 	public int total(int review_mall_key);
+	public HashMap<String, Object> reviewRead(int review_key);
 
 }

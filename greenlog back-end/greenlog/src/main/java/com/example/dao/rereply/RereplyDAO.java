@@ -31,5 +31,7 @@ public interface RereplyDAO {
 	public void reactionDelete(RereplyLikeVO vo);
 
 	public HashMap<String, Object> CountReaction(int rereply_key);
+	
+	public HashMap<String, Object> rereplyRead (int rereply_key);
 
 }

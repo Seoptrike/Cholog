@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Row, Col, Button, Form } from 'react-bootstrap';
 import { BsArrowReturnRight } from "react-icons/bs";
 import { SlLock, SlLockOpen } from "react-icons/sl";
-import RereplyReadPage from './RereplyReadPage';
+import RereplyListPage from './RereplyListPage';
 import axios from 'axios';
 import { BsChevronDown } from "react-icons/bs";
 
@@ -107,7 +107,7 @@ const RereplyPage = ({ reply_key, reply_writer, bbs_writer }) => {
                 <hr />
                 {showRep[reply_key] && (
                     <>
-                        <RereplyReadPage reply_key={reply_key} reply_writer={reply_writer} rereply={rereply} setRereply={setRereply} callList={callList} callCount={callCount} bbs_writer={bbs_writer} />
+                        <RereplyListPage reply_key={reply_key} reply_writer={reply_writer} rereply={rereply} setRereply={setRereply} callList={callList} callCount={callCount} bbs_writer={bbs_writer} />
                         <Row className='text-end'>
                             <Col xs={12}>
                                 <form onSubmit={onSubmit} onReset={onClickCancel}>

@@ -83,6 +83,11 @@ public class RereplyDAOImpl implements RereplyDAO{
 	public HashMap<String, Object> CountReaction(int rereply_key) {
 		return session.selectOne(namespace + ".CountReaction", rereply_key);
 	}
+
+	@Override
+	public HashMap<String, Object> rereplyRead(int rereply_key) {
+		return session.selectOne(namespace + ".rereplyRead", rereply_key);
+	}
 	
 
 }

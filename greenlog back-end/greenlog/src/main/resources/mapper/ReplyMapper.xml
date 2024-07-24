@@ -10,6 +10,12 @@
 				limit #{start}, #{size};
 		</select>
 		
+		<select id="replyRead" resultType="hashmap">
+				select r.*, user_nickname, user_img 
+				from reply r, user u
+				where reply_writer= user_uid and reply_key=#{reply_key}
+		</select>
+		
 		<insert id="insert">
 				insert into reply ( reply_bbs_key, reply_writer, reply_contents, reply_lock)
 				value ( #{reply_bbs_key}, #{reply_writer}, #{reply_contents}, #{reply_lock})

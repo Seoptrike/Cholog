@@ -9,7 +9,7 @@ import Slider from "react-slick";
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import InsertPage from '../../review/InsertPage';
-import ReviewPage from '../../review/ReviewPage';
+import ReviewListPage from '../../review/ReviewListPage';
 import ReportInsert from '../../report/ReportInsert';
 
 const ReadPage = () => {
@@ -218,7 +218,7 @@ const ReadPage = () => {
                 )}
                 {activeTab === '3' && (
                     <div>
-                        <ReviewPage mall_key={mall_key} mall_seller={mall_seller} seller_number={seed_number} />
+                        <ReviewListPage mall_key={mall_key} mall_seller={mall_seller} seller_number={seed_number} />
                     </div>
                 )}
                 {activeTab === '4' && (

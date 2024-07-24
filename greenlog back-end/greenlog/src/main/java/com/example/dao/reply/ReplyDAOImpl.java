@@ -88,4 +88,9 @@ public class ReplyDAOImpl implements ReplyDAO {
 	public HashMap<String, Object> CountReaction(int reply_key) {
 		return session.selectOne(namespace + ".CountReaction", reply_key);
 	}
+
+	@Override
+	public HashMap<String, Object> replyRead(int reply_key) {
+		return session.selectOne(namespace + ".replyRead", reply_key);
+	}
 }

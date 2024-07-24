@@ -52,6 +52,11 @@ public class ReviewDAOImpl implements ReviewDAO {
 		public int total(int review_mall_key) {
 				return session.selectOne(namespace + ".total", review_mall_key);
 		}
+
+		@Override
+		public HashMap<String, Object> reviewRead(int review_key) {
+				return session.selectOne(namespace + ".reviewRead", review_key);
+		}
 		
 		
 

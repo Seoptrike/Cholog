@@ -8,6 +8,12 @@
 				where rereply_writer= user_uid and reply_key=#{reply_key}
 		</select>
 		
+		<select id="rereplyRead" resultType="hashmap">
+				select r.*, user_nickname, user_img 
+				from rereply r, user u
+				where rereply_writer= user_uid and rereply_key=#{rereply_key}
+		</select>
+		
 		<insert id="insert">
 				insert into rereply ( reply_key, rereply_writer, rereply_contents, rereply_lock )
 				value ( #{reply_key}, #{rereply_writer}, #{rereply_contents}, #{rereply_lock})

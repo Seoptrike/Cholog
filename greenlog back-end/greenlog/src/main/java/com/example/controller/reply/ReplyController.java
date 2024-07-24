@@ -108,4 +108,9 @@ public class ReplyController {
 	public HashMap<String, Object> CountReaction(@PathVariable("reply_key") int reply_key) {
 		return rdao.CountReaction(reply_key);
 	}
+	
+	@GetMapping("/read/{reply_key}")
+	public HashMap<String, Object> replyRead(@PathVariable("reply_key") int  reply_key) {
+		return rdao.replyRead(reply_key);
+	}
 }
