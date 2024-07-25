@@ -23,4 +23,19 @@ public class GraphController {
 	public List<HashMap<String,Object>> diaryChart2() {
 		return dao.diaryChart2();
 	}
+	
+	@GetMapping("/graph/diary/daily")
+	public List<HashMap<String,Object>> diaryChart3() {
+		return dao.diaryChart3();
+	}
+	
+	@GetMapping("/graph/rank")
+	public List<HashMap<String,Object>> rank() {
+		return dao.rank();
+	}
+	
+	@GetMapping("/graph/mall")
+	public List<HashMap<String,Object>> mallChart() {
+		return dao.mallChart();
+	}
 }

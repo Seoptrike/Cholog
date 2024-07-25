@@ -1,14 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react'
 import Sidebar from './Sidebar'
-import { Row, Col, Button, Badge, ListGroup } from 'react-bootstrap'
-import PieChart from '../../common/useful/PieChart'
+import { Row, Col, Button, Badge, ListGroup, } from 'react-bootstrap'
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
 import axios from 'axios'
-import ReportPage from './ReportPage'
 import FiberNewIcon from '@mui/icons-material/FiberNew';
 import { Link, useLocation } from 'react-router-dom'
 import { UserContext } from '../user/UserContext';
 import DiaryChart from './DiaryChart'
 import DiaryPieChart from './DiaryPieChart'
+import DiaryDailyChart from './DiaryDailyChart'
+import MallChart from './MallChart';
 
 //전체데이터필요, 차트출력 및 뱃지데이터 출력
 //오늘의 할일을 버튼대신 listGroup을 사용할지 고민(넣어놓기만 함)
@@ -17,16 +19,20 @@ const Dashboard = () => {
     const [reportCount, setReportCount] = useState('');
     const [askCount, setaskCount] = useState('');
     const [qaCount, setQaCount] = useState('');
-    const {userData, setUserData} = useContext(UserContext);
+    const { userData, setUserData } = useContext(UserContext);
+    const [rank, setRank] = useState([]);
 
 
     const callAPI = async () => {
         const res = await axios.get("/report/count")
         const res1 = await axios.get("/chat/listCount")
         const res2 = await axios.get("/qa/qaListCount")
+        const res3 = await axios.get("/graph/rank")
         setaskCount(res1.data)
         setReportCount(res.data)
         setQaCount(res2.data)
+        setRank(res3.data);
+        console.log(res3.data);
     }
     useEffect(() => { callAPI() }, [])
     return (
@@ -49,7 +55,7 @@ const Dashboard = () => {
                         <Link to="/admin/question#1:1">
                             <Button className='px-5 me-5'>{askCount > 0 ? <FiberNewIcon style={{ color: "yellow" }} /> : null}
                                 1:1 문의
-                                <Badge bg="secondary">{qaCount}</Badge>
+                                <Badge bg="secondary">{askCount}</Badge>
                             </Button>
                         </Link>
                         <Link to="/admin/question#qa">
@@ -61,62 +67,36 @@ const Dashboard = () => {
                     </div>
                     <div className='chart text-center mb-5'>
                         <Row>
-                            <Col><DiaryChart/></Col>
-                            <Col><DiaryPieChart/></Col>
+                            <Col lg={4}><DiaryChart /></Col>
+                            <Col lg={4}><DiaryDailyChart /></Col>
+                            <Col lg={4}><DiaryPieChart /></Col>
                         </Row>
                     </div>
                     <div>
+                        <div className='mb-2'>씨드포인트 랭킹</div>
                         <Row>
-                            <Col>오늘올라온물건
-                                <ListGroup as="ol" numbered>
-                                    <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                    >
-                                        <div className="ms-2 me-auto">
-                                            <div className="fw-bold">Subheading</div>
-                                            Cras justo odio
-                                        </div>
-                                        <Badge bg="primary" pill>
-                                            14
-                                        </Badge>
-                                    </ListGroup.Item>
-                                    <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                    >
-                                        <div className="ms-2 me-auto">
-                                            <div className="fw-bold">Subheading</div>
-                                            Cras justo odio
-                                        </div>
-                                        <Badge bg="primary" pill>
-                                            14
-                                        </Badge>
-                                    </ListGroup.Item>
-                                    <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                    >
-                                        <div className="ms-2 me-auto">
-                                            <div className="fw-bold">Subheading</div>
-                                            Cras justo odio
-                                        </div>
-                                        <Badge bg="primary" pill>
-                                            14
-                                        </Badge>
-                                    </ListGroup.Item>
-                                </ListGroup>
-                            </Col>
+                            {rank.map(r =>
+                                <Col key={r.seed_uid} md={8} lg={7}>
+                                    <Card variant="outlined" className='mb-2' size="sm">
+                                        <Row>
+                                        <Col lg={6}>
+                                            <div><b>{r.ranked}위</b></div>
+                                            <div className='mb-2'>{r.seed_uid}({r.user_nickname})님</div>
+                                            <div>{r.seed_point}씨드</div>
+                                        </Col>
+                                        <Col lg={1}>
+                                        <div className='text-end'>
+                                            <Badge color="secondary" overlap="circular">
+                                                {r.user_auth}
+                                            </Badge>
+                                            </div>
+                                        </Col>
+                                        </Row>
+                                    </Card>
+                                </Col>
+                            )}
                             <Col>
-                                <div>오늘올라온일기</div>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col>
-                                <div>이번달랭크(관리자 제외, 일반회원 씨드포인트 대량 or 좋아요를 가장 많이 받은 일기/게시물)</div>
-                            </Col>
-                            <Col>
-                                <div>이번달이벤트</div>
+                            <MallChart/>
                             </Col>
                         </Row>
                     </div>
