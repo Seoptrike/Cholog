@@ -12,4 +12,10 @@ public interface ReportDAO {
 	public List<HashMap<String, Object>> list(QueryVO vo);
 
 	public int count();
+
+	public void update(ReportVO vo);
+
+	public List<HashMap<String, Object>> alist(QueryVO vo);
+
+	public int acount();
 }

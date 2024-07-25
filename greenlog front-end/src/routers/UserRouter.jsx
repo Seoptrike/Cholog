@@ -1,7 +1,6 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import LoginPage from '../components/user/LoginPage'
-import JoinPage from '../components/user/JoinPage'
 import MyPage from '../components/user/MyPage'
 import Dashboard from '../components/admin/Dashboard'
 import UserListPage from '../components/admin/UserListPage'
@@ -27,7 +26,7 @@ const UserRouter = () => {
     <Routes>
       <Route path='updatePass/:user_uid' element={<NewPass/>} />
       <Route path='login' element={<LoginPage />} />
-      <Route path='join' element={<JoinPage />} />
+      <Route path='join' element={<StepPage />} />
       <Route path='read/:user_uid' element={<MyPage />} /> 
       <Route path='admin' element={<Dashboard />} />
       <Route path='chat/:user_uid' element={<AdminChat />} />
@@ -44,7 +43,6 @@ const UserRouter = () => {
       <Route path='following/:user_uid' element={<Following />} />
       <Route path='follower/:user_uid' element={<Follow />} />
       <Route path='chat' element={<ChatRoom />} />
-      <Route path='step' element={<StepPage />} />
     </Routes>
   )
 }

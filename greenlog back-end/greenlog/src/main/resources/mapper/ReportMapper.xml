@@ -4,31 +4,34 @@
 	<insert id="insert" >
 		insert into report (report_from, report_to, report_contents, report_origin, report_root) value (#{report_from},#{report_to},#{report_contents},#{report_origin},#{report_root});
 	</insert>
-    
-    <select id="list" resultType="hashmap">
-    	select * from report 
-    	<where>
-      	<if test="key == 'report_from'">
-           report_from like concat('%', #{word}, '%')
-        </if>
-        <if test="key == 'report_contents'">
-            report_contents like concat('%', #{word}, '%')
-        </if>
-        <if test="key == 'report_to'">
-           report_to like concat('%', #{word}, '%')
-        </if>
-        <if test="key == 'report_root'">
-           report_root like concat('%', #{word}, '%')
-        </if>
-        <if test="key == 'report_origin'">
-           report_origin like concat('%', #{word}, '%')
-        </if>
-    	</where>
-    	order by report_regDate desc
-    	limit #{start}, #{size}
-    </select>
+
+	<select id="list" resultType="hashmap">
+		select * from report
+		where report_state=0
+		order by report_regDate desc
+		limit #{start}, #{size}
+	</select>
+
+	<select id="alist" resultType="hashmap">
+		select * from report
+		<where>
+			<if test="key == 'id'">
+				report_state=1 and (report_from like concat('%', #{word}, '%') or report_to like concat('%', #{word}, '%'))
+			</if>
+		</where>
+		order by report_regDate desc
+		limit #{start}, #{size}
+	</select>
     
     <select id="count" resultType="int">
    		select count(*) from report where report_state=0;
     </select>
+    
+    <select id="acount" resultType="int">
+    	select count(*) from report where report_state=1;
+    </select>
+    
+    <update id="update">
+    	update report set report_state=1 where report_key=#{report_key}
+    </update>
 </mapper>

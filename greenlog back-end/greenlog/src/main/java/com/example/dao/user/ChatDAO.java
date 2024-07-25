@@ -5,15 +5,16 @@ import java.util.List;
 
 import com.example.domain.ChatVO;
 import com.example.domain.ChatlogVO;
+import com.example.domain.QueryVO;
 
 public interface ChatDAO {
 	public void insertChat(ChatVO chatVO);
 
-	public List<ChatVO> list();
+	public List<HashMap<String, Object>> list(QueryVO vo);
 
 	public void update(ChatVO chatVO);
 
-	public List<ChatVO> alist();
+	public List<HashMap<String, Object>> alist(QueryVO vo);
 
 	public void save(ChatVO chatVO);
 
@@ -24,6 +25,8 @@ public interface ChatDAO {
 	public Integer searchChatkey(String uid);
 
 	public int listCount();
+
+	public int alistCount();
 
 	public List<HashMap<String, Object>> userChatList(String uid);
 

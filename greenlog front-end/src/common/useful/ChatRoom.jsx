@@ -63,7 +63,6 @@ const ChatRoom = () => {
         setMessageInput(event.target.value);
     };
 
-    
     const handleDisconnect = async() => {
         if (stompClient) {
             stompClient.deactivate(); // Use deactivate() to properly close the connection

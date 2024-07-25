@@ -5,7 +5,7 @@ import axios from 'axios';
 import ModalAddress from '../../common/useful/ModalAddress';
 import { Calendar } from 'primereact/calendar';
 
-const JoinPage = () => {
+const JoinPage = ({ onNextStep }) => {
     const navigate = useNavigate();
     const [form, setForm] = useState({
         user_uid: '',
@@ -45,6 +45,7 @@ const JoinPage = () => {
             checkNickname(value);
         }
     };
+
     const handleDateChange = (e) => {
         setForm({ ...form, user_birth: e.value });
     };
@@ -57,7 +58,6 @@ const JoinPage = () => {
         }
         try {
             const res = await axios.get(`/user/read/${user_uid}`);
-            console.log("User ID Check Response:", res.data); // 디버깅 로그
             if (res.data.user_uid === user_uid) {
                 setUidCheckMessage("이미 가입되어있는 아이디입니다.");
                 setIsCheckUid(false);
@@ -78,7 +78,6 @@ const JoinPage = () => {
         }
         try {
             const res = await axios.get(`/user/chknickname/${user_nickname}`);
-            console.log("Nickname Check Response:", res.data); // 디버깅 로그
             if (res.data.user_nickname === user_nickname) {
                 setNicknameCheckMessage("현재 사용중인 닉네임입니다.");
                 setIsCheckNickname(false);
@@ -118,8 +117,11 @@ const JoinPage = () => {
         try {
             await axios.post(`/user/insert`, form);
             await axios.post('/seed/insert', { seed_uid: form.user_uid });
-            alert("회원 가입 완료!");
-            navigate("/user/login");
+            if (!window.confirm("회원가입하시겠습니까?"))
+                if (onNextStep) {
+                    onNextStep(); // 부모 컴포넌트의 콜백 호출
+                }
+
         } catch (error) {
             console.error('Error signing up:', error);
         }
@@ -132,9 +134,15 @@ const JoinPage = () => {
     const closeModal = () => {
         setIsModalOpen(false);
     };
-    console.log(form.user_birth);
+
+    const testBtn = () => {
+        if (onNextStep) {
+            onNextStep(); // 부모 컴포넌트의 콜백 호출
+        }
+    }
+
     return (
-        <Container maxWidth="sm" style={{ textAlign: 'center', marginTop: '2rem' }}>
+        <Container maxWidth="sm" style={{ textAlign: 'center' }}>
             <Grid container spacing={2}>
                 <Grid item xs={12}>
                     <FormControl fullWidth variant="outlined">
