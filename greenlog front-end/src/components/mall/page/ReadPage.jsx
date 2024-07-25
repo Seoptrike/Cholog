@@ -1,34 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { Nav, TabContent, Row, Col, Table, Badge } from 'react-bootstrap';
+import { Nav, TabContent, Row, Col, Table,Badge } from 'react-bootstrap';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import AllImage from '../read/AllImage';
 import SellerInfo from '../read/SellerInfo';
 import Slider from "react-slick";
-
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import InsertPage from '../../review/InsertPage';
 import ReviewListPage from '../../review/ReviewListPage';
 import ReportInsert from '../../report/ReportInsert';
 import { Watermark } from 'antd';
-import { Margin } from '@mui/icons-material';
+import moment from 'moment/moment';
 
 const ReadPage = () => {
-    const today =  new Date().toISOString().split('T')[0];
-    //데이타 같게바꿔서 마감처리해줘야함...
+    const today = new Date().toISOString().split('T')[0];
     const navi = useNavigate();
     const { mall_key } = useParams();
     const uid = sessionStorage.getItem("uid");
-    //console.log(mall_key);
     const [form, setForm] = useState({});
     const [list, setList] = useState([]);//슬라이드
+    const [total,setTotal] = useState([]);
     const root = "mall";
-
-    //console.log("read!!!!!!!!!!!!!!" + form);
-
     const [activeTab, setActiveTab] = useState('1');
-
     const handleTabClick = (tabName) => {
         setActiveTab(tabName);
     };
@@ -46,13 +40,15 @@ const ReadPage = () => {
         const res3 = await axios.get(`/mall/list/${res.data.mall_seller}?page=0&size=8`)
         //console.log("ListPage : "+ JSON.stringify(res.data));
         setList(res3.data);//슬라이드할 유저가 올린 테이블리스트
-
+        //댓글수
+        const res4= await axios.get(`/mall/reviewCount/${mall_key}`);
+        setTotal(res4.data); 
+        console.log("total : "+ JSON.stringify(res4.data));//카운트에 들어있음..
     }
-    const { fmtudate, mall_uDate, mall_seller, mall_title, mall_info, mall_price, mall_regDate, mall_photo, mall_tstate, mall_pstate, mall_endDate, user_uname, user_address1 } = form;
+    const { mall_uDate, mall_seller, mall_title, mall_info, mall_price, mall_regDate, mall_photo, mall_tstate, mall_pstate, mall_endDate, user_uname, user_address1 } = form;
     useEffect(() => {
         callAPI();
     }, [mall_key]) // 판매자정보에서 누르면 url만 바뀌고 안가서 넣어줘야함!
-    console.log("endDate: "+mall_endDate+"//// today: "+today);
     const onClickUpdate = () => {
         navi(`/mall/update/${mall_key}`);
     }
@@ -70,14 +66,24 @@ const ReadPage = () => {
     }
 
     const Badge = ({ text }) => (
-        <span style={{ backgroundColor: '', 
-                        color: 'red', 
-                        fontSize:"2rem", 
-                        padding:"0 0.5rem 0.5rem 0.5rem",
-                        borderRadius: '5px' }}>
+        <span style={{
+            backgroundColor: '',
+            color: 'red',
+            fontSize: "2rem",
+            padding: "0 0.5rem 0.5rem 0.5rem",
+            borderRadius: '5px'
+        }}>
             {text}
         </span>
     );
+
+    
+   
+
+    const endDate = moment(mall_endDate).format('YYYY-MM-DD'); // "2024-07-25"
+    const fmtUdate = moment(mall_uDate).format('yyyy년 MM월 DD일 HH시mm분');
+    const fmtRdate = moment(mall_regDate).format('yyyy년 MM월 DD일 HH시mm분');
+    //console.log("1: "+mall_regDate+"1.1: "+fmtRdate+"//// today: "+today);
 
     const mapST = {
         width: '100%',
@@ -87,8 +93,8 @@ const ReadPage = () => {
     const photoST = {
         width: '30rem',
         height: '30rem',
-        padding:"0.5rem",
-        position:" relative",
+        padding: "0.5rem",
+        position: " relative",
     };
     const sellerList = {
         dots: true,
@@ -103,44 +109,58 @@ const ReadPage = () => {
         border: "1px solid green",
         borderRadius: "20%"
     }
-    const buttonST={
-        position: 'absolute', 
-        width:" 1rem",
+    const buttonST = {
+        position: 'absolute',
+        width: " 1rem",
         height: "2rem",
-        top: '0.7rem',      
+        top: '0.7rem',
         right: '5rem',
     }
-    const reportbuttonST={
-        position: 'absolute', 
-        width:" 4rem",
+    const reportbuttonST = {
+        position: 'absolute',
+        width: " 4rem",
         height: "2.5rem",
-        top: '0.7rem',      
+        top: '0.7rem',
         right: '2rem',
     }
-    
+    const watermarkProps = {
+        content: "이미 마감된 글입니다!",
+        zIndex: 100,
+        rotate: -20,
+        gap: [50, 0],
+        offset: { top: '10px', left: '10px' },
+        font: { color: 'rgba(0, 0, 0, 0.5)', fontSize: 20 }
+    };
+    const table={
+        borderRadius:"1rem",
+        border:"1px ",
+    }
 
     return (
         <div className="read-page mb-5" >
             <div className='my-5'>
                 <div>
                     <Row className=' align-items-center mall_read_flexbox'>
-                        
-                        <Col className=' text-center  text-middle  mall_read_item' xs={5} md={5} lg={5}  style={{ whiteSpace: "nowrap" }}>  
-                            <Watermark content="이미 마감된 글입니다!">
-                                <img  style={photoST} src={mall_photo ? mall_photo : ' http://via.placeholder.com/300x300'} alt='상품대표이미지' />
-                            </Watermark>
+                        <Col className=' text-center  text-middle  mall_read_item' xs={5} md={5} lg={5} style={{ whiteSpace: "nowrap" }}>
+                            {endDate <= today ?
+                                <Watermark  {...watermarkProps}>
+                                    <img style={photoST} src={mall_photo ? mall_photo : ' http://via.placeholder.com/300x300'} alt='상품대표이미지' />
+                                </Watermark>
+                                :
+                                <img style={photoST} src={mall_photo ? mall_photo : ' http://via.placeholder.com/300x300'} alt='상품대표이미지' />
+                            }
                         </Col>
-                        <Col className=' mall_read_item' xs={7} md={7} lg={7} style={{ whiteSpace: "nowrap",height:"100%",padding:"0px 2rem 0px 0px" }} >
-                            <Row className=''style={{height:"22rem"}} >
-                                <Table bordered>
+                        <Col className=' mall_read_item' xs={7} md={7} lg={7} style={{ whiteSpace: "nowrap", height: "100%", padding: "0px 2rem 0px 0px" }} >
+                            <Row className='' style={{ height: "22rem" }} >
+                                <Table  style={{table}}>
                                     <tbody>
-                                        <tr style={{ position: "relative"}}>
+                                        <tr style={{ position: "relative" }}>
                                             {mall_seller === uid ?
                                                 <>
                                                     <td className='' colSpan={2} style={{ width: "100%" }}>
-                                                        { mall_endDate <= today ? <Badge text="[마감]" /> : null } 
-                                                        { mall_title }
-                                                        <DropdownButton  title="수정" style={buttonST}>
+                                                        {endDate <= today ? <Badge text="[마감]" /> : null}
+                                                        {mall_title}
+                                                        <DropdownButton title="수정" style={buttonST}>
                                                             <Dropdown.Item onClick={onClickUpdate}>수정하기</Dropdown.Item>
                                                             <Dropdown.Item onClick={(e) => onClickDelete(e)}>삭제하기</Dropdown.Item>
                                                         </DropdownButton>
@@ -149,8 +169,8 @@ const ReadPage = () => {
                                                 :
                                                 <>
                                                     <td className='' colSpan={2} style={{ width: "100%" }}>
-                                                    { mall_endDate <= today ? <Badge text="[마감]" /> : null } 
-                                                    { mall_title }
+                                                        {endDate <= today ? <Badge text="[마감]" /> : null}
+                                                        {mall_title}
                                                     </td>
                                                     {uid && (
                                                         <div className='text-end' style={reportbuttonST}>
@@ -165,28 +185,33 @@ const ReadPage = () => {
                                             <td style={{ width: "50%" }} >{mall_pstate === 0 ? "중고상품" : "(미개봉,미사용)"}</td>
                                         </tr>
                                         <tr>
+                                            {mall_info !== "" ?
                                             <td colSpan={2} style={{ width: "100%", height: "80px" }}>
-                                                {mall_info !== "" ? mall_info : "입력된내용이 없습니다!"}
+                                                 {mall_info} 
                                             </td>
+                                            :
+                                            <td colSpan={2} style={{ width: "100%", height: "80px", color:"#E6E6E6" , fontSize:"30px"}} >
+                                                내용이 없습니다
+                                            </td>
+                                            }
                                         </tr>
                                         <tr>
-                                            <td style={{ width: "50%" }}>마감일:{mall_endDate}</td>
+                                            <td style={{ width: "50%" }}>마감일:{endDate}</td>
                                             <td style={{ width: "50%" }}>{mall_price}씨드</td>
                                         </tr>
                                         <tr>
                                             <td style={{ width: "50%" }}><Link to={`/user/read/${mall_seller}`}>{mall_seller}</Link></td>
-
-                                            <td style={{ fontSize: "12px", width: "50%" }}>{fmtudate ? `${fmtudate}(수정됨)` : mall_regDate}</td>
+                                            <td style={{ fontSize: "12px", width: "50%" }}>{fmtUdate ? `${fmtUdate}(수정됨)` : fmtRdate}</td>
                                         </tr>
                                     </tbody>
                                 </Table>
                             </Row>
-                            <Row className='' style={{ height: "7rem" }} >
+                            <Row style={{ height: "7rem" }} >
                                 <div style={mapST}>
                                     <Slider className='sellerList'{...sellerList}>
                                         {list &&
                                             list.map(list => (
-                                                <div className=''>
+                                                <div className='' key={list.mall_key}>
                                                     <Link to={`/mall/read/${list.mall_key}`}>
                                                         <img style={slideImg} src={list.mall_photo ? list.mall_photo : "http://via.placeholder.com/100x100"} />
                                                     </Link>
@@ -194,7 +219,7 @@ const ReadPage = () => {
                                             ))}
                                     </Slider>
                                 </div>
-                             </Row>
+                            </Row>
                         </Col>
                     </Row>
                 </div>
@@ -214,7 +239,12 @@ const ReadPage = () => {
                 </Nav.Item>
                 <Nav.Item>
                     <Nav.Link eventKey="3" onClick={() => handleTabClick('3')} active={activeTab === '3'}>
-                        {mall_tstate === 0 ? "현재 입찰 내역" : "현재 문의 내역 "}
+                        <Row>
+                            <Col>
+                              {mall_tstate === 0 ? "현재 입찰 내역" : "현재 문의 내역 "}  💬 {total.count}개
+                            </Col>
+                        </Row>
+                          
                     </Nav.Link>
                 </Nav.Item>
                 <Nav.Item>

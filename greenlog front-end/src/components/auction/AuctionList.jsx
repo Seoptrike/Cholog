@@ -7,6 +7,7 @@ import Pagination from 'react-js-pagination';
 import '../../common/useful/Paging.css';
 import { Link } from 'react-router-dom';
 import { Calendar } from 'primereact/calendar';
+import MallList from '../mall/MallList';
 
 
 const AuctionList = () => {
@@ -112,6 +113,7 @@ const AuctionList = () => {
     return (
         <Row>
             <Col>
+                <MallList/>
                 <h1 className='text-center my-5'>개인경매목록</h1>
                 <Row className='justify-content-center mt-3'>
                     <Col lg={5}>

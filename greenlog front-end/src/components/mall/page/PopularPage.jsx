@@ -109,21 +109,19 @@ const PopularPage = () => {
                     {list && list.slice(2,3 ).map(top3 =>
                        
                         <Card hoverable className='mall_pop_card3' key={top3.mall_key}
-                         style={topCard}
-                         cover={
-                             <a href={`/mall/read/${top3.mall_key}`} style={topCover}>
-                                 <img alt="mall" style={topST}
-                                     src={top3.mall_photo ? top3.mall_photo : "http://via.placeholder.com/100x100"}/>
-                             </a>
-                         }
+                            style={topCard}
+                            cover={
+                            <a href={`/mall/read/${top3.mall_key}`} style={topCover}>
+                                <img alt="mall" style={topST}
+                                    src={top3.mall_photo ? top3.mall_photo : "http://via.placeholder.com/100x100"}/>
+                            </a>}
                         >
-                         <div style={metaDiv}>
-                             <Meta
-                                 title={`[${top3.mall_key}] ${top3.mall_title}`}
-                                 style={topMeta}/>
-                         </div>
+                        <div style={metaDiv}>
+                            <Meta
+                                title={`[${top3.mall_key}] ${top3.mall_title}`}
+                                style={topMeta}/>
+                        </div>
                      </Card>
-                     
                     )}
                 </Col>
             </Row>
