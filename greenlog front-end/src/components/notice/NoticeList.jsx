@@ -1,32 +1,31 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import Pagination from 'react-js-pagination';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import HeaderTabs from '../../common/useful/HeaderTabs';
-import './NoticeList.css';  // 추가적인 CSS 스타일링 파일
-import '@fortawesome/fontawesome-free/css/all.min.css';
+import { Container, TextField, MenuItem, Select, FormControl, Button, Typography, Box, InputAdornment, IconButton } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import { UserContext } from '../user/UserContext';
+import './NoticeList.css'; // CSS 파일 임포트
 
 const NoticeList = () => {
+  const { userData } = useContext(UserContext);
   const [list, setList] = useState([]);
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(10);
   const [key, setKey] = useState('all');
   const [word, setWord] = useState('');
-  const [searchClicked, setSearchClicked] = useState(false); // 검색 버튼 클릭 여부 상태 추가
-
-  const adminIds = ['admin', 'seop', 'hanna', 'gr001231', 'laonmiku', 'ne4102'];
-  const currentUser = sessionStorage.getItem('uid');
+  const [searchClicked, setSearchClicked] = useState(false);
 
   const callAPI = async () => {
     const res = await axios.get(`/notice/list.json?key=${key}&word=${word}&page=${page}&size=${size}`);
-    console.log(res.data);
     setList(res.data.documents);
     setCount(res.data.total);
 
     if (searchClicked && res.data.total === 0) {
       alert('검색 결과가 없습니다');
-      setSearchClicked(false); // 검색 클릭 상태 초기화
+      setSearchClicked(false);
     }
   };
 
@@ -37,88 +36,99 @@ const NoticeList = () => {
   const onClickSearch = async (e) => {
     e.preventDefault();
     setPage(1);
-    setSearchClicked(true); // 검색 버튼 클릭 상태 설정 후 API 호출
+    setSearchClicked(true);
     callAPI();
   };
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      onClickSearch(e); // e를 전달
+      onClickSearch(e);
     }
   };
 
-  const handleKeyClick = (newKey) => {
-    setKey(newKey);
+  const handleKeyChange = (event) => {
+    setKey(event.target.value);
     setPage(1);
-    setSearchClicked(true);
     callAPI();
   };
 
-  const getBadge = (type) => {
-    switch(type) {
-      case 1:
-        return <span className="badge badge-normal">일반</span>;
-      case 2:
-        return <span className="badge badge-member">회원</span>;
-      case 3:
-        return <span className="badge badge-event">이벤트</span>;
-      default:
-        return null;
-    }
-  };
-
   return (
-    <div>
+    <Container maxWidth="xl">
       <HeaderTabs />
-      <h1 className=" notice-list-container text-center my-5">공지사항</h1>
-      <div className="search-container">
-        <div className="button-group">
-          <button className={key === 'all' ? 'active' : ''} onClick={() => handleKeyClick('all')}>전체</button>
-          <button className={key === 'normal' ? 'active' : ''} onClick={() => handleKeyClick('normal')}>일반</button>
-          <button className={key === 'member' ? 'active' : ''} onClick={() => handleKeyClick('member')}>회원</button>
-          <button className={`event-button ${key === 'event' ? 'active' : ''}`} onClick={() => handleKeyClick('event')}>이벤트</button>
-        </div>
-        <div className="search-input-group">
-          <input 
-            type="text" 
-            placeholder='검색어를 입력하세요' 
-            value={word} 
-            onChange={(e) => setWord(e.target.value)} 
-            onKeyDown={handleKeyDown} 
+      <Typography variant="h4" component="h1" align="center" my={5}>공지사항</Typography>
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+        <Box display="flex" alignItems="center" className="search-container">
+          <TextField
+            variant="outlined"
+            placeholder="검색어를 입력하세요"
+            value={word}
+            onChange={(e) => setWord(e.target.value)}
+            onKeyDown={handleKeyDown}
+            className="search-input"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={onClickSearch}>
+                    <SearchIcon />
+                  </IconButton>
+                </InputAdornment>
+              )
+            }}
+            sx={{ marginLeft: 2 }}
           />
-          <button className="search-button" onClick={(e) => onClickSearch(e)}>
-            <i className="fas fa-search"></i>
-          </button>
-        </div>
-      </div>
-      <div className="actions-row">
-        <div className="search-count">
-          검색수: {count}건
-        </div>
-        {adminIds.includes(currentUser) && (
-          <div>
-            <Link to="/community/notice/insert" className="write-button">글쓰기</Link>
-          </div>
+        </Box>
+        {userData.auth && (
+          <Button
+            variant="contained"
+            color="primary"
+            component={Link}
+            to="/community/notice/insert"
+            sx={{ backgroundColor: 'black', color: 'white' }}
+          >
+            글쓰기
+          </Button>
         )}
-      </div>
+      </Box>
       <table className="notice-table">
         <thead>
           <tr>
-            <th>번호</th>
+            <th>No</th>
+            <th>
+              <FormControl variant="outlined" sx={{ minWidth: 120 }}>
+                <Select
+                  value={key}
+                  onChange={handleKeyChange}
+                  displayEmpty
+                  inputProps={{ 'aria-label': 'Without label' }}
+                  className="category-select"
+                >
+                  <MenuItem value="all">카테고리</MenuItem>
+                  <MenuItem value="normal">일반</MenuItem>
+                  <MenuItem value="member">회원</MenuItem>
+                  <MenuItem value="event">이벤트</MenuItem>
+                </Select>
+              </FormControl>
+            </th>
             <th>제목</th>
             <th>등록일</th>
+            <th>조회수</th>
           </tr>
         </thead>
         <tbody>
-          {list.map((item, index) => (
-            <tr key={item.notice_key}>
-              <td>{(page - 1) * size + index + 1}</td>
-              <td className="title-cell">
-                {getBadge(item.notice_type)}{" "}
-                <Link to={`/community/notice/read/${item.notice_key}`} className="notice-link">{item.notice_title}</Link>
+          {list.map((n, index) => (
+            <tr key={n.notice_key}>
+              <td>{index + 1}</td>
+              <td>
+                <span>
+                  {n.notice_type === 1 ? '일반' : n.notice_type === 2 ? '회원' : '이벤트'}
+                </span>
               </td>
-              <td>{item.fmtdate}</td>
+              <td className="title-cell">
+                <Link to={`/community/notice/read/${n.notice_key}`} className="notice-link">{n.notice_title}</Link>
+              </td>
+              <td>{n.fmtdate}</td>
+              <td>{n.notice_vcnt}</td>
             </tr>
           ))}
         </tbody>
@@ -134,7 +144,7 @@ const NoticeList = () => {
           onChange={(pageNumber) => setPage(pageNumber)}
         />
       )}
-    </div>
+    </Container>
   );
 };
 

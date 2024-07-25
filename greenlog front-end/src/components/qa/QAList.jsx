@@ -1,21 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import Pagination from 'react-js-pagination';
 import axios from 'axios';
 import HeaderTabs from '../../common/useful/HeaderTabs';
-import './QAList.css'; // CSS 파일 추가
-import '@fortawesome/fontawesome-free/css/all.min.css'; // FontAwesome 아이콘 사용
+import { UserContext } from '../user/UserContext';
+import SearchIcon from '@mui/icons-material/Search';
+import { Container, Box, Typography, Select, MenuItem, Button, Table, TableHead, TableRow, TableCell, TableBody, InputAdornment, OutlinedInput } from '@mui/material';
 
 const QAList = () => {
+  const { userData } = useContext(UserContext);
   const [list, setList] = useState([]);
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(8);
   const [key, setKey] = useState('qa_title');
   const [word, setWord] = useState('');
-
-  const adminIds = ['admin', 'seop', 'hanna', 'gr001231', 'laonmiku', 'ne4102'];
-  const currentUser = sessionStorage.getItem('uid');
 
   const callAPI = async () => {
     const res = await axios.get(`/qa/list.json?key=${key}&word=${word}&page=${page}&size=${size}`);
@@ -40,71 +39,82 @@ const QAList = () => {
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      onClickSearch(e); // e를 전달
+      onClickSearch(e);
     }
   };
 
   return (
-    <div className="qa-list-container">
+    <Container maxWidth="xl">
       <HeaderTabs />
-      <h1 className="text-center my-5">Q&A</h1>
-      <div className="qa-search-wrapper">
-        <div className="qa-search-container">
-          <div className="qa-search-input-group">
-            <select className='me-2' value={key} onChange={(e) => setKey(e.target.value)}>
-              <option value="qa_title">제목</option>
-              <option value="qa_contents">내용</option>
-              <option value="qa_writer">글쓴이</option>
-            </select>
-            <input 
-              type="text" 
-              placeholder='검색어를 입력하세요' 
-              value={word} 
-              onChange={(e) => setWord(e.target.value)} 
-              onKeyDown={handleKeyDown} 
-            />
-            <button className="qa-search-button" onClick={(e) => onClickSearch(e)}>
-              <i className="fas fa-search"></i>
-            </button>
-          </div>
-        </div>
-        <div className="qa-write-button-container">
-          {currentUser && (
-            <Link to="/community/qa/insert">
-              <button className="write-button">글쓰기</button>
-            </Link>
-          )}
-        </div>
-      </div>
-      <div className="qa-search-info">
-        <span className="me-3">검색수: {count}건</span>
-      </div>
-      <table className="qa-table">
-        <thead>
-          <tr>
-            <th>번호</th>
-            <th>제목</th>
-            <th>글쓴이</th>
-            <th>등록일</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Typography variant="h4" align="center" gutterBottom>
+        Q&A
+      </Typography>
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+        <Box display="flex" alignItems="center">
+          <Select
+            value={key}
+            onChange={(e) => setKey(e.target.value)}
+            variant="outlined"
+            sx={{ marginRight: 2 }}
+          >
+            <MenuItem value="qa_title">제목</MenuItem>
+            <MenuItem value="qa_contents">내용</MenuItem>
+            <MenuItem value="qa_writer">글쓴이</MenuItem>
+          </Select>
+          <OutlinedInput
+            placeholder="검색어"
+            value={word}
+            onChange={(e) => setWord(e.target.value)}
+            onKeyDown={handleKeyDown}
+            endAdornment={
+              <InputAdornment position="end">
+                <Button onClick={(e) => onClickSearch(e)} style={{ border: 'none', background: 'none' }}>
+                  <SearchIcon
+                    style={{ cursor: 'pointer', color: 'black' }}
+                  />
+                </Button>
+              </InputAdornment>
+            }
+            sx={{ width: 300, marginRight: 2 }} // 검색창 크기 조정
+          />
+        </Box>
+        {sessionStorage.getItem('uid') && (
+          <Link to="/community/qa/insert">
+            <Button variant="contained" sx={{ backgroundColor: 'black', color: 'white' }}>글쓰기</Button>
+          </Link>
+        )}
+      </Box>
+      <Typography variant="subtitle1" gutterBottom>
+        검색수: {count}건
+      </Typography>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>번호</TableCell>
+            <TableCell>제목</TableCell>
+            <TableCell>글쓴이</TableCell>
+            <TableCell>등록일</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
           {list.map((post, index) => (
-            <tr key={post.QA_key}>
-              <td>{count - ((page - 1) * size + index)}</td>
-              <td>
-                {post.QA_lock === 1 && !adminIds.includes(currentUser) && currentUser !== post.QA_writer ? (
+            <TableRow key={post.QA_key}>
+              <TableCell>{count - ((page - 1) * size + index)}</TableCell>
+              <TableCell>
+                {post.QA_lock === 1 && !((userData.auth ==='관리자') || (userData.uuid === post.QA_writer)) ? (
                   <span>🔒 비밀글</span>
                 ) : (
-                  <Link to={`/community/qa/read/${post.QA_key}`} className="link-no-style">{post.QA_title}</Link>
+                  <Link to={`/community/qa/read/${post.QA_key}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                    {post.QA_title}
+                  </Link>
                 )}
-              </td>
-              <td>{post.QA_writer}</td>
-              <td>{post.fmtdate}</td>
-            </tr>
+              </TableCell>
+              <TableCell>{post.QA_writer}</TableCell>
+              <TableCell>{post.fmtdate}</TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
       {count > size &&
         <Pagination
           activePage={page}
@@ -116,7 +126,7 @@ const QAList = () => {
           onChange={(pageNumber) => setPage(pageNumber)}
         />
       }
-    </div>
+    </Container>
   );
 };
 

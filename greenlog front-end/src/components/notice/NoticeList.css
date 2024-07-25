@@ -1,164 +1,45 @@
-.notice-list-container {
-  max-width: 1200px; /* HeaderTabs와 동일한 최대 너비로 설정 */
-  margin: 0 auto;
-  padding: 0 20px; /* 좌우 여백 추가 */
+.notice-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 auto; /* 테이블을 가운데 정렬 */
 }
 
-.notice-list-container h1 {
-  margin-top: 20px;
-  margin-bottom: 20px;
+.notice-table th, .notice-table td {
+  padding: 10px;
+  text-align: left;
+}
+
+.notice-table th {
+  border-bottom: 2px solid black; 
+}
+
+.title-cell {
+  max-width: 600px;
+}
+
+.notice-link {
+  text-decoration: none;
+  color: black;
+}
+
+.notice-link:hover {
+  text-decoration: none; /* 호버 시에도 밑줄 없애기 */
 }
 
 .search-container {
   display: flex;
-  justify-content: center;
   align-items: center;
-  flex-direction: column;
-  width: 100%; /* 검색 컨테이너 너비를 100%로 설정 */
 }
 
-.button-group {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 15px;
-  width: 100%; /* 버튼 그룹의 너비를 100%로 설정 */
+.search-input {
+  width: 300px;
 }
 
-.button-group button {
-  margin: 0 5px; /* 버튼 간의 간격 추가 */
-  cursor: pointer;
-  padding: 8px 100px;
-  font-size: 14px;
-  border-radius: 0;
-  background-color: #ffffff;
-  color: #000;
-  border: 1px solid #ddd;
-  flex: 1;
-  text-align: center;
-}
-
-.button-group .active {
-  background-color: #6da964;
-  color: #fff;
-}
-
-.button-group .event-button {
-  padding: 8px 100px;
-  white-space: nowrap;
-}
-
-.search-input-group {
-  display: flex;
-  align-items: center;
-  background-color: #E6F4EA;
-  border-radius: 25px;
-  padding: 10px;
-  width: 100%; /* 검색 바의 너비를 100%로 설정 */
-  max-width: 800px; /* 검색 바의 최대 너비를 설정 */
-}
-
-.search-input-group input {
+.category-select .MuiSelect-outlined {
   border: none;
-  background: none;
-  outline: none;
-  box-shadow: none;
-  padding: 8px;
-  border-radius: 5px;
-  flex: 1;
+  padding: 0;
 }
 
-.search-button {
-  background: none;
+.category-select .MuiOutlinedInput-notchedOutline {
   border: none;
-  color: #2f855a;
-  font-size: 24px;
-  cursor: pointer;
-}
-
-.search-button i {
-  font-size: 24px;
-}
-
-.actions-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 20px 0; /* 상하 여백 설정 */
-  width: 100%;
-}
-
-.notice-table {
-  width: 100%; /* 테이블의 너비를 100%로 설정 */
-  margin: 20px auto;
-  border-collapse: collapse;
-}
-
-.notice-table th, .notice-table td {
-  text-align: left;
-  padding: 10px;
-  border-bottom: 1px solid #e2e8f0;
-  color: #000;
-}
-
-.notice-table th {
-  background-color: #f7fafc;
-  font-weight: bold;
-}
-
-.notice-link {
-  color: #000;
-  text-decoration: none;
-}
-
-.notice-link:hover {
-  text-decoration: none;
-}
-
-.search-count {
-  display: flex;
-  align-items: center;
-}
-
-.write-button {
-  background-color: #2f855a;
-  border: none;
-  color: white;
-  padding: 5px 10px;
-  border-radius: 3px;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.write-button:hover {
-  background-color: #276749;
-}
-
-.badge {
-  padding: 5px 10px;
-  border-radius: 5px;
-  font-size: 12px;
-  font-weight: bold;
-  display: inline-block;
-  margin-right: 5px;
-  vertical-align: middle;
-}
-
-.badge-all {
-  background-color: #e0e0e0;
-  color: #000;
-}
-
-.badge-normal {
-  background-color: #FFF176;
-  color: #0e0a0a;
-}
-
-.badge-member {
-  background-color: #95d5f8;
-  color: #fff;
-}
-
-.badge-event {
-  background-color: #F8BBD0;
-  color: #fff;
 }

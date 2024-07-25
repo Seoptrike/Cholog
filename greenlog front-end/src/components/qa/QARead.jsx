@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './QARead.css'; // CSS 파일 추가
+import { UserContext } from '../user/UserContext';
+import { Container, Box, Typography, TextField, Button, Divider } from '@mui/material';
 
 const QARead = () => {
+  const { userData } = useContext(UserContext);
   const { qa_key } = useParams();
   const navigate = useNavigate();
   const [form, setForm] = useState({
@@ -20,9 +22,6 @@ const QARead = () => {
   const [loading, setLoading] = useState(false);
   const [editingComment, setEditingComment] = useState(false);
 
-  const adminIds = ['admin', 'seop', 'hanna', 'gr001231', 'laonmiku', 'ne4102'];
-  const currentUser = sessionStorage.getItem('uid');
-
   const callAPI = async () => {
     try {
       const res = await axios.get(`/qa/read/${qa_key}`);
@@ -35,22 +34,6 @@ const QARead = () => {
   useEffect(() => {
     callAPI();
   }, [qa_key]);
-
-  const handleSubmitComment = async (e) => {
-    e.preventDefault();
-    if (!comment) return alert("댓글을 입력하세요!");
-    setLoading(true);
-
-    try {
-      await axios.post(`/qa/update/${qa_key}`, { ...form, comments: comment });
-      setLoading(false);
-      setComment('');
-      callAPI();
-    } catch (error) {
-      setLoading(false);
-      alert('댓글 등록 중 오류가 발생했습니다.');
-    }
-  };
 
   const handleEditComment = async (e) => {
     e.preventDefault();
@@ -96,69 +79,102 @@ const QARead = () => {
   };
 
   return (
-    <div className="qa-read-container">
-      <h3 className="qa-title">{form.qa_title}</h3>
-      <div className="qa-subtitle">
-        <span>작성자: {form.qa_writer}</span>
-        <span>작성일: {form.qa_regDate}</span>
-      </div>
-      <hr />
-      <p>{form.qa_contents}</p>
-      {adminIds.includes(currentUser) && (
-        <div className="qa-buttons">
-          <Link to={`/community/qa/update/${qa_key}`}>
-            <button className='qa-button'>수정</button>
-          </Link>
-          <button onClick={handleDeletePost} className='qa-button'>삭제</button>
-        </div>
-      )}
-
-      {adminIds.includes(currentUser) && !form.comments && (
-        <div className="qa-comment-section">
-          <form onSubmit={handleSubmitComment}>
-            <textarea
-              rows={3}
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              placeholder="답변을 입력하세요."
-            />
-            <button type="submit" className="qa-button" disabled={loading}>
-              {loading ? '등록 중...' : '답변 등록'}
-            </button>
-          </form>
-        </div>
-      )}
-
+    <Container maxWidth="md" style={{ marginTop: '40px' }}>
+      <Box mb={4}>
+        <Typography variant="h5" gutterBottom style={{ fontWeight: 'bold' }}>
+          {form.qa_title}
+        </Typography>
+        <Box display="flex" justifyContent="space-between" mb={2}>
+          <Typography variant="subtitle2" color="textSecondary">
+            작성자: {form.qa_writer}
+          </Typography>
+          <Typography variant="subtitle2" color="textSecondary">
+            작성일: {form.qa_regDate}
+          </Typography>
+          {userData.uuid === form.qa_writer && (
+            <Box>
+              <Button
+                variant="contained" sx={{ backgroundColor: 'black', color: 'white' }}
+                style={{ marginRight: '10px' }}
+                onClick={() => navigate(`/community/qa/update/${qa_key}`)}
+              >
+                수정
+              </Button>
+              <Button
+                variant="contained" sx={{ backgroundColor: 'black', color: 'white' }}
+                onClick={handleDeletePost}
+              >
+                삭제
+              </Button>
+            </Box>
+          )}
+        </Box>
+        <Divider style={{ marginBottom: '20px', backgroundColor: '#ddd' }} />
+      </Box>
+      <Typography variant="body1" style={{ whiteSpace: 'pre-line' }} mt={2}>
+        {form.qa_contents}
+      </Typography>
+      <Divider style={{ margin: '40px 0', backgroundColor: '#ddd' }} />
       {form.comments && (
-        <div className="qa-comment-section">
-          <h3>답변</h3>
+        <Box mt={4}>
+          <Typography variant="h6" gutterBottom style={{ fontWeight: 'bold' }}>
+            답변
+          </Typography>
+          <Divider style={{ marginBottom: '20px', backgroundColor: '#ddd' }} />
           {!editingComment ? (
-            <p>{form.comments}</p>
+            <Typography variant="body1" style={{ whiteSpace: 'pre-line' }}>
+              {form.comments}
+            </Typography>
           ) : (
             <form onSubmit={handleEditComment}>
-              <textarea
+              <TextField
+                fullWidth
+                multiline
                 rows={3}
+                variant="outlined"
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
                 placeholder="답변을 수정하세요."
               />
-              <button type="submit" className="qa-button" disabled={loading}>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                disabled={loading}
+                style={{ marginTop: '10px' }}
+              >
                 {loading ? '수정 중...' : '답변 수정'}
-              </button>
+              </Button>
             </form>
           )}
-          {adminIds.includes(currentUser) && !editingComment && (
-            <div className="qa-buttons">
-              <button onClick={() => { setEditingComment(true); setComment(form.comments); }} className='qa-button'>답변 수정</button>
-              <button onClick={handleDeleteComment} className='qa-button'>답변 삭제</button>
-            </div>
+          {userData.auth === '관리자' && !editingComment && (
+            <Box mt={2}>
+              <Button
+                onClick={() => { setEditingComment(true); setComment(form.comments); }}
+                variant="contained" sx={{ backgroundColor: 'black', color: 'white' }}
+                style={{ marginRight: '10px' }}
+              >
+                답변 수정
+              </Button>
+              <Button
+                onClick={handleDeleteComment}
+                variant="contained" sx={{ backgroundColor: 'black', color: 'white' }}
+              >
+                답변 삭제
+              </Button>
+            </Box>
           )}
-        </div>
+        </Box>
       )}
-       <div className="qa-navigation">
-        <button className="btn" onClick={() => navigate('/community/qa/list.json')}>목록</button>
-      </div>
-    </div>
+      <Box mt={4}>
+        <Button
+          variant="contained" sx={{ backgroundColor: 'black', color: 'white' }}
+          onClick={() => navigate('/community/qa/list.json')}
+        >
+          목록
+        </Button>
+      </Box>
+    </Container>
   );
 };
 

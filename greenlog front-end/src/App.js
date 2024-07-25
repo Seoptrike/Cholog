@@ -14,7 +14,7 @@ function App() {
     const UserAPI=async()=>{
         const user_uid=sessionStorage.getItem('uid')
         const res2= await axios.get(`/user/read/${user_uid}`)
-        setUserData({auth:res2.data.user_auth, img:res2.data.user_img, uname:res2.data.user_uname, nickname:res2.data.user_nickname})
+        setUserData({auth:res2.data.user_auth, img:res2.data.user_img, uname:res2.data.user_uname, nickname:res2.data.user_nickname, uuid:res2.data.user_uid})
     }
 
     useEffect(()=>{UserAPI()},[])
