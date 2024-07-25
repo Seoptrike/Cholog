@@ -4,7 +4,7 @@ import { BsChevronDown } from 'react-icons/bs';
 import ReplyListPage from './ReplyListPage';
 import axios from 'axios';
 import { SlLock, SlLockOpen } from "react-icons/sl";
-import Pagination from 'react-js-pagination';
+import { Pagination as MuiPagination } from '@mui/material';
 
 const ReplyPage = ({ bbs_key, bbs_writer }) => {
     const [page, setPage] = useState(1);
@@ -121,9 +121,13 @@ const ReplyPage = ({ bbs_key, bbs_writer }) => {
         setForm({ ...form, reply_lock: lockState });
     };
 
+    const handlePageChange = (event, value) => {
+        setPage(value);
+    };
+
     return (
         <Row className='justify-content-center mt-3'>
-            <Col xs={12} md={10}>
+            <Col xs={10}>
                 <Button type='button' variant="" onClick={() => setShowReply(!showReply)}>
                     댓글 {replyCount} <BsChevronDown />
                 </Button>
@@ -160,31 +164,31 @@ const ReplyPage = ({ bbs_key, bbs_writer }) => {
                                         </InputGroup.Text>
                                     </form>
                                 </div>
-                                <hr />
-                                <div className="mt-3 mb-3">
+                                {/* <div className="mt-3 mb-3">
                                     <Button variant='' onClick={() => onKey('reply_regdate desc')}>최신순</Button>
                                     <Button variant='' onClick={() => onKey('reply_reaction desc')}>인기순</Button>
-                                </div>
+                                </div> */}
+                    
                             </Col>
+                            
                         </Row>
-
+        
                         <ReplyListPage reply={reply} setReply={setReply} bbs_writer={bbs_writer} callCount={callCount} callList={callList} />
                         
                         {count > size && (
-                            <Row className="justify-content-center mt-3">
-                                <Col xs={12} md={10}>
-                                    <Pagination
-                                        activePage={page}
-                                        itemsCountPerPage={size}
-                                        totalItemsCount={count}
-                                        pageRangeDisplayed={5}
-                                        prevPageText={"‹"}
-                                        nextPageText={"›"}
-                                        onChange={(e) => setPage(e)}
-                                    />
-                                </Col>
-                            </Row>
-                        )}
+                        <Row className="pagination-container">
+                            <Col xs={12} md={10}>
+                                <MuiPagination
+                                    count={Math.ceil(count / size)}
+                                    page={page}
+                                    onChange={handlePageChange}
+                                    color="standard"
+                                    variant="outlined"
+                                    shape="rounded"
+                                />
+                            </Col>
+                        </Row>
+                    )}
                     </>
                 )}
             </Col>

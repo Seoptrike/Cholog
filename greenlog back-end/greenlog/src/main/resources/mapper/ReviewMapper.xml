@@ -3,7 +3,7 @@
 <mapper namespace="com.example.mapper.ReviewMapper">
 
 		<select id="reviewList" resultType="hashmap">
-			    select r.*, user_nickname, user_img, user_uid 
+			    select r.*, user_nickname, user_img, user_uid, date_format(review_regDate, '%Y-%m-%d %H:%i:%S') as fmtdate ,date_format(review_uDate, '%Y-%m-%d %H:%i:%S') as fmtudate
 			    from review r, user u
 			    where review_writer= user_uid and review_mall_key=#{review_mall_key} 
 			    order by review_rating desc
@@ -11,7 +11,7 @@
 		</select>
 		
 		<select id="reviewRead" resultType="hashmap">
-			    select r.*, user_nickname, user_img, user_uid 
+			    select r.*, user_nickname, user_img, user_uid, date_format(review_regDate, '%Y-%m-%d %H:%i:%S') as fmtdate ,date_format(review_uDate, '%Y-%m-%d %H:%i:%S') as fmtudate 
 			    from review r, user u
 			    where review_writer= user_uid and review_key=#{review_key} 
 		</select>	

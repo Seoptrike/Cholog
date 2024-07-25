@@ -56,6 +56,15 @@ const RereplyPage = ({ reply_key, reply_writer, bbs_writer }) => {
         setOnCancel(true);
     }
 
+    const Focus = () => {
+        const uid = sessionStorage.getItem('uid');
+        if (!uid) {
+            window.location = "/user/login";
+        } else {
+            setOnCancel(true);
+        }
+    };
+
     const onSubmit = async (e) => {
         e.preventDefault();
         const uid = sessionStorage.getItem('uid');
@@ -63,7 +72,7 @@ const RereplyPage = ({ reply_key, reply_writer, bbs_writer }) => {
             alert("로그인이 필요합니다.");
             return;
         }
-        
+
         if (rereply_contents === '') {
             alert("대댓글 내용을 입력해주세요!");
             return;
@@ -82,7 +91,7 @@ const RereplyPage = ({ reply_key, reply_writer, bbs_writer }) => {
         });
         setOnCancel(false);
         callCount();
-        callList();  
+        callList();
     }
 
     const [onCancel, setOnCancel] = useState(false);
@@ -100,27 +109,30 @@ const RereplyPage = ({ reply_key, reply_writer, bbs_writer }) => {
     return (
         <Row className='justify-content-center'>
             <Col xs={12}>
-            
+
                 <Button type='button' variant="" onClick={() => toggleRep(reply_key)}>
-                    댓글 {rereplyCount} <BsChevronDown />
+                    답글 {rereplyCount} <BsChevronDown />
                 </Button>
-                <hr />
+
                 {showRep[reply_key] && (
                     <>
+                        <hr />
                         <RereplyListPage reply_key={reply_key} reply_writer={reply_writer} rereply={rereply} setRereply={setRereply} callList={callList} callCount={callCount} bbs_writer={bbs_writer} />
                         <Row className='text-end'>
                             <Col xs={12}>
                                 <form onSubmit={onSubmit} onReset={onClickCancel}>
                                     <div className="d-flex align-items-center mb-2">
-                                        <BsArrowReturnRight className='me-2' />
-                                        <img src="http://via.placeholder.com/20x20" width="50" className='me-3 rounded-circle' />
+                                        <Col className="d-flex justify-content-end align-items-start" xs={2}>
+                                            <BsArrowReturnRight className='me-2' style={{ color: 'gray', fontSize: '1.5em' }} />
+                                        </Col>
                                         <Form.Control
                                             name='rereply_contents'
                                             value={rereply_contents}
                                             as='textarea' rows={3}
                                             placeholder='내용을 입력해주세요.'
                                             onChange={onChangeForm}
-                                            onFocus={() => setOnCancel(true)} />
+                                            onFocus={Focus}
+                                            />
                                     </div>
                                     <div className='text-end mt-2'>
                                         <Button

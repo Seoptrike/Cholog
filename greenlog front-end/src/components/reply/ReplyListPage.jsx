@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Row, Col, Button, Card, Dropdown, } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Row, Col, Dropdown } from 'react-bootstrap';
 import { SlLock, SlLockOpen } from "react-icons/sl";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import axios from 'axios';
@@ -7,6 +7,7 @@ import RereplyPage from '../rereply/RereplyPage';
 import ReplyReaction from './ReplyReaction';
 import ReportInsert from '../report/ReportInsert';
 import { Link } from 'react-router-dom';
+import './ReplyPage.css'; // CSS 파일 import
 
 const ReplyListPage = ({ reply, bbs_writer, setReply, callCount, callList }) => {
     const uid = sessionStorage.getItem('uid');
@@ -62,17 +63,21 @@ const ReplyListPage = ({ reply, bbs_writer, setReply, callCount, callList }) => 
     };
 
     return (
-        <div>
-            <Row className='justify-content-center mt-3'>
+        <div className="reply-page-container">
+            <Row className='justify-content-center'>
                 {reply.map(reply => (
                     <Row key={reply.reply_key} className='justify-content-center mt-2'>
                         <Col xs={10}>
-                            <div className="d-flex align-items-center justify-content-between mb-2">
+                            <div className="reply-card-header">
                                 <div className="d-flex align-items-center">
-                                    <Link to={`/user/read/${reply.reply_writer}`}><img src={reply.user_img || "http://via.placeholder.com/20x20"} width="50" className='me-3 rounded-circle' /></Link>
-                                    <div className="d-flex flex-column">
+                                    <Link to={`/user/read/${reply.reply_writer}`}>
+                                        <img src={reply.user_img || "http://via.placeholder.com/70x70"} alt="User" />
+                                    </Link>
+                                    <div className="user-info">
                                         <div className="d-flex align-items-center">
-                                            <Link to={`/user/read/${reply.reply_writer}`}><span>{reply.user_nickname} ({reply.reply_writer})</span></Link>
+                                            <Link to={`/user/read/${reply.reply_writer}`}>
+                                                <span>{reply.user_nickname} ({reply.reply_writer})</span>
+                                            </Link>
                                             {!reply.isEdit && (
                                                 <>
                                                     {(uid === reply.reply_writer || uid === bbs_writer) && reply.reply_lock === 'lock' && (
@@ -87,51 +92,49 @@ const ReplyListPage = ({ reply, bbs_writer, setReply, callCount, callList }) => 
                                                     )}
                                                 </>
                                             )}
-
                                             {reply.isEdit && (uid === reply.reply_writer || uid === bbs_writer) && reply.lock === 'lock' && (
                                                 <span onClick={() => onChangeLock(reply.reply_key, reply.lock)} style={{ cursor: 'pointer', marginLeft: '8px' }}>
                                                     <SlLock style={{ color: 'green' }} />
                                                 </span>
                                             )}
-
                                             {reply.isEdit && (uid === reply.reply_writer || uid === bbs_writer) && reply.lock !== 'lock' && (
                                                 <span onClick={() => onChangeLock(reply.reply_key, reply.lock)} style={{ cursor: 'pointer', marginLeft: '8px' }}>
                                                     <SlLockOpen style={{ color: 'black' }} />
                                                 </span>
                                             )}
+                                            <Dropdown className="text-end dropdown-container">
+                                                <Dropdown.Toggle variant="" id={`dropdown-basic-${reply.reply_key}`}>
+                                                    <BsThreeDotsVertical />
+                                                </Dropdown.Toggle>
+                                                {uid === reply.reply_writer ? (
+                                                    <>
+                                                        {!reply.isEdit ? (
+                                                            <Dropdown.Menu>
+                                                                <Dropdown.Item onClick={() => onUpdate(reply.reply_key)} eventKey="update">수정하기</Dropdown.Item>
+                                                                <Dropdown.Item onClick={() => onDelete(reply.reply_key)} eventKey="delete">삭제하기</Dropdown.Item>
+                                                            </Dropdown.Menu>
+                                                        ) : (
+                                                            <Dropdown.Menu>
+                                                                <Dropdown.Item onClick={() => onSave(reply)} eventKey="save">등록</Dropdown.Item>
+                                                                <Dropdown.Item onClick={() => onCancel(reply.reply_key)} eventKey="cancel">취소</Dropdown.Item>
+                                                            </Dropdown.Menu>
+                                                        )}
+                                                    </>
+                                                ) : (
+                                                    <Dropdown.Menu>
+                                                        <Dropdown.Item eventKey="warning"><ReportInsert uid={uid} writer={reply.reply_writer} root={root} origin={reply.reply_key} /></Dropdown.Item>
+                                                    </Dropdown.Menu>
+                                                )}
+                                            </Dropdown>
                                         </div>
+
                                         <div>
-                                            <span>{reply.reply_udate ? `${reply.reply_udate}` : `${reply.reply_regdate}`} </span>
+                                            <span>{reply.fmtudate ? `${reply.fmtudate}` : `${reply.fmtdate}`} </span>
                                         </div>
                                     </div>
                                 </div>
-                                <Dropdown className="text-end">
-                                    <Dropdown.Toggle variant="" id={`dropdown-basic-${reply.reply_key}`}>
-                                        <BsThreeDotsVertical />
-                                    </Dropdown.Toggle>
-                                    {uid === reply.reply_writer ? (
-                                        <>
-                                            {!reply.isEdit ? (
-                                                <Dropdown.Menu>
-                                                    <Dropdown.Item onClick={() => onUpdate(reply.reply_key)} eventKey="update">수정하기</Dropdown.Item>
-                                                    <Dropdown.Item onClick={() => onDelete(reply.reply_key)} eventKey="delete">삭제하기</Dropdown.Item>
-                                                </Dropdown.Menu>
-                                            ) : (
-                                                <Dropdown.Menu>
-                                                    <Dropdown.Item onClick={() => onSave(reply)} eventKey="save">등록</Dropdown.Item>
-                                                    <Dropdown.Item onClick={() => onCancel(reply.reply_key)} eventKey="cancel">취소</Dropdown.Item>
-                                                </Dropdown.Menu>
-                                            )}
-                                        </>
-                                    ) : (
-                                        <Dropdown.Menu>
-                                            <Dropdown.Item eventKey="warning"><ReportInsert uid={uid} writer={reply.reply_writer} root={root} origin={reply.reply_key} /></Dropdown.Item>
-                                        </Dropdown.Menu>
-                                    )}
-                                </Dropdown>
-                            </div>
-                            <div className='my-3' style={{ whiteSpace: 'pre-wrap' }}>
-                                <Row className='align-items-center my-2'>
+                                <div className='reply-content'>
+                                <Row className='align-items-center my-3'>
                                     <Col>
                                         {reply.isEdit ? (
                                             <textarea
@@ -140,25 +143,23 @@ const ReplyListPage = ({ reply, bbs_writer, setReply, callCount, callList }) => 
                                                 onChange={(e) => onChangeContents(reply.reply_key, e.target.value)}
                                             />
                                         ) : (
-                                            reply.lock === 'lock' && (uid !== reply.reply_writer && uid !== bbs_writer) ? "비밀댓글입니다." : reply.reply_contents
+                                            reply.lock === 'lock' && (uid !== reply.reply_writer && uid !== bbs_writer) ? "비밀 댓글입니다." : reply.reply_contents
                                         )}
                                     </Col>
                                 </Row>
                             </div>
                             <div>
-                                <Row>
-                                    <Col className='text-end' >
-                                        <ReplyReaction reply_key={reply.reply_key} uid={uid} /> 
-                                    </Col>
-                                    <Col xs={12}>
-                                        <RereplyPage bbs_writer={bbs_writer} reply_key={reply.reply_key} reply_writer={reply.reply_writer} /> 
-                                    </Col>
-                                </Row>
+                                <span>
+                                    <ReplyReaction reply_key={reply.reply_key} uid={uid} />
+                                    <RereplyPage bbs_writer={bbs_writer} reply_key={reply.reply_key} reply_writer={reply.reply_writer} />
+                                </span>
                             </div>
+                            </div>
+                            
+
                         </Col>
                     </Row>
                 ))}
-
             </Row>
         </div>
     );

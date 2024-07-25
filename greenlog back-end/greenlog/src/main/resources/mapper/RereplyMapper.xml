@@ -3,13 +3,13 @@
 <mapper namespace="com.example.mapper.RereplyMapper">
 		
 		<select id="rereplyList" resultType="hashmap">
-				select r.*, user_nickname, user_img 
+				select r.*, user_nickname, user_img , date_format(rereply_regdate, '%Y-%m-%d %H:%i:%S') as fmtdate ,date_format(rereply_udate, '%Y-%m-%d %H:%i:%S') as fmtudate
 				from rereply r, user u
 				where rereply_writer= user_uid and reply_key=#{reply_key}
 		</select>
 		
 		<select id="rereplyRead" resultType="hashmap">
-				select r.*, user_nickname, user_img 
+				select r.*, user_nickname, user_img, date_format(rereply_regdate, '%Y-%m-%d %H:%i:%S') as fmtdate ,date_format(rereply_udate, '%Y-%m-%d %H:%i:%S') as fmtudate 
 				from rereply r, user u
 				where rereply_writer= user_uid and rereply_key=#{rereply_key}
 		</select>
