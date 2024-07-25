@@ -11,12 +11,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.WebUtils;
 
 import com.example.dao.notice.NoticeDAO;
 import com.example.domain.NoticeVO;
 import com.example.domain.QaVO;
 import com.example.domain.QueryVO;
 import com.example.service.notice.NoticeService;
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/notice")
@@ -54,8 +59,27 @@ public class NoticeController {
 		}
 	    
 	    @GetMapping("/read/{notice_key}")
-		public NoticeVO read(@PathVariable("notice_key") int nid, Model model) {
-	    	model.addAttribute("notice", service.read(nid));
-			return NDAO.read(nid);
-		}
-	}
+		public NoticeVO read(@PathVariable("notice_key") int nid, HttpServletRequest request,
+				HttpServletResponse response) {
+			System.out.println("-----------------------------------------" + nid);
+			Cookie oldCookie = WebUtils.getCookie(request, "noticeView");
+
+			if (oldCookie != null) {
+				if (!oldCookie.getValue().contains("[" + nid + "]")) {
+					oldCookie.setValue(oldCookie.getValue() + "_" + "[" + nid + "]");
+					oldCookie.setPath("/");
+					oldCookie.setMaxAge(60 * 60 * 24);
+					response.addCookie(oldCookie);
+					return service.read(nid);
+				} else {
+					return NDAO.read(nid);
+				}
+			} else {
+				Cookie newCookie = new Cookie("noticeView", "[" + nid + "]");
+				newCookie.setPath("/");
+				newCookie.setMaxAge(60 * 60 * 24);
+				response.addCookie(newCookie);
+				return service.read(nid);
+			}
+	    }
+}

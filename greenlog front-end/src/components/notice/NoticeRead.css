@@ -43,7 +43,7 @@
     margin-left: 10px;
     padding: 5px 20px;
     border: none;
-    background-color: #2f855a;
+    background-color: #040505;
     color: white;
     border-radius: 5px;
     cursor: pointer;
@@ -51,7 +51,7 @@
   }
   
   .notice-actions .btn:hover {
-    background-color: #276749;
+    background-color: #1c1e1e;
   }
   
   .notice-navigation {
@@ -63,7 +63,7 @@
   .notice-navigation .btn {
     padding: 5px 20px;
     border: none;
-    background-color: #2f855a;
+    background-color: #050605;
     color: white;
     border-radius: 5px;
     cursor: pointer;
@@ -71,6 +71,6 @@
   }
   
   .notice-navigation .btn:hover {
-    background-color: #276749;
+    background-color: #070908;
   }
   

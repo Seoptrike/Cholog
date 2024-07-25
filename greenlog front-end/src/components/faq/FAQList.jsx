@@ -1,34 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Pagination from 'react-js-pagination';
 import axios from 'axios';
 import HeaderTabs from '../../common/useful/HeaderTabs';
-import './FAQList.css'; // CSS 파일 추가
-import '@fortawesome/fontawesome-free/css/all.min.css'; // FontAwesome 아이콘 사용
+import { Accordion, AccordionSummary, AccordionDetails, TextField, Button, Typography, Container, Box, InputAdornment, IconButton, Divider } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import SearchIcon from '@mui/icons-material/Search';
+import { UserContext } from '../user/UserContext';
+import './FAQList.css'; // CSS 파일 임포트
 
 const FAQList = () => {
+  const { userData } = useContext(UserContext);
   const [list, setList] = useState([]);
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(10);
   const [key, setKey] = useState('all');
   const [word, setWord] = useState('');
-  const [activeIndex, setActiveIndex] = useState(null); // 활성화된 아코디언 인덱스를 저장
-
-  // 관리자 아이디 목록
-  const adminIds = ['admin', 'seop', 'hanna', 'gr001231', 'laonmiku', 'ne4102'];
-  const currentUser = sessionStorage.getItem('uid');
+  const [activeIndex, setActiveIndex] = useState(null);
 
   const callAPI = async () => {
     try {
       const res = await axios.get('/faq/list.json', {
         params: {
           key: key,
-          word: word || '%', // 검색어가 없을 경우 기본 값 설정
+          word: word || '%',
           page: page,
           size: size
         }
       });
-      console.log(res.data);
       setList(res.data.documents);
       setCount(res.data.total);
       const last = Math.ceil(res.data.total / size);
@@ -55,7 +54,7 @@ const FAQList = () => {
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      onClickSearch(e); // e를 전달
+      onClickSearch(e);
     }
   };
 
@@ -69,13 +68,8 @@ const FAQList = () => {
 
   const DeleteClick = async (faq_key) => {
     if (!window.confirm('정말로 이 FAQ를 삭제하시겠습니까?')) return;
-    try {
-      await axios.post(`/faq/delete/${faq_key}`);
-      setList(list.filter(faq => faq.FAQ_key !== faq_key));
-    } catch (error) {
-      console.error('Error deleting FAQ:', error);
-      alert('FAQ 삭제 중 오류가 발생했습니다.');
-    }
+    await axios.post(`/faq/delete/${faq_key}`);
+    setList(list.filter(faq => faq.FAQ_key !== faq_key));
   };
 
   const toggleAccordion = (index) => {
@@ -83,63 +77,71 @@ const FAQList = () => {
   };
 
   return (
-    <div className="faq-list-container">
+    <Container maxWidth="xl">
       <HeaderTabs />
-      <h1 className="text-center my-5">FAQ</h1>
-      <div className="faq-search-container">
-        <div className="faq-search-input-group">
-          <select className='me-2' value={key} onChange={(e) => setKey(e.target.value)}>
-            <option value="all">전체</option>
-            <option value="member">회원</option>
-            <option value="point">포인트</option>
-            <option value="how">참여방법</option>
-          </select>
-          <input 
-            type="text" 
-            placeholder='검색어를 입력하세요' 
-            value={word} 
-            onChange={(e) => setWord(e.target.value)} 
-            onKeyDown={handleKeyDown} 
-          />
-          <button className="faq-search-button" onClick={onClickSearch} >
-            <i className="fas fa-search"></i>
-          </button>
+      <Typography variant="h4" component="h1" align="center" my={5}>FAQ</Typography>
+      <Box display="flex" justifyContent="center" alignItems="center" mb={3}>
+        <div className="toggle-button-group">
+          <button className={`toggle-button ${key === 'all' ? 'active' : ''}`} onClick={() => setKey('all')}>전체</button>
+          <button className={`toggle-button ${key === 'member' ? 'active' : ''}`} onClick={() => setKey('member')}>회원</button>
+          <button className={`toggle-button ${key === 'point' ? 'active' : ''}`} onClick={() => setKey('point')}>포인트</button>
+          <button className={`toggle-button ${key === 'how' ? 'active' : ''}`} onClick={() => setKey('how')}>참여방법</button>
         </div>
-      </div>
-      <div className="search-info">
-        <span className="me-3">검색수: {count}건</span>
-        {adminIds.includes(currentUser) && (
-          <button className="write-button" onClick={WriteClick}>글쓰기</button>
+      </Box>
+      <Box className="search-bar" mb={3}>
+        <TextField
+          variant="outlined"
+          placeholder="검색어를 입력하세요"
+          value={word}
+          onChange={(e) => setWord(e.target.value)}
+          onKeyDown={handleKeyDown}
+          className="search-field"
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={onClickSearch}>
+                  <SearchIcon />
+                </IconButton>
+              </InputAdornment>
+            )
+          }}
+        />
+      </Box>
+      <Box display="flex" justifyContent="space-between" mb={3}>
+        <Typography>검색수: {count}건</Typography>
+        {userData.auth && (
+          <Button variant="contained" sx={{ backgroundColor: 'black', color: 'white' }} onClick={WriteClick}>
+            글쓰기
+          </Button>
         )}
-      </div>
-      <div className="accordion">
-        {list.map((faq, index) => (
-          <div 
-            className={`accordion-item ${activeIndex === index ? 'active' : ''}`} 
-            key={faq.FAQ_key}
+      </Box>
+      {list.map((faq, index) => (
+        <Box key={faq.FAQ_key} mb={2}>
+          <Accordion
+            expanded={activeIndex === index}
+            onChange={() => toggleAccordion(index)}
+            sx={{ boxShadow: 'none', '&:before': { display: 'none' }, '& .MuiAccordionSummary-root': { minHeight: 'auto', '&.Mui-expanded': { minHeight: 'auto' } }, '& .MuiAccordionDetails-root': { padding: 0 } }}
           >
-            <div 
-              className="accordion-header" 
-              onClick={() => toggleAccordion(index)}
-            >
-              <span className={`badge badge-${faq.FAQ_type === 0 ? 'member' : faq.FAQ_type === 2 ? 'point' : 'how'}`}>
-                {faq.FAQ_type === 0 ? '회원' : faq.FAQ_type === 2 ? '포인트' : '참여방법'}
-              </span> 
-              <span className="faq-question">{faq.FAQ_question}</span>
-              <i className={`fas fa-chevron-${activeIndex === index ? 'up' : 'down'}`}></i>
-            </div>
-            <div className="accordion-body">
-              {faq.FAQ_answer}
-              {adminIds.includes(currentUser) && (
-                <div className='mt-3'>
-                  <button className="btn" onClick={() => UpdateClick(faq.FAQ_key)}>수정</button>
-                  <button className="btn" onClick={() => DeleteClick(faq.FAQ_key)}>삭제</button>
-                </div>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography variant="h6">Q. {faq.FAQ_question}</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography>A. {faq.FAQ_answer}</Typography>
+              {userData.auth && (
+                <Box mt={3} display="flex" justifyContent="flex-end">
+                  <Button variant="contained" sx={{ backgroundColor: 'black', color: 'white', mr: 1 }} onClick={() => UpdateClick(faq.FAQ_key)} >
+                    수정
+                  </Button>
+                  <Button variant="contained" sx={{ backgroundColor: 'black', color: 'white' }} onClick={() => DeleteClick(faq.FAQ_key)}>
+                    삭제
+                  </Button>
+                </Box>
               )}
-            </div>
-          </div>
-        ))}
-      </div>
+            </AccordionDetails>
+          </Accordion>
+          <Divider sx={{ backgroundColor: 'black' }} />
+        </Box>
+      ))}
       {count > size && (
         <Pagination
           activePage={page}
@@ -151,7 +153,7 @@ const FAQList = () => {
           onChange={(e) => setPage(e)}
         />
       )}
-    </div>
+    </Container>
   );
 };
 

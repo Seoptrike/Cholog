@@ -1,162 +1,43 @@
-.faq-list-container {
-  max-width: 1500px;
-  margin: 0 auto;
-}
-
-.faq-list-container h1 {
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-.accordion-item {
-  border: 2px solid #ddd; 
-  margin-bottom: 15px;
-  border-radius: 5px;
-  overflow: hidden;
-  transition: max-height 0.3s ease-out;
-}
-
-.accordion-header {
-  padding: 18px;
-  background-color: #ffffff;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.accordion-header .badge {
-  margin-right: 10px;
-  padding: 5px 20px;
-  border-radius: 20px;
-  font-size: 12px;
-  color: white;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.accordion-header .badge-member {
-  background-color: transparent;
-  color: #1E88E5;
-  border: 1px solid #1E88E5;
-}
-
-.accordion-header .badge-point {
-  background-color: transparent;
-  color: #ffc107;
-  border: 1px solid #ffc107;
-}
-
-.accordion-header .badge-how {
-  background-color: transparent;
-  color: #28a745;
-  border: 1px solid #28a745;
-}
-
-.accordion-item.active .accordion-header .badge-member {
-  background-color: #1E88E5;
-  color: white;
-}
-
-.accordion-item.active .accordion-header .badge-point {
-  background-color: #ffc107;
-  color: white;
-}
-
-.accordion-item.active .accordion-header .badge-how {
-  background-color: #28a745;
-  color: white;
-}
-
-.accordion-header.active .faq-question {
-  font-weight: bold;
-}
-
-.accordion-body {
-  padding: 15px;
-  display: none;
-  background-color: #f5f5f5; 
-  transition: max-height 0.5s ease-out;
-  overflow: hidden;
-}
-
-.accordion-item.active .accordion-body {
-  display: block;
-}
-
-.faq-question {
-  flex-grow: 1;
-  transition: font-weight 0.3s ease; /* 글꼴 굵기의 전환 추가 */
-}
-
-.accordion-item.active .faq-question {
-  font-weight: bold; /* 아코디언이 활성화되면 볼드체 적용 */
-}
-
-.faq-question::before {
-  content: 'Q . ';
-  font-weight: bold; /* Q 부분을 볼드체로 */
-}
-
-.accordion-body::before {
-  content: 'A . ';
-  font-weight: bold; /* A 부분을 볼드체로 */
-}
-
-.faq-search-container {
+/* FAQList.css */
+.toggle-button-group {
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin-bottom: 20px;
-  padding: 15px;
-  background-color: #E6F4EA; /* 검색 바 배경색 */
-  border-radius: 25px;
-}
-
-.faq-search-input-group {
-  display: flex;
-  align-items: center;
   width: 100%;
-  max-width: 800px; /* 최대 너비를 설정하여 중앙 정렬 */
 }
 
-.faq-search-input-group select,
-.faq-search-input-group input {
-  border: none;
-  background: none;
-  outline: none;
-  box-shadow: none;
-  padding: 15px;
-  flex: 1; /* 입력 필드와 선택 필드의 너비를 동일하게 맞춤 */
-  font-size: 16px;
-  color: #333;
-}
-
-.faq-search-button {
-  background: none;
-  border: none;
-  color: #2f855a;
-  font-size: 24px; /* 아이콘 크기 조정 */
+.toggle-button {
+  flex: 1;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px 20px;
   cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s;
 }
 
-.faq-search-button i {
-  font-size: 24px; /* 아이콘 크기 조정 */
+.toggle-button:not(.active):hover {
+  background-color: #000;
+  color: white;
 }
 
-.search-info {
+.toggle-button.active {
+  background-color: #000;
+  color: white;
+  cursor: default;
+}
+
+.toggle-button.active:hover {
+  background-color: #000;
+}
+
+.search-bar {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+  justify-content: center;
+  width: 100%;
 }
 
-.write-button {
-  background-color: #28a745;
-  color: #fff;
-  border: none;
-  padding: 5px 10px;
-}
-
-.search-count {
-  margin-right: auto;
+.search-field {
+  flex: 1;
+  max-width: 800px;
+  width: 100%;
 }

@@ -1,29 +1,45 @@
 import React from 'react';
-import { Tabs, Tab } from 'react-bootstrap';
+import { Tabs, Tab } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 const StyledTabs = styled(Tabs)`
+  .MuiTabs-flexContainer {
+    justify-content: center;
+  }
 
-  .nav-link {
+  .MuiTab-root {
     padding: 10px 20px;
     border-radius: 5px;
     transition: background-color 0.3s, color 0.3s;
     font-size: 1rem;
+    text-transform: none;
   }
 
-  .nav-link.active {
-    background-color: #81C784; /* 연한 초록색 */
-    color: white !important;
+  .MuiTab-root.Mui-selected {
+    background-color: initial; /* 배경 색 초기화 */
+    color: initial !important; /* 글자 색 초기화 */
+    font-weight: bold;
   }
 
-  .nav-link:hover {
-    background-color: #1B5E20; /* 조금 더 진한 초록색 */
-    color: white;
+  .MuiTab-root:hover {
+    background-color: initial; /* 호버 배경 색 초기화 */
+    color: initial; /* 호버 글자 색 초기화 */
   }
 
-  .nav-tabs {
-    border-bottom: none;
+  .MuiTabs-indicator {
+    display: none;
+  }
+
+  .header-container {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .header-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
   }
 `;
 
@@ -31,10 +47,10 @@ const HeaderTabs = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const handleTabSelect = (key) => {
-    if (key === 'faq') {
+  const handleTabSelect = (event, newValue) => {
+    if (newValue === 'faq') {
       navigate('/community/faq/list.json');
-    } else if (key === 'notice') {
+    } else if (newValue === 'notice') {
       navigate('/community/notice/list.json');
     } else {
       navigate('/community/qa/list.json');
@@ -51,17 +67,18 @@ const HeaderTabs = () => {
   };
 
   return (
-    <StyledTabs
-      activeKey={getDefaultTab()}
-      onSelect={handleTabSelect}
-      id="header-tabs"
-      className="mb-3"
-      fill
-    >
-      <Tab eventKey="qa" title="Q&A" />
-      <Tab eventKey="faq" title="FAQ" />
-      <Tab eventKey="notice" title="공지사항" />
-    </StyledTabs>
+    <div className="header-container">
+      <StyledTabs
+        value={getDefaultTab()}
+        onChange={handleTabSelect}
+        variant="fullWidth"
+        centered
+      >
+        <Tab label="NOTICE" value="notice" />
+        <Tab label="FAQ" value="faq" />
+        <Tab label="Q&A" value="qa" />
+      </StyledTabs>
+    </div>
   );
 };
 
