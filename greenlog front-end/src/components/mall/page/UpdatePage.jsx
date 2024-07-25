@@ -17,7 +17,6 @@ export const UpdatePage = () => {
     const [photos, setPhotos] = useState([]);
     const [attach, setAttach] = useState([]);
     const refFile = useRef();
-
     const [form, setForm] = useState(""); //바꾸는데이터
     const [list, setList] = useState(""); //기존데이터
     const { mall_title, mall_info, mall_price, mall_photo, mall_tstate, mall_pstate, mall_endDate } = form;
@@ -72,10 +71,7 @@ export const UpdatePage = () => {
             mallPhoto_sequence: index
         }));
         setPhotos(updateSequence);
-
     };
-
-
 
     const onClickUpdate = async (photos) => {
         if (isModified === true) {
@@ -237,7 +233,6 @@ export const UpdatePage = () => {
                                     onChange={onChangeForm}
                                 />
                             </Grid>
-
                         }
                         <Grid item xs={3}>
                             <TextField
@@ -265,7 +260,6 @@ export const UpdatePage = () => {
                             />
                         </Grid>
                         <Grid item xs={12}>
-
                             <DragDropContext onDragEnd={handleOnDragEnd}>
                                 <Droppable droppableId='photo.mallPhoto_photo' direction="horizontal">
                                     {(provided) => (
@@ -290,17 +284,12 @@ export const UpdatePage = () => {
                                                                             <Badge onClick={() => onClickDelete(photo)} style={{ cursor: "pointer", position: "absolute", top: '10px', right: "5px" }} bg='danger'>X</Badge>
                                                                         </span>
                                                                     </div>
-
                                                                     <img src={photo.mallPhoto_photo} style={{ borderRadius: "50%", width: "10rem", height: "10rem" }} />
                                                                 </Col>
-
-
                                                             )}
                                                         </Draggable>
-
                                                     )
-                                                }
-                                                )}
+                                                })}
                                                 <Col xs={2}>
                                                     <img src={file.name || "/images/plus.png"} style={{ borderRadius: "50%", width: "10rem", height: "10rem" }} onClick={() => refFile.current.click()} />
                                                     <input ref={refFile} type="file" onChange={onChangeFile} style={{ display: "none" }} />
@@ -310,7 +299,6 @@ export const UpdatePage = () => {
                                                 </Col>
                                                 {provided.placeholder}
                                             </Row>
-
                                         </div>
                                     )}
                                 </Droppable>

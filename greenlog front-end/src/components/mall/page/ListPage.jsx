@@ -58,7 +58,7 @@ const ListPage = () => {
             const { data } = filterData(res.data.documents);
             setList(data); // 전체 목록 업데이트
             setCount(res.data.total);
-            console.log("ListPage : " + JSON.stringify(list));
+            //console.log("ListPage : " + JSON.stringify(list));
             setLoading(false);
         } catch (error) {
             console.error("Error fetching mall list:", error);
@@ -111,7 +111,7 @@ const ListPage = () => {
         top: '0',      // 상단 여백
         right: '0',    // 오른쪽 여백 기본이 오른쪽아래로 쳐져잇어서 줘야댐..
     }
-    const adminST = { //클릭되게 작게만들기
+    const adminST = {
         width: "100%",
         height: "10%",
         position: 'absolute',
@@ -133,7 +133,7 @@ const ListPage = () => {
     return (
         <div className='justify-content-center text-center'>
             <div className='bg-secondary mb-3'>
-                <img src='../images/paprika.png' style={{width:"100%",height:"20rem"}}/>
+                <img src='../images/pimang.jpg' style={{width:"100%",height:"100%"}}/>
             </div>
             <div>
                 <Row>
@@ -159,7 +159,7 @@ const ListPage = () => {
                             <Dropdown className="mt-1" style={{ width: "100%" }}>
                                 <Dropdown.Toggle variant="">{dropDown}</Dropdown.Toggle>
                                 <Dropdown.Menu>
-                                <Dropdown.Item onClick={()=>callAPI()} value="desc" >모두보기</Dropdown.Item>
+                                    <Dropdown.Item onClick={()=>callAPI()} value="desc" >모두보기</Dropdown.Item>
                                     <Dropdown.Item onClick={() => { setDropDown("최신순"); setOrderBy("desc"); }} value="desc" >최신순</Dropdown.Item>
                                     <Dropdown.Item onClick={() => { setDropDown("오래된순"); setOrderBy("asc"); }} value="asc">오래된순</Dropdown.Item>
                                     <Dropdown.Item onClick={() => { setDropDown("피망마켓"); setItisEnd("false"); }}  >진행중</Dropdown.Item>
@@ -219,8 +219,7 @@ const ListPage = () => {
                                     flexDirection: 'column'}}
                                 cover={
                                     <a href={`/mall/read/${card.mall_key}`} style={{ display: 'block', height: '10rem', overflow: 'hidden' }}>
-                                        <img
-                                            alt="mall"
+                                        <img alt="mall"
                                             src={card.mall_photo ? card.mall_photo : "http://via.placeholder.com/100x100"}
                                             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                         />
@@ -228,17 +227,11 @@ const ListPage = () => {
                                 }
                             >
                                 {card.isEnd && (
-                                userData.auth === "관리자" ? (
-                                    <div  style={adminST}>
-                                        마감
-                                    </div>
-                                    ) : (
-                                        <div style={badgeST} >
-                                            마감 
-                                        </div>
-                                    )
+                                    userData.auth === "관리자" ? 
+                                        (<div  style={adminST}>마감</div>) 
+                                    : 
+                                        (<div style={badgeST} >마감  </div>)
                                 )}
-
                                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', textAlign: 'center' }}>
                                     <Meta
                                         title={`[${card.mall_key}] ${card.mall_title}`}

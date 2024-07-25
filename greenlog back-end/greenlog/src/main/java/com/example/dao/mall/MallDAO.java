@@ -10,7 +10,11 @@ import com.example.domain.QueryVO;
 
 public interface MallDAO {
 	
+	public List<HashMap<String,Object>> reviewList (String review_writer);
+	
 	public List<HashMap<String,Object>> reviewCount ();
+	
+	public HashMap<String,Object> reviewCount2 (int mall_key);
 	
 	public List<HashMap<String, Object>> list(Query2VO vo);
 	

@@ -1,12 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.mapper.MallMapper">
+	
+	<select id="reviewList" resultType="hashmap">
+		select * 
+		from review join mall on mall_key=review_mall_key 
+		where review_writer=#{review_writer}
+	</select>
+	
 	<select id="reviewCount" resultType="hashmap">
 		select m.*, count(review_key) as count
 		from mall m left join review r on m.mall_key= r.review_mall_key
 		where mall_endDate > now()
 		group by mall_key
 		order by count desc
+	</select>
+	
+	<select id="reviewCount2" resultType="hashmap">
+		select m.*, count(review_key) as count
+		from mall m left join review r on m.mall_key= r.review_mall_key
+		where mall_key=#{mall_key}
+		group by mall_key
 	</select>
 	
 	<select id="list" resultType="hashmap">

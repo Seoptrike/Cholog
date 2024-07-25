@@ -4,8 +4,6 @@ import { TextField, Grid, Typography, Paper, MenuItem } from "@mui/material";
 import { Form, Row, Col, Button, Tooltip, OverlayTrigger } from "react-bootstrap";
 import axios from "axios";
 
-
-
 const InsertPage = () => {
     const uid = sessionStorage.getItem("uid");
     const today = new Date(); //오늘
@@ -13,10 +11,8 @@ const InsertPage = () => {
     tomorrowDate.setDate(today.getDate() + 1); //내일
     const tomorrow = tomorrowDate.toISOString().split('T')[0]; //내일 형식변환본
     const [edate, setEdate] = useState(tomorrow); // endDate값
-
     const [form, setForm] = useState({
         mall_seller: uid,
-        mall_buyer: "ghost",
         mall_title: "",
         mall_info: "",
         mall_price: 0,
@@ -26,10 +22,7 @@ const InsertPage = () => {
         mall_endDate: edate,
     });
     const { mall_title, mall_info, mall_price, mall_photo, mall_tstate, mall_pstate, mall_endDate } = form;
-
-    //사진업로드
-    const [files, setFiles] = useState([]);
-
+    const [files, setFiles] = useState([]);//사진업로드
     // 일반 입력 필드 경우
     const onChangeForm = (e) => {
         const { name, value } = e.target;
@@ -43,7 +36,6 @@ const InsertPage = () => {
     const onChangeEndDate = (e) => {
         setEdate(e.target.value);
     }
-
     // 사진 변경
     const onChangeFiles = (e) => {
         let selectedFiles = []
@@ -56,7 +48,6 @@ const InsertPage = () => {
         }
         setFiles(selectedFiles);
     }
-
     const uploadPhoto = async (mallPhoto_mall_key) => {
         if (files.length === 0) return;
         if (!window.confirm(`${files.length} 개 파일을 업로드 하시겠습니까? 취소시 이미지는 올라가지 않습니다!`)) return;
@@ -66,9 +57,7 @@ const InsertPage = () => {
             for (let i = 0; i < files.length; i++) {
                 formData.append('bytes', files[i].byte);
             }
-
-            console.log(formData);
-
+            //console.log(formData);
             // 첨부 파일 업로드 요청
             await axios.post(`/mall/attach/${mallPhoto_mall_key}`, formData);
             //alert("첨부파일 업로드 완료!");
@@ -85,10 +74,8 @@ const InsertPage = () => {
             alert("일반나눔은 1씨드부터 가능합니다.씨드를 수정해주세요.");
             return;
         }
-
         if (!window.confirm("피망마켓에 등록하실래요?")) return;
         //console.log(form);
-        // 경매 상품이면서 시드가 0일 경우 경고 메시지를 띄우고 함수를 종료합니다.
         try {
             // 게시글 등록
             const formData = { ...form, mall_seller: uid, mall_endDate: edate }
@@ -100,19 +87,17 @@ const InsertPage = () => {
                 alert("게시글 등록 완료!");
                 window.location.href = '/mall/list.json';
             }
-
         } catch (error) {
             // 오류 발생 시 오류 메시지 출력
             console.error("게시글 등록 오류:", error);
             alert("게시글 등록 중 오류가 발생했습니다.");
         }
     }
-    const thumbnail = (props) => ( 
+    const thumbnail = (props) => (
         <Tooltip id="button-tooltip" {...props}>
             가장 왼쪽에 있는 이미지가 대표이미지로 임의 지정됩니다.
         </Tooltip>
     );
-
 
     return (
         <div className="my-5">
@@ -131,7 +116,7 @@ const InsertPage = () => {
                                 fullWidth
                                 required
                                 inputProps={{ maxLength: 20 }}
-                                helperText="최대 20자까지 입력 가능합니다."
+                                helperText="최대 20자까지 입력 가능합니다." 
                             />
                         </Grid>
                         <Grid item xs={3}>
@@ -143,8 +128,7 @@ const InsertPage = () => {
                                 onChange={onChangeForm}
                                 name="mall_tstate"
                                 required
-                                fullWidth
-                            >
+                                fullWidth>
                                 <MenuItem value={0}>일반나눔으로 올리기</MenuItem>
                                 <MenuItem value={1}>무료나눔으로 올리기</MenuItem>
                                 <MenuItem value={2}>구매글 올리기</MenuItem>
@@ -159,8 +143,7 @@ const InsertPage = () => {
                                 onChange={onChangeForm}
                                 name="mall_pstate"
                                 required
-                                fullWidth
-                            >
+                                fullWidth>
                                 <MenuItem value={0}>중고</MenuItem>
                                 <MenuItem value={1}>미개봉,미사용</MenuItem>
                             </TextField>
@@ -176,8 +159,7 @@ const InsertPage = () => {
                                     value={0}
                                     onChange={onChangeForm}
                                     required
-                                    disabled
-                                />
+                                    disabled />
                             </Grid>
                             :
                             <Grid item xs={3}>
@@ -189,12 +171,9 @@ const InsertPage = () => {
                                     required
                                     inputProps={{ min: "0", step: "1" }}
                                     value={mall_price}
-                                    onChange={onChangeForm}
-                                />
+                                    onChange={onChangeForm} />
                             </Grid>
-
                         }
-
                         <Grid item xs={3}>
                             <TextField
                                 label="마감일"
@@ -206,8 +185,7 @@ const InsertPage = () => {
                                 inputProps={{
                                     min: tomorrow // 현재 날짜 이전의 날짜 선택 불가능
                                 }}
-                                required
-                            />
+                                required />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
@@ -217,21 +195,16 @@ const InsertPage = () => {
                                 multiline
                                 value={mall_info}
                                 rows={4}
-                                onChange={onChangeForm}
-                            />
+                                onChange={onChangeForm} />
                         </Grid>
                         <Grid item xs={12}>
                             <Form.Group as={Row} className="mb-3">
                                 <Col sm={12}>
-                                    <OverlayTrigger
-                                        placement="top"
-                                        overlay={thumbnail}
-                                    >
+                                    <OverlayTrigger placement="top" overlay={thumbnail}>
                                         <Form.Control
                                             type="file"
                                             multiple
-                                            onChange={onChangeFiles}
-                                        />
+                                            onChange={onChangeFiles} />
                                     </OverlayTrigger>
                                 </Col>
                             </Form.Group>
@@ -251,9 +224,7 @@ const InsertPage = () => {
                     </Grid>
                 </form>
             </Paper>
-
         </div>
-
     )
 }
 

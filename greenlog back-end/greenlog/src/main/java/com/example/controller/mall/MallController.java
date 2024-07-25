@@ -32,11 +32,21 @@ public class MallController {
 	@Autowired
 	MallService mservice;
 
+	@GetMapping("/review/{review_writer}")
+	public  List<HashMap<String, Object>> reviewList (@PathVariable("review_writer") String review_writer){
+		return mdao.reviewList(review_writer);
+	}
+	
 	@GetMapping("/reviewCount")
 	public  List<HashMap<String, Object>> reviewCount (){
 		return mdao.reviewCount();
 	}
-		
+	
+	@GetMapping("/reviewCount/{mall_key}")
+	public  HashMap<String, Object> reviewCount2 (@PathVariable("mall_key") int mall_key){
+		return mdao.reviewCount2(mall_key);
+	}
+	
 	
 	@GetMapping("/list")
 	public HashMap<String, Object> list(Query2VO vo) {
