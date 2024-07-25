@@ -3,7 +3,7 @@
 <mapper namespace="com.example.mapper.ReplyMapper">
 
 		<select id="replyList" resultType="hashmap">
-				select r.*, user_nickname, user_img 
+				select r.*, user_nickname, user_img , date_format(reply_regdate, '%Y-%m-%d %H:%i:%S') as fmtdate ,date_format(reply_udate, '%Y-%m-%d %H:%i:%S') as fmtudate
 				from reply r, user u
 				where reply_writer= user_uid and reply_bbs_key=#{reply_bbs_key}
 				order by ${key}
@@ -11,7 +11,7 @@
 		</select>
 		
 		<select id="replyRead" resultType="hashmap">
-				select r.*, user_nickname, user_img 
+				select r.*, user_nickname, user_img, date_format(reply_regdate, '%Y-%m-%d %H:%i:%S') as fmtdate ,date_format(reply_udate, '%Y-%m-%d %H:%i:%S') as fmtudate 
 				from reply r, user u
 				where reply_writer= user_uid and reply_key=#{reply_key}
 		</select>

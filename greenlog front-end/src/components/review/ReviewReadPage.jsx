@@ -11,8 +11,8 @@ const ReviewReadPage = ({ mall_key }) => {
         review_writer: sessionStorage.getItem('uid'),
         review_rating: 0,
         review_contents: '',
-        review_regDate: '',
-        review_uDate: '',
+        fmtdate: '',
+        fmtudate: '',
         user_img: '',
         user_nickname: '',
         user_uid: ''
@@ -30,10 +30,10 @@ const ReviewReadPage = ({ mall_key }) => {
         callAPI();
     }, []);
 
-    const { review_rating, review_contents, review_regDate, review_uDate, user_img, user_nickname, user_uid } = review;
+    const { review_rating, review_contents, fmtdate, fmtudate, user_img, user_nickname, user_uid } = review;
 
     return (
-        <div className="review-page-container">
+        <div className="mt-3">
             <Row className='justify-content-center'>
                 <Col xs={12} md={8} lg={6}>
                     <Card className="mb-3">
@@ -46,7 +46,7 @@ const ReviewReadPage = ({ mall_key }) => {
                             />
                             <div>
                                 <h5 className="mb-1">{user_nickname} ({user_uid})</h5>
-                                <small className="text-muted">{review_uDate || review_regDate}</small>
+                                <small className="text-muted">{fmtudate || fmtdate}</small>
                             </div>
                         </Card.Header>
                         <Card.Body>

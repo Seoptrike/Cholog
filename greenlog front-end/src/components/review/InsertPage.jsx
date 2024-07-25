@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Row, Col, Button, Form } from 'react-bootstrap';
 import { Rating } from '@mui/material';
 import axios from 'axios';
 import { TbBrandSnapseed } from "react-icons/tb";
-import './ReviewPage.css';
-import { Link } from 'react-router-dom';
+import './ReviewInsertPage.css';
 
 const InsertPage = ({ mall_key, mall_seller, mall_photo }) => {
     const uid = sessionStorage.getItem('uid');
@@ -84,7 +83,7 @@ const InsertPage = ({ mall_key, mall_seller, mall_photo }) => {
                         <form onSubmit={onSubmit} onReset={onClickCancel}>
                             <div className="form-content">
                                 <div className="form-image">
-                                    <img src={mall_photo || "http://via.placeholder.com/200x200"} alt="Review" className="review-image" />
+                                    <img src="/images/pimang.jpg" alt="Review" className="review-image" />
                                 </div>
                                 <div className="form-fields">
                                     <div className="rating-container">
@@ -111,9 +110,9 @@ const InsertPage = ({ mall_key, mall_seller, mall_photo }) => {
                                         onFocus={Focus}
                                         className="form-control-textarea"
                                     />
-                                    <div className="button-group">
-                                        <Button type='submit' variant='success' className='button button-submit'>등록</Button>
-                                        <Button type='reset' variant='success' className='button button-cancel' onClick={onClickCancel} disabled={!onCancel}>취소</Button>
+                                    <div className="text-end">
+                                        <Button type='submit' variant='success' className='me-2'>등록</Button>
+                                        <Button type='reset' variant='success' onClick={onClickCancel} disabled={!onCancel}>취소</Button>
                                     </div>
                                 </div>
                             </div>

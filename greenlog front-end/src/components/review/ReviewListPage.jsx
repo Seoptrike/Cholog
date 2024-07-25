@@ -112,44 +112,54 @@ const ReviewListPage = ({ mall_key, mall_seller, seller_number }) => {
                     {list.map(review => (
                         <Card key={review.review_key} className="review-card">
                             <div className="review-card-header">
-                                <Link to={`/user/read/${review.review_writer}`}><img src={review.user_img || "http://via.placeholder.com/70x70"} alt="User" /></Link>
+                                <Link to={`/user/read/${review.review_writer}`}>
+                                    <img src={review.user_img || "http://via.placeholder.com/70x70"} alt="User" />
+                                </Link>
                                 <div className="user-info">
-                                    <Link to={`/user/read/${review.review_writer}`}>{review.user_nickname} ({review.user_uid})</Link>
-                                    <div><span>{review.review_uDate || review.review_regDate}</span></div>
+                                    <div className="d-flex align-items-center">
+                                        <Link to={`/user/read/${review.review_writer}`}>
+                                            {review.user_nickname} ({review.user_uid})
+                                        </Link>
+                                        <Dropdown className="text-end dropdown-container">
+                                            <Dropdown.Toggle variant="" id="dropdown-basic">
+                                                <BsThreeDotsVertical />
+                                            </Dropdown.Toggle>
+                                            {uid === review.review_writer ? (
+                                                !review.isEdit ? (
+                                                    <Dropdown.Menu>
+                                                        <Dropdown.Item onClick={() => onUpdate(review.review_key)} eventKey="update">수정하기</Dropdown.Item>
+                                                        <Dropdown.Item onClick={() => onDelete(review.review_key)} eventKey="delete">삭제하기</Dropdown.Item>
+                                                    </Dropdown.Menu>
+                                                ) : (
+                                                    <Dropdown.Menu>
+                                                        <Dropdown.Item onClick={() => onSave(review)} eventKey="save">등록</Dropdown.Item>
+                                                        <Dropdown.Item onClick={() => onCancel(review)} eventKey="cancel">취소</Dropdown.Item>
+                                                    </Dropdown.Menu>
+                                                )
+                                            ) : (
+                                                uid === mall_seller ? (
+                                                    <Dropdown.Menu>
+                                                        <Dropdown.Item onClick={() => onClickBuy(review.review_writer, review.review_rating, mall_seller)} eventKey="buy">낙찰하기</Dropdown.Item>
+                                                        <Dropdown.Item eventKey="warning">
+                                                            <ReportInsert uid={uid} writer={review.review_writer} root={root} origin={review.review_key} />
+                                                        </Dropdown.Item>
+                                                    </Dropdown.Menu>
+                                                ) : (
+                                                    <Dropdown.Menu>
+                                                        <Dropdown.Item eventKey="warning">
+                                                            <ReportInsert uid={uid} writer={review.review_writer} root={root} origin={review.review_key} />
+                                                        </Dropdown.Item>
+                                                    </Dropdown.Menu>
+                                                )
+                                            )}
+                                        </Dropdown>
+                                    </div>
+                                    <div>
+                                        <span>{review.fmtudate || review.fmtdate}</span>
+                                    </div>
                                 </div>
-                                <Dropdown>
-                                    <Dropdown.Toggle variant="" id="dropdown-basic">
-                                        <BsThreeDotsVertical />
-                                    </Dropdown.Toggle>
-                                    {uid === review.review_writer ? (
-                                        !review.isEdit ? (
-                                            <Dropdown.Menu>
-                                                <Dropdown.Item onClick={() => onUpdate(review.review_key)} eventKey="update">수정하기</Dropdown.Item>
-                                                <Dropdown.Item onClick={() => onDelete(review.review_key)} eventKey="delete">삭제하기</Dropdown.Item>
-                                            </Dropdown.Menu>
-                                        ) : (
-                                            <Dropdown.Menu>
-                                                <Dropdown.Item onClick={() => onSave(review)} eventKey="save">등록</Dropdown.Item>
-                                                <Dropdown.Item onClick={() => onCancel(review)} eventKey="cancel">취소</Dropdown.Item>
-                                            </Dropdown.Menu>
-                                        )
-                                    ) : (
-                                        uid === mall_seller ? (
-                                            <Dropdown.Menu>
-                                                <Dropdown.Item onClick={() => onClickBuy(review.review_writer, review.review_rating, mall_seller)} eventKey="buy">낙찰하기</Dropdown.Item>
-                                                <Dropdown.Item eventKey="warning">
-                                                    <ReportInsert uid={uid} writer={review.review_writer} root={root} origin={review.review_key} />
-                                                </Dropdown.Item>
-                                            </Dropdown.Menu>
-                                        ) : (
-                                            <Dropdown.Menu>
-                                                <Dropdown.Item eventKey="warning">
-                                                    <ReportInsert uid={uid} writer={review.review_writer} root={root} origin={review.review_key} />
-                                                </Dropdown.Item>
-                                            </Dropdown.Menu>
-                                        )
-                                    )}
-                                </Dropdown>
+
+
                             </div>
                             <div className="review-card-body">
                                 <div className="review-rating">

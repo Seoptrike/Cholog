@@ -65,18 +65,19 @@ const RereplyListPage = ({ reply_key, reply_writer, callList, rereply, setRerepl
     };
 
     return (
+        <div className='rereply-page-container'>
         <Row className='justify-content-center'>
             <Col xs={12}>
                 {rereply.map(rereply => (
-                    <Row key={rereply.rereply_key} className='mb-3'>
+                    <Row key={rereply.rereply_key} className='mb-1'>
                         <Col className="d-flex justify-content-end align-items-start" xs={2}>
                             <BsArrowReturnRight className='me-2' style={{ color: 'gray', fontSize: '1.5em' }} />
                         </Col>
                         <Col xs={10}>
-                            <div className="d-flex align-items-center justify-content-between">
+                            <div className="rereply-card-header">
                                 <div className="d-flex align-items-center">
                                     <Link to={`/user/read/${uid}`}><img src={rereply.user_img || "http://via.placeholder.com/20x20"} width="50" className='me-3 rounded-circle' /></Link>
-                                    <div className="d-flex flex-column">
+                                    <div className="user-info">
                                         <div className="d-flex align-items-center">
                                             <Link to={`/user/read/${uid}`}><span>{rereply.user_nickname} ({rereply.rereply_writer})</span></Link>
                                             {!rereply.isEdit && (
@@ -105,36 +106,37 @@ const RereplyListPage = ({ reply_key, reply_writer, callList, rereply, setRerepl
                                                     <SlLockOpen style={{ color: 'black' }} />
                                                 </span>
                                             )}
+                                            <Dropdown className="text-end dropdown-container">
+                                                <Dropdown.Toggle variant="" id={`dropdown-basic-${rereply.rereply_key}`}>
+                                                    <BsThreeDotsVertical />
+                                                </Dropdown.Toggle>
+                                                {uid === rereply.rereply_writer || uid === reply_writer ? (
+                                                    <>
+                                                        {!rereply.isEdit ? (
+                                                            <Dropdown.Menu>
+                                                                <Dropdown.Item onClick={() => onUpdate(rereply.rereply_key)} eventKey="update">수정하기</Dropdown.Item>
+                                                                <Dropdown.Item onClick={() => onDelete(rereply.rereply_key)} eventKey="delete">삭제하기</Dropdown.Item>
+                                                            </Dropdown.Menu>
+                                                        ) : (
+                                                            <Dropdown.Menu>
+                                                                <Dropdown.Item onClick={() => onSave(rereply)} eventKey="save">등록</Dropdown.Item>
+                                                                <Dropdown.Item onClick={() => onCancel(rereply.rereply_key)} eventKey="cancel">취소</Dropdown.Item>
+                                                            </Dropdown.Menu>
+                                                        )}
+                                                    </>
+                                                ) : (
+                                                    <Dropdown.Menu>
+                                                        <Dropdown.Item eventKey="warning"><ReportInsert uid={uid} writer={rereply.rereply_writer} root={root} origin={rereply.rereply_key} /></Dropdown.Item>
+                                                    </Dropdown.Menu>
+                                                )}
+                                            </Dropdown>
                                         </div>
                                         <div>
-                                            <span>{rereply.rereply_udate ? `${rereply.rereply_udate}` : `${rereply.rereply_regdate}`} </span>
+                                            <span>{rereply.fmtudate ? `${rereply.fmtudate}` : `${rereply.fmtdate}`} </span>
                                         </div>
                                     </div>
                                 </div>
-                                <Dropdown className="text-end">
-                                    <Dropdown.Toggle variant="" id={`dropdown-basic-${rereply.rereply_key}`}>
-                                        <BsThreeDotsVertical />
-                                    </Dropdown.Toggle>
-                                    {uid === rereply.rereply_writer || uid === reply_writer ? (
-                                        <>
-                                            {!rereply.isEdit ? (
-                                                <Dropdown.Menu>
-                                                    <Dropdown.Item onClick={() => onUpdate(rereply.rereply_key)} eventKey="update">수정하기</Dropdown.Item>
-                                                    <Dropdown.Item onClick={() => onDelete(rereply.rereply_key)} eventKey="delete">삭제하기</Dropdown.Item>
-                                                </Dropdown.Menu>
-                                            ) : (
-                                                <Dropdown.Menu>
-                                                    <Dropdown.Item onClick={() => onSave(rereply)} eventKey="save">등록</Dropdown.Item>
-                                                    <Dropdown.Item onClick={() => onCancel(rereply.rereply_key)} eventKey="cancel">취소</Dropdown.Item>
-                                                </Dropdown.Menu>
-                                            )}
-                                        </>
-                                    ) : (
-                                        <Dropdown.Menu>
-                                            <Dropdown.Item eventKey="warning"><ReportInsert uid={uid} writer={rereply.rereply_writer} root={root} origin={rereply.rereply_key} /></Dropdown.Item>
-                                        </Dropdown.Menu>
-                                    )}
-                                </Dropdown>
+
                             </div>
                             <div className='my-3' style={{ whiteSpace: 'pre-wrap' }}>
                                 <Row className='align-items-center my-2'>
@@ -149,17 +151,19 @@ const RereplyListPage = ({ reply_key, reply_writer, callList, rereply, setRerepl
                                             rereply.lock === 'lock' && (uid !== rereply.rereply_writer && uid !== bbs_writer) ? "비밀댓글입니다." : rereply.rereply_contents
                                         )}
                                     </Col>
-                                    <Col className='text-end'>
-                                        <RereplyReaction rereply_key={rereply.rereply_key} uid={uid} />
-                                    </Col>
+
                                 </Row>
                             </div>
-                            <hr />
+                            <Col className='text-end mb-3'>
+                                <RereplyReaction rereply_key={rereply.rereply_key} uid={uid} />
+                            </Col>    
                         </Col>
+                        <hr />
                     </Row>
                 ))}
             </Col>
         </Row>
+        </div>
     );
 };
 
