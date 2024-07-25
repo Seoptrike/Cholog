@@ -9,18 +9,29 @@
 	<update id="saveChat">
 		update chat set chat_content = #{chat_content} where chat_sender = #{chat_sender} and chat_state='미처리'
 	</update>
-    <select id="list" resultType="com.example.domain.ChatVO">
-        SELECT * FROM chat where chat_endTime is null order by chat_key desc
+    <select id="list" resultType="hashmap">
+        SELECT *, date_format(chat_sendTime, '%Y.%m.%d %T') as fmtdate, date_format(chat_endTime, '%Y.%m.%d %T') as fmtedate
+        FROM chat 
+        where chat_endTime is null 
+        order by chat_key desc
+       	limit #{start}, #{size}
     </select>
     
     <select id="listCount" resultType="int">
     	select count(*) FROM chat where chat_endTime is null 
     </select>
     
-     <select id="alreadylist" resultType="com.example.domain.ChatVO">
-        SELECT * FROM chat where chat_endTime is not null order by chat_key desc;
+     <select id="alreadylist" resultType="hashmap">
+        SELECT *, date_format(chat_sendTime, '%Y.%m.%d %T') as fmtdate, date_format(chat_endTime, '%Y.%m.%d %T') as fmtedate
+        FROM chat
+        where chat_endTime is not null 
+        order by chat_key desc 
+        limit #{start}, #{size}
     </select>
     
+    <select id="alistCount" resultType="int">
+    	select count(*) FROM chat where chat_endTime is not null
+    </select>
     <select id="userChatList" resultType="hashmap">
         SELECT * FROM chat where chat_endTime is null and chat_sender=#{uid} 
     

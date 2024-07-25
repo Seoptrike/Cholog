@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.dao.user.ChatDAO;
 import com.example.domain.ChatVO;
 import com.example.domain.ChatlogVO;
+import com.example.domain.QueryVO;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
@@ -75,21 +76,26 @@ public class ChatController {
 
 	// 채팅방 목록
 	@GetMapping("/chat/list")
-	public List<ChatVO> list() {
-		return cdao.list();
+	public HashMap<String, Object> list(QueryVO vo) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("doc", cdao.list(vo));
+		map.put("total", cdao.listCount());
+		return map;
 	}
 
 	// 완료된 채팅방 목록
 	@GetMapping("/chat/alist")
-	public List<ChatVO> alist() {
-		return cdao.alist();
+	public HashMap<String, Object> alist(QueryVO vo) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("doc", cdao.alist(vo));
+		map.put("total", cdao.alistCount());
+		return map;
 	}
 
 	@MessageMapping("/chat.sendMessage")
 	public void sendMessage(ChatVO chatMessage) {
 		String path = chatMessage.getChat_path();
 		String destination = "/topic/" + path;
-		ChatlogVO vo2 = new ChatlogVO();
 		cdao.save(chatMessage);
 		System.out.println("Sending message to " + destination + ": " + chatMessage);
 		messagingTemplate.convertAndSend(destination, chatMessage);

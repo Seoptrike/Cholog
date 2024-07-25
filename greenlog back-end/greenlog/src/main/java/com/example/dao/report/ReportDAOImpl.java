@@ -31,4 +31,19 @@ public class ReportDAOImpl implements ReportDAO {
 		return session.selectOne(namespace + ".count");
 	}
 
+	@Override
+	public void update(ReportVO vo) {
+		session.update(namespace + ".update", vo);
+
+	}
+
+	@Override
+	public List<HashMap<String, Object>> alist(QueryVO vo) {
+		return session.selectList(namespace + ".alist", vo);
+	}
+
+	@Override
+	public int acount() {
+		return session.selectOne(namespace + ".acount");
+	}
 }

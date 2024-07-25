@@ -13,7 +13,6 @@ const TotalPage = () => {
                 <Col xs={2}>
                     <ListGroup>
                         <ListGroup.Item >유저</ListGroup.Item>
-                        <ListGroup.Item> <Link to={"/user/step"}>스텝</Link></ListGroup.Item>
                         <ListGroup.Item> <Link to={"/user/login"}>로그인</Link></ListGroup.Item>
                         <ListGroup.Item> <Link to={`/user/read/${uid}`}>마이페이지</Link></ListGroup.Item>
                         <ListGroup.Item> <Link to={"/user/join"}>회원가입</Link></ListGroup.Item>

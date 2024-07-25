@@ -80,16 +80,6 @@ const AdminChat = () => {
         setMessageInput(event.target.value);
     };
 
-    const handleDisconnect = async () => {
-        if (stompClient) {
-            stompClient.deactivate(); 
-            console.log('WebSocket connection closed.');
-        }
-        await axios.post("/chat/delete", { chat_key: key })
-        alert("처리완료되었습니다")
-        window.location.href = "/";
-    };
-
     const scrollToBottom = () => {
         if (chatContainerRef.current) {
             chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
