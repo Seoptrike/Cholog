@@ -33,8 +33,12 @@ public class MallController {
 	MallService mservice;
 
 	@GetMapping("/review/{review_writer}")
-	public  List<HashMap<String, Object>> reviewList (@PathVariable("review_writer") String review_writer){
-		return mdao.reviewList(review_writer);
+	public  HashMap<String, Object> reviewList (@PathVariable("review_writer") String review_writer,QueryVO vo){
+		HashMap<String, Object> map = new HashMap<>();
+		List<HashMap<String, Object>> list = mdao.reviewList(review_writer,vo);
+		map.put("documents", list);
+		map.put("total", mdao.reviewListTotal(review_writer));
+		return map;
 	}
 	
 	@GetMapping("/reviewCount")
@@ -47,7 +51,6 @@ public class MallController {
 		return mdao.reviewCount2(mall_key);
 	}
 	
-	
 	@GetMapping("/list")
 	public HashMap<String, Object> list(Query2VO vo) {
 		HashMap<String, Object> map = new HashMap<>();
@@ -58,9 +61,12 @@ public class MallController {
 	}
 	
 	@GetMapping("/list/{mall_seller}")
-	public List<HashMap<String, Object>> sellerList (@PathVariable("mall_seller") String mall_seller, 
-													  @RequestParam("page") int page,@RequestParam("size") int size){
-		return mdao.sellerList(mall_seller,page,size);
+	public HashMap<String, Object> sellerList (@PathVariable("mall_seller") String mall_seller, QueryVO vo){
+		HashMap<String, Object> map = new HashMap<>();
+		List<HashMap<String, Object>> list = mdao.sellerList(mall_seller,vo);
+		map.put("documents", list);
+		map.put("total", mdao.sellerListTotal(mall_seller));
+		return map;
 	}
 
 	@PostMapping("/insert")

@@ -3,7 +3,6 @@ import { Nav, TabContent, Row, Col, Table,Badge } from 'react-bootstrap';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import AllImage from '../read/AllImage';
-import SellerInfo from '../read/SellerInfo';
 import Slider from "react-slick";
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import axios from 'axios';
@@ -20,6 +19,8 @@ const ReadPage = () => {
     const uid = sessionStorage.getItem("uid");
     const [form, setForm] = useState({});
     const [list, setList] = useState([]);//슬라이드
+    const [page, setPage] = useState(1);
+    const [size, setSize] = useState(8);
     const [total,setTotal] = useState([]);
     const root = "mall";
     const [activeTab, setActiveTab] = useState('1');
@@ -31,15 +32,15 @@ const ReadPage = () => {
     const { seed_number } = seedNumber
     const callAPI = async () => {
         const res = await axios.get(`/mall/read/${mall_key}`);
-        //console.log("****************************", res.data);
+        console.log("****************************", res.data);
         setForm(res.data);
         //경매시스템 위해서 넣어놓음 -인섭
         const res2 = await axios.get(`/seed/read/${res.data.mall_seller}`)
         setSeedNumber(res2.data)
         //슬라이드
-        const res3 = await axios.get(`/mall/list/${res.data.mall_seller}?page=0&size=8`)
+        const res3 = await axios.get(`/mall/list/${res.data.mall_seller}?page=${page}&size=${size}`)
         //console.log("ListPage : "+ JSON.stringify(res.data));
-        setList(res3.data);//슬라이드할 유저가 올린 테이블리스트
+        setList(res3.data.documents);//슬라이드할 유저가 올린 테이블리스트
         //댓글수
         const res4= await axios.get(`/mall/reviewCount/${mall_key}`);
         setTotal(res4.data); 
@@ -77,13 +78,11 @@ const ReadPage = () => {
         </span>
     );
 
-    
-   
-
     const endDate = moment(mall_endDate).format('YYYY-MM-DD'); // "2024-07-25"
-    const fmtUdate = moment(mall_uDate).format('yyyy년 MM월 DD일 HH시mm분');
     const fmtRdate = moment(mall_regDate).format('yyyy년 MM월 DD일 HH시mm분');
-    //console.log("1: "+mall_regDate+"1.1: "+fmtRdate+"//// today: "+today);
+    //const fmtUdate = moment(mall_uDate).format('yyyy년 MM월 DD일 HH시mm분');
+    const fmtUdate = mall_uDate ? moment(mall_uDate).format('yyyy년 MM월 DD일 HH시mm분') :null;
+    console.log("1: "+mall_regDate+"1.1: "+fmtRdate+"//// today: "+today+"udate"+mall_uDate,fmtUdate);
 
     const mapST = {
         width: '100%',
@@ -100,8 +99,9 @@ const ReadPage = () => {
         dots: true,
         infinite: false,
         speed: 500,
-        slidesToShow: 5,
-        slidesToScroll: 1
+        slidesToShow: 4,
+        slidesToScroll: 1,
+        arrows: true, // 좌우 화살표 표시
     };
     const slideImg = {
         width: "7rem",
@@ -131,15 +131,11 @@ const ReadPage = () => {
         offset: { top: '10px', left: '10px' },
         font: { color: 'rgba(0, 0, 0, 0.5)', fontSize: 20 }
     };
-    const table={
-        borderRadius:"1rem",
-        border:"1px ",
-    }
-
+   
     return (
         <div className="read-page mb-5" >
             <div className='my-5'>
-                <div>
+                <div >
                     <Row className=' align-items-center mall_read_flexbox'>
                         <Col className=' text-center  text-middle  mall_read_item' xs={5} md={5} lg={5} style={{ whiteSpace: "nowrap" }}>
                             {endDate <= today ?
@@ -150,17 +146,17 @@ const ReadPage = () => {
                                 <img style={photoST} src={mall_photo ? mall_photo : ' http://via.placeholder.com/300x300'} alt='상품대표이미지' />
                             }
                         </Col>
-                        <Col className=' mall_read_item' xs={7} md={7} lg={7} style={{ whiteSpace: "nowrap", height: "100%", padding: "0px 2rem 0px 0px" }} >
+                        <Col className=' mall_read_item ' xs={7} md={7} lg={7} style={{ whiteSpace: "nowrap", height: "100%", padding: "0px 2rem 0px 0px" }} >
                             <Row className='' style={{ height: "22rem" }} >
-                                <Table  style={{table}}>
+                                <Table  className='table table-striped'bordered >
                                     <tbody>
                                         <tr style={{ position: "relative" }}>
                                             {mall_seller === uid ?
                                                 <>
-                                                    <td className='' colSpan={2} style={{ width: "100%" }}>
+                                                    <td className='' colSpan={2} style={{ width: "100%",fontSize:"1.5rem" }}>
                                                         {endDate <= today ? <Badge text="[마감]" /> : null}
                                                         {mall_title}
-                                                        <DropdownButton title="수정" style={buttonST}>
+                                                        <DropdownButton title="수정" style={buttonST} variant='outline-dark'>
                                                             <Dropdown.Item onClick={onClickUpdate}>수정하기</Dropdown.Item>
                                                             <Dropdown.Item onClick={(e) => onClickDelete(e)}>삭제하기</Dropdown.Item>
                                                         </DropdownButton>
@@ -168,7 +164,7 @@ const ReadPage = () => {
                                                 </>
                                                 :
                                                 <>
-                                                    <td className='' colSpan={2} style={{ width: "100%" }}>
+                                                    <td className='' colSpan={2} style={{ width: "100%",fontSize:"1rem" }}>
                                                         {endDate <= today ? <Badge text="[마감]" /> : null}
                                                         {mall_title}
                                                     </td>
@@ -181,27 +177,27 @@ const ReadPage = () => {
                                             }
                                         </tr>
                                         <tr>
-                                            <td style={{ width: "50%" }} >{mall_tstate === 0 ? "나눔" : (mall_tstate === 1 ? "무료나눔" : "구매")}</td>
-                                            <td style={{ width: "50%" }} >{mall_pstate === 0 ? "중고상품" : "(미개봉,미사용)"}</td>
+                                            <td style={{ width: "50%" ,fontSize:"1rem" }} >{mall_tstate === 0 ? "나눔" : (mall_tstate === 1 ? "무료나눔" : "구매")}</td>
+                                            <td style={{ width: "50%",fontSize:"1rem" }} >{mall_pstate === 0 ? "중고상품" : "(미개봉,미사용)"}</td>
                                         </tr>
                                         <tr>
                                             {mall_info !== "" ?
-                                            <td colSpan={2} style={{ width: "100%", height: "80px" }}>
+                                            <td colSpan={2} style={{ width: "100%", height: "80px",fontSize:"1rem" }}>
                                                  {mall_info} 
                                             </td>
                                             :
-                                            <td colSpan={2} style={{ width: "100%", height: "80px", color:"#E6E6E6" , fontSize:"30px"}} >
+                                            <td colSpan={2} style={{ width: "100%", height: "80px", color:"#E6E6E6" , fontSize:"2rem"}} >
                                                 내용이 없습니다
                                             </td>
                                             }
                                         </tr>
                                         <tr>
-                                            <td style={{ width: "50%" }}>마감일:{endDate}</td>
-                                            <td style={{ width: "50%" }}>{mall_price}씨드</td>
+                                            <td style={{ width: "50%" ,fontSize:"1rem"}}>마감일:{endDate}</td>
+                                            <td style={{ width: "50%" ,fontSize:"1rem"}}>{mall_price}씨드</td>
                                         </tr>
                                         <tr>
-                                            <td style={{ width: "50%" }}><Link to={`/user/read/${mall_seller}`}>{mall_seller}</Link></td>
-                                            <td style={{ fontSize: "12px", width: "50%" }}>{fmtUdate ? `${fmtUdate}(수정됨)` : fmtRdate}</td>
+                                            <td style={{ width: "50%",fontSize:"1rem" }}><Link to={`/user/read/${mall_seller}`}>{mall_seller}</Link></td>
+                                            <td style={{ fontSize: "1rem", width: "50%" }}>{fmtUdate ? `${fmtUdate}(수정됨)` : fmtRdate}</td>
                                         </tr>
                                     </tbody>
                                 </Table>
@@ -247,11 +243,6 @@ const ReadPage = () => {
                           
                     </Nav.Link>
                 </Nav.Item>
-                <Nav.Item>
-                    <Nav.Link eventKey="4" onClick={() => handleTabClick('4')} active={activeTab === '4'}>
-                        판매자정보
-                    </Nav.Link>
-                </Nav.Item>
             </Nav>
 
             {/* TabContent 컴포넌트 */}
@@ -268,9 +259,6 @@ const ReadPage = () => {
                     <div>
                         <ReviewListPage mall_key={mall_key} mall_seller={mall_seller} seller_number={seed_number} />
                     </div>
-                )}
-                {activeTab === '4' && (
-                    <SellerInfo mall_seller={mall_seller} />
                 )}
             </TabContent>
         </div>

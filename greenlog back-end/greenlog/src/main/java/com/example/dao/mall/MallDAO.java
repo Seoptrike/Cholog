@@ -10,7 +10,9 @@ import com.example.domain.QueryVO;
 
 public interface MallDAO {
 	
-	public List<HashMap<String,Object>> reviewList (String review_writer);
+	public List<HashMap<String,Object>> reviewList (String review_writer,QueryVO vo);
+	
+	public int reviewListTotal(String review_writer);
 	
 	public List<HashMap<String,Object>> reviewCount ();
 	
@@ -18,7 +20,9 @@ public interface MallDAO {
 	
 	public List<HashMap<String, Object>> list(Query2VO vo);
 	
-	public List<HashMap<String, Object>> sellerList(String mall_seller,int page,int size);
+	public List<HashMap<String, Object>> sellerList(String mall_seller,QueryVO vo);
+	
+	public int sellerListTotal(String mall_seller);
 
 	public void insertInfo(MallVO vo);
 

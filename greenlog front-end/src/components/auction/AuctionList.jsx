@@ -114,7 +114,7 @@ const AuctionList = () => {
         <Row>
             <Col>
                 <MallList/>
-                <h1 className='text-center my-5'>개인경매목록</h1>
+                <h1 className='text-center my-5'>거래완료내역</h1>
                 <Row className='justify-content-center mt-3'>
                     <Col lg={5}>
                         <form onSubmit={onSubmit}>

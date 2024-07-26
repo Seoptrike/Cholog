@@ -19,10 +19,17 @@ public class MallDAOImpl implements MallDAO {
 	String namespace = "com.example.mapper.MallMapper";
 
 	@Override
-	public List<HashMap<String, Object>> reviewList(String review_writer) {
-		return session.selectList(namespace+".reviewList", review_writer);
+	public int reviewListTotal(String review_writer) {
+		return session.selectOne(namespace+".reviewListTotal",review_writer);
 	}
 
+	@Override
+	public List<HashMap<String, Object>> reviewList(String review_writer,QueryVO vo) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("review_writer",review_writer);
+		map.put("vo", vo);
+		return session.selectList(namespace+".reviewList", map);
+	}
 	
 	@Override
 	public List<HashMap<String, Object>> reviewCount() {
@@ -41,13 +48,18 @@ public class MallDAOImpl implements MallDAO {
 	}
 	
 	@Override
-	public List<HashMap<String, Object>> sellerList(String mall_seller,int page,int size) {
+	public List<HashMap<String, Object>> sellerList(String mall_seller,QueryVO vo) {
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("mall_seller", mall_seller);
-		map.put("page", page);
-		map.put("size", size);
+		map.put("vo", vo);
 		return session.selectList(namespace + ".sellerList",map);
 	}
+	
+	@Override
+	public int sellerListTotal(String mall_seller) {
+		return session.selectOne(namespace+".sellerListTotal",mall_seller);
+	}
+
 
 	@Override
 	public void insertInfo(MallVO vo) {
@@ -125,6 +137,9 @@ public class MallDAOImpl implements MallDAO {
 		session.update(namespace + ".updatePhoto", vo);
 	}
 
+	
+
+	
 	
 
 	

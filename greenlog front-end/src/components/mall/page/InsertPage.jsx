@@ -100,10 +100,12 @@ const InsertPage = () => {
     );
 
     return (
-        <div className="my-5">
+        <div className="my-5 ">
             <Paper elevation={3} style={{ padding: 20 }}>
                 <Typography variant="h3" gutterBottom className="text-center">
+                    <img src="../images/pmang1.png" style={{width:"3rem",height:"3rem", marginBottom:"1rem"}} />
                     피망마켓에 글쓰기
+                    <img src="../images/pmang1.png" style={{width:"3rem",height:"3rem",marginBottom:"1rem"}} />
                 </Typography>
                 <form onSubmit={onSubmit}>
                     <Grid container spacing={2}>

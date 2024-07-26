@@ -6,6 +6,13 @@
 		select * 
 		from review join mall on mall_key=review_mall_key 
 		where review_writer=#{review_writer}
+		limit #{vo.start}, #{vo.size}
+	</select>
+	
+	<select id="reviewListTotal" resultType="int">
+		select count(*) 
+		from review join mall on mall_key=review_mall_key 
+		where review_writer=#{review_writer}
 	</select>
 	
 	<select id="reviewCount" resultType="hashmap">
@@ -64,11 +71,17 @@
 	</select>
 	
 	<select id="sellerList" resultType="hashmap">
-		select *
+		select * 
 		from mall
         where mall_seller = #{mall_seller} and mall_endDate > now() 
         order by mall_regDate desc
-		limit #{page}, #{size}
+		limit #{vo.start}, #{vo.size}
+	</select>
+	
+	<select id="sellerListTotal" resultType="int">
+		select count(*) 
+		from mall
+        where mall_seller = #{mall_seller} and mall_endDate > now() 
 	</select>
 	
 	<select id="read" resultType="hashmap">
