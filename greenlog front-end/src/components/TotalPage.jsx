@@ -32,7 +32,7 @@ const TotalPage = () => {
                 <Col xs={2}>
                     <ListGroup>
                         <ListGroup.Item>다이어리</ListGroup.Item>
-                        <ListGroup.Item> <Link to={"/diary/list.json/:diary_writer"}>다이어리목록</Link></ListGroup.Item>
+                        <ListGroup.Item> <Link to={`/diary/list.json/${uid}`}>다이어리목록</Link></ListGroup.Item>
                         <ListGroup.Item> <Link to={"/diary/insert"}>다이어리작성</Link></ListGroup.Item>
                         <ListGroup.Item> <Link to={"/diary/read/103"}>다이어리읽기</Link></ListGroup.Item>
                     </ListGroup>

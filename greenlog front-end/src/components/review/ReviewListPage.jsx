@@ -33,6 +33,7 @@ const ReviewListPage = ({ mall_key, mall_seller, seller_number }) => {
         await axios.post(`/review/delete/${review_key}`);
         alert('리뷰 삭제 완료!');
         callAPI();
+        window.location.href=`/mall/read/${mall_key}`
     };
 
     const onUpdate = (review_key) => {
@@ -108,7 +109,7 @@ const ReviewListPage = ({ mall_key, mall_seller, seller_number }) => {
     return (
         <div className="review-page-container">
             <Row className='justify-content-center'>
-                <Col xs={7}>
+                <Col xs={10}>
                     {list.map(review => (
                         <Card key={review.review_key} className="review-card">
                             <div className="review-card-header">

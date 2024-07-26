@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Slider from "react-slick";
-import '../../common/useful/Slick.css';
+import './DiarySlickSlider.css';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 

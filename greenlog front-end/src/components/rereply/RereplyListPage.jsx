@@ -6,6 +6,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import RereplyReaction from './RereplyReaction';
 import ReportInsert from '../report/ReportInsert';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 const RereplyListPage = ({ reply_key, reply_writer, callList, rereply, setRereply, callCount, bbs_writer }) => {
     const uid = sessionStorage.getItem('uid');
@@ -64,6 +65,16 @@ const RereplyListPage = ({ reply_key, reply_writer, callList, rereply, setRerepl
         setRereply(data);
     };
 
+    const [showDropdown, setShowDropdown] = useState(null); // 드롭다운 상태 관리
+    
+    const handleDropdownToggle = (rereply_key) => {
+        setShowDropdown(prevKey => (prevKey === rereply_key ? null : rereply_key));
+    };
+
+    const handleDropdownClose = () => {
+        setShowDropdown(null);
+    };
+
     return (
         <div className='rereply-page-container'>
         <Row className='justify-content-center'>
@@ -106,30 +117,30 @@ const RereplyListPage = ({ reply_key, reply_writer, callList, rereply, setRerepl
                                                     <SlLockOpen style={{ color: 'black' }} />
                                                 </span>
                                             )}
-                                            <Dropdown className="text-end dropdown-container">
-                                                <Dropdown.Toggle variant="" id={`dropdown-basic-${rereply.rereply_key}`}>
-                                                    <BsThreeDotsVertical />
-                                                </Dropdown.Toggle>
-                                                {uid === rereply.rereply_writer || uid === reply_writer ? (
-                                                    <>
-                                                        {!rereply.isEdit ? (
-                                                            <Dropdown.Menu>
-                                                                <Dropdown.Item onClick={() => onUpdate(rereply.rereply_key)} eventKey="update">수정하기</Dropdown.Item>
-                                                                <Dropdown.Item onClick={() => onDelete(rereply.rereply_key)} eventKey="delete">삭제하기</Dropdown.Item>
-                                                            </Dropdown.Menu>
-                                                        ) : (
-                                                            <Dropdown.Menu>
-                                                                <Dropdown.Item onClick={() => onSave(rereply)} eventKey="save">등록</Dropdown.Item>
-                                                                <Dropdown.Item onClick={() => onCancel(rereply.rereply_key)} eventKey="cancel">취소</Dropdown.Item>
-                                                            </Dropdown.Menu>
-                                                        )}
-                                                    </>
-                                                ) : (
-                                                    <Dropdown.Menu>
-                                                        <Dropdown.Item eventKey="warning"><ReportInsert uid={uid} writer={rereply.rereply_writer} root={root} origin={rereply.rereply_key} /></Dropdown.Item>
-                                                    </Dropdown.Menu>
-                                                )}
-                                            </Dropdown>
+                                            <div className="text-end dropdown-container">
+                                                <MoreVertIcon onClick={() => handleDropdownToggle(rereply.rereply_key)} style={{ cursor: 'pointer' }} />
+                                                <Dropdown.Menu show={showDropdown === rereply.rereply_key} onClick={(e) => e.stopPropagation()} align="end" >
+                                                    {uid === rereply.rereply_writer ? (
+                                                        <>
+                                                            {!rereply.isEdit ? (
+                                                                <>
+                                                                    <Dropdown.Item onClick={() => { onUpdate(rereply.rereply_key); handleDropdownClose(); }}> 수정하기 </Dropdown.Item>
+                                                                    <Dropdown.Item onClick={() => { onDelete(rereply.rereply_key); handleDropdownClose(); }}> 삭제하기 </Dropdown.Item>
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <Dropdown.Item onClick={() => { onSave(rereply); handleDropdownClose(); }}> 등록 </Dropdown.Item>
+                                                                    <Dropdown.Item onClick={() => { onCancel(rereply.rereply_key); handleDropdownClose(); }} > 취소 </Dropdown.Item>
+                                                                </>
+                                                            )}
+                                                        </>
+                                                    ) : (
+                                                        <Dropdown.Item onClick={() => handleDropdownClose()}>
+                                                            <ReportInsert uid={uid} writer={rereply.rereply_writer} root={root} origin={rereply.rereply_key} />
+                                                        </Dropdown.Item>
+                                                    )}
+                                                </Dropdown.Menu>
+                                            </div>
                                         </div>
                                         <div>
                                             <span>{rereply.fmtudate ? `${rereply.fmtudate}` : `${rereply.fmtdate}`} </span>
