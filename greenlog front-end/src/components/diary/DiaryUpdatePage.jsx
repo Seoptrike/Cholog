@@ -1,10 +1,10 @@
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react'
-import { Card, Row, Col, InputGroup, Form, Button, Badge } from 'react-bootstrap'
+import { Row, Col, InputGroup, Form, Button } from 'react-bootstrap'
 import { useParams } from 'react-router-dom';
 import { MdOutlineCancel } from "react-icons/md";
 import { DragDropContext, Draggable, Droppable, } from 'react-beautiful-dnd';
-
+import { Card, Chip } from '@mui/material';
 
 const DiaryUpdatePage = () => {
   const uid = sessionStorage.getItem("uid");
@@ -134,7 +134,11 @@ const DiaryUpdatePage = () => {
    window.location.href = `/diary/read/${diary_key}`;
   }
 
-
+  const chipColors = {
+    "현재 대표이미지": "#4CAF50",
+    "썸네일 설정하기": "#FF9800",
+    "이미지 추가하기": "#dc3545"
+  };
 
   return (
     <div>
@@ -188,11 +192,18 @@ const DiaryUpdatePage = () => {
                                  <Col key={p.diaryPhoto_filename} lg={5} className='mb-2'
                                  ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                                  <div style={{ position: "relative" }}>
-                                   {p.diaryPhoto_filename === diary_thumbnail ?
-                                     <Badge style={{ position: "absolute", top: '10px', right: "30px" }} bg='primary'>현재 대표이미지</Badge>
-                                     :
-                                     <Badge onClick={() => ThumbnailUpload(p)} style={{ cursor: "pointer", position: "absolute", top: '10px', right: "30px" }} bg='success'>썸네일 설정하기</Badge>
-                                   }
+                                 {p.diaryPhoto_filename === diary_thumbnail ? (
+                                        <Chip
+                                          sx={{ position: "absolute", top: '10px', right: "30px", backgroundColor: chipColors["현재 대표이미지"], color: '#fff' }}
+                                          label="현재 대표이미지"
+                                        />
+                                      ) : (
+                                        <Chip
+                                          onClick={() => ThumbnailUpload(p)}
+                                          sx={{ cursor: "pointer", position: "absolute", top: '10px', right: "30px", backgroundColor: chipColors["썸네일 설정하기"], color: '#fff' }}
+                                          label="썸네일 설정하기"
+                                        />
+                                      )}
                                    <img src={p.diaryPhoto_filename} style={style} />
                                    <MdOutlineCancel onClick={() => onClickDelete(p)} style={{ cursor: "pointer", position: "absolute", top: '10px', right: "5px" }} />
                                  </div>
@@ -211,9 +222,12 @@ const DiaryUpdatePage = () => {
                   <div>
                     <img src={file.name || "/images/plus.png"} onClick={() => refFile.current.click()}
                       style={{ width: "15rem", cursor: "pointer", position: "relative" }} />
-                    {file.name && <Badge onClick={onClickImageSave} bg='danger' style={{ position: "absolute", bottom: '850px', left: "300px" }}>
-                      이미지추가</Badge>
-                    }
+                    {file.name &&  
+                    <Chip
+                      onClick={onClickImageSave}
+                      sx={{ cursor: "pointer", position: "absolute", bottom: '850px', left: "300px", backgroundColor: chipColors["이미지 추가하기"], color: '#fff' }}
+                      label="이미지 추가하기"
+                    />}
                   </div>
                   <Form.Control type="file" ref={refFile} onChange={onChangeFile} style={{ display: 'none' }} />
 

@@ -1,6 +1,10 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap'
+import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
+import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 const ReplyReaction = ({ reply_key, uid }) => {
     const [reaction, setReaction] = useState([]);
     const [likeCount, setLikeCount] = useState('');
@@ -45,31 +49,29 @@ const ReplyReaction = ({ reply_key, uid }) => {
     }, [])
     
     return (
-        <div>
+        <span>
             {reaction ?
                 <>
-                    <span style={{ cursor: 'pointer' }}>
-                        {reaction=== 1 ? (
-                           <Button variant="success" size='sm' className='me-2' onClick={onReactionDelete}>좋아요 {likeCount}</Button>
-                        ) : (
-                            <Button variant="outline-success" size='sm' className='me-2' onClick={onReactionUpdate}>좋아요 {likeCount}</Button>
-                        )}
-                    </span>
-                    <span style={{ cursor: 'pointer' }}>
-                        {reaction === -1 ? (
-                       <Button variant="danger" size='sm' onClick={onReactionDelete}>싫어요 {hateCount}</Button>
-                        ) : (
-                            <Button variant="outline-danger" size='sm' onClick={onReactionUpdate}>싫어요 {hateCount}</Button>
-                        )}
-                    </span>
+                    {reaction=== 1 ? (
+                        <ThumbUpAltIcon style={{ cursor: 'pointer'}} onClick={onReactionDelete} className='me-1'/> 
+                    ) : (
+                        <ThumbUpOffAltIcon style={{ cursor: 'pointer'}} onClick={onReactionUpdate} className='me-1'/> 
+                    )} <span className='me-2'>{likeCount}</span>
+        
+
+                    {reaction === -1 ? (
+                        <ThumbDownAltIcon style={{ cursor: 'pointer'}} onClick={onReactionDelete} className='me-1'/> 
+                    ) : (
+                        <ThumbDownOffAltIcon style={{ cursor: 'pointer'}} onClick={onReactionUpdate} className='me-1'/> 
+                    )} <span className='me-2'>{hateCount}</span>
                 </>
                 :   
                 <>
-                <Button variant="outline-success" size='sm' className='me-2' onClick={onInsertLike}>좋아요 {likeCount}</Button>
-                <Button variant="outline-danger" size='sm' onClick={onInsertHate}>싫어요 {hateCount}</Button>
+                <ThumbUpOffAltIcon style={{ cursor: 'pointer'}} onClick={onInsertLike} className='me-1'/> <span className='me-3'>{likeCount}</span>
+                <ThumbDownOffAltIcon style={{ cursor: 'pointer'}} onClick={onInsertHate} className='me-1'/> <span className='me-3'>{hateCount}</span>
                 </>
             }
-        </div>
+        </span>
     )
 }
 

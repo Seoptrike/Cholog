@@ -131,7 +131,7 @@ const MyPage = () => {
       <div className='mt-3 mb-5'>
         <Row className='justify-content-center'>
           <Col>
-            <MypageSlick diary={diary} setDiary={setDiary} />
+            <MypageSlick diary={diary} setDiary={setDiary} callAPI={callAPI2}  />
           </Col>
         </Row>
       </div>

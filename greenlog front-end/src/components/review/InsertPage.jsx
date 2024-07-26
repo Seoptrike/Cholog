@@ -62,6 +62,7 @@ const InsertPage = ({ mall_key, mall_seller, mall_photo }) => {
                 review_rating: 0,
                 review_contents: ''
             });
+            window.location.href=`/mall/read/${mall_key}`
             setOnCancel(false);
         } catch (error) {
             alert('이미 리뷰를 등록하셨습니다.');

@@ -135,7 +135,7 @@ const ReplyPage = ({ bbs_key, bbs_writer }) => {
                 {showReply && (
                     <>
                         <Row className='justify-content-center mt-3'>
-                            <Col xs={12} md={10}>
+                            <Col xs={12}>
                                 <div>
                                     <form onSubmit={onSubmit} onReset={onClickCancel}>
                                         <Form.Control
@@ -151,15 +151,13 @@ const ReplyPage = ({ bbs_key, bbs_writer }) => {
                                             <Button
                                                 onClick={onClickLock}
                                                 variant=''
-                                                size="sm"
-                                                className='me-2'
                                                 type='button'
                                                 style={{ color: form.reply_lock === 'lock' ? 'green' : 'inherit' }}>
                                                 {form.reply_lock === 'lock' ? <SlLock /> : <SlLockOpen />} {form.reply_lock === 'lock' ? '비공개' : '공개'}
                                             </Button>
                                             <div className='text-end'>
-                                                <Button variant='' size="sm" type='submit'>등록</Button>
-                                                <Button onClick={onClickCancel} variant='' size="sm" type='reset' disabled={!onCancel}>취소</Button>
+                                                <Button variant='' type='submit'>등록</Button>
+                                                <Button onClick={onClickCancel} variant='' type='reset' disabled={!onCancel}>취소</Button>
                                             </div>
                                         </InputGroup.Text>
                                     </form>
@@ -170,11 +168,9 @@ const ReplyPage = ({ bbs_key, bbs_writer }) => {
                                 </div> */}
                     
                             </Col>
-                            
                         </Row>
-        
                         <ReplyListPage reply={reply} setReply={setReply} bbs_writer={bbs_writer} callCount={callCount} callList={callList} />
-                        
+                        <hr />
                         {count > size && (
                         <Row className="pagination-container">
                             <Col xs={12} md={10}>

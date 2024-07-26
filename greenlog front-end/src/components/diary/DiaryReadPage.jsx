@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Row, Col, InputGroup, Form, Button, Badge } from 'react-bootstrap'
+import { Row, Col, InputGroup, Form, Button } from 'react-bootstrap'
 import { FaRegThumbsUp } from "react-icons/fa";
 import { FaThumbsUp } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
@@ -7,6 +7,7 @@ import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 import { BsTrash } from "react-icons/bs";
 import DiarySlickSlider from './DiarySlickSlider';
+import { styled, CardContent, Card, Chip } from '@mui/material';
 
 
 //슬릭슬라이더로 인스타처럼 사진 넘기기
@@ -55,7 +56,7 @@ const DiaryReadPage = () => {
       await axios.post(`/diary/cancel`, { user_uid: sessionStorage.getItem("uid"), diary_key });
       if (ucnt === 0) {
         alert("좋아요를 이미 취소한 상태입니다.");
-      }else{
+      } else {
         alert("좋아요가 취소되었습니다");
         callAPI();
         setLoading(false);
@@ -70,17 +71,26 @@ const DiaryReadPage = () => {
   }
 
   //뱃지색바꾸기 (list, read필요... bg에 먹지 않아 mui Badge를 써봤지만 다시시도해야할듯 )
-  const ChangeBadge =(diary_state,e)=>{
-    e.preventDefault();
-    switch (diary_state){
-      case "리필스테이션/개인용기":
-      return "info"
+  // const ChangeBadge =(diary_state,e)=>{
+  //   e.preventDefault();
+  //   switch (diary_state){
+  //     case "리필스테이션/개인용기":
+  //     return "info"
 
-      default :
-      return "primary"
-    }
-  }
-
+  //     default :
+  //     return "primary"
+  //   }
+  // }
+  const chipColors = {
+    "개인컵/텀블러": "#FF6F61", // Coral
+    "리필스테이션/개인용기": "#6B5B95", // Slate Blue
+    "리사이클링 제작": "#88B04B", // Olive Green
+    "전자영수증": "#F7CAC9", // Light Pink
+    "친환경 제품구매": "#92A8D1", // Light Blue
+    "재활용품 배출": "#F0B27A", // Light Orange
+    "전기차 대여": "#E5E8E8", // Light Gray
+    "봉사활동/개인 환경활동": "#D5AAFF", // Light Purple
+  };
 
   if (loading) return <h1>로딩중</h1>
   return (
@@ -88,9 +98,9 @@ const DiaryReadPage = () => {
       <Row className='justify-content-center my-5'>
         <Col lg={6}>
           <Card>
-            <Card.Body>
+            <CardContent>
               <Row>
-                <Col lg={8} style={{whiteSpace:"pre-line"}}>
+                <Col className='mb-2' lg={8} style={{ whiteSpace: "pre-line" }}>
                   <h3>{diary_title}</h3>
                 </Col>
                 <Col lg={4}>
@@ -102,13 +112,16 @@ const DiaryReadPage = () => {
                 </Col>
                 <hr />
                 <div className='text-center mb-3'>
-                 <DiarySlickSlider diary={diary} setDiary={setDiary}/>
+                  <DiarySlickSlider diary={diary} setDiary={setDiary} />
                 </div>
                 <hr />
                 <Col>
                   <Row>
                     <Col>
-                      <Badge bg="primary">{diary_state}</Badge>
+                      <Chip
+                        label={diary_state}
+                        style={{ backgroundColor: chipColors[diary_state] || "#6B5B95", color: "#fff" }}
+                      />
                     </Col>
                     <Col>
                       <div className='text-end' style={{ cursor: "pointer" }}>
@@ -118,7 +131,7 @@ const DiaryReadPage = () => {
                       </div>
                     </Col>
                   </Row>
-                  <div style={{whiteSpace:"pre"}}>
+                  <div className='mb-3' style={{ whiteSpace: "pre" }}>
                     <span>{diary_contents}</span>
                   </div>
                 </Col>
@@ -126,7 +139,7 @@ const DiaryReadPage = () => {
                 <span>등록일: {fmtDdate}</span>
                 <span>수정일: {fmtUdate}</span>
               </Row>
-            </Card.Body>
+            </CardContent>
           </Card>
         </Col>
       </Row>

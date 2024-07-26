@@ -18,12 +18,12 @@
 	</update>
 	
 	<select id="personList" resultType="hashmap">
-		select *, date_format(diary_regDate,'%Y년%m월%d일 %T') as fmtDdate, 
+		select d.*, user_img, date_format(diary_regDate,'%Y년%m월%d일 %T') as fmtDdate, 
 		date_format(diary_uDate,'%Y년%m월%d일 %T') as fmtUdate,
 		(select count(*) from diaryLike f where user_uid=#{user_uid} and f.diary_key=d.diary_key) ucnt, 
 		(select count(*) from diaryLike f where f.diary_key=d.diary_key) fcnt   
-		from diary d
-		where diary_writer = #{diary_writer}
+		from diary d, user u
+		where diary_writer= user_uid and diary_writer=#{diary_writer}
 		order by diary_regDate desc  
         limit #{start}, #{size}	
 	</select>

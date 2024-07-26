@@ -107,54 +107,52 @@ const RereplyPage = ({ reply_key, reply_writer, bbs_writer }) => {
     }
 
     return (
-        <Row className='justify-content-center'>
-            <Col xs={12}>
-
-                <Button type='button' variant="" onClick={() => toggleRep(reply_key)}>
-                    답글 {rereplyCount} <BsChevronDown />
-                </Button>
-
-                {showRep[reply_key] && (
-                    <>
-                        <hr />
-                        <RereplyListPage reply_key={reply_key} reply_writer={reply_writer} rereply={rereply} setRereply={setRereply} callList={callList} callCount={callCount} bbs_writer={bbs_writer} />
-                        <Row className='text-end'>
-                            <Col xs={12}>
-                                <form onSubmit={onSubmit} onReset={onClickCancel}>
-                                    <div className="d-flex align-items-center mb-2">
-                                        <Col className="d-flex justify-content-end align-items-start" xs={2}>
-                                            <BsArrowReturnRight className='me-2' style={{ color: 'gray', fontSize: '1.5em' }} />
-                                        </Col>
-                                        <Form.Control
-                                            name='rereply_contents'
-                                            value={rereply_contents}
-                                            as='textarea' rows={3}
-                                            placeholder='내용을 입력해주세요.'
-                                            onChange={onChangeForm}
-                                            onFocus={Focus}
+        <>
+            <Button type='button' variant="" onClick={() => toggleRep(reply_key)}>
+                답글 {rereplyCount} <BsChevronDown />
+            </Button>
+            <Row className='justify-content-center'>
+                <Col xs={12}>
+                    {showRep[reply_key] && (
+                        <>
+                            <hr />
+                            <RereplyListPage reply_key={reply_key} reply_writer={reply_writer} rereply={rereply} setRereply={setRereply} callList={callList} callCount={callCount} bbs_writer={bbs_writer} />
+                            <Row className='text-end'>
+                                <Col xs={12}>
+                                    <form onSubmit={onSubmit} onReset={onClickCancel}>
+                                        <div className="d-flex align-items-center mb-2">
+                                            <Col className="d-flex justify-content-end align-items-start" xs={2}>
+                                                <BsArrowReturnRight className='me-2' style={{ color: 'gray', fontSize: '1.5em' }} />
+                                            </Col>
+                                            <Form.Control
+                                                name='rereply_contents'
+                                                value={rereply_contents}
+                                                as='textarea' rows={3}
+                                                placeholder='내용을 입력해주세요.'
+                                                onChange={onChangeForm}
+                                                onFocus={Focus}
                                             />
-                                    </div>
-                                    <div className='text-end mt-2'>
-                                        <Button
-                                            onClick={onClickLock}
-                                            variant=''
-                                            size="sm"
-                                            className='me-2'
-                                            type='button'
-                                            style={{ color: rereply_lock === 'lock' ? 'green' : 'inherit' }}>
-                                            {rereply_lock === 'lock' ? <SlLock /> : <SlLockOpen />} {rereply_lock === 'lock' ? '비공개' : '공개'}
-                                        </Button>
-                                        <Button variant='' size="sm" className='text-end me-2' type='submit'>등록</Button>
-                                        <Button onClick={onClickCancel} variant='' size="sm" className='text-end' type='reset' disabled={!onCancel}>취소</Button>
-                                    </div>
-                                </form>
-                            </Col>
-                        </Row>
-                        <Button variant='' onClick={() => toggleRep(reply_key)} size="sm" className='text-end me-2'>답글 접기</Button>
-                    </>
-                )}
-            </Col>
-        </Row>
+                                        </div>
+                                        <div className='text-end mt-2'>
+                                            <Button
+                                                onClick={onClickLock}
+                                                variant=''
+                                                type='button'
+                                                style={{ color: rereply_lock === 'lock' ? 'green' : 'inherit' }}>
+                                                {rereply_lock === 'lock' ? <SlLock /> : <SlLockOpen />} {rereply_lock === 'lock' ? '비공개' : '공개'}
+                                            </Button>
+                                            <Button variant='' className='text-end me-2' type='submit'>등록</Button>
+                                            <Button onClick={onClickCancel} variant='' className='text-end' type='reset' disabled={!onCancel}>취소</Button>
+                                        </div>
+                                    </form>
+                                </Col>
+                            </Row>
+                            <Button variant='' onClick={() => toggleRep(reply_key)} className='text-end me-2'>답글 접기</Button>
+                        </>
+                    )}
+                </Col>
+            </Row>
+        </>
     );
 };
 
