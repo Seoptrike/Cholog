@@ -8,6 +8,7 @@ import {Card } from 'antd';
 import { Link } from 'react-router-dom';
 import { BsPencilSquare } from "react-icons/bs";
 import {UserContext} from '../../user/UserContext';
+import { Padding } from '@mui/icons-material';
 
 
 const ListPage = () => {
@@ -124,34 +125,42 @@ const ListPage = () => {
         right: '0%',    // 오른쪽 여백 기본이 오른쪽아래로 쳐져잇어서 줘야댐..
     }
     const stateBox = {
-        width: "10rem",
-        margin: "2rem "
+        width: "6.8rem",
+        margin: "1rem 2rem",
+        border: "1px solid #ccc", 
+        borderRadius: "1rem" ,
+        textAlign:"center",
+        backgroundColor:"#E0F8EC"
     }
-
+    const stateRow={
+        display: "flex",
+        alignItems: "center",
+        width:"100%", height:"4rem",
+        borderTop: "1px solid #ccc",borderBottom: "1px solid #ccc",
+        textAlign:"center"
+    }
 
     if (loading) return <h1 className='text-center'>로딩중...</h1>
     return (
         <div className='justify-content-center text-center'>
-            <div className='bg-secondary mb-3'>
-                <img src='../images/pimang.jpg' style={{width:"100%",height:"100%"}}/>
+            <div className=' mb-3'>
+                <img src='../images/pimang3.jpg' style={{width:"100%",height:"25rem"}}/>
             </div>
             <div>
-                <Row>
-                    <Col>
-                        {word === '' ?
-                            <div style={countST}>총 게시글 : {count}건</div>
-                            :
-                            <div style={countST}>검색수 : {count}건</div>
-                        }
-                    </Col>
-                    <Col>
-                        {uid ?
-                            <div className='text-end' ><Link to="/mall/insert">
-                                <BsPencilSquare style={{fontSize:"2rem"}}/></Link> </div>
-                            :
-                            <div className='text-end'><Link to="/user/login">♻로그인 하기♻</Link> </div>
-                        }
-                    </Col>
+                <Row className='my-2 '>
+                    {uid ?
+                        <div className='text-end ' style={{fontSize:"1.5rem"}}><Link to="/mall/insert" className='insert_link'>
+                            활동하기<BsPencilSquare style={{fontSize:"2rem"}}/></Link> </div>
+                        :
+                        <div className='text-end'><Link to="/user/login">♻로그인 하기♻</Link> </div>
+                    }
+                </Row>
+                <Row className='my-0 d-flex align-items-end justify-content-end'>
+                    {word === '' ?
+                        <div style={countST}>총 게시글 : {count}건</div>
+                        :
+                        <div style={countST}>검색수 : {count}건</div>
+                    }
                 </Row>
                 <div style={{ border: "1px solid #ccc", borderRadius: "5px" }}  >
                     <Row className='my-2'>
@@ -167,7 +176,7 @@ const ListPage = () => {
                                 </Dropdown.Menu>
                             </Dropdown>
                         </Col>
-                        <Col className='text-start ' xs={9} ms={9} lg={10}>
+                        <Col className='text-center ' xs={9} ms={9} lg={10}>
                             <InputGroup>
                                 <Form.Select value={key} onChange={(e) => setKey(e.target.value)} style={{ border: "none", borderRight: "1px solid #ccc" }} >
                                     <option value="mall_seller">아이디</option>
@@ -180,24 +189,24 @@ const ListPage = () => {
                         </Col>
                     </Row>
                 </div>
-                <Row className='justify-content-center ' style={{width:"100%", height:"5rem", alignItems: "flex-start"}}>
-                <InputGroup className=" mt-2" style={stateBox}>
+                <Row className=' mx-0 mt-2 my-5 justify-content-center'  style={stateRow}>
+                <InputGroup  style={stateBox}>
                         <input className='mall_stateBox_input' type="checkbox" id="ch1" onChange={onChangeChecked} name="checkT0" checked={form.checkT0} />
-                        <label for="ch1" className='mall_stateBox' >일반나눔</label>
+                        <label for="ch1" className='mall_stateBox ' >일반나눔</label>
                     </InputGroup>
-                    <InputGroup className=" mt-2" style={stateBox}>
+                    <InputGroup  style={stateBox}>
                         <input className='mall_stateBox_input' type="checkbox" id="ch2" onChange={onChangeChecked} name="checkT1" checked={form.checkT1} />
                         <label for="ch2" className='mall_stateBox' >무료나눔</label>
                     </InputGroup>
-                    <InputGroup className=" mt-2" style={stateBox}>
+                    <InputGroup  style={stateBox}>
                         <input className='mall_stateBox_input' type="checkbox" id="ch3" onChange={onChangeChecked} name="checkT2" checked={form.checkT2} />
-                        <label for="ch3" className='mall_stateBox' >구매글</label>
+                        <label for="ch3" className='mall_stateBox ' >구매글</label>
                     </InputGroup>
-                    <InputGroup className=" mt-2" style={stateBox}>
+                    <InputGroup style={stateBox}>
                         <input className='mall_stateBox_input' type="checkbox" id="ch4" onChange={onChangeChecked} name="checkP0" checked={form.checkP0} />
                         <label for="ch4" className='mall_stateBox' >중고상품</label>
                     </InputGroup>
-                    <InputGroup className=" mt-2" style={stateBox}>
+                    <InputGroup  style={stateBox}>
                         <input className='mall_stateBox_input' type="checkbox" id="ch5" onChange={onChangeChecked} name="checkP1" checked={form.checkP1} />
                         <label for="ch5" className='mall_stateBox' >새상품</label>
                     </InputGroup>
@@ -243,7 +252,8 @@ const ListPage = () => {
                     ))
                 }
             </Row>
-            {count > size &&
+            <Row style={{paddingTop:"1rem"}}>
+                {count > size &&
                 <Pagination
                     activePage={page}
                     itemsCountPerPage={size}
@@ -251,8 +261,10 @@ const ListPage = () => {
                     pageRangeDisplayed={5}
                     prevPageText={"‹"}
                     nextPageText={"›"}
-                    onChange={(e) => setPage(e)} />
+                    onChange={(e) => setPage(e)} 
+                    />
             }
+            </Row>
         </div>
     )
 }

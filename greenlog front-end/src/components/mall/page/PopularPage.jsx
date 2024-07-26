@@ -3,16 +3,20 @@ import React, { useEffect, useState } from 'react'
 import { Container, Row, Col,  Table } from 'react-bootstrap';
 import {Card } from 'antd'; 
 import axios from 'axios';
-import { position } from '@chakra-ui/react';
-
+import moment from 'moment';
 
 const PopularPage = () => {
     const { Meta } = Card;
     const [list, setList] = useState([]);
 
-    const callAPI = async () => {
+    const callAPI = async () => { 
         const res = await axios.get("/mall/reviewCount");
-        setList(res.data);
+        const fmtdata = res.data.map(item => ({
+            ...item,
+            mall_endDate: moment(item.mall_endDate).format('YYYY-MM-DD')
+        }));
+        console.log(fmtdata);
+        setList(fmtdata);
         console.log(res.data);
     }
 
@@ -38,6 +42,7 @@ const PopularPage = () => {
         margin: '0.5rem',
         display: 'flex',
         flexDirection: 'column'
+        ,position:"absolute"
     }
     const topCover={/*카드 썸네일 영역*/ 
         display: 'block', 
@@ -60,11 +65,25 @@ const PopularPage = () => {
         justifyContent: 'flex-end', 
         textAlign: 'center' ,
     }
+    const badgeST={
+        position:"relative",
+        bottom:"13rem",
+        right:"4rem",
+        width:"7rem",
+        height:"5rem",
+    }
+    const rankST={
+        position:"relative",
+        bottom:"19.2rem",
+        right:"1.3rem",
+        fontSize:"3.5rem",
+        color:"black"
+    }
 
     return (
-        <Container>
+        <div>
             <div className='bg-secondary mb-5'>
-                <img src='../images/paprika.png' style={{width:"100%",height:"20rem"}}/>
+                <img src='../images/popularList.png' style={{width:"100%",height:"25rem"}}/>
             </div>
             <Row className="mall-table-stand mx-5 " style={{marginTop:"5rem"}} >
                 <Col md={4} className="mall-stand-leg">
@@ -82,7 +101,9 @@ const PopularPage = () => {
                                 <Meta
                                     title={`[${top2.mall_key}] ${top2.mall_title}`}
                                     style={topMeta}/>
-                            </div>
+                            </div> 
+                            <img src='../images/rankk2.png' style={badgeST}/>
+                            <div style={rankST}>2</div>
                         </Card>
                     )}
                 </Col>
@@ -102,6 +123,8 @@ const PopularPage = () => {
                             title={`[${top1.mall_key}] ${top1.mall_title}`}
                             style={topMeta}/>
                         </div>
+                        <img src='../images/rankk.png' style={badgeST}/>
+                        <div style={rankST}>1</div>
                      </Card>
                     )}
                 </Col>
@@ -121,31 +144,54 @@ const PopularPage = () => {
                                 title={`[${top3.mall_key}] ${top3.mall_title}`}
                                 style={topMeta}/>
                         </div>
+                        <img src='../images/rankk3.png' style={badgeST}/>
+                        <div style={rankST}>3</div>
                      </Card>
                     )}
                 </Col>
             </Row>
             <hr className='mx-5'/>
-            <h3 className='text-center my-5'>♻ 인기상품리스트 ♻</h3>
+            <h3 className='text-center my-5'>♻ 인기상품리스트 TOP10 ♻</h3>
             <div className='' style={{position:"relative"}}>
                 {list.slice(0, 10).map((list, index) => (
                     <Card key={index} className='m-0 p-0  mx-5 mb-3' style={{height:"8rem"}}>
-                            <a href={`/mall/read/${list.mall_key}`} >
+                            <a href={`/mall/read/${list.mall_key}`} style={{color:"#5a9410",textDecoration: 'none'}} >
                             <Row>
                                 <Col xs={2} md={2} lg={2}>
                                     <img src={list.mall_photo ? list.mall_photo : "http://via.placeholder.com/100x100"} style={photoST}/>
                                 </Col>
                                 <Col className='me-5 py-0'>
-                                    <p>[{index+1}]</p>
-                                    <p>제목:{list.mall_title}  ID:{list.mall_seller} 유형:{list.mall_pstate}{list.mall_tstate}</p>
-                                    <p>마감:{list.mall_endDate}</p>
+                                    <Row className='mb-0 pb-0'>
+                                        <Col >
+                                            <p className='my-0 py-0'style={{fontSize:"1.5rem"}}>
+                                                [{index+1}]  {list.mall_title} 
+                                            </p> 
+                                            <p className='mt-3'>
+                                                마감일 : {list.mall_endDate}
+                                            </p>
+                                        </Col>
+                                        <Col className='text-center' xs={2} md={2} lg={2}>
+                                           <div style={{border:"1px solid #d7ffa3",backgroundColor:"#d7ffa3", borderRadius:"20px"}}> ID : {list.mall_seller} </div>
+                                            <p className='my-0 py-0 ' >
+                                                {list.mall_tstate === 0 && `일반나눔`}
+                                                {list.mall_tstate === 1 && `무료나눔`}
+                                                {list.mall_tstate === 2 && `구매글`}
+                                            </p>
+                                            <p>
+                                                {list.mall_pstate === 0 && `중고상품`}
+                                                {list.mall_pstate === 1 && `새상품`}
+                                            </p>
+                                        </Col>
+                                    </Row>
+                                    
+                                     
                                 </Col>
                             </Row>
                         </a>
                     </Card>
                 ))}
             </div>
-        </Container>
+        </div>
     )
 }
 

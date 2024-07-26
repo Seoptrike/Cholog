@@ -161,8 +161,8 @@ export const UpdatePage = () => {
     return (
         <div className="my-5">
             <Paper elevation={3} style={{ padding: 20 }}>
-                <Typography variant="h3" gutterBottom className="text-center">
-                    피망마켓
+                <Typography variant="h3" gutterBottom className="text-center ">
+                    🧩수정중입니다🧩
                 </Typography>
                 <form>
                     <Grid container spacing={2}>
@@ -305,8 +305,8 @@ export const UpdatePage = () => {
                             </DragDropContext>
                         </Grid>
                         <Grid item xs={12} className="text-end">
-                            <Button onClick={() => onClickUpdate(photos)} variant="outline-secondary" >게시글 수정</Button>
-                            <Button onClick={onClickCancel} variant="outline-secondary" >취소</Button>
+                            <Button onClick={onClickCancel} variant="outline-secondary me-3" >취소</Button>
+                            <Button onClick={() => onClickUpdate(photos)} variant="outline-secondary me-3" >게시글 수정</Button>
                         </Grid>
                     </Grid>
                 </form>
