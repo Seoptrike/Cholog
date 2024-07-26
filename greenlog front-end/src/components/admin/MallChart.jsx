@@ -31,7 +31,7 @@ const MallChart = () => {
             }
         },
         legend: {
-            data: ['Mall', 'Auction', 'Review']
+            data: ['상품등록수', '경매완료수', '경매입찰수']
         },
         grid: {
             left: '3%',
@@ -48,7 +48,7 @@ const MallChart = () => {
         },
         series: [
             {
-                name: 'Mall',
+                name: '상품등록수',
                 type: 'bar',
                 stack: 'total',
                 label: {
@@ -60,7 +60,7 @@ const MallChart = () => {
                 data: data.map(item => item.value[0])
             },
             {
-                name: 'Auction',
+                name: '경매완료수',
                 type: 'bar',
                 stack: 'total',
                 label: {
@@ -72,7 +72,7 @@ const MallChart = () => {
                 data: data.map(item => item.value[1])
             },
             {
-                name: 'Review',
+                name: '경매입찰수',
                 type: 'bar',
                 stack: 'total',
                 label: {

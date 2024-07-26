@@ -1,40 +1,49 @@
-import React, { useContext, useEffect, useState } from 'react'
-import Sidebar from './Sidebar'
-import { Row, Col, Button, Badge, ListGroup, } from 'react-bootstrap'
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import axios from 'axios'
+import React, { useContext, useEffect, useState } from 'react';
+import Sidebar from './Sidebar';
+import { Row, Col } from 'react-bootstrap';
+import { Card } from 'primereact/card';
+import { List, ListItem, Divider, ListItemText, ListItemAvatar, Avatar, Typography, Chip, Stack, Box, Badge } from '@mui/material';
+import axios from 'axios';
 import FiberNewIcon from '@mui/icons-material/FiberNew';
-import { Link, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import { UserContext } from '../user/UserContext';
-import DiaryChart from './DiaryChart'
-import DiaryPieChart from './DiaryPieChart'
-import DiaryDailyChart from './DiaryDailyChart'
+import DiaryChart from './DiaryChart';
 import MallChart from './MallChart';
+import { RiAwardFill } from 'react-icons/ri';
+import './AdminPage.css'
 
-//전체데이터필요, 차트출력 및 뱃지데이터 출력
-//오늘의 할일을 버튼대신 listGroup을 사용할지 고민(넣어놓기만 함)
-//차트 컴포넌트 추가
+
 const Dashboard = () => {
     const [reportCount, setReportCount] = useState('');
-    const [askCount, setaskCount] = useState('');
+    const [askCount, setAskCount] = useState('');
     const [qaCount, setQaCount] = useState('');
-    const { userData, setUserData } = useContext(UserContext);
+    const { userData } = useContext(UserContext);
     const [rank, setRank] = useState([]);
 
-
     const callAPI = async () => {
-        const res = await axios.get("/report/count")
-        const res1 = await axios.get("/chat/listCount")
-        const res2 = await axios.get("/qa/qaListCount")
-        const res3 = await axios.get("/graph/rank")
-        setaskCount(res1.data)
-        setReportCount(res.data)
-        setQaCount(res2.data)
+        const res = await axios.get("/report/count");
+        const res1 = await axios.get("/chat/listCount");
+        const res2 = await axios.get("/qa/qaListCount");
+        const res3 = await axios.get("/graph/rank");
+        setAskCount(res1.data);
+        setReportCount(res.data);
+        setQaCount(res2.data);
         setRank(res3.data);
         console.log(res3.data);
-    }
-    useEffect(() => { callAPI() }, [])
+    };
+
+    useEffect(() => {
+        callAPI();
+    }, []);
+
+    const tasks = [
+        { count: reportCount, link: "/admin/question#notice", label: "신고접수", icon: "pi pi-exclamation-triangle" },
+        { count: askCount, link: "/admin/question#1:1", label: "1:1 문의", icon: "pi pi-comments" },
+        { count: qaCount, link: "/admin/question#qa", label: "Q&A 답변하기", icon: "pi pi-question-circle" }
+    ];
+
+
+
     return (
         <div>
             <Row>
@@ -45,65 +54,97 @@ const Dashboard = () => {
                     <h2 className='text-center my-5'>{userData.nickname}님 오늘도 초록데이</h2>
                     <div className='mb-3'><h4>오늘의 할일</h4></div>
                     <div className='today text-center mb-5'>
-                        <Link to="/admin/question#notice">
-                            <Button className='px-5 me-5'>
-                                {reportCount > 0 ? <FiberNewIcon style={{ color: "yellow" }} /> : null}
-                                신고접수
-                                <Badge bg="secondary">{reportCount}</Badge>
-                            </Button>
-                        </Link>
-                        <Link to="/admin/question#1:1">
-                            <Button className='px-5 me-5'>{askCount > 0 ? <FiberNewIcon style={{ color: "yellow" }} /> : null}
-                                1:1 문의
-                                <Badge bg="secondary">{askCount}</Badge>
-                            </Button>
-                        </Link>
-                        <Link to="/admin/question#qa">
-                            <Button className='px-5 me-5'>{qaCount > 0 ? <FiberNewIcon style={{ color: "yellow" }} /> : null}
-                                Q&A 답변하기
-                                <Badge bg="secondary">{qaCount}</Badge>
-                            </Button>
-                        </Link>
+                        <div className="p-grid p-justify-center small-card-grid">
+                            {tasks.map((task, index) => (
+                                <div key={index} className="small-card-col">
+                                    <Card className="card action-card small-card">
+                                        <div className="p-d-flex p-flex-column p-ai-center">
+                                            <Badge badgeContent={task.count} color="secondary">
+                                                <i className={`${task.icon} p-mb-3`} style={{ fontSize: '2em' }}></i>
+                                            </Badge>
+                                            <Link to={task.link} className="task-link">
+                                                <h3>{task.label}</h3>
+                                                {task.count > 0 && <FiberNewIcon style={{ color: "black" }} />}
+                                            </Link>
+                                        </div>
+                                    </Card>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                     <div className='chart text-center mb-5'>
                         <Row>
-                            <Col lg={4}><DiaryChart /></Col>
-                            <Col lg={4}><DiaryDailyChart /></Col>
-                            <Col lg={4}><DiaryPieChart /></Col>
+                            <div className='mb-5'>클로버일기 전체 차트</div>
+                            <Col><Card><DiaryChart /></Card></Col>
                         </Row>
                     </div>
                     <div>
-                        <div className='mb-2'>씨드포인트 랭킹</div>
                         <Row>
-                            {rank.map(r =>
-                                <Col key={r.seed_uid} md={8} lg={7}>
-                                    <Card variant="outlined" className='mb-2' size="sm">
-                                        <Row>
-                                        <Col lg={6}>
-                                            <div><b>{r.ranked}위</b></div>
-                                            <div className='mb-2'>{r.seed_uid}({r.user_nickname})님</div>
-                                            <div>{r.seed_point}씨드</div>
-                                        </Col>
-                                        <Col lg={1}>
-                                        <div className='text-end'>
-                                            <Badge color="secondary" overlap="circular">
-                                                {r.user_auth}
-                                            </Badge>
-                                            </div>
-                                        </Col>
-                                        </Row>
-                                    </Card>
-                                </Col>
-                            )}
-                            <Col>
-                            <MallChart/>
+                            <Col lg={5}>
+                                <Card className="mb-3" style={{ height: "565px", overflowY: "scroll" }}>
+                                    <div className='mb-2'>씨드포인트 이번달 랭킹</div>
+                                    {rank.map(r => (
+                                        <div key={r.seed_uid}>
+                                            <ListItem alignItems="flex-start">
+                                                <ListItemAvatar>
+                                                    <Box>
+                                                        <Typography variant="h6"><b>{r.ranked}</b></Typography>
+                                                        <RiAwardFill style={{ fontSize: '25px' }} />
+                                                    </Box>
+                                                </ListItemAvatar>
+                                                <ListItemText
+                                                    primary={
+                                                        <Box>
+                                                            <Row>
+                                                                <Col>
+                                                                    <Typography variant="body1">{r.seed_uid}({r.user_nickname})님</Typography>
+                                                                    <Stack direction="row" spacing={1}>
+                                                                        {r.user_auth === '일반회원' ?
+                                                                            <Chip label="일반회원" color="primary" size="small" /> :
+                                                                            <Chip label="우수회원" color="success" size="small" />
+                                                                        }
+                                                                    </Stack>
+                                                                </Col>
+                                                                <Col>
+                                                                    <Link to={`/user/admin/update/${r.seed_uid}`}>
+                                                                        <Avatar alt={r.seed_uid} src={r.user_img} width="100%" />
+                                                                    </Link>
+                                                                </Col>
+                                                            </Row>
+                                                        </Box>}
+                                                    secondary={
+                                                        <React.Fragment>
+                                                            <Typography
+                                                                sx={{ display: 'inline' }}
+                                                                component="span"
+                                                                variant="body2"
+                                                                color="text.primary"
+                                                            >
+                                                                <br />
+                                                                {r.seed_point}씨드
+                                                            </Typography>
+                                                        </React.Fragment>
+                                                    }
+                                                />
+                                            </ListItem>
+                                            <Divider variant="inset" component="li" />
+                                        </div>
+                                    ))}
+                                </Card>
+                            </Col>
+                            <Col lg={7}>
+                                <Card className="mb-3">
+                                    <div>피망마켓 이용 차트</div>
+                                    <MallChart />
+                                </Card>
                             </Col>
                         </Row>
+
                     </div>
                 </Col>
             </Row>
         </div>
-    )
+    );
 }
 
-export default Dashboard
+export default Dashboard;

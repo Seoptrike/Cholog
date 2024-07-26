@@ -2,27 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.mapper.GraphMapper">
 	<select id="diaryCount" resultType="hashmap">
-		SELECT COUNT(DATE_FORMAT(diary_regDate, '%Y-%m')) AS diary_count, 
-		       DATE_FORMAT(diary_regDate, '%Y-%m') AS diary_regMonth
-		FROM diary 
-		WHERE diary_regDate BETWEEN DATE_ADD(NOW(), INTERVAL -3 MONTH) AND NOW()
-		GROUP BY DATE_FORMAT(diary_regDate, '%Y-%m') 
-		ORDER BY diary_regMonth ASC;
-	</select>
-	
-	<select id="categoryCount" resultType="hashmap">
-	SELECT COUNT(diary_key) AS diary_count, diary_state
-	FROM diary
-	GROUP BY diary_state;
-	</select>
-	
-	<select id="diaryDailyCount" resultType="hashmap">
-	SELECT COUNT(*) AS diary_count, 
-       DATE_FORMAT(diary_regDate, '%m-%d') AS diary_regDaily
-FROM diary 
-WHERE diary_regDate BETWEEN DATE_ADD(NOW(), INTERVAL -1 WEEK) AND NOW()
-GROUP BY DATE_FORMAT(diary_regDate, '%m-%d') 
-ORDER BY diary_regDaily ASC;
+		SELECT COUNT(diary_key) AS diary_count, diary_state, DATE_FORMAT(diary_regDate, '%Y-%m') AS diary_regMonth
+		FROM diary WHERE diary_regDate BETWEEN DATE_ADD(NOW(), INTERVAL -4 MONTH) AND NOW()
+		GROUP BY diary_state, DATE_FORMAT(diary_regDate, '%Y-%m') ORDER BY diary_regMonth ASC;
 	</select>
 	
 	<select id="rank" resultType="hashmap">
@@ -35,14 +17,14 @@ ORDER BY diary_regDaily ASC;
         seed.seed_uid,
         seed.seed_number,
         seed.seed_point,
-        ROW_NUMBER() OVER (ORDER BY seed.seed_point DESC) AS ranked
+        rank() OVER (ORDER BY seed.seed_point DESC) AS ranked
       FROM user
       LEFT JOIN seed ON user.user_uid = seed.seed_uid
       WHERE (user.user_auth = '일반회원' OR user.user_auth = '우수회원')
     )
     SELECT *
     FROM ranked_data
-    WHERE ranked <= 3
+    WHERE ranked <= 10
     ORDER BY ranked;
     ]]>
 	
