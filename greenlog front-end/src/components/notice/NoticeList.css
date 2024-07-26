@@ -13,6 +13,26 @@
   border-bottom: 2px solid black; 
 }
 
+.notice-table th:first-child, .notice-table td:first-child {
+  width: 10%;
+}
+
+.notice-table th:nth-child(2), .notice-table td:nth-child(2) {
+  width: 15%;
+}
+
+.notice-table th:nth-child(3), .notice-table td:nth-child(3) {
+  width: 30%;
+}
+
+.notice-table th:nth-child(4), .notice-table td:nth-child(4) {
+  width: 15%;
+}
+
+.notice-table th:nth-child(5), .notice-table td:nth-child(5) {
+  width: 15%;
+}
+
 .title-cell {
   max-width: 600px;
 }

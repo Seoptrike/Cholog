@@ -13,9 +13,10 @@ const QAUpdate = () => {
     qa_title: '',
     qa_contents: '',
     qa_writer: '',
+    qa_lock: 0
   });
 
-  const { qa_title, qa_contents, qa_writer } = form;
+  const { qa_title, qa_contents, qa_writer, qa_lock } = form;
 
   const callAPI = async () => {
     const res = await axios.get(`/qa/read/${qa_key}`);
@@ -30,10 +31,8 @@ const QAUpdate = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const onChangeCKEditor = (event, editor) => {
-    let data = editor.getData();
-    data = data.replace(/<\/?p>/g, '');  // <p> 태그를 제거
-    setForm({ ...form, qa_contents: data });
+  const onChangeCheckbox = (e) => {
+    setForm({ ...form, qa_lock: e.target.checked ? 1 : 0 });
   };
 
   const onReset = () => {
@@ -79,6 +78,15 @@ const QAUpdate = () => {
                   name="qa_contents"
                   value={qa_contents}
                   onChange={onChangeForm}
+                  style={{ whiteSpace: 'pre-wrap' }}
+                />
+              </Form.Group>
+              <Form.Group controlId="qa_lock" className="mt-3">
+                <Form.Check
+                  type="checkbox"
+                  label="비밀글로 수정"
+                  checked={qa_lock === 1}
+                  onChange={onChangeCheckbox}
                 />
               </Form.Group>
               <div className='text-center mt-3'>

@@ -60,7 +60,8 @@ const FAQInsert = () => {
             style={{ maxWidth: '150px', marginRight: '10px' }}>
             <option value={1}>회원</option>
             <option value={2}>포인트</option>
-            <option value={3}>참여방법</option>
+            <option value={3}>일기</option>
+            <option value={4}>피망몰</option>
           </FormControl>
           <FormControl
             type="text"
@@ -78,6 +79,7 @@ const FAQInsert = () => {
             name="faq_answer"
             value={faq_answer}
             onChange={onChangeForm}
+            style={{ whiteSpace: 'pre-wrap' }} 
           />
         </Form.Group>
         <Button type="submit" className="mt-3" disabled={loading}>

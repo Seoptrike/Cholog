@@ -6,6 +6,7 @@ import { Accordion, AccordionSummary, AccordionDetails, TextField, Button, Typog
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SearchIcon from '@mui/icons-material/Search';
 import { UserContext } from '../user/UserContext';
+import FAQImage from './faq.png';
 import './FAQList.css'; // CSS 파일 임포트
 
 const FAQList = () => {
@@ -79,13 +80,16 @@ const FAQList = () => {
   return (
     <Container maxWidth="xl">
       <HeaderTabs />
-      <Typography variant="h4" component="h1" align="center" my={5}>FAQ</Typography>
+      <Box display="flex" justifyContent="center" my={3}>
+        <img src={FAQImage} alt="faq" style={{ width: '100%', maxWidth: '1000px' }} />
+      </Box>
       <Box display="flex" justifyContent="center" alignItems="center" mb={3}>
         <div className="toggle-button-group">
           <button className={`toggle-button ${key === 'all' ? 'active' : ''}`} onClick={() => setKey('all')}>전체</button>
           <button className={`toggle-button ${key === 'member' ? 'active' : ''}`} onClick={() => setKey('member')}>회원</button>
           <button className={`toggle-button ${key === 'point' ? 'active' : ''}`} onClick={() => setKey('point')}>포인트</button>
-          <button className={`toggle-button ${key === 'how' ? 'active' : ''}`} onClick={() => setKey('how')}>참여방법</button>
+          <button className={`toggle-button ${key === 'diary' ? 'active' : ''}`} onClick={() => setKey('diary')}>일기</button>
+          <button className={`toggle-button ${key === 'mall' ? 'active' : ''}`} onClick={() => setKey('mall')}>피망몰</button>
         </div>
       </Box>
       <Box className="search-bar" mb={3}>
@@ -109,7 +113,7 @@ const FAQList = () => {
       </Box>
       <Box display="flex" justifyContent="space-between" mb={3}>
         <Typography>검색수: {count}건</Typography>
-        {userData.auth && (
+        {userData.auth === '관리자' && (
           <Button variant="contained" sx={{ backgroundColor: 'black', color: 'white' }} onClick={WriteClick}>
             글쓰기
           </Button>
@@ -126,7 +130,7 @@ const FAQList = () => {
               <Typography variant="h6">Q. {faq.FAQ_question}</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Typography>A. {faq.FAQ_answer}</Typography>
+              <Typography sx={{ whiteSpace: 'pre-wrap' }}>A. {faq.FAQ_answer}</Typography>
               {userData.auth && (
                 <Box mt={3} display="flex" justifyContent="flex-end">
                   <Button variant="contained" sx={{ backgroundColor: 'black', color: 'white', mr: 1 }} onClick={() => UpdateClick(faq.FAQ_key)} >
