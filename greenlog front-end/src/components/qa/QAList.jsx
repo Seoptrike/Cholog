@@ -5,6 +5,7 @@ import axios from 'axios';
 import HeaderTabs from '../../common/useful/HeaderTabs';
 import { UserContext } from '../user/UserContext';
 import SearchIcon from '@mui/icons-material/Search';
+import QAImage from './qa.png'
 import { Container, Box, Typography, Select, MenuItem, Button, Table, TableHead, TableRow, TableCell, TableBody, InputAdornment, OutlinedInput } from '@mui/material';
 
 const QAList = () => {
@@ -46,9 +47,9 @@ const QAList = () => {
   return (
     <Container maxWidth="xl">
       <HeaderTabs />
-      <Typography variant="h4" align="center" gutterBottom>
-        Q&A
-      </Typography>
+      <Box display="flex" justifyContent="center" my={3}>
+        <img src={QAImage} alt="qa" style={{ width: '100%', maxWidth: '1000px' }} />
+      </Box>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <Box display="flex" alignItems="center">
           <Select

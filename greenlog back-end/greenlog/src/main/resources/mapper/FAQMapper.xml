@@ -24,7 +24,8 @@
             <if test="key == 'all' and word != null and word != ''">faq_question LIKE #{word}</if>
             <if test="key == 'member' and word != null and word != ''">faq_question LIKE #{word} AND faq_type =0</if>
             <if test="key == 'point' and word != null and word != ''">faq_question LIKE #{word} AND faq_type =2</if>
-            <if test="key == 'how' and word != null and word != ''">faq_question LIKE #{word} AND faq_type =3</if>
+            <if test="key == 'diary' and word != null and word != ''">faq_question LIKE #{word} AND faq_type =3</if>
+             <if test="key == 'mall' and word != null and word != ''">faq_question LIKE #{word} AND faq_type =4</if>
         </where>
     order by faq_key desc
     limit #{start}, #{size}
@@ -37,7 +38,8 @@
     <if test="key == 'all' and word != null and word != ''">faq_question LIKE #{word}</if>
     <if test="key == 'member' and word != null and word != ''">faq_question LIKE #{word} AND faq_type =0</if>
     <if test="key == 'point' and word != null and word != ''">faq_question LIKE #{word} AND faq_type =2</if>
-    <if test="key == 'how' and word != null and word != ''">faq_question LIKE #{word} AND faq_type =3</if>
+    <if test="key == 'diary' and word != null and word != ''">faq_question LIKE #{word} AND faq_type =3</if>
+     <if test="key == 'mall' and word != null and word != ''">faq_question LIKE #{word} AND faq_type =4</if>
   </where>
 </select>
 

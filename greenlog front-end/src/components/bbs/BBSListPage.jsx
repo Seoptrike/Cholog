@@ -6,6 +6,8 @@ import { FaHotjar } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
+import BBSImage from './bbs.png'
+
 
 // Define custom styles for top list rows
 const TopListTableRow = styled(TableRow)(({ theme }) => ({
@@ -83,6 +85,9 @@ const BBSListPage = () => {
 
     return (
         <div className='mt-2'>
+            <Box display="flex" justifyContent="center" my={3}>
+                <img src={BBSImage} alt="bbs" style={{ width: '100%', maxWidth: '1000px' }} />
+            </Box>
             <Box sx={{ mb: 3, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -127,12 +132,12 @@ const BBSListPage = () => {
                     </Box>
                 </Box>
                 <Box>
-                    <Button onClick={onClickShow} variant="contained" color={showNotice ? 'secondary' : 'primary'} sx={{ mr: 2 }}>
+                    <Button onClick={onClickShow} variant="contained" sx={{ backgroundColor: 'black', color: 'white', mr: 2 }}>
                         {showNotice ? '공지접기' : '공지보기'}
                     </Button>
                     {sessionStorage.getItem('uid') && (
                         <Link to="/bbs/insert">
-                            <Button variant="contained" color="primary">글쓰기</Button>
+                            <Button variant="contained" sx={{ backgroundColor: 'black', color: 'white' }}>글쓰기</Button>
                         </Link>
                     )}
                 </Box>

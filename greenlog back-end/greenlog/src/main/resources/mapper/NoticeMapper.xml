@@ -24,7 +24,8 @@
             <if test="key == 'all'">notice_title LIKE #{word}</if>
             <if test="key == 'normal'">notice_title LIKE #{word} AND notice_type = 1</if>
             <if test="key == 'member'">notice_title LIKE #{word} AND notice_type = 2 </if>
-            <if test="key == 'event'">notice_title LIKE #{word} AND notice_type = 3 </if>
+            <if test="key == 'point'">notice_title LIKE #{word} AND notice_type = 3 </if>
+            <if test="key == 'etc'">notice_title LIKE #{word} AND notice_type = 4 </if>
         </where>
         order by notice_key desc
         limit #{start}, #{size}
@@ -36,7 +37,8 @@
             <if test="key == 'all'">notice_title LIKE #{word}</if>
             <if test="key == 'normal'">notice_title LIKE #{word} AND notice_type = 1</if>
             <if test="key == 'member'">notice_title LIKE #{word} AND notice_type = 2 </if>
-            <if test="key == 'event'">notice_title LIKE #{word} AND notice_type = 3 </if>
+            <if test="key == 'point'">notice_title LIKE #{word} AND notice_type = 3 </if>
+             <if test="key == 'etc'">notice_title LIKE #{word} AND notice_type = 4 </if>
         </where>
     </select>
     <update id="updateViewcnt">

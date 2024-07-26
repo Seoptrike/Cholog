@@ -77,7 +77,8 @@ const NoticeUpdate = () => {
                   style={{ maxWidth: '150px', marginRight: '10px' }}>
                   <option value="1">일반</option>
                   <option value="2">회원</option>
-                  <option value="3">이벤트</option>
+                  <option value="3">포인트</option>
+                  <option value="4">기타</option>
                 </FormControl>
                 <FormControl
                   placeholder="제목을 입력하세요"
@@ -95,6 +96,7 @@ const NoticeUpdate = () => {
                   name="notice_contents"
                   value={notice_contents}
                   onChange={onChangeForm}
+                  style={{ whiteSpace: 'pre-wrap' }} 
                 />
               </Form.Group>
               <div className='text-center mt-3'>

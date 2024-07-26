@@ -67,6 +67,7 @@ const QAInsert = () => {
             name="qa_contents"
             value={qa_contents}
             onChange={onChangeForm}
+            style={{ whiteSpace: 'pre-wrap' }} 
           />
         </Form.Group>
         <Form.Group controlId="qa_lock" className="mt-3">

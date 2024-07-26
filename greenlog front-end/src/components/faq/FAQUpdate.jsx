@@ -77,7 +77,8 @@ const FAQUpdate = () => {
                 style={{ maxWidth: '150px', marginRight: '10px' }}>
                 <option value="0">회원</option>
                 <option value="2">포인트</option>
-                <option value="3">참여방법</option>
+                <option value="3">일기</option>
+                <option value="4">피망몰</option>
               </FormControl>
               <FormControl
                 placeholder="질문을 입력하세요"
@@ -95,6 +96,7 @@ const FAQUpdate = () => {
                 name="faq_answer"
                 value={form.faq_answer}
                 onChange={onChangeForm}
+                style={{ whiteSpace: 'pre-wrap' }} 
               />
             </Form.Group>
             <div className='text-center mt-3'>

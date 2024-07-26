@@ -11,7 +11,7 @@ const NoticeInsert = () => {
     notice_title: '',
     notice_contents: '',
     notice_writer: uid,
-    notice_type: 0 // 기본값 설정
+    notice_type: 1 // 기본값 설정
   });
 
   const { notice_title, notice_contents, notice_type } = form;
@@ -57,7 +57,8 @@ const NoticeInsert = () => {
             style={{ maxWidth: '150px', marginRight: '10px' }}>
             <option value={1}>일반</option>
             <option value={2}>회원</option>
-            <option value={3}>이벤트</option>
+            <option value={3}>포인트</option>
+            <option value={4}>기타</option>
           </FormControl>
           <FormControl
             type="text"
@@ -75,6 +76,7 @@ const NoticeInsert = () => {
             name="notice_contents"
             value={notice_contents}
             onChange={onChangeForm}
+            style={{ whiteSpace: 'pre-wrap' }} 
           />
         </Form.Group>
         <Button type="submit" className="mt-3" disabled={loading}>

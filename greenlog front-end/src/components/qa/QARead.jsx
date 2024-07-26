@@ -59,7 +59,6 @@ const QARead = () => {
       await axios.post(`/qa/update/${qa_key}`, { ...form, comments: '' });
       setLoading(false);
       setComment('');
-      setEditingComment(false);
       callAPI();
     } catch (error) {
       setLoading(false);
@@ -115,57 +114,59 @@ const QARead = () => {
         {form.qa_contents}
       </Typography>
       <Divider style={{ margin: '40px 0', backgroundColor: '#ddd' }} />
+
       {form.comments && (
         <Box mt={4}>
           <Typography variant="h6" gutterBottom style={{ fontWeight: 'bold' }}>
             답변
           </Typography>
           <Divider style={{ marginBottom: '20px', backgroundColor: '#ddd' }} />
-          {!editingComment ? (
-            <Typography variant="body1" style={{ whiteSpace: 'pre-line' }}>
-              {form.comments}
-            </Typography>
-          ) : (
-            <form onSubmit={handleEditComment}>
-              <TextField
-                fullWidth
-                multiline
-                rows={3}
-                variant="outlined"
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                placeholder="답변을 수정하세요."
-              />
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                disabled={loading}
-                style={{ marginTop: '10px' }}
-              >
-                {loading ? '수정 중...' : '답변 수정'}
-              </Button>
-            </form>
-          )}
-          {userData.auth === '관리자' && !editingComment && (
-            <Box mt={2}>
-              <Button
-                onClick={() => { setEditingComment(true); setComment(form.comments); }}
-                variant="contained" sx={{ backgroundColor: 'black', color: 'white' }}
-                style={{ marginRight: '10px' }}
-              >
-                답변 수정
-              </Button>
-              <Button
-                onClick={handleDeleteComment}
-                variant="contained" sx={{ backgroundColor: 'black', color: 'white' }}
-              >
-                답변 삭제
-              </Button>
-            </Box>
-          )}
+          <Typography variant="body1" style={{ whiteSpace: 'pre-line' }}>
+            {form.comments}
+          </Typography>
         </Box>
       )}
+
+      {userData.auth === '관리자' && (
+        <Box mt={4}>
+          <Typography variant="h6" gutterBottom style={{ fontWeight: 'bold' }}>
+            {form.comments ? '답변 수정' : '답변 작성'}
+          </Typography>
+          <Divider style={{ marginBottom: '20px', backgroundColor: '#ddd' }} />
+          <form onSubmit={handleEditComment}>
+            <TextField
+              fullWidth
+              multiline
+              rows={3}
+              variant="outlined"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              placeholder="답변을 입력하세요."
+            />
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={loading}
+              style={{ marginTop: '10px' }}
+            >
+              {loading ? '저장 중...' : '답변 저장'}
+            </Button>
+          </form>
+        </Box>
+      )}
+
+      {userData.auth === '관리자' && form.comments && (
+        <Box mt={2}>
+          <Button
+            onClick={handleDeleteComment}
+            variant="contained" sx={{ backgroundColor: 'black', color: 'white' }}
+          >
+            답변 삭제
+          </Button>
+        </Box>
+      )}
+
       <Box mt={4}>
         <Button
           variant="contained" sx={{ backgroundColor: 'black', color: 'white' }}

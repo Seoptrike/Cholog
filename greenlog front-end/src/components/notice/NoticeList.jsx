@@ -6,6 +6,7 @@ import HeaderTabs from '../../common/useful/HeaderTabs';
 import { Container, TextField, MenuItem, Select, FormControl, Button, Typography, Box, InputAdornment, IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { UserContext } from '../user/UserContext';
+import noticeImage from './notice2.png'; // 이미지 경로를 프로젝트 구조에 맞게 수정
 import './NoticeList.css'; // CSS 파일 임포트
 
 const NoticeList = () => {
@@ -56,7 +57,9 @@ const NoticeList = () => {
   return (
     <Container maxWidth="xl">
       <HeaderTabs />
-      <Typography variant="h4" component="h1" align="center" my={5}>공지사항</Typography>
+      <Box display="flex" justifyContent="center" my={3}>
+        <img src={noticeImage} alt="Notice" style={{ width: '100%', maxWidth: '1000px' }} />
+      </Box>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <Box display="flex" alignItems="center" className="search-container">
           <TextField
@@ -78,7 +81,7 @@ const NoticeList = () => {
             sx={{ marginLeft: 2 }}
           />
         </Box>
-        {userData.auth && (
+        {userData.auth === '관리자' && (
           <Button
             variant="contained"
             color="primary"
@@ -106,7 +109,8 @@ const NoticeList = () => {
                   <MenuItem value="all">카테고리</MenuItem>
                   <MenuItem value="normal">일반</MenuItem>
                   <MenuItem value="member">회원</MenuItem>
-                  <MenuItem value="event">이벤트</MenuItem>
+                  <MenuItem value="point">포인트</MenuItem>
+                  <MenuItem value="etc">기타</MenuItem>
                 </Select>
               </FormControl>
             </th>
@@ -116,19 +120,19 @@ const NoticeList = () => {
           </tr>
         </thead>
         <tbody>
-          {list.map((n, index) => (
-            <tr key={n.notice_key}>
+          {list.map((item, index) => (
+            <tr key={item.notice_key}>
               <td>{index + 1}</td>
               <td>
                 <span>
-                  {n.notice_type === 1 ? '일반' : n.notice_type === 2 ? '회원' : '이벤트'}
+                  {item.notice_type === 1 ? '일반' : item.notice_type === 2 ? '회원' : item.notice_type === 3 ? '포인트' : '기타'}
                 </span>
               </td>
               <td className="title-cell">
-                <Link to={`/community/notice/read/${n.notice_key}`} className="notice-link">{n.notice_title}</Link>
+                <Link to={`/community/notice/read/${item.notice_key}`} className="notice-link">{item.notice_title}</Link>
               </td>
-              <td>{n.fmtdate}</td>
-              <td>{n.notice_vcnt}</td>
+              <td>{item.fmtdate}</td>
+              <td>{item.notice_vcnt}</td>
             </tr>
           ))}
         </tbody>
