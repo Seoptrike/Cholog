@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Row, Col, Button } from 'react-bootstrap'
+import { Row, Col, Button } from 'react-bootstrap'
 import { FaSeedling } from "react-icons/fa";
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -8,6 +8,7 @@ import { PiUserCirclePlus } from "react-icons/pi";
 import { PiUserCircleMinusThin } from "react-icons/pi";
 import ModalFollower from '../follow/ModalFollower';
 import ModalFollowing from '../follow/ModalFollowing';
+import { CardActions, CardContent, Avatar, Typography, Chip, Stack, Box, Badge, Card, Grid } from '@mui/material';
 
 //이미지를 누르면 정보수정페이지로 이동
 //아이콘은 css로 움직일 예정
@@ -48,6 +49,7 @@ const MyPage = () => {
     }
   }
 
+
   const onUnFollow = async () => {
     const res = await axios.post("/follow/unFollow", { follow_to: user_uid, follow_from: sessionStorage.getItem("uid") })
     if (res.data === 1) {
@@ -58,69 +60,67 @@ const MyPage = () => {
     }
   }
 
+  // const users = [
+  //   { name: `팔로잉 : ${data.following_count}`, avatar: 'https://randomuser.me/api/portraits/women/1.jpg', },
+  //   { name: `일기목록 : ${diary.length}`, avatar: 'https://randomuser.me/api/portraits/men/1.jpg' },
+  //   { name: `팔로워 : ${data.follower_count}`, avatar: 'https://randomuser.me/api/portraits/women/3.jpg' },
+  //   { name: `피망마켓이용: ${data.auction_count}` , avatar: 'https://randomuser.me/api/portraits/women/2.jpg'},
+  //   { name: `내 씨드 : ${data.seed_point}씨드`, avatar: 'https://randomuser.me/api/portraits/men/2.jpg' },
+  //   { name: '일기쓰기', avatar: 'https://randomuser.me/api/portraits/women/4.jpg' }
+  // ];
+
+  // const UserCard = ({ name, avatar }) => (
+  //   <Card variant="outlined" style={{ marginBottom: '16px' }}>
+  //     <CardContent style={{ display: 'flex', alignItems: 'center' }}>
+  //       <Avatar alt={name} src={avatar} style={{ marginRight: '16px' }} />
+  //       <Typography variant="body">{name}</Typography>
+  //     </CardContent>
+  //   </Card>
+  // );
+
+
   return (
     <div>
-      <h1 className='text-center my-5'>{data.user_nickname}님 환영합니다</h1>
-      <div className='text-end'>
-        {!(sessionStorage.getItem("uid") === user_uid) &&
-          <div>
-            <PiUserCirclePlus style={{ cursor: "pointer", fontSize: "60px" }} onClick={onAddFollow} />
-            <PiUserCircleMinusThin style={{ cursor: "pointer", fontSize: "60px" }} onClick={onUnFollow} />
-          </div>
-        }
-      </div>
+       {user_uid === sessionStorage.getItem("uid") ?
+      <h1 className='text-center my-5'>{data.user_nickname}님 환영합니다</h1> : 
+      <h1 className='text-center my-5'>어서오세요. {data.user_nickname}님의 마이페이지입니다.</h1>}
+
       <Row className='my-5'>
         <Col lg={5}>
           <Link to={`/user/update/${user_uid}`}><img src={data.user_img || "http://via.placeholder.com/200x200"} width="100%" height="100%" /></Link>
         </Col>
         <Col lg={7}>
-          <Card>
-            <Card.Body>
-              <h3 className='text-center'>오늘도 탄소지킴이 역할을 톡톡히 하셨나요?</h3>
-              <div className='mt-2'>
-                <Row>
-                  {user_uid === sessionStorage.getItem("uid") &&
-                    <Row>
-                      <Col>
-                        <Card>
-                          <Card.Body>
-                            <Link to={`/user/wallet/${user_uid}`}>씨드: {data.seed_point}점</Link>
-                          </Card.Body>
-                        </Card>
-                      </Col>
-                      <Col>
-                        <Card>
-                          <Card.Body>
-                            <Link to={`/auction/list.json/${user_uid}`}>피망이용: {data.auction_count}건</Link>
-                          </Card.Body>
-                        </Card>
-                      </Col>
-                    </Row>
-                  }
-                  <Col>
-                    <Card>
-                      <Card.Body>
-                        <span><ModalFollower uid={user_uid} cnt={data.follower_count} /></span>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                  <Col>
-                    <Card>
-                      <Card.Body>
-                        <span><ModalFollowing uid={user_uid} cnt={data.follower_count} /></span>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                </Row>
-              </div>
-              <div>
-                <FaSeedling style={{ fontSize: "100px", position: "bottom" }} />
-                <FaSeedling style={{ fontSize: "100px", position: "bottom", Padding: "20px" }} />
-                <FaSeedling style={{ fontSize: "100px", position: "bottom", Padding: "20px" }} />
-                <FaSeedling style={{ fontSize: "100px", position: "bottom", Padding: "20px" }} />
-              </div>
-            </Card.Body>
-          </Card>
+          {/* <Box sx={{ minWidth: 275, padding: '16px', }}>
+              <Grid container spacing={2} justifyContent="space-between">
+                <Grid item>
+                  <Typography variant="h6" gutterBottom>
+                    오늘도 탄소 지킴이 활동 톡톡히 하셨나요?
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  {!(sessionStorage.getItem("uid") === user_uid) && (
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <PiUserCirclePlus style={{ cursor: "pointer", fontSize: "50px" }} onClick={onAddFollow} />
+                      <PiUserCircleMinusThin style={{ cursor: "pointer", fontSize: "50px" }} onClick={onUnFollow} />
+                    </div>
+                  )}
+                </Grid>
+              {/* <Grid item xs={12} md={6}>
+              
+                {users.slice(0, 3).map((user) => (
+                  <UserCard key={user.name} name={user.name} avatar={user.avatar} />
+                ))}
+              </Grid>
+              {user_uid === sessionStorage.getItem("uid") &&
+              
+              <Grid item xs={12} md={6}>
+                {users.slice(3).map((user) => (
+                  <UserCard key={user.name} name={user.name} avatar={user.avatar} />
+                ))}
+              </Grid>
+}
+            </Grid> 
+          </Box> */}
         </Col>
 
       </Row>
