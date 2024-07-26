@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Row, Col, InputGroup, Form, Button, Card } from 'react-bootstrap'
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const LoginPage = () => {
     const [userInfo, setUserInfo] = useState(null);
@@ -22,12 +23,23 @@ const LoginPage = () => {
         e.preventDefault();
         const res = await axios.post('/user/login', { user_uid, user_upass })
         if (res.data === 0) {
-            alert("아이디가 없습니다")
+            Swal.fire({
+                icon: "error",
+                title: "아이디가 존재하지 않습니다",
+              });
         } else if (res.data === 2) {
-            alert("비밀번호가 일치하지 않습니다")
+            Swal.fire({
+                icon: "error",
+                title: "비밀번호가 일치하지 않습니다",
+              });
         } else if (res.data === 1) {
             sessionStorage.setItem("uid", user_uid);
-            alert("로그인 성공")
+            Swal.fire({
+                icon: "success",
+                title: "로그인 성공",
+                showConfirmButton: false,
+                timer: 1500
+            });
             if (sessionStorage.getItem('target')) {
                 window.location.href = sessionStorage.getItem('target')
             } else {
@@ -80,16 +92,6 @@ const LoginPage = () => {
                                     <Form.Control type="password" name="user_upass" value={user_upass} onChange={onChangeForm} />
                                 </InputGroup>
                                 <Button style={{ backgroundColor: "#2BBEC6", borderColor: "#2BBEC6", color: 'white' }} className='w-100 mt-2' type='submit' ><b>로그인</b></Button>
-                                <div className='text-center mt-2'>
-                                    <div>
-                                        <div>
-                                            <img src='/images/kakao1.png' onClick={onKakaoLogin} style={{width:"20rem", height:"2.5rem" ,borderRadius:"8px"}}></img>
-                                        </div>
-                                        <div className='mt-2'>
-                                            <img src='/images/naver1.png' style={{width:"20rem", height:"2.5rem" ,borderRadius:"8px"}}></img>
-                                        </div>
-                                    </div>
-                                </div>
                                 <div className='text-center mt-2'>
                                     <span>
                                         <a href='/user/join'>회원가입</a>

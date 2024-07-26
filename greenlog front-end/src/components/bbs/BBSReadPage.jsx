@@ -5,6 +5,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import axios from 'axios';
 import ReplyPage from '../reply/ReplyPage';
 import ReportInsert from '../report/ReportInsert';
+import Swal from 'sweetalert2';
 
 const BBSReadPage = () => {
     const { bbs_key } = useParams();
@@ -26,15 +27,32 @@ const BBSReadPage = () => {
     };
 
     const onDelete = async () => {
-        if (!window.confirm(`${bbs_key}번 게시글을 삭제하실래요?`)) return;
-        try {
-            await axios.post(`/bbs/delete/${bbs_key}`);
-            alert("게시글 삭제 완료!");
-            window.location.href = '/community/bbs/list.json';
-        } catch (error) {
-            console.error('There was an error deleting the post!', error);
-            alert('게시물 삭제 중 오류가 발생했습니다.');
-        }
+        Swal.fire({
+            title: "게시글을 삭제하시겠습니까?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: '삭제',
+            cancelButtonText: '취소'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    await axios.post(`/bbs/delete/${bbs_key}`);
+                    Swal.fire({
+                        icon: "success",
+                        title: "게시글 삭제가 완료되었습니다",
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+                    window.location.href = '/bbs/list.json';
+                } catch (error) {
+                    console.error('There was an error deleting the post!', error);
+                    alert('게시물 삭제 중 오류가 발생했습니다.');
+                }
+            }
+        });
+
     };
 
     useEffect(() => {

@@ -4,11 +4,9 @@ import { Button, Box, TextField, InputLabel, MenuItem, Select, FormControl, Icon
 import axios from 'axios';
 import { Editor } from 'primereact/editor';
 import { UserContext } from '../user/UserContext';
-import { MdCancel } from 'react-icons/md';
-import { AiOutlineUpload } from 'react-icons/ai';
 import { Form, InputGroup } from 'react-bootstrap';
+import Swal from 'sweetalert2';
 
-// BBSInsertPage 컴포넌트
 const BBSInsertPage = () => {
     const { userData } = useContext(UserContext);
     const auth = userData.auth;
@@ -53,42 +51,79 @@ const BBSInsertPage = () => {
     // 사진 업로드 함수
     const uploadPhoto = async (bbsPhoto_bbs_key) => {
         if (files.length === 0) return;
-        if (!window.confirm(`${files.length} 개 파일을 업로드 하시겠습니까? 취소시 이미지는 올라가지 않습니다!`)) return;
 
-        try {
-            const formData = new FormData();
-            for (let i = 0; i < files.length; i++) {
-                formData.append('bytes', files[i].byte);
+        const result = await Swal.fire({
+            title: `${files.length} 개 파일을 업로드 하시겠습니까?`,
+            text: '취소시 이미지는 올라가지 않습니다!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '업로드',
+            cancelButtonText: '취소'
+        });
+
+        if (result.isConfirmed) {
+            try {
+                const formData = new FormData();
+                for (let i = 0; i < files.length; i++) {
+                    formData.append('bytes', files[i].byte);
+                }
+                // 첨부 파일 업로드 요청
+                await axios.post(`/bbs/attach/${bbsPhoto_bbs_key}`, formData);
+                setFiles([]); // 파일 상태 초기화
+            } catch (error) {
+                console.error("첨부 파일 업로드 오류:", error);
+                Swal.fire({
+                    icon: 'error',
+                    title: '첨부 파일 업로드 오류',
+                    text: '첨부 파일 업로드 중 오류가 발생했습니다.'
+                });
             }
-            // 첨부 파일 업로드 요청
-            await axios.post(`/bbs/attach/${bbsPhoto_bbs_key}`, formData);
-            setFiles([]); // 파일 상태 초기화
-        } catch (error) {
-            console.error("첨부 파일 업로드 오류:", error);
-            alert("첨부 파일 업로드 중 오류가 발생했습니다.");
         }
     };
 
     // 폼 제출 핸들러
     const onSubmit = async (e) => {
         e.preventDefault();
-        if (!window.confirm("게시글을 등록하시겠습니까?")) return;
 
-        try {
-            // 게시글 등록
-            const updatedForm = { ...form, bbs_contents: text.replace(/<\/?p>/g, '') };
-            const response = await axios.post('/bbs/insert', updatedForm);
-            const insertedMallKey = response.data; // 삽입된 행의 자동 생성 키
-            // 첨부 파일 업로드 함수 호출
-            if (insertedMallKey) {
-                await uploadPhoto(insertedMallKey);
-                alert("게시글 등록 완료!");
-                navigate('/bbs/list.json');
+        const result = await Swal.fire({
+            position: 'top',
+            title: '게시글을 등록하시겠습니까?',
+            text: "게시글을 등록하려면 확인 버튼을 클릭하세요.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '등록',
+            cancelButtonText: '취소'
+        });
+
+        if (result.isConfirmed) {
+            try {
+                // 게시글 등록
+                const updatedForm = { ...form, bbs_contents: text.replace(/<\/?p>/g, '') };
+                const response = await axios.post('/bbs/insert', updatedForm);
+                const insertedMallKey = response.data; // 삽입된 행의 자동 생성 키
+
+                // 첨부 파일 업로드 함수 호출
+                if (insertedMallKey) {
+                    await uploadPhoto(insertedMallKey);
+                    Swal.fire({
+                        icon: 'success',
+                        title: '게시글 등록 완료!',
+                        text: '게시글이 성공적으로 등록되었습니다.'
+                    });
+                    navigate('/bbs/list.json');
+                }
+            } catch (error) {
+                console.error("게시글 등록 오류:", error);
+                Swal.fire({
+                    icon: 'error',
+                    title: '게시글 등록 오류',
+                    text: '게시글 등록 중 오류가 발생했습니다.'
+                });
             }
-
-        } catch (error) {
-            console.error("게시글 등록 오류:", error);
-            alert("게시글 등록 중 오류가 발생했습니다.");
         }
     };
 

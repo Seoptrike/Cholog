@@ -72,9 +72,6 @@ const MainPage = () => {
                 </Col>
             </Row>
             <Row>
-                <h5 className='text-center'>봉사활동</h5>
-            </Row>
-            <Row>
                 <Col xs={8}>
                     <FollowingDiaryList />
                 </Col>
