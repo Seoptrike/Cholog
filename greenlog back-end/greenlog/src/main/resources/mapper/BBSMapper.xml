@@ -37,7 +37,7 @@
 			<if test="key == 'contents'">bbs_contents LIKE #{word} AND bbs_type = 1</if>
 		</if>
 	</where>
-		order by bbs_key desc
+		order by bbs_regDate desc
 		limit #{start}, #{size} ;
 	</select>
  	<select id="total" resultType="int">
@@ -67,7 +67,10 @@
 		where bbs_key=#{bbs_key}
 	</update>
 	  <select id="topList" resultType="hashmap">
-        select *, date_format(bbs_regDate, '%Y.%m.%d') as fmtdate from BBS order by bbs_vcnt desc limit 3
+        select *, date_format(bbs_regDate, '%Y.%m.%d') as fmtdate 
+        from BBS 
+        where bbs_regDate BETWEEN DATE_FORMAT(NOW(), '%Y-%m-01 00:00:00') AND LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 SECOND
+        order by bbs_vcnt desc limit 3
     </select>
     
      <select id="noticeList" resultType="hashmap">

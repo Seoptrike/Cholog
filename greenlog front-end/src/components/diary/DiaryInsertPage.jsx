@@ -1,6 +1,12 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { Card, Row, Col, InputGroup, Form, Button } from 'react-bootstrap'
+import { Row, Col } from 'react-bootstrap';
+import {
+  Container, Card, Typography, MenuItem, Select, TextField, Button, Grid, IconButton, ButtonGroup
+} from '@mui/material';
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import { useNavigate } from 'react-router-dom';
+import { Height } from '@mui/icons-material';
 
 
 const DiaryInsertPage = () => {
@@ -9,8 +15,14 @@ const DiaryInsertPage = () => {
     diary_writer: uid,
     diary_contents: "",
     diary_title: "",
-    diary_state: "개인컵/텀블러"
+    diary_state: ""
   });
+
+  const navi = useNavigate();
+
+  const onClickCancel = () => {
+    navi(-1); // 뒤로 가기
+  };
 
   const { diary_contents, diary_title, diary_state, diary_writer } = diary;
 
@@ -39,7 +51,8 @@ const DiaryInsertPage = () => {
 
   const style = {
     border: '1px solid gray',
-    width: '100%',
+    width: '10rem',
+    height: "10rem"
   }
 
   //파일 업로드 전 이미지 출력
@@ -56,27 +69,20 @@ const DiaryInsertPage = () => {
     setFiles(selFiles);
   }
   //유사성 체크
-  const checkSimilarity = async () => {
+  const getEmbeddings = async (sentences) => {
     try {
-      const response = await axios.post(
-        '/api/ai/check-similarity',
-        {
-          "inputs": {
-            "source_sentence": diary_state,
-            "sentences": [diary_contents]
-          }
+      const res = await axios.post('/api/ai/embeddings', [sentences], {
+        headers: {
+          'Content-Type': 'application/json',
         },
-        {
-          headers: {
-            'Content-Type': 'application/json' // 서버가 JSON 형식을 기대하기 때문에 설정
-          }
-        }
-      );
-      setSimilarityScore(response.data.similarity);
+      });
+      return res.data;
+      console.log(res.data)
     } catch (error) {
-      console.error("유사성 체크 오류:", error.response ? error.response.data : error.message);
-      alert("유사성 체크 중 오류가 발생했습니다.");
+      console.error('Error fetching embeddings:', error);
+      throw error;
     }
+
   };
 
 
@@ -114,12 +120,7 @@ const DiaryInsertPage = () => {
 
     if (!window.confirm("일기를 등록하시겠습니까?")) return;
 
-    // await checkSimilarity(); // 유사성 체크
-    // console.log(similarityScore)
-    // if (similarityScore < 0.7) { // 유사성이 기준보다 낮은 경우
-    //   alert("텍스트의 유사성이 낮습니다. 다시 확인해 주세요.");
-    //   return;
-    // }
+
 
     try {
       const response = await axios.post('/diary/insert', diary);
@@ -146,63 +147,105 @@ const DiaryInsertPage = () => {
   }
 
   return (
-    <div>
-      <div className='text-center my-5'>
-        <h4>오늘은 어떤 활동을 하셨나요?</h4><br /><h5>행운일기를 통해 알려주세요</h5>
-      </div>
-      <Row className='justify-content-center mb-3'>
-        <Col lg={8}>
-          <Card>
-            <h5 className='text-center my-3'>활동 카테고리를 선택해주세요</h5>
-            <Row className='justify-content-center'>
-              <Col lg={10}>
-                <InputGroup className='text-center mb-3'>
-                  <Form.Select value={diary_state} onChange={onChangeForm} name="diary_state">
-                    <option value="개인컵/텀블러">개인컵 활용(카페/사무실/식당)</option>
-                    <option value="리필스테이션/개인용기">용기 활용(리필스테이션/배달음식)</option>
-                    <option value="리사이클링 제작">리사이클링 제작(리사이클링/업사이클링)</option>
-                    <option value="전자영수증">전자영수증(쇼핑)</option>
-                    <option value="친환경 제품구매">친환경 제품구매(제로웨이스트/업사이클링/리사이클링)</option>
-                    <option value="재활용품 배출">재활용품 배출(폐휴대폰 반납/페트병,유리병 반납)</option>
-                    <option value="전기차 대여">전기차 대여(대여만 가능, 반납일 캡쳐)</option>
-                    <option value="봉사활동/개인 환경활동">봉사활동/개인 환경활동 (쓰레기줍기, 봉사활동참여)</option>
-                  </Form.Select>
-                </InputGroup>
-                <InputGroup className='mb-3'>
-                  <InputGroup.Text>제목</InputGroup.Text>
-                  <Form.Control value={diary_title} onChange={onChangeForm} name="diary_title" />
-                </InputGroup>
-                <InputGroup className='mb-3'>
-                  <Form.Control type="file" onChange={onChangeFile} multiple />
-                </InputGroup>
-                <Row>
-                  {files.map(f =>
-                    <Col key={f.name} lg={4} className='mb-2'>
-                      <img src={f.name} style={style} />
-                    </Col>
-                  )}
-
-                </Row>
-                <InputGroup className='mb-5'>
-                  <Form.Control as="textarea" rows={20} value={diary_contents} onChange={onChangeForm} name="diary_contents"
-                    placeholder=' 관리자가 하나하나 체크하고 있습니다.
-                      관련 일기가 아닐 시, 권한이 제한될 수 있으며
-                      적립된 포인트가 차감될 수 있으니 이점 유의해주시기 바랍니다.
-                      사진은 필수첨부입니다.'/>
-                </InputGroup>
-                <InputGroup className='mb-5'>
-                  <Form.Control value={diary_writer} readOnly />
-                </InputGroup>
+    <Container maxWidth="sm">
+      <Card sx={{ padding: 3, marginTop: 5 }}>
+        <Typography variant="h4" align="center" gutterBottom>
+          오늘은 어떤 활동을 하셨나요?
+        </Typography>
+        <Typography variant="h6" align="center" paragraph>
+          행운일기를 통해 알려주세요
+        </Typography>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Select
+              fullWidth
+              value={diary_state}
+              onChange={onChangeForm}
+              name="diary_state"
+              displayEmpty
+              inputProps={{ 'aria-label': '활동 카테고리 선택' }}
+            >
+              <MenuItem value="" disabled>
+                활동 카테고리를 선택해주세요
+              </MenuItem>
+              <MenuItem value="개인컵/텀블러">개인컵 활용(카페/사무실/식당)</MenuItem>
+              <MenuItem value="리필스테이션/개인용기">용기 활용(리필스테이션/배달음식)</MenuItem>
+              <MenuItem value="리사이클링 제작">리사이클링 제작(리사이클링/업사이클링)</MenuItem>
+              <MenuItem value="전자영수증">전자영수증(쇼핑)</MenuItem>
+              <MenuItem value="친환경 제품구매">친환경 제품구매(제로웨이스트/업사이클링/리사이클링)</MenuItem>
+              <MenuItem value="재활용품 배출">재활용품 배출(폐휴대폰 반납/페트병,유리병 반납)</MenuItem>
+              <MenuItem value="전기차 대여">전기차 대여(대여만 가능, 반납일 캡쳐)</MenuItem>
+              <MenuItem value="봉사활동/개인 환경활동">봉사활동/개인 환경활동 (쓰레기줍기, 봉사활동참여)</MenuItem>
+            </Select>
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="제목"
+              value={diary_title}
+              onChange={onChangeForm}
+              name="diary_title"
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              multiline
+              rows={5}
+              label="내용"
+              placeholder='관리자가 하나하나 체크하고 있습니다. 관련 일기가 아닐 시, 권한이 제한될 수 있으며 적립된 포인트가 차감될 수 있으니 이점 유의해주시기 바랍니다. 사진은 필수첨부입니다.'
+              value={diary_contents}
+              onChange={onChangeForm}
+              name="diary_contents"
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Button
+              variant="contained"
+              component="label"
+              fullWidth
+              startIcon={<PhotoCamera />}
+            >
+              파일 첨부
+              <input
+                type="file"
+                hidden
+                onChange={onChangeFile}
+                multiple
+              />
+            </Button>
+          </Grid>
+          <Grid item xs={12} container justifyContent="center">
+          <Row className='justify-content-center mt-2 text-center'>
+            {files.map(f =>
+              <Col key={f.name} lg={4} className='mb-2'>
+                <img src={f.name} style={style} />
               </Col>
-            </Row>
-            <div className='text-center mb-5'>
-              <Button className='me-2 px-4' onClick={onClickInsert}>등록</Button>
-              <Button className='px-4'>취소</Button>
-            </div>
-          </Card>
-        </Col>
-      </Row>
-    </div>
+            )}
+
+          </Row>
+          </Grid>
+          <Grid item xs={12} container justifyContent="center" spacing={2}>
+            <ButtonGroup variant="contained" aria-label="button group">
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={onClickInsert}
+              >
+                등록
+              </Button>
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={onClickCancel}
+              >
+                취소
+              </Button>
+            </ButtonGroup>
+          </Grid>
+        </Grid>
+      </Card>
+    </Container>
   )
 
 }
