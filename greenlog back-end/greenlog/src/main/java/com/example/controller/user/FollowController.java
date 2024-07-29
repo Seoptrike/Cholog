@@ -56,4 +56,9 @@ public class FollowController {
 			return 0; // Failure
 		}
 	}
+	
+	@PostMapping("/chkfollow")
+	public HashMap<String, Object> chkfollow(@RequestBody FollowVO vo){
+		return fdao.chkfollow(vo.getFollow_from(), vo.getFollow_to());
+	}
 }
