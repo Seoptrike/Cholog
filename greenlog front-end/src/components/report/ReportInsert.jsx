@@ -57,7 +57,7 @@ const ReportInsert = ({ uid, writer, root, origin }) => {
                 keyboard={false}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title>Modal title</Modal.Title>
+                    <Modal.Title>신고하기</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Card>
@@ -75,15 +75,15 @@ const ReportInsert = ({ uid, writer, root, origin }) => {
                                 placeholder='상세신고 내용을 적어주세요'
                             />
                         </InputGroup >
-                        <InputGroup className='h-25'>
+                        <InputGroup className='h-25' style={{display:"none"}}>
                             <InputGroup.Text style={{ backgroundColor: "#002412", color: 'white' }} className=' justify-content-center w-25'><b>신고한 사람</b></InputGroup.Text>
                             <Form.Control name="report_from" value={report_from} onChange={onChangeForm} />
                         </InputGroup >
-                        <InputGroup className='h-25'>
+                        <InputGroup className='h-25' style={{display:"none"}}>
                             <InputGroup.Text style={{ backgroundColor: "#002412", color: 'white' }} className=' justify-content-center w-25'><b>신고 루트</b></InputGroup.Text>
                             <Form.Control name="report_root" value={report_root} onChange={onChangeForm} />
                         </InputGroup >
-                        <InputGroup className='h-25'>
+                        <InputGroup className='h-25'style={{display:"none"}}>
                             <InputGroup.Text style={{ backgroundColor: "#002412", color: 'white' }} className=' justify-content-center w-25'><b>신고 키</b></InputGroup.Text>
                             <Form.Control name="report_origin" value={report_origin} onChange={onChangeForm} />
                         </InputGroup >

@@ -8,7 +8,9 @@ import {Card } from 'antd';
 import { Link } from 'react-router-dom';
 import { BsPencilSquare } from "react-icons/bs";
 import {UserContext} from '../../user/UserContext';
-import { Padding } from '@mui/icons-material';
+import SearchIcon from '@mui/icons-material/Search';
+import {InputAdornment, IconButton, MenuItem, TextField } from '@mui/material';
+
 
 
 const ListPage = () => {
@@ -130,7 +132,8 @@ const ListPage = () => {
         border: "1px solid #ccc", 
         borderRadius: "1rem" ,
         textAlign:"center",
-        backgroundColor:"#E0F8EC"
+        backgroundColor:"black",
+        color:"white"
     }
     const stateRow={
         display: "flex",
@@ -174,18 +177,40 @@ const ListPage = () => {
                                     <Dropdown.Item onClick={() => { setDropDown("피망마켓"); setItisEnd("false"); }}  >진행중</Dropdown.Item>
                                     <Dropdown.Item onClick={() => { setDropDown("마감"); setItisEnd("true"); }}  >마감</Dropdown.Item>
                                 </Dropdown.Menu>
-                            </Dropdown>
+                            </Dropdown> 
                         </Col>
                         <Col className='text-center ' xs={9} ms={9} lg={10}>
-                            <InputGroup>
-                                <Form.Select value={key} onChange={(e) => setKey(e.target.value)} style={{ border: "none", borderRight: "1px solid #ccc" }} >
-                                    <option value="mall_seller">아이디</option>
-                                    <option value="mall_title">제목</option>
-                                    <option value="mall_info">내용</option>
-                                </Form.Select>
-                                <Form.Control style={{ border: "none" }} value={word} onChange={(e) => setWord(e.target.value)} placeholder="검색어" className='w-50' />
-                                <img src='/images/searchImg.png' onClick={(e) => onClickSearch(e)} width="50px" style={{ cursor: "pointer" }} />
-                            </InputGroup>
+                        <TextField
+          select
+          value={key}
+          onChange={(e) => setKey(e.target.value)}
+          variant="standard"
+          style={{ width: '30%'}}
+          InputProps={{
+            disableUnderline: true, // 하단 테두리 제거
+          }}
+        >
+          <MenuItem value="mall_seller">아이디</MenuItem>
+          <MenuItem value="mall_title">제목</MenuItem>
+          <MenuItem value="mall_info">내용</MenuItem>
+        </TextField>
+        <TextField
+          value={word}
+          onChange={(e) => setWord(e.target.value)}
+          placeholder="검색어"
+          variant="standard"
+          style={{ width: '68%'}}
+          InputProps={{ 
+            disableUnderline: true, // 하단 테두리 제거
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={onClickSearch}>
+                  <SearchIcon />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
                         </Col>
                     </Row>
                 </div>

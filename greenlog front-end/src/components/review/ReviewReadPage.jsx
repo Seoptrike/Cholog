@@ -38,11 +38,11 @@ const ReviewReadPage = ({ mall_key }) => {
                 <Col xs={12} md={8} lg={6}>
                     <Card className="mb-3">
                         <Card.Header className="d-flex align-items-center">
-                            <img 
-                                src={user_img || "http://via.placeholder.com/70x70"} 
-                                alt="User" 
-                                className="rounded-circle me-3" 
-                                style={{ width: '70px', height: '70px', objectFit: 'cover' }} 
+                            <img
+                                src={user_img || "http://via.placeholder.com/70x70"}
+                                alt="User"
+                                className="rounded-circle me-3"
+                                style={{ width: '70px', height: '70px', objectFit: 'cover' }}
                             />
                             <div>
                                 <h5 className="mb-1">{user_nickname} ({user_uid})</h5>

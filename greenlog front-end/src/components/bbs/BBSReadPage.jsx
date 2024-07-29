@@ -76,18 +76,7 @@ const BBSReadPage = () => {
                             action={
                                 sessionStorage.getItem("uid") !== bbs_writer && (
                                     <div>
-                                        <IconButton onClick={handleClick}>
-                                            <MoreVertIcon />
-                                        </IconButton>
-                                        <Menu
-                                            anchorEl={anchorEl}
-                                            open={open}
-                                            onClose={handleClose}
-                                        >
-                                            <MenuItem onClick={handleClose}>
-                                                <ReportInsert uid={sessionStorage.getItem("uid")} origin={bbs_key} writer={bbs_writer} root="bbs" />
-                                            </MenuItem>
-                                        </Menu>
+                                        <ReportInsert uid={sessionStorage.getItem("uid")} origin={bbs_key} writer={bbs_writer} root="bbs" />
                                     </div>
                                 )
                             }

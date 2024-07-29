@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { Row, Col, Button, Badge, InputGroup, Form, Card, Table } from 'react-bootstrap'
+import { Row, Col, Badge, InputGroup, Form, Card, Table } from 'react-bootstrap'
 import { TbBrandSnapseed } from "react-icons/tb";
 import SyncAltIcon from '@mui/icons-material/SyncAlt';
 import Pagination from 'react-js-pagination';
@@ -8,7 +8,7 @@ import '../../common/useful/Paging.css';
 import { Link } from 'react-router-dom';
 import { Calendar } from 'primereact/calendar';
 import MallList from '../mall/MallList';
-
+import Button from '@mui/material/Button';
 
 const AuctionList = () => {
 
@@ -130,12 +130,12 @@ const AuctionList = () => {
                                 {key === "auction_regDate"&&
                                     <Calendar value={dates} onChange={onChangedate} selectionMode="range" dateFormat="yy/mm/dd" readOnlyInput hideOnRangeSelection />
                                 }
-                                <Button type="submit" size="sm">검색</Button>
+                                <Button variant="contained" type="submit" size="sm">검색</Button>
                             </InputGroup>
                         </form>
                     </Col>
                     <div className='text-end mb-2'>
-                        <Button onClick={onClickDelete} size="sm">선택삭제</Button>
+                        <Button variant="contained" color='error' onClick={onClickDelete} size="sm">선택삭제</Button>
                     </div>
                     <Table>
                         <thead>

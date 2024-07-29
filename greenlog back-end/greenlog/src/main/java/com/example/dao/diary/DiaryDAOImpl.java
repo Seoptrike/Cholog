@@ -123,6 +123,20 @@ public class DiaryDAOImpl implements DiaryDAO{
 		session.update(namespace + ".updatePhoto", vo);
 	}
 
+	@Override
+	public List<HashMap<String, Object>> DiaryTopList( String diary_writer, String user_uid) {
+			HashMap<String, Object> map = new HashMap<>();
+			map.put("diary_writer", diary_writer);
+			map.put("user_uid", user_uid);
+			return session.selectList(namespace + ".DiaryTopList",  map);
+	
+	}
+	
+	@Override
+	public int DiaryTotal(String diary_writer) {
+		return session.selectOne(namespace + ".DiaryTotal", diary_writer);
+	}
+
 
 	
 

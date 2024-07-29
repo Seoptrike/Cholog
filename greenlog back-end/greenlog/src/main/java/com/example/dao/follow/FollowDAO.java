@@ -18,4 +18,6 @@ public interface FollowDAO {
 	public void addFollow(FollowVO vo);
 
 	public void unFollow(FollowVO vo);
+	
+	public HashMap<String, Object> chkfollow(String uid1, String uid2);
 }

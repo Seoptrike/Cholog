@@ -25,8 +25,6 @@ const TotalPage = () => {
                         <ListGroup.Item> <Link to={"/admin/dash"}>관리자대시보드</Link></ListGroup.Item>
                         <ListGroup.Item> <Link to={"/admin/question"}>관리자1:1/FAQ/Q&A</Link></ListGroup.Item>
                         <ListGroup.Item> <Link to={"/admin/list.json"}>관리자회원목록</Link></ListGroup.Item>
-                        <ListGroup.Item> <Link to={"/admin/read/:user_uid"}>관리자용 회원정보</Link></ListGroup.Item>
-                        <ListGroup.Item> <Link to={"/admin/report"}>관리자용 신고접수</Link></ListGroup.Item>
                     </ListGroup>
                 </Col>
                 <Col xs={2}>
