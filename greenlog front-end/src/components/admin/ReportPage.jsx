@@ -128,7 +128,7 @@ const ReportPage = () => {
                                                     </Link>
                                                 </TableCell>
                                                 <TableCell>{report.report_from}</TableCell>
-                                                <TableCell>{report.report_to}</TableCell>
+                                                <TableCell><Link to={`/user/admin/update/${report.report_to}`}>{report.report_to}</Link></TableCell>
                                                 <TableCell>{report.report_contents}</TableCell>
                                                 <TableCell>
                                                     {report.report_state === 0 ? (
