@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Row, Col, Button, Badge, InputGroup, Form, Card, Table } from 'react-bootstrap'
+import { Row, Col, Badge, InputGroup, Form, Card, Table } from 'react-bootstrap'
 import Sidebar from './Sidebar'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
@@ -7,6 +7,7 @@ import '../../common/useful/Paging.css';
 import Pagination from 'react-js-pagination'
 import { UserContext } from '../user/UserContext';
 import { Calendar } from 'primereact/calendar';
+import Button from '@mui/material/Button';
 
 const AuctionPage = () => {
   const [list, setList] = useState([]);
@@ -150,15 +151,15 @@ const AuctionPage = () => {
                     <Calendar value={dates} onChange={onChangedate} selectionMode="range" dateFormat="yy/mm/dd" readOnlyInput hideOnRangeSelection /> :
                     <Form.Control value={word} name="word" onChange={(e) => setWord(e.target.value)} />
                   }
-                  <Button type="submit" size="sm" className="me-3">검색</Button>
+                  <Button variant="contained" color='success' type="submit" size="sm" className="me-3">검색</Button>
                   <span> 총: {count}건</span>
                 </InputGroup>
               </form>
             </Col>
             <Col>
               <div className="text-end me-2 mt-2">
-                <Button size="sm" className="me-2" onClick={onClickDelete}>선택삭제</Button>
-                <Button size="sm" onClick={onClickRestore}>선택복원</Button>
+                <Button variant="contained" color='error' size="sm" className="me-2" onClick={onClickDelete}>선택삭제</Button>
+                <Button variant="contained" type="submit" size="sm" onClick={onClickRestore}>선택복원</Button>
               </div>
             </Col>
           </Row>

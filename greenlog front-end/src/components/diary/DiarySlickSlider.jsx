@@ -4,23 +4,23 @@ import './DiarySlickSlider.css';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
-const DiarySlickSlider = ({diary, setDiary}) => {
+const DiarySlickSlider = ({ diary, setDiary }) => {
     console.log(diary);
-    const {diary_key}=useParams();
+    const { diary_key } = useParams();
 
 
     //현재저장된 사진 가져오기
-  const [photo, setPhoto] = useState([]);
+    const [photo, setPhoto] = useState([]);
 
-  const callAttach = async () => {
-    const res2 = await axios.get(`/diary/attach/${diary_key}`);
-    console.log(res2.data);
-    setPhoto(res2.data);
-  }
+    const callAttach = async () => {
+        const res2 = await axios.get(`/diary/attach/${diary_key}`);
+        console.log(res2.data);
+        setPhoto(res2.data);
+    }
 
-    useEffect(()=>{
-      callAttach();
-    },[]);
+    useEffect(() => {
+        callAttach();
+    }, []);
 
     const settings = {
         dots: false,
@@ -30,16 +30,28 @@ const DiarySlickSlider = ({diary, setDiary}) => {
         slidesToShow: 1,
         slidesToScroll: 1,
         waitForAnimate: false
-      };
+    };
 
-  return (
-    <Slider {...settings}>
-    {photo.map(p=>
-        <img src={p.diaryPhoto_filename} key={p.diaryPhoto_key} className="slider-image"/>
-    )}
-        
-    </Slider>
-  )
+    return (
+        <Slider {...settings}>
+            {photo.length > 0 ? (
+                photo.map((p) => (
+                    <img
+                        src={p.diaryPhoto_filename}
+                        key={p.diaryPhoto_key}
+                        className="slider-image"
+                        alt="Diary"
+                    />
+                ))
+            ) : (
+                <img
+                    src="http://via.placeholder.com/100x100"
+                    className="slider-image"
+                    alt="Placeholder"
+                />
+            )}
+        </Slider>
+    )
 }
 
 export default DiarySlickSlider

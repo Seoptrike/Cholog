@@ -19,7 +19,8 @@
 }
 
 .form-image {
-    flex: 0 0 auto; /* 이미지 크기를 고정 */
+    flex: 0 0 auto;
+    /* 이미지 크기를 고정 */
 }
 
 .review-image {
@@ -30,7 +31,8 @@
 }
 
 .form-fields {
-    flex: 1; /* 남은 공간을 차지 */
+    flex: 1;
+    /* 남은 공간을 차지 */
 }
 
 .rating-container {

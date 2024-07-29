@@ -12,7 +12,7 @@ import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 const Menupage = () => {
-    const uid= sessionStorage.getItem("uid");
+    const uid = sessionStorage.getItem("uid");
     const onClickLogout = () => {
         sessionStorage.clear();
         window.location.href = '/'
@@ -23,10 +23,10 @@ const Menupage = () => {
     }
 
     const onClickIcon = () => {
-       window.location.href = `/user/read/${uid}`
+        window.location.href = `/user/read/${uid}`
     }
-    const {userData} =useContext(UserContext);
-    console.log(userData);
+    const { userData } = useContext(UserContext);
+    //console.log(userData);
     return (
         <div>
             <Navbar bg="dark" data-bs-theme="dark" style={{ height: "3rem", margin: 0, padding: 0 }}>
@@ -51,26 +51,26 @@ const Menupage = () => {
                             <NavDropdown.Item href="/about/carspot">나눔카</NavDropdown.Item>
                         </NavDropdown>
                         <NavDropdown title="고객센터" id="basic-nav-dropdown">
-                        <NavDropdown.Item href="/community/faq/list.json">FAQ,Q&A,공지사항</NavDropdown.Item>
-                        <NavDropdown.Divider />
+                            <NavDropdown.Item href="/community/faq/list.json">FAQ,Q&A,공지사항</NavDropdown.Item>
+                            <NavDropdown.Divider />
                             <NavDropdown.Item href="/community/ask/list.json">1대1 문의하기</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>
                     <Nav>
                         {sessionStorage.getItem("uid") ?
                             <>
-                                <span className='me-3' style={{ float: "right" ,color:"white", cursor:"pointer"}} onClick={onClickIcon}><AccountCircleIcon/></span>
-                                <span onClick={onClickLogout} className='me-3' style={{ float: "right",color:"white", cursor:"pointer" }}><LogoutIcon/></span>
+                                <span className='me-3' style={{ float: "right", color: "white", cursor: "pointer" }} onClick={onClickIcon}><AccountCircleIcon /></span>
+                                <span onClick={onClickLogout} className='me-3' style={{ float: "right", color: "white", cursor: "pointer" }}><LogoutIcon /></span>
                             </>
                             :
-                            <span className='me-3' style={{ float: "right", color:"white", cursor:"pointer" }} onClick={onClickLogin}>로그인</span>
+                            <span className='me-3' style={{ float: "right", color: "white", cursor: "pointer" }} onClick={onClickLogin}>로그인</span>
                         }
                     </Nav>
                 </Container>
             </Navbar>
             <RouterPage />
-            <BottomPage/>
-            <TotalPage/>
+            <BottomPage />
+            <TotalPage />
         </div>
     )
 }
