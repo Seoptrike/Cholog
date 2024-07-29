@@ -30,6 +30,7 @@ import com.example.domain.DiaryLikeVO;
 import com.example.domain.DiaryPhotoVO;
 import com.example.domain.DiaryVO;
 import com.example.domain.QueryVO;
+import com.mysql.cj.Session;
 
 @RestController
 @RequestMapping("/diary")
@@ -242,5 +243,11 @@ public class DiaryController {
 	@GetMapping("/lastKey")
 	public int lastKey() {
 		return dao.lastKey();
+	}
+	
+	@GetMapping("/DiaryTopList/{diary_writer}")
+	public List<HashMap<String, Object>> DiaryTopList(@PathVariable("diary_writer") String diary_writer,
+			@RequestParam("uid") String user_uid) {
+			return dao.DiaryTopList(diary_writer, user_uid);
 	}
 }

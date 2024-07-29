@@ -18,7 +18,7 @@ const ReplyReadPage = () => {
     });
     const { reply_key } = useParams();
     const uid = sessionStorage.getItem("uid");
-    
+
     const callAPI = async () => {
         const res = await axios.get(`/reply/read/${reply_key}`);
         setReply(res.data);

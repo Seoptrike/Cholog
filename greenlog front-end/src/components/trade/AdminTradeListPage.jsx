@@ -1,10 +1,11 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { Row, Col, InputGroup, Button, Table, Form, Badge } from 'react-bootstrap';
+import { Row, Col, InputGroup, Table, Form, Badge } from 'react-bootstrap';
 import Pagination from 'react-js-pagination';
 import { TbBrandSnapseed } from "react-icons/tb";
 import Sidebar from '../admin/Sidebar'
 import { Calendar } from 'primereact/calendar';
+import Button from '@mui/material/Button';
 
 const AdminTradeListPage = () => {
     const [count, setCount] = useState(0);
@@ -142,7 +143,7 @@ const AdminTradeListPage = () => {
                                     <Calendar value={dates} onChange={onChangedate} selectionMode="range" dateFormat="yy/mm/dd"  readOnlyInput={false} hideOnRangeSelection /> :
                                     <Form.Control placeholder='검색어' value={word} onChange={(e) => setWord(e.target.value)} />
                                 }
-                                <Button onClick={(e) => onClickSearch(e)} >검색</Button>
+                                <Button variant="contained" color='success' onClick={(e) => onClickSearch(e)} >검색</Button>
                             </InputGroup>
                         </Col>
                         <Col>
@@ -159,8 +160,8 @@ const AdminTradeListPage = () => {
                                 <td>받는 사람</td>
                                 <td>씨앗 <span style={{ fontSize: '15px', color:"brown" }}><TbBrandSnapseed /></span>  </td>
                                 <td>내용</td>
-                                <td><Button size="sm" className='me-2' onClick={onClickDelete}>선택삭제</Button>
-                                <Button size="sm" onClick={onClickRestore}>선택복구</Button>
+                                <td><Button  variant="contained" color='error' size="sm" className='me-2' onClick={onClickDelete}>선택삭제</Button>
+                                <Button  variant="contained" size="sm" onClick={onClickRestore}>선택복구</Button>
                                 </td>
                             </tr>
                         </thead>

@@ -14,7 +14,7 @@ const RereplyReadPage = (reply_key) => {
         fmtdate: '',
         fmtudate: ''
     })
-    
+
 
     const { rereply_key } = useParams();
     const uid = sessionStorage.getItem("uid");

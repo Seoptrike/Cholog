@@ -1,9 +1,10 @@
 import axios from 'axios';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react'
-import { Table, Button } from 'react-bootstrap'
+import { Table} from 'react-bootstrap'
 import Pagination from 'react-js-pagination';
 import '../../common/useful/Paging.css';
+import Button from '@mui/material/Button';
 
 const MallList = () => {
     const uid = sessionStorage.getItem("uid");
@@ -63,8 +64,8 @@ const MallList = () => {
         <>
             <h1 className='text-center my-5'>피망이용목록</h1>
             <div className='text-end'  >
-                <Button onClick={onClickseller} className='me-3'>판매 내역</Button>
-                <Button onClick={onClickreview}>입찰 내역</Button>
+                <Button variant="contained" color='success' onClick={onClickseller} className='me-3'>판매 내역</Button>
+                <Button variant="contained" color='success' onClick={onClickreview}>입찰 내역</Button>
             </div>
             {view === 'seller' && (
                 <>
