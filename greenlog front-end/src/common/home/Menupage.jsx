@@ -12,8 +12,6 @@ import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { RiUserSettingsFill } from "react-icons/ri";
-
-
 const Menupage = () => {
     const uid = sessionStorage.getItem("uid");
     const onClickLogout = () => {
@@ -27,6 +25,7 @@ const Menupage = () => {
 
     const onClickIcon = () => {
         window.location.href = `/user/read/${uid}`
+    }
 
     const onClickAdmin = () => {
         window.location.href = '/admin/dash'
@@ -34,7 +33,6 @@ const Menupage = () => {
 
     const { userData } = useContext(UserContext);
     console.log(userData);
-
     return (
         <div>
             <Navbar bg="dark" data-bs-theme="dark" style={{ height: "3rem", margin: 0, padding: 0 }}>
@@ -65,14 +63,12 @@ const Menupage = () => {
                         </NavDropdown>
                     </Nav>
                     <Nav>
-
                         {userData.auth === '관리자' &&
                             <>
-                                <span className='me-3' style={{ float: "right", fontSize:"18px", color: "white", cursor: "pointer" }}
+                                <span className='me-3' style={{ float: "right", fontSize: "18px", color: "white", cursor: "pointer" }}
                                     onClick={onClickAdmin}><RiUserSettingsFill /></span>
                             </>
                         }
-
                         {sessionStorage.getItem("uid") ?
                             <>
                                 <span className='me-3' style={{ float: "right", color: "white", cursor: "pointer" }} onClick={onClickIcon}><AccountCircleIcon /></span>
