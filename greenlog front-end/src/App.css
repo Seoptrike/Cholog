@@ -140,19 +140,19 @@
 .mall-stand-top {
   width: 10rem; 
   height: 50%;
-  background-color: #85d81883; 
+  background-color: #000000; 
   border-radius:1rem 1rem 0rem 0rem;
 }
 .mall-stand-leg {
   width:  10rem; 
   height: 40%; 
-  background-color: #85d818d0; 
+  background-color: #000000b9; 
   border-radius:1rem 1rem 0rem 0rem;
 }
 .mall-stand-row-leg {
   width:  10rem; 
   height: 30%;
-  background-color:  #85d818; 
+  background-color:  #00000083; 
   border-radius:1rem 1rem 0rem 0rem;
 }
 .mall_pop_card2{
