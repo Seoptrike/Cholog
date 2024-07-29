@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Row, Col, Button, Form } from 'react-bootstrap';
+import { Row, Col, Form } from 'react-bootstrap';
 import { Rating } from '@mui/material';
 import axios from 'axios';
 import { TbBrandSnapseed } from "react-icons/tb";
 import './ReviewInsertPage.css';
+import Button from '@mui/material/Button';
 
 const InsertPage = ({ mall_key, mall_seller, mall_photo }) => {
     const uid = sessionStorage.getItem('uid');
@@ -39,11 +40,11 @@ const InsertPage = ({ mall_key, mall_seller, mall_photo }) => {
     const onSubmit = async (e) => {
         e.preventDefault();
         const uid = sessionStorage.getItem('uid');
-        if(uid===mall_seller) {
+        if (uid === mall_seller) {
             alert("자신의 게시글에는 리뷰를 남길 수 없습니다.");
             return;
         }
-        if(!uid) {
+        if (!uid) {
             alert("로그인이 필요합니다.");
             return;
         }
@@ -62,7 +63,7 @@ const InsertPage = ({ mall_key, mall_seller, mall_photo }) => {
                 review_rating: 0,
                 review_contents: ''
             });
-            window.location.href=`/mall/read/${mall_key}`
+            window.location.href = `/mall/read/${mall_key}`
             setOnCancel(false);
         } catch (error) {
             alert('이미 리뷰를 등록하셨습니다.');
@@ -112,8 +113,8 @@ const InsertPage = ({ mall_key, mall_seller, mall_photo }) => {
                                         className="form-control-textarea"
                                     />
                                     <div className="text-end">
-                                        <Button type='submit' variant='success' className='me-2'>등록</Button>
-                                        <Button type='reset' variant='success' onClick={onClickCancel} disabled={!onCancel}>취소</Button>
+                                        <Button type='submit' variant="contained" color='success' className='me-2'>등록</Button>
+                                        <Button type='reset' variant="contained" color='success' onClick={onClickCancel} disabled={!onCancel}>취소</Button>
                                     </div>
                                 </div>
                             </div>

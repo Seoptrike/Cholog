@@ -64,13 +64,12 @@ const StepPage = () => {
                     <div className="flex flex-column h-12rem">
                         <div className="flex flex-column align-items-center justify-content-center flex-auto">
                             <img
-                                src="path-to-your-image.jpg" // Update this with your image path
+                                src="/images/intro.png" // Update this with your image path
                                 alt="Registration Complete"
                                 style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px' }}
                                 className="mb-4"
                             />
                             <div className="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium text-center">
-                                회원가입이 완료되었습니다!
                             </div>
                         </div>
                     </div>

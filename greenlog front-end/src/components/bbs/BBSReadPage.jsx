@@ -76,18 +76,7 @@ const BBSReadPage = () => {
                             action={
                                 sessionStorage.getItem("uid") !== bbs_writer && (
                                     <div>
-                                        <IconButton onClick={handleClick}>
-                                            <MoreVertIcon />
-                                        </IconButton>
-                                        <Menu
-                                            anchorEl={anchorEl}
-                                            open={open}
-                                            onClose={handleClose}
-                                        >
-                                            <MenuItem onClick={handleClose}>
-                                                <ReportInsert uid={sessionStorage.getItem("uid")} origin={bbs_key} writer={bbs_writer} root="bbs" />
-                                            </MenuItem>
-                                        </Menu>
+                                        <ReportInsert uid={sessionStorage.getItem("uid")} origin={bbs_key} writer={bbs_writer} root="bbs" />
                                     </div>
                                 )
                             }
@@ -98,7 +87,7 @@ const BBSReadPage = () => {
                             }
                             subheader={
                                 <Typography variant="body2">
-                                    <RouterLink to={`/user/mypage/${bbs_writer}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                    <RouterLink to={`/user/read/${bbs_writer}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                                         {bbs_writer}
                                     </RouterLink> - 조회수: {bbs_vcnt} - {bbs_uDate ? bbs_uDate : bbs_regDate}
                                 </Typography>

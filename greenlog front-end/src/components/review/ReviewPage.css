@@ -54,7 +54,9 @@
     height: 70px;
     border-radius: 50%;
     margin-right: 15px;
-}/* 컨테이너와 카드 스타일 */
+}
+
+/* 컨테이너와 카드 스타일 */
 .review-page-container {
     padding: 30px;
     border-radius: 0px 0px 10px 10px;
