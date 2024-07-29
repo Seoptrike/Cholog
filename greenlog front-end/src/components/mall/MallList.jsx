@@ -8,18 +8,28 @@ import '../../common/useful/Paging.css';
 const MallList = () => {
     const uid = sessionStorage.getItem("uid");
     const now = new Date(); // 오늘 날짜
-    const today = moment(now).format('YYYY-MM-DD'); 
-    //셀러
+    const today = moment(now).format('YYYY-MM-DD');
+    const [view, setView] = useState('sellerlist');
+    //내가쓴 게시글(셀러)
     const [list, setList] = useState([]);
     const [total, setTotal] = useState(0);
     const [page, setPage] = useState(1);
     const [size, setSize] = useState(5);
-    //리뷰
+    //리뷰(낙찰) 댓ㄱ글
     const [list2, setList2] = useState([]);
     const [total2, setTotal2] = useState(0);
     const [page2, setPage2] = useState(1);
     const [size2, setSize2] = useState(5);
-    const [view, setView] = useState('seller');
+    //리뷰(낙찰X) 댓글
+    const [list3, setList3] = useState([]);
+    const [total3, setTotal3] = useState(0);
+    const [page3, setPage3] = useState(1);
+    const [size3, setSize3] = useState(5);
+    //ㄴ마감된 게시글
+    const [list4, setList4] = useState([]);
+    const [total4, setTotal4] = useState(0);
+    const [page4, setPage4] = useState(1);
+    const [size4, setSize4] = useState(5);
 
     const callAPI = async () => {
         //셀러
@@ -37,42 +47,74 @@ const MallList = () => {
             reviewCount: responses[index].data.count // 리뷰 카운트 추가
         }));
         setList(updatedData);
-        //리뷰
-        const res3 = await axios.get(`/mall/review/${uid}?page=${page2}&size=${size2}`);
+        //리뷰(낙찰)
+        const res3 = await axios.get(`/mall/buy/${uid}?&page=${page2}&size=${size2}`);
         const formattedData2 = res3.data.documents.map(item => ({
             ...item,
             mall_endDate: moment(item.mall_endDate).format('YYYY-MM-DD')
         }));
+        console.log(res3.data);
         setTotal2(res3.data.total);
         setList2(formattedData2);
+        //리뷰(낙찰X)
+        const res4 = await axios.get(`/mall/review/${uid}?&page=${page2}&size=${size2}`);
+        const formattedData3 = res4.data.documents.map(item => ({
+            ...item,
+            mall_endDate: moment(item.mall_endDate).format('YYYY-MM-DD')
+        }));
+        console.log(res4.data);
+        setTotal3(res4.data.total);
+        setList3(formattedData3);
+        //마감된 내가쓴게시글
+        const res5 = await axios.get(
+            `/mall/list?key=mall_seller&word=${uid}&page=${page}&size=${size}
+                &orderBy=desc&itisEnd=true`
+        );
+        const formattedData4 = res5.data.documents.map(item => ({
+            ...item,
+            mall_endDate: moment(item.mall_endDate).format('YYYY-MM-DD')
+        }));
+        console.log(res5.data);
+        setTotal4(res5.data.total);
+        setList4(formattedData4);
     }
 
     useEffect(() => {
         callAPI();
-    }, [page, size,page2, size2])
+    }, [page, size, page2, size2, page3, size3, page4, size4])
 
-    const onClickseller = () => {
-        setView('seller');
+    const onClicksellerlist = () => {
+        setView('sellerlist');
     }
 
     const onClickreview = () => {
         setView('review');
     }
 
+    const onClickbuy = () => {
+        setView('buy');
+    }
+
+    const onClickendlist = () => {
+        setView('endlist');
+    }
+
     return (
         <>
             <h1 className='text-center my-5'>피망이용목록</h1>
-            <div className='text-end'  >
-                <Button onClick={onClickseller} className='me-3'>판매 내역</Button>
-                <Button onClick={onClickreview}>입찰 내역</Button>
+            <div className='text-end my-3'  >
+                <Button onClick={onClicksellerlist} className='me-3' variant='dark'>판매 내역</Button>
+                <Button onClick={onClickendlist} className='me-3' variant='dark'>마감 내역</Button>
+                <Button onClick={onClickreview} className='me-3' variant='dark'>입찰 내역</Button>
+                <Button onClick={onClickbuy} className='me-3' variant='dark'>낙찰 내역</Button>
             </div>
-            {view === 'seller' && (
+            {view === 'sellerlist' && (
                 <>
                     <Table className='sellerList'>
                         <thead>
                             <tr>
                                 <td>글번호</td>
-                                <td colSpan={2}>상품명</td>
+                                <td colSpan={2}>제목</td>
                                 <td>반응수</td>
                                 <td>마감일</td>
                                 <td>작성일</td>
@@ -106,21 +148,21 @@ const MallList = () => {
                     }
                 </>
             )}
-            {view === 'review' && (
+            {view === 'buy' && (
                 <>
                     <Table className='reviewList'>
                         <thead>
                             <tr>
                                 <td>글번호</td>
-                                <td colSpan={2}>상품명</td>
+                                <td colSpan={2}>제목</td>
                                 <td>나의 반응</td>
                                 <td>마감일</td>
                                 <td>글쓴이</td>
                             </tr>
                         </thead>
                         <tbody>
-                            {list2.map(list =>
-                                <tr key={list.mall_key}>
+                            {list2.map((list, index) =>
+                                <tr key={index}>
                                     <td>[{list.mall_key}]</td>
                                     <td ><a href={`/mall/read/${list.mall_key}`}>{list.mall_title}</a></td>
                                     <td >
@@ -128,7 +170,7 @@ const MallList = () => {
                                             style={{ width: "40%", height: "4rem", objectFit: "contain" }} />
                                     </td>
                                     <td>{list.review_rating}씨드</td>
-                                    <td>{list.mall_endDate > today ? list.mall_endDate : `[마감]`}</td>
+                                    <td>{list.mall_endDate}</td>
                                     <td>{list.mall_seller}</td>
                                 </tr>
                             )}
@@ -146,7 +188,87 @@ const MallList = () => {
                     }
                 </>
             )}
-            <hr className='my-5'/>
+            {view === 'review' && (
+                <>
+                    <Table className='reviewList'>
+                        <thead>
+                            <tr>
+                                <td>글번호</td>
+                                <td colSpan={2}>제목</td>
+                                <td>나의 반응</td>
+                                <td>마감일</td>
+                                <td>글쓴이</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {list3.map((list, index) =>
+                                <tr key={index}>
+                                    <td>[{list.mall_key}]</td>
+                                    <td ><a href={`/mall/read/${list.mall_key}`}>{list.mall_endDate > today ? list.mall_title : `[마감]${list.mall_title}`}</a></td>
+                                    <td >
+                                        <img src={list.mall_photo || "http://via.placeholder.com/200x200"}
+                                            style={{ width: "40%", height: "4rem", objectFit: "contain" }} />
+                                    </td>
+                                    <td>{list.review_rating}씨드</td>
+                                    <td>{list.mall_endDate}</td>
+                                    <td>{list.mall_seller}</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </Table>
+                    {total3 > size3 &&
+                        <Pagination
+                            activePage={page3}
+                            itemsCountPerPage={size3}
+                            totalItemsCount={total3}
+                            pageRangeDisplayed={5}
+                            prevPageText={"‹"}
+                            nextPageText={"›"}
+                            onChange={(e) => setPage3(e)} />
+                    }
+                </>
+            )}
+            {view === 'endlist' && (
+                <>
+                    <Table className='reviewList'>
+                        <thead>
+                            <tr>
+                                <td>글번호</td>
+                                <td colSpan={2}>제목</td>
+                                <td>낙찰자</td>
+                                <td>마감일</td>
+                                <td>작성일</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {list4.map((list, index) =>
+                                <tr key={list.mall_key}>
+                                    <td>[{list.mall_key}]</td>
+                                    <td >[마감]{list.mall_title}</td>
+                                    <td >
+                                        <img src={list.mall_photo || "http://via.placeholder.com/200x200"}
+                                            style={{ width: "40%", height: "4rem", objectFit: "contain" }} />
+                                    </td>
+                                    <td>{list.auction_buyer !== undefined ? `${list.auction_buyer}님` : ` - `}</td>
+                                    <td>{list.mall_endDate}</td>
+                                    <td>{list.mall_regDate}</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </Table>
+                    {total4 > size4 &&
+                        <Pagination
+                            activePage={page4}
+                            itemsCountPerPage={size4}
+                            totalItemsCount={total4}
+                            pageRangeDisplayed={5}
+                            prevPageText={"‹"}
+                            nextPageText={"›"}
+                            onChange={(e) => setPage4(e)} />
+                    }
+                </>
+            )}
+            <hr className='my-5' />
         </>
     )
 }

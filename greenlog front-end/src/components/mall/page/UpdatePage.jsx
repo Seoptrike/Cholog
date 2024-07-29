@@ -162,7 +162,9 @@ export const UpdatePage = () => {
         <div className="my-5">
             <Paper elevation={3} style={{ padding: 20 }}>
                 <Typography variant="h3" gutterBottom className="text-center ">
-                    🧩수정중입니다🧩
+                    <img src="/images/pmang1.png" style={{width:"3rem",height:"3rem", marginBottom:"1rem"}} />
+                    수정중입니다
+                    <img src="/images/pmang1.png" style={{width:"3rem",height:"3rem",marginBottom:"1rem"}} />
                 </Typography>
                 <form>
                     <Grid container spacing={2}>

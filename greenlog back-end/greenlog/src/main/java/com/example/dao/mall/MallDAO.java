@@ -12,7 +12,11 @@ public interface MallDAO {
 	
 	public List<HashMap<String,Object>> reviewList (String review_writer,QueryVO vo);
 	
-	public int reviewListTotal(String review_writer);
+	public int reviewListTotal(String review_writer,QueryVO vo);
+	
+public List<HashMap<String,Object>> buyList (String review_writer,QueryVO vo);
+	
+	public int buyListTotal(String review_writer,QueryVO vo);
 	
 	public List<HashMap<String,Object>> reviewCount ();
 	

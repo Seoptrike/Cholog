@@ -19,8 +19,27 @@ public class MallDAOImpl implements MallDAO {
 	String namespace = "com.example.mapper.MallMapper";
 
 	@Override
-	public int reviewListTotal(String review_writer) {
-		return session.selectOne(namespace+".reviewListTotal",review_writer);
+	public int buyListTotal(String review_writer,QueryVO vo) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("review_writer",review_writer);
+		map.put("vo",vo);
+		return session.selectOne(namespace+".buyListTotal",map);
+	}
+
+	@Override
+	public List<HashMap<String, Object>> buyList(String review_writer,QueryVO vo) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("review_writer",review_writer);
+		map.put("vo", vo);
+		return session.selectList(namespace+".buyList", map);
+	}
+	
+	@Override
+	public int reviewListTotal(String review_writer,QueryVO vo) {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("review_writer",review_writer);
+		map.put("vo",vo);
+		return session.selectOne(namespace+".reviewListTotal",map);
 	}
 
 	@Override

@@ -13,7 +13,8 @@ const MallRouter = () => {
             <Route path='read/:mall_key' element={<ReadPage/>}/>
             <Route path='insert' element={<InsertPage/>}/>
             <Route path='update/:mall_key' element={<UpdatePage/>}/>
-            <Route path='pop' element={<PopularPage/>}/>
+            <Route path='pop' element={<PopularPage/>}/> 
+            
         </Routes>
     )
 }
