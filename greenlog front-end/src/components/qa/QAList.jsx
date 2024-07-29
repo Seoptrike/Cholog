@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import Pagination from 'react-js-pagination';
 import axios from 'axios';
 import HeaderTabs from '../../common/useful/HeaderTabs';
 import { UserContext } from '../user/UserContext';
 import SearchIcon from '@mui/icons-material/Search';
-import QAImage from './qa.png'
-import { Container, Box, Typography, Select, MenuItem, Button, Table, TableHead, TableRow, TableCell, TableBody, InputAdornment, OutlinedInput } from '@mui/material';
+import QAImage from './qa.png';
+import { Container, Box, Typography, Pagination as MuiPagination, Select, MenuItem, Button, Table, TableHead, TableRow, TableCell, TableBody, InputAdornment, OutlinedInput } from '@mui/material';
 
 const QAList = () => {
   const { userData } = useContext(UserContext);
@@ -19,6 +18,7 @@ const QAList = () => {
 
   const callAPI = async () => {
     const res = await axios.get(`/qa/list.json?key=${key}&word=${word}&page=${page}&size=${size}`);
+    console.log(res.data);
     setList(res.data.documents);
     setCount(res.data.total);
 
@@ -30,6 +30,10 @@ const QAList = () => {
   useEffect(() => {
     callAPI();
   }, [page]);
+
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
 
   const onClickSearch = async (e) => {
     e.preventDefault();
@@ -95,6 +99,7 @@ const QAList = () => {
             <TableCell>제목</TableCell>
             <TableCell>글쓴이</TableCell>
             <TableCell>등록일</TableCell>
+            <TableCell>답변상태</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -102,7 +107,7 @@ const QAList = () => {
             <TableRow key={post.QA_key}>
               <TableCell>{count - ((page - 1) * size + index)}</TableCell>
               <TableCell>
-                {post.QA_lock === 1 && !((userData.auth ==='관리자') || (userData.uuid === post.QA_writer)) ? (
+                {post.QA_lock === 1 && !((userData.auth === '관리자') || (userData.uuid === post.QA_writer)) ? (
                   <span>🔒 비밀글</span>
                 ) : (
                   <Link to={`/community/qa/read/${post.QA_key}`} style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -112,20 +117,22 @@ const QAList = () => {
               </TableCell>
               <TableCell>{post.QA_writer}</TableCell>
               <TableCell>{post.fmtdate}</TableCell>
+              <TableCell>{post.QA_state === 0 ? '답변대기' : '답변완료'}</TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
       {count > size &&
-        <Pagination
-          activePage={page}
-          itemsCountPerPage={size}
-          totalItemsCount={count}
-          pageRangeDisplayed={5}
-          prevPageText={"‹"}
-          nextPageText={"›"}
-          onChange={(pageNumber) => setPage(pageNumber)}
-        />
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+          <MuiPagination
+            count={Math.ceil(count / size)}
+            page={page}
+            onChange={handlePageChange}
+            color="primary"
+            variant="outlined"
+            shape="rounded"
+          />
+        </Box>
       }
     </Container>
   );

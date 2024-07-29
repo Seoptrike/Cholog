@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import Pagination from 'react-js-pagination';
 import axios from 'axios';
 import HeaderTabs from '../../common/useful/HeaderTabs';
-import { Accordion, AccordionSummary, AccordionDetails, TextField, Button, Typography, Container, Box, InputAdornment, IconButton, Divider } from '@mui/material';
+import { Accordion, AccordionSummary, Pagination as MuiPagination, AccordionDetails, TextField, Button, Typography, Container, Box, InputAdornment, IconButton, Divider } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SearchIcon from '@mui/icons-material/Search';
 import { UserContext } from '../user/UserContext';
@@ -45,6 +45,10 @@ const FAQList = () => {
   useEffect(() => {
     callAPI();
   }, [page, size, key]);
+
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
 
   const onClickSearch = async (e) => {
     e.preventDefault();
@@ -127,7 +131,7 @@ const FAQList = () => {
             sx={{ boxShadow: 'none', '&:before': { display: 'none' }, '& .MuiAccordionSummary-root': { minHeight: 'auto', '&.Mui-expanded': { minHeight: 'auto' } }, '& .MuiAccordionDetails-root': { padding: 0 } }}
           >
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography variant="h6">Q. {faq.FAQ_question}</Typography>
+              <Typography variant="h6" sx={{ fontWeight: activeIndex === index ? 'bold' : 'normal' }}>Q. {faq.FAQ_question}</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <Typography sx={{ whiteSpace: 'pre-wrap' }}>A. {faq.FAQ_answer}</Typography>
@@ -146,17 +150,18 @@ const FAQList = () => {
           <Divider sx={{ backgroundColor: 'black' }} />
         </Box>
       ))}
-      {count > size && (
-        <Pagination
-          activePage={page}
-          itemsCountPerPage={size}
-          totalItemsCount={count}
-          pageRangeDisplayed={5}
-          prevPageText={"‹"}
-          nextPageText={"›"}
-          onChange={(e) => setPage(e)}
-        />
-      )}
+      {count > size &&
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+          <MuiPagination
+            count={Math.ceil(count / size)}
+            page={page}
+            onChange={handlePageChange}
+            color="primary"
+            variant="outlined"
+            shape="rounded"
+          />
+        </Box>
+      }
     </Container>
   );
 };

@@ -69,4 +69,5 @@ public class QADAOImpl implements QADAO{
 	public int qaListTotal(QueryVO vo) {
 		return session.selectOne(NAMESPACE+".qaListTotal",vo);
 	}
+
 }

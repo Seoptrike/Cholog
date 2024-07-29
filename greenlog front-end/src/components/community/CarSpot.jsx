@@ -1,10 +1,11 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import SeoulMap from '../../common/useful/SeoulMap';
+import carImage from './car.png';
 
 const CarSpot = () => {
     const [locations, setLocations] = useState([]);
-    
+
     useEffect(() => {
         const callAPI = async () => {
             try {

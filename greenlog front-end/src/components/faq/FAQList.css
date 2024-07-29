@@ -10,6 +10,7 @@
   background-color: white;
   border: 1px solid #ccc;
   padding: 10px 20px;
+  border-radius: 5px; 
   cursor: pointer;
   text-align: center;
   transition: background-color 0.3s;

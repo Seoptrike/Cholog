@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Card, CardContent, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, Box } from '@mui/material';
 import axios from 'axios';
+import inquireImage from './inquire.png'
 
 const AskList = () => {
     const [chk, setChk] = useState('');
@@ -29,6 +30,9 @@ const AskList = () => {
 
     return (
         <Container sx={{ my: 5 }}>
+            <Box display="flex" justifyContent="center" my={3}>
+                <img src={inquireImage} alt="inquire" style={{ width: '60%', maxWidth: '1000px' }} />
+            </Box>
             <Card sx={{ maxWidth: 600, mx: 'auto', p: 3 }}>
                 <CardContent>
                     <Typography variant="h5" component="div" gutterBottom align="center">

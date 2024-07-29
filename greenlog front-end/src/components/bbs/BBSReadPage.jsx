@@ -98,7 +98,7 @@ const BBSReadPage = () => {
                             }
                             subheader={
                                 <Typography variant="body2">
-                                    <RouterLink to={`/user/mypage/${bbs_writer}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                    <RouterLink to={`/user/read/${bbs_writer}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                                         {bbs_writer}
                                     </RouterLink> - 조회수: {bbs_vcnt} - {bbs_uDate ? bbs_uDate : bbs_regDate}
                                 </Typography>
@@ -119,10 +119,10 @@ const BBSReadPage = () => {
                     </Card>
                     {uid === bbs_writer && (
                         <div style={{ textAlign: 'center', margin: '1rem 0' }}>
-                            <Button variant="contained" color="primary" component={RouterLink} to={`/bbs/update/${bbs_key}`} style={{ marginRight: '1rem' }}>
+                            <Button variant="outlined" color="primary" component={RouterLink} to={`/bbs/update/${bbs_key}`} style={{ marginRight: '1rem' }}>
                                 수정
                             </Button>
-                            <Button variant="contained" color="error" onClick={onDelete}>
+                            <Button variant="outlined" color="error" onClick={onDelete}>
                                 삭제
                             </Button>
                         </div>

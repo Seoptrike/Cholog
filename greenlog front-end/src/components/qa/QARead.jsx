@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { UserContext } from '../user/UserContext';
 import { Container, Box, Typography, TextField, Button, Divider } from '@mui/material';
@@ -15,7 +15,8 @@ const QARead = () => {
     qa_writer: '',
     qa_regDate: '',
     qa_udate: '',
-    comments: ''
+    comments: '',
+    qa_state:''
   });
 
   const [comment, setComment] = useState('');
@@ -25,7 +26,9 @@ const QARead = () => {
   const callAPI = async () => {
     try {
       const res = await axios.get(`/qa/read/${qa_key}`);
+      console.log(res.data)
       setForm(res.data);
+      setComment(res.data.comments);
     } catch (error) {
       alert('게시물 데이터를 가져오는 중 오류가 발생했습니다.');
     }
@@ -41,7 +44,7 @@ const QARead = () => {
     setLoading(true);
 
     try {
-      await axios.post(`/qa/update/${qa_key}`, { ...form, comments: comment });
+      await axios.post(`/qa/update/${qa_key}`, { ...form, comments: comment, qa_state:1 });
       setLoading(false);
       setEditingComment(false);
       callAPI();
@@ -130,29 +133,39 @@ const QARead = () => {
       {userData.auth === '관리자' && (
         <Box mt={4}>
           <Typography variant="h6" gutterBottom style={{ fontWeight: 'bold' }}>
-            {form.comments ? '답변 수정' : '답변 작성'}
+            {editingComment ? '답변 수정' : form.comments ? '답변' : '답변 작성'}
           </Typography>
           <Divider style={{ marginBottom: '20px', backgroundColor: '#ddd' }} />
-          <form onSubmit={handleEditComment}>
-            <TextField
-              fullWidth
-              multiline
-              rows={3}
-              variant="outlined"
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              placeholder="답변을 입력하세요."
-            />
+          {editingComment || !form.comments ? (
+            <form onSubmit={handleEditComment}>
+              <TextField
+                fullWidth
+                multiline
+                rows={3}
+                variant="outlined"
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                placeholder="답변을 입력하세요."
+              />
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                disabled={loading}
+                style={{ marginTop: '10px' }}
+              >
+                {loading ? '저장 중...' : '답변 저장'}
+              </Button>
+            </form>
+          ) : (
             <Button
-              type="submit"
               variant="contained"
-              color="primary"
-              disabled={loading}
-              style={{ marginTop: '10px' }}
+              sx={{ backgroundColor: 'black', color: 'white' }}
+              onClick={() => setEditingComment(true)}
             >
-              {loading ? '저장 중...' : '답변 저장'}
+              답변 수정
             </Button>
-          </form>
+          )}
         </Box>
       )}
 

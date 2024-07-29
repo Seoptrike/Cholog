@@ -100,8 +100,9 @@ const BBSUpdatePage = () => {
     };
 
     const onChangeText = (e) => {
-        setText(e.htmlValue);
-        setForm({ ...form, bbs_contents: e.htmlValue.replace(/<\/?p>/g, '') });
+        const newText = e.htmlValue || ''; // null일 경우 빈 문자열로 대체
+        setText(newText);
+        setForm({ ...form, bbs_contents: newText.replace(/<\/?p>/g, '') });
     };
 
     const handleOnDragEnd = (result) => {

@@ -3,7 +3,7 @@ import Pagination from 'react-js-pagination';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import HeaderTabs from '../../common/useful/HeaderTabs';
-import { Container, TextField, MenuItem, Select, FormControl, Button, Typography, Box, InputAdornment, IconButton } from '@mui/material';
+import { Container, TextField, MenuItem, Pagination as MuiPagination, Select, FormControl, Button, Box, InputAdornment, IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { UserContext } from '../user/UserContext';
 import noticeImage from './notice2.png'; // 이미지 경로를 프로젝트 구조에 맞게 수정
@@ -46,6 +46,10 @@ const NoticeList = () => {
       e.preventDefault();
       onClickSearch(e);
     }
+  };
+
+  const handlePageChange = (event, value) => {
+    setPage(value);
   };
 
   const handleKeyChange = (event) => {
@@ -137,17 +141,18 @@ const NoticeList = () => {
           ))}
         </tbody>
       </table>
-      {count > size && (
-        <Pagination
-          activePage={page}
-          itemsCountPerPage={size}
-          totalItemsCount={count}
-          pageRangeDisplayed={5}
-          prevPageText={"‹"}
-          nextPageText={"›"}
-          onChange={(pageNumber) => setPage(pageNumber)}
-        />
-      )}
+      {count > size &&
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+          <MuiPagination
+            count={Math.ceil(count / size)}
+            page={page}
+            onChange={handlePageChange}
+            color="primary"
+            variant="outlined"
+            shape="rounded"
+          />
+        </Box>
+      }
     </Container>
   );
 };
