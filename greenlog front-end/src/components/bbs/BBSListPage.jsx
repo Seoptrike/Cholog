@@ -8,7 +8,6 @@ import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
 import BBSImage from './bbs.png'
 
-
 // Define custom styles for top list rows
 const TopListTableRow = styled(TableRow)(({ theme }) => ({
     backgroundColor: '#f5f5f5',
@@ -69,13 +68,13 @@ const BBSListPage = () => {
     const renderChip = (type) => {
         switch (type) {
             case 0:
-                return <Chip label="자유" color="primary" size="small" />;
+                return <Chip label="자유" sx={{ backgroundColor: '#AEDFF7', color: '#000', border: 'none' }} size="small" />;
             case 1:
-                return <Chip label="꿀팁" color="success" size="small" />;
+                return <Chip label="꿀팁" sx={{ backgroundColor: '#C3FDB8', color: '#000', border: 'none' }} size="small" />;
             case 2:
-                return <Chip label="공지사항" color="error" size="small" />;
+                return <Chip label="공지사항" sx={{ backgroundColor: '#FFD1DC', color: '#000', border: 'none' }} size="small" />;
             default:
-                return <Chip label="기타" size="small" />;
+                return <Chip label="기타" sx={{ backgroundColor: '#F3E5AB', color: '#000', border: 'none' }} size="small" />;
         }
     };
 
@@ -142,7 +141,7 @@ const BBSListPage = () => {
                     )}
                 </Box>
             </Box>
-            <TableContainer component={Paper}>
+            <TableContainer component={Paper} sx={{ boxShadow: 'none', border: 'none' }}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
                         <TableRow>
@@ -161,7 +160,7 @@ const BBSListPage = () => {
                                     {renderChip(post.bbs_type)} <strong>{post.bbs_title}</strong>
                                 </TableCell>
                                 <TableCell>
-                                    <Chip label="관리자" sx={{ backgroundColor: 'rgb(0, 0, 0)', color: 'rgb(255, 255, 255)' }} size="small" />
+                                    <Chip label="관리자" sx={{ backgroundColor: 'rgb(0, 0, 0)', color: 'rgb(255, 255, 255)', border: 'none' }} size="small" />
                                     <img src="/images/green.png" alt="Icon" style={{ width: "2rem", marginRight: "0.5rem" }} />
                                 </TableCell>
                                 <TableCell>{post.fmtdate}</TableCell>

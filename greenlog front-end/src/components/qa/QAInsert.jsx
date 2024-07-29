@@ -12,6 +12,7 @@ const QAInsert = () => {
     qa_contents: '',
     qa_writer: uid,
     qa_lock: 0 
+    
   });
 
   const { qa_title, qa_contents, qa_writer, qa_lock } = form;

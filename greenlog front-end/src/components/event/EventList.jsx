@@ -1,17 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import {
-    Box,
-    Heading,
-    Text,
-    Image,
-    Link,
-    SimpleGrid,
-    Card,
-    CardBody,
-    Divider,
-    ChakraProvider
-} from '@chakra-ui/react';
+import { Box, Heading, Text, Image, Link, SimpleGrid, Card, CardBody, Divider, ChakraProvider } from '@chakra-ui/react';
 import axios from 'axios';
+import camImage from './cam.png'
 
 const EventList = () => {
     const [list, setList] = useState([]);
@@ -35,9 +25,9 @@ const EventList = () => {
     return (
         <ChakraProvider>
             <Box p={5}>
-                <Heading textAlign="center" mb={5}>
-                    캠페인 소개 페이지
-                </Heading>
+                <Box display="flex" justifyContent="center" my={3}>
+                    <img src={camImage} alt="cam" style={{ width: '100%', maxWidth: '1000px' }} />
+                </Box>
                 <SimpleGrid columns={{ base: 1, md: 3 }} spacing={5}>
                     {list.map((e, index) => (
                         <Card key={index} borderWidth="1px" borderRadius="md" overflow="hidden">

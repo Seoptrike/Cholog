@@ -108,10 +108,10 @@ const BBSReadPage = () => {
                     </Card>
                     {uid === bbs_writer && (
                         <div style={{ textAlign: 'center', margin: '1rem 0' }}>
-                            <Button variant="contained" color="primary" component={RouterLink} to={`/bbs/update/${bbs_key}`} style={{ marginRight: '1rem' }}>
+                            <Button variant="outlined" color="primary" component={RouterLink} to={`/bbs/update/${bbs_key}`} style={{ marginRight: '1rem' }}>
                                 수정
                             </Button>
-                            <Button variant="contained" color="error" onClick={onDelete}>
+                            <Button variant="outlined" color="error" onClick={onDelete}>
                                 삭제
                             </Button>
                         </div>

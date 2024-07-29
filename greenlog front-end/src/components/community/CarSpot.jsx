@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import SeoulMap from '../../common/useful/SeoulMap';
+import carImage from './car.png';
 import { List, ListItem, ListItemText, ListItemButton, Typography, Pagination, Paper, Box, Container, Chip } from '@mui/material';
 
 const CarSpot = () => {
@@ -48,7 +49,7 @@ const CarSpot = () => {
     return (
         <>
             <div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
-                <img src={'/images/carimage.png'} alt="car" style={{ width: '100%', maxWidth: '1000px' }} />
+                <img src={carImage} alt="car" style={{ width: '100%', maxWidth: '1000px' }} />
             </div>
             <Container sx={{ display: 'flex', justifyContent: 'space-between', padding: '1rem' }}>
 
