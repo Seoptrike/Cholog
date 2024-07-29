@@ -43,7 +43,6 @@ const Dashboard = () => {
     ];
 
 
-
     return (
         <div>
             <Row>
@@ -64,7 +63,6 @@ const Dashboard = () => {
                                             </Badge>
                                             <Link to={task.link} className="task-link">
                                                 <h3>{task.label}</h3>
-                                                {task.count > 0 && <FiberNewIcon style={{ color: "black" }} />}
                                             </Link>
                                         </div>
                                     </Card>
@@ -74,14 +72,14 @@ const Dashboard = () => {
                     </div>
                     <div className='chart text-center mb-5'>
                         <Row>
-                            <div className='mb-5'>클로버일기 전체 차트</div>
+                            <div className='mb-5'>행운일기 전체 차트</div>
                             <Col><Card><DiaryChart /></Card></Col>
                         </Row>
                     </div>
                     <div>
                         <Row>
                             <Col lg={5}>
-                                <Card className="mb-3" style={{ height: "565px", overflowY: "scroll" }}>
+                                <Card className="mb-3" style={{ height: "500px", overflowY: "scroll" }}>
                                     <div className='mb-2'>씨드포인트 이번달 랭킹</div>
                                     {rank.map(r => (
                                         <div key={r.seed_uid}>
@@ -95,8 +93,8 @@ const Dashboard = () => {
                                                 <ListItemText
                                                     primary={
                                                         <Box>
-                                                            <Row>
-                                                                <Col>
+                                                            <Row className='justify-content-center'>
+                                                                <Col xs={10} md={9} lg={8}>
                                                                     <Typography variant="body1">{r.seed_uid}({r.user_nickname})님</Typography>
                                                                     <Stack direction="row" spacing={1}>
                                                                         {r.user_auth === '일반회원' ?
@@ -105,7 +103,7 @@ const Dashboard = () => {
                                                                         }
                                                                     </Stack>
                                                                 </Col>
-                                                                <Col>
+                                                                <Col xs={2} md={3} lg={4}>
                                                                     <Link to={`/user/admin/update/${r.seed_uid}`}>
                                                                         <Avatar alt={r.seed_uid} src={r.user_img} width="100%" />
                                                                     </Link>
@@ -123,11 +121,12 @@ const Dashboard = () => {
                                                                 <br />
                                                                 {r.seed_point}씨드
                                                             </Typography>
+                                                            <hr />
                                                         </React.Fragment>
+
                                                     }
                                                 />
                                             </ListItem>
-                                            <Divider variant="inset" component="li" />
                                         </div>
                                     ))}
                                 </Card>

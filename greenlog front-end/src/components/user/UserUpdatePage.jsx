@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Card, Row, Col, InputGroup, Form, Button } from 'react-bootstrap'
+import { Row, Col, InputGroup, Form } from 'react-bootstrap'
 import ModalAddress from '../../common/useful/ModalAddress'
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
+import { TextField, Button, Grid, Container, Typography, FormControl, InputLabel, Box, Alert, Card } from '@mui/material';
 
-//이미지저장(관리자용이랑 동일하게 사용)
-//닉네임 중복확인 알고리즘 검토 필요
+
+
 
 const UserUpdatePage = () => {
     const uid = sessionStorage.getItem("uid")
@@ -13,10 +14,11 @@ const UserUpdatePage = () => {
         user_key: '', user_nickname: '', user_uname: '', user_phone: '', user_address1: '', user_address2: '',
         user_birth: '', user_email: '', user_gender: '', user_ment: ''
     });
+    const [loading, setLoading] = useState(false);
     const [origin, setOrigin] = useState("");
-    const [overlap, setOverlap] = useState([]);
     const [isCheck, setIsCheck] = useState(false);
     const [phoneCheck, setPhoneCheck] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const { user_uid } = useParams();
     const [file, setfile] = useState({
         name: '',
@@ -37,19 +39,13 @@ const UserUpdatePage = () => {
         console.log(res.data)
         setfile({ name: res.data.user_img, byte: null });
     }
-    //닉네임 중복확인 용도
-    const userCallAPI = async () => {
-        const res2 = await axios.get("/user/admin/list");
-        setOverlap(res2.data);
-        //console.log(res2.data);
-    }
 
     const { user_key, user_nickname, user_uname, user_phone, user_address1, user_address2,
         user_birth, user_email, user_gender, user_ment } = form;
 
+
     useEffect(() => {
         callAPI();
-        userCallAPI();
     }, [])
 
 
@@ -75,24 +71,37 @@ const UserUpdatePage = () => {
         }
     };
 
-    //닉네임 중복확인
-    const onCheckNickname = (user_nickname) => {
-        const findNickname = overlap.findIndex(user => user.user_nickname === user_nickname);
-        if (user_nickname) {
-            alert("현재 사용중인 닉네임입니다");
-            setIsCheck(false);
-            return;
-        } else if (findNickname) {
-            alert("다른유저가 사용하고 있는 닉네임입니다.");
+
+    //닉네임중복체크
+    const checkNickname = async (user_nickname) => {
+        if (user_nickname === "") {
             setIsCheck(false);
             return;
         }
-        else {
-            alert("사용가능한 닉네임입니다");
-            setIsCheck(true);
-            return;
+        try {
+            const res = await axios.get(`/user/chknickname/${user_nickname}`);
+            if (res.data.user_nickname === user_nickname) {
+                alert("현재 사용중인 닉네임입니다.");
+                setIsCheck(false);
+            } else {
+                alert("사용 가능한 닉네임입니다");
+                setIsCheck(true);
+            }
+        } catch (error) {
+            console.error('Error checking nickname:', error);
         }
-    }
+    };
+
+    //주소모달 
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
+
 
 
 
@@ -129,86 +138,160 @@ const UserUpdatePage = () => {
         alert("이미지 변경완료!")
     }
 
-  
+    if (loading) return <h1>로딩중</h1>
     return (
         <div>
-            <Row className='justify-content-center my-5'>
-                <Col lg={10}>
-                    <Card>
-                        <Card.Body>
+            <Row className='justify-content-center'>
+                <Container maxWidth="sm" style={{ textAlign: 'center', marginTop: "20px" }}>
+                    <Grid container row spacing={2}>
+                        <Grid item>
+                            <img src={file.name || "http://via.placeholder.com/100x150"} style={{ width: '100%', cursor: 'pointer' }} onClick={() => refFile.current.click()} />
+                            <input ref={refFile} type="file" onChange={onChangeFile} style={{ display: "none" }} />
+                            <Button onClick={onClickImageSave} variant="outlined" className="w-100 mt-1 mb-5">이미지저장</Button>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                label="회원번호"
+                                value={user_key}
+                                fullWidth
+                                variant="outlined"
+                                disabled
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                label="성함"
+                                name="user_uname"
+                                value={user_uname}
+                                onChange={onChangeForm}
+                                fullWidth
+                                variant="outlined"
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                label="전화번호"
+                                name="user_phone"
+                                value={user_phone}
+                                onChange={handlePress}
+                                maxLength={13}
+                                fullWidth
+                                variant="outlined"
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                label="주소"
+                                name="user_address1"
+                                value={user_address1}
+                                onChange={onChangeForm}
+                                onClick={openModal}
+                                fullWidth
+                                variant="outlined"
+                            /><ModalAddress />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                label="상세주소"
+                                name="user_address2"
+                                value={user_address2}
+                                onChange={onChangeForm}
+                                fullWidth
+                                variant="outlined"
+                            />
+                        </Grid >
+                        <Grid item xs={12}>
+                            <TextField
+                                label="생년월일"
+                                name="user_birth"
+                                value={user_birth}
+                                onChange={onChangeForm}
+                                type="date"
+                                variant="outlined"
+                                fullWidth
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                label="성별"
+                                name="user_gender"
+                                value={user_gender === '남자' ? "남자" : "여자"}
+                                variant="outlined"
+                                disabled
+                                fullWidth
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
                             <Row>
-                                <Col lg={4}>
-                                    <img src={file.name || "http://via.placeholder.com/100x150"} width="100%" onClick={() => refFile.current.click()} />
-                                    <input ref={refFile} type="file" onChange={onChangeFile} style={{display:"none"}} />
-                                    <Button onClick={onClickImageSave}>이미지저장</Button>
+                                <Col xs={9}>
+                                    <TextField
+                                        label="아이디"
+                                        name="user_uid"
+                                        value={user_uid}
+                                        variant="outlined"
+                                        disabled
+                                        fullWidth
+                                    />
                                 </Col>
-                                <Col lg={8}>
-                                    <Card className='mb-2'>
-                                        <Card.Body>
-                                            <InputGroup className='mb-2'>
-                                                <InputGroup.Text>회원번호</InputGroup.Text>
-                                                <Form.Control name="user_key" readOnly value={user_key} />
-                                            </InputGroup>
-                                            <InputGroup className='mb-2'>
-                                                <InputGroup.Text>성함</InputGroup.Text>
-                                                <Form.Control value={user_uname} name="user_uname" onChange={onChangeForm} />
-                                            </InputGroup>
-                                            <InputGroup className='mb-2'>
-                                                <InputGroup.Text>전화번호</InputGroup.Text>
-                                                <Form.Control value={user_phone} name="user_phone" onChange={handlePress} maxLength={13} />
-                                            </InputGroup>
-                                            <InputGroup className='mb-2'>
-                                                <InputGroup.Text>주소</InputGroup.Text>
-                                                <Form.Control value={user_address1} name="user_address1" onChange={onChangeForm} />
-                                            </InputGroup>
-                                            <InputGroup className='mb-2'>
-                                                <Form.Control value={user_address2} name="user_address2" onChange={onChangeForm} />
-                                                <ModalAddress form={form} setform={setForm} />
-                                            </InputGroup>
-                                            <InputGroup className='mb-2'>
-                                                <InputGroup.Text>생년월일/성별</InputGroup.Text>
-                                                <Form.Control value={user_birth} name="user_birth" onChange={onChangeForm} type="date" />
-                                                <Form.Control value={user_gender === '남자' ? "남자" : "여자"} name="user_gender" readOnly />
-                                            </InputGroup>
-                                        </Card.Body>
-                                    </Card>
-                                    <Card className='mb-2'>
-                                        <Card.Body>
-                                            <InputGroup className='mb-2'>
-                                                <InputGroup.Text>아이디</InputGroup.Text>
-                                                <Form.Control readOnly value={user_uid} name="user_uid" />
-                                            </InputGroup>
-                                            <InputGroup className='mb-2'>
-                                                <InputGroup.Text>이메일</InputGroup.Text>
-                                                <Form.Control value={user_email} name="user_email" onChange={onChangeForm} type="email" />
-                                            </InputGroup>
-                                            <InputGroup className='mb-2'>
-                                                <InputGroup.Text>비밀번호 변경</InputGroup.Text>
-                                                <Button className='px-5'>비밀번호 변경</Button>
-                                            </InputGroup>
-                                            <InputGroup className='mb-2'>
-                                                <InputGroup.Text>닉네임</InputGroup.Text>
-                                                <Form.Control value={user_nickname} name="user_nickname" onChange={onChangeForm} />
-                                                <Button onClick={onCheckNickname}>중복확인</Button>
-                                            </InputGroup>
-                                            <InputGroup className='mb-2'>
-                                                <InputGroup.Text>한줄소개</InputGroup.Text>
-                                                <Form.Control placeholder="한줄소개" onChange={onChangeForm}
-                                                    value={user_ment} name="user_ment" />
-                                            </InputGroup>
-                                        </Card.Body>
-                                    </Card>
+                                <Col>
+                                    <Link to={`/user/updatePass/${user_uid}`}><Button>비밀번호변경</Button></Link>
                                 </Col>
                             </Row>
-                        </Card.Body>
-                    </Card>
-                </Col>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                label="이메일"
+                                name="user_email"
+                                value={user_email}
+                                onChange={onChangeForm}
+                                type="email"
+                                fullWidth
+                                variant="outlined"
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Row>
+                                <Col xs={9}>
+                                    <TextField
+                                        label="닉네임"
+                                        name="user_nickname"
+                                        value={user_nickname}
+                                        onChange={onChangeForm}
+                                        fullWidth
+                                        variant="outlined"
+                                    />
+                                </Col>
+                                <Col>
+                                    <Button onClick={() => checkNickname(user_nickname)}>중복확인</Button>
+                                </Col>
+                            </Row>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                label="한줄소개"
+                                name="user_ment"
+                                value={user_ment}
+                                onChange={onChangeForm}
+                                fullWidth
+                                variant="outlined"
+                            />
+                        </Grid>
+
+                    </Grid>
+                </Container>
             </Row>
-            <div className='text-center'>
-                <Button className='me-4 px-5' onClick={onClickUpdate}>수정하기</Button>
-                <Button className='me-4 px-5' onClick={onClickReset}>취소하기</Button>
-                <Link to={`/user/read/${user_uid}`}><Button className='px-5'>마이페이지로 돌아가기</Button></Link>
+
+            <div className='text-center mt-5'>
+                <Button className='me-4 px-5' variant="outlined" onClick={onClickUpdate}>수정하기</Button>
+                <Button className='me-4 px-5' variant="outlined" onClick={onClickReset}>취소하기</Button>
+                <Link to={`/user/read/${user_uid}`}><Button variant="outlined" className='px-5'>마이페이지로 돌아가기</Button></Link>
             </div>
+            <ModalAddress
+                show={isModalOpen}
+                handleClose={closeModal}
+                setform={setForm}
+                form={form}
+            />
         </div>
     )
 }

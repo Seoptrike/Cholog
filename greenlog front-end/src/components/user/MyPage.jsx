@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { Row, Col, Button } from 'react-bootstrap'
 import { FaSeedling } from "react-icons/fa";
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import MypageSlick from './MypageSlick';
 import { PiUserCirclePlus } from "react-icons/pi";
 import { PiUserCircleMinusThin } from "react-icons/pi";
-import ModalFollower from '../follow/ModalFollower';
-import ModalFollowing from '../follow/ModalFollowing';
+import { TbBrandSnapseed } from "react-icons/tb";
+import mypage from './mypage.png'
 import { CardActions, CardContent, Avatar, Typography, Chip, Stack, Box, Badge, Card, Grid } from '@mui/material';
 
 //이미지를 누르면 정보수정페이지로 이동
@@ -18,7 +18,9 @@ import { CardActions, CardContent, Avatar, Typography, Chip, Stack, Box, Badge, 
 const MyPage = () => {
   const { user_uid } = useParams();
   const [diary, setDiary] = useState([]);
+  const [follow, setFollow] = useState("");
   const [data, setData] = useState({});
+  const navi = useNavigate();
 
 
   //일기내용 조회(슬라이더로 목록 만들기)
@@ -26,6 +28,12 @@ const MyPage = () => {
     const res = await axios.get(`/user/mypage2/${user_uid}`);
     //console.log(res.data);
     setDiary(res.data);
+  }
+
+  const callAPI3 = async () => {
+    const res = await axios.post('/follow/chkfollow', { follow_to: user_uid, follow_from: sessionStorage.getItem("uid") })
+    console.log(res.data);
+    setFollow(res.data);
   }
 
   const callAPI4 = async () => {
@@ -36,6 +44,7 @@ const MyPage = () => {
   console.log(data);
   useEffect(() => {
     callAPI2();
+    callAPI3();
     callAPI4();
   }, [])
 
@@ -60,69 +69,123 @@ const MyPage = () => {
     }
   }
 
-  // const users = [
-  //   { name: `팔로잉 : ${data.following_count}`, avatar: 'https://randomuser.me/api/portraits/women/1.jpg', },
-  //   { name: `일기목록 : ${diary.length}`, avatar: 'https://randomuser.me/api/portraits/men/1.jpg' },
-  //   { name: `팔로워 : ${data.follower_count}`, avatar: 'https://randomuser.me/api/portraits/women/3.jpg' },
-  //   { name: `피망마켓이용: ${data.auction_count}` , avatar: 'https://randomuser.me/api/portraits/women/2.jpg'},
-  //   { name: `내 씨드 : ${data.seed_point}씨드`, avatar: 'https://randomuser.me/api/portraits/men/2.jpg' },
-  //   { name: '일기쓰기', avatar: 'https://randomuser.me/api/portraits/women/4.jpg' }
-  // ];
 
-  // const UserCard = ({ name, avatar }) => (
-  //   <Card variant="outlined" style={{ marginBottom: '16px' }}>
-  //     <CardContent style={{ display: 'flex', alignItems: 'center' }}>
-  //       <Avatar alt={name} src={avatar} style={{ marginRight: '16px' }} />
-  //       <Typography variant="body">{name}</Typography>
-  //     </CardContent>
-  //   </Card>
-  // );
+
 
 
   return (
     <div>
-       {user_uid === sessionStorage.getItem("uid") ?
-      <h1 className='text-center my-5'>{data.user_nickname}님 환영합니다</h1> : 
-      <h1 className='text-center my-5'>어서오세요. {data.user_nickname}님의 마이페이지입니다.</h1>}
-
+      <div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
+        <img src={mypage} alt="car" style={{ width: '100%', maxWidth: '1000px' }} />
+      </div>
+      {user_uid === sessionStorage.getItem("uid") ?
+        <h3 className='text-center my-5'>{data.user_nickname}님 환영합니다</h3> :
+        <h3 className='text-center my-5'>어서오세요. {data.user_nickname}님의 마이페이지입니다.</h3>}
       <Row className='my-5'>
-        <Col lg={5}>
-          <Link to={`/user/update/${user_uid}`}><img src={data.user_img || "http://via.placeholder.com/200x200"} width="100%" height="100%" /></Link>
+        <Col xs={8} md={6} lg={4}>
+          <Grid item>
+            <img src={data.user_img || "http://via.placeholder.com/200x200"} width="400rem" />
+          </Grid>
         </Col>
-        <Col lg={7}>
-          {/* <Box sx={{ minWidth: 275, padding: '16px', }}>
+        <Col xs={7} md={6} lg={8}>
+          <Card>
+            <Box sx={{ minWidth: 275, padding: '16px', }}>
               <Grid container spacing={2} justifyContent="space-between">
-                <Grid item>
-                  <Typography variant="h6" gutterBottom>
-                    오늘도 탄소 지킴이 활동 톡톡히 하셨나요?
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  {!(sessionStorage.getItem("uid") === user_uid) && (
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                      <PiUserCirclePlus style={{ cursor: "pointer", fontSize: "50px" }} onClick={onAddFollow} />
-                      <PiUserCircleMinusThin style={{ cursor: "pointer", fontSize: "50px" }} onClick={onUnFollow} />
-                    </div>
-                  )}
-                </Grid>
-              {/* <Grid item xs={12} md={6}>
-              
-                {users.slice(0, 3).map((user) => (
-                  <UserCard key={user.name} name={user.name} avatar={user.avatar} />
-                ))}
-              </Grid>
-              {user_uid === sessionStorage.getItem("uid") &&
-              
-              <Grid item xs={12} md={6}>
-                {users.slice(3).map((user) => (
-                  <UserCard key={user.name} name={user.name} avatar={user.avatar} />
-                ))}
-              </Grid>
-}
-            </Grid> 
-          </Box> */}
-        </Col>
+                <Grid item >
+                  <Row className='justify-content-center'>
+                    <Col xs={6} md={5} lg={4}>
+                      <Card style={{ cursor: "pointer" }} onClick={() => navi(`/user/follower/${user_uid}`)}>
+                        <div className='text-center'>
+                          <img src="/images/green.png" style={{ cursor: "pointer", width: "20%" }} />
+                          <span>
+                            팔로워 : {data.follower_count}
+                          </span>
+                        </div>
+                      </Card>
+                    </Col>
+                    <Col xs={6} md={5} lg={4}>
+                      <Card style={{ cursor: "pointer" }} onClick={() => navi(`/user/following/${user_uid}`)}>
+                        <div className='text-center'>
+                          <img src="/images/green.png" style={{ cursor: "pointer", width: "20%" }} />
+                          <span>
+                            팔로잉 : {data.following_count}
+                          </span>
+                        </div>
+                      </Card>
+                    </Col>
+                    {!(sessionStorage.getItem("uid") === user_uid) && (
+                      <Col xs={1} md={3} lg={2}>
+                        <Grid item>
+                          <div style={{ display: 'flex' }}>
+                            {follow ? <PiUserCircleMinusThin style={{ cursor: "pointer", fontSize: "50px" }} onClick={onUnFollow} />
+                              : <PiUserCirclePlus style={{ cursor: "pointer", fontSize: "50px" }} onClick={onAddFollow} />
+                            }
+                          </div>
 
+                        </Grid>
+                      </Col>
+                    )}
+                  </Row>
+                </Grid>
+                {(sessionStorage.getItem("uid") === user_uid) &&
+                  <>
+                    <Grid item xs={12}>
+                      <Row className='justify-content-center'>
+                        <Col xs={6} md={5} lg={4}>
+                          <Card style={{ cursor: "pointer", padding: "20px" }} onClick={() => navi(`/auction/list.json/${user_uid}`)}>
+                            <div className='text-center'>
+                              <span>
+                                피망마켓이용건 : {data.auction_count}
+                              </span>
+                            </div>
+                          </Card>
+                        </Col>
+                        <Col xs={6} md={5} lg={4}>
+                          <Card style={{ cursor: "pointer", padding: "20px" }} onClick={() => navi(`/user/wallet/${user_uid}`)}>
+                            <div className='text-center'>
+                              <span>
+                                내 씨드 : {data.seed_point}
+                                <TbBrandSnapseed style={{ fontSize: '15px', color: 'brown', verticalAlign: 'middle' }} />
+                              </span>
+                            </div>
+                          </Card>
+                        </Col>
+                      </Row>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Row className='justify-content-center'>
+                        <Col xs={6} md={5} lg={4}>
+                          <Card style={{ cursor: "pointer", padding: "20px" }} onClick={() => navi(`/diary/insert`)}>
+                            <div className='text-center'>
+                              <span>일기쓰기 </span>
+                            </div>
+                          </Card>
+                        </Col>
+                        <Col xs={6} md={5} lg={4}>
+                          <Card style={{ cursor: "pointer", padding: "20px" }} onClick={() => navi(`/user/update/${user_uid}`)}>
+                            <div className='text-center'>
+                              <span>내 정보수정 </span>
+                            </div>
+                          </Card>
+                        </Col>
+                      </Row>
+                    </Grid>
+                  </>
+                }
+              </Grid>
+
+            </Box>
+          </Card>
+          {!(sessionStorage.getItem("uid") === user_uid) && (
+            <Box sx={{ padding: '16px' }}>
+              <Row className='justify-content-center'>
+                <Col>
+                  <MypageSlick diary={diary} setDiary={setDiary} />
+                </Col>
+              </Row>
+            </Box>
+          )}
+        </Col>
       </Row>
       <div className='my-5'>
         <h4 className='text-center mb-3'>{data.user_nickname}님의 럭키클로버 일기</h4>
@@ -131,7 +194,7 @@ const MyPage = () => {
       <div className='mt-3 mb-5'>
         <Row className='justify-content-center'>
           <Col>
-            <MypageSlick diary={diary} setDiary={setDiary} callAPI={callAPI2}  />
+            <MypageSlick diary={diary} setDiary={setDiary} />
           </Col>
         </Row>
       </div>

@@ -59,4 +59,8 @@
 		limit #{start},#{size}
 	</select>
 	
+	<select id="chkfollow" resultType="hashmap">
+		select * from follow where follow_from =#{uid1} and follow_to=#{uid2}
+	</select>
+	
 </mapper>

@@ -5,11 +5,7 @@ import { GiCancel } from "react-icons/gi";
 import { FaEdit } from "react-icons/fa";
 import axios from 'axios';
 import ModalAddress from '../../common/useful/ModalAddress';
-import { ElevatorSharp } from '@mui/icons-material';
 
-//엑스버튼 누를 시 취소하기, 수정아이콘누를 시 수정하기
-//비밀번호체크
-//이미지변경
 
 const AdminUpdate = () => {
   const { user_uid } = useParams();
@@ -18,6 +14,7 @@ const AdminUpdate = () => {
   const [isCheck, setIsCheck] = useState(false);
   const [isEmail, setIsEmail] = useState(false);
   const [phoneCheck, setPhoneCheck] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { user_key, user_nickname, user_uname, user_phone, user_address1, user_address2,
     user_birth, user_email, user_gender, user_auth } = form;
@@ -137,12 +134,19 @@ const AdminUpdate = () => {
 
   //정보수정
   const onClickUpdate = async () => {
-    if (!window.confirm("변경된 내용을 수정하시겠습니까?")) return; 
+    if (!window.confirm("변경된 내용을 수정하시겠습니까?")) return;
     await axios.post("/user/admin/update", form);
     window.location.href = `/user/admin/read/${user_uid}`;
   }
 
+  //모달
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
 
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <div><h1 className='text-center my-5'>{user_uid}({user_uname})님 회원정보</h1>
@@ -156,12 +160,12 @@ const AdminUpdate = () => {
                     style={photoStyle} onClick={() => refFile.current.click()} />
                   <InputGroup>
                     <input ref={refFile} type="file" style={{ display: 'none' }} onChange={onChangeFile} />
-                    <div className='text-end'>
-                      <Button className='w-100' size="sm" onClick={onUploadImage}>이미지저장</Button>
-                    </div>
                   </InputGroup>
+                  <div className='text-center mt-2'>
+                    <Button className='w-100' size="sm" variant='outline-primary' onClick={onUploadImage}>이미지저장</Button>
+                  </div>
                 </Col>
-                <Col lg={6}>
+                <Col>
                   <Card.Text>
                     <div className='text-start'>
                       <br />
@@ -204,6 +208,13 @@ const AdminUpdate = () => {
                       <InputGroup className='mb-2'>
                         <InputGroup.Text>주소</InputGroup.Text>
                         <Form.Control value={user_address1} name="user_address1" onChange={onChangeForm} />
+                        <Button onClick={openModal} variant='warning'>주소찾기</Button>
+                        <ModalAddress
+                          show={isModalOpen}
+                          handleClose={closeModal}
+                          setform={setForm}
+                          form={form}
+                        />
                       </InputGroup>
                       <InputGroup className='mb-2'>
                         <Form.Control value={user_address2} name="user_address2" onChange={onChangeForm} />
@@ -223,12 +234,10 @@ const AdminUpdate = () => {
                     </div>
                   </Card.Text>
                 </Col>
-                <Col lg={2}>
-                  <FaEdit style={{ fontSize: "40px", cursor: "pointer" }} className='me-4' onClick={onClickUpdate} />
-                  <GiCancel style={{ fontSize: "40px", cursor: "pointer" }} onClick={onClickReset} />
-                </Col>
               </Row>
-              <div className='text-end mt-3'>
+              <div className='text-center mt-3'>
+                <Button className='me-4 px-5' variant="outline-dark" onClick={onClickUpdate}>수정하기</Button>
+                <Button className='me-4 px-5' variant="outline-dark" onClick={onClickReset}>취소하기</Button>
                 <Button className='px-5' onClick={() => onClickDelete(user_key)}>회원영구삭제</Button>
               </div>
             </Card.Body>

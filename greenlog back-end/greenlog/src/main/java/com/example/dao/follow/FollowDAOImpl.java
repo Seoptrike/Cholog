@@ -72,4 +72,14 @@ public class FollowDAOImpl implements FollowDAO {
 		session.update(namespace + ".unFollow", vo);
 	}
 
+	@Override
+	public HashMap<String, Object> chkfollow(String uid1, String uid2) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("uid1", uid1);
+		map.put("uid2", uid2);
+		return session.selectOne(namespace + ".chkfollow", map);
+	}
+
+	
+
 }
