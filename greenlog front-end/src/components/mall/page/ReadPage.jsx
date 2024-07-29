@@ -177,13 +177,13 @@ const ReadPage = () => {
                                             }
                                         </tr>
                                         <tr>
-                                            <td style={{ width: "50%" ,fontSize:"1rem" }} >{mall_tstate === 0 ? "나눔" : (mall_tstate === 1 ? "무료나눔" : "구매")}</td>
-                                            <td style={{ width: "50%",fontSize:"1rem" }} >{mall_pstate === 0 ? "중고상품" : "(미개봉,미사용)"}</td>
+                                            <td style={{ width: "50%" ,fontSize:"1rem" }} >거래유형 : {mall_tstate === 0 ? "나눔" : (mall_tstate === 1 ? "무료나눔" : "구매")}</td>
+                                            <td style={{ width: "50%",fontSize:"1rem" }} > 상품상태 : {mall_pstate === 0 ? "중고상품" : "(미개봉,미사용)"}</td>
                                         </tr>
                                         <tr>
                                             {mall_info !== "" ?
                                             <td colSpan={2} style={{ width: "100%", height: "80px",fontSize:"1rem" }}>
-                                                 {mall_info} 
+                                                 내용 : {mall_info} 
                                             </td>
                                             :
                                             <td colSpan={2} style={{ width: "100%", height: "80px", color:"#E6E6E6" , fontSize:"2rem"}} >
@@ -192,12 +192,12 @@ const ReadPage = () => {
                                             }
                                         </tr>
                                         <tr>
-                                            <td style={{ width: "50%" ,fontSize:"1rem"}}>마감일:{endDate}</td>
-                                            <td style={{ width: "50%" ,fontSize:"1rem"}}>{mall_price}씨드</td>
+                                            <td style={{ width: "50%" ,fontSize:"1rem"}}>마감일 : {endDate}</td>
+                                            <td style={{ width: "50%" ,fontSize:"1rem"}}>{mall_price} 씨드</td>
                                         </tr>
                                         <tr>
-                                            <td style={{ width: "50%",fontSize:"1rem" }}><Link to={`/user/read/${mall_seller}`}>{mall_seller}</Link></td>
-                                            <td style={{ fontSize: "1rem", width: "50%" }}>{fmtUdate ? `${fmtUdate}(수정됨)` : fmtRdate}</td>
+                                            <td style={{ width: "50%",fontSize:"1rem" }}>판매자 ID : <Link to={`/user/read/${mall_seller}`}>{mall_seller}</Link></td>
+                                            <td style={{ fontSize: "1rem", width: "50%" }}>{fmtUdate ? `${fmtUdate}(수정됨)` : `작성일 : ${fmtRdate}`}</td>
                                         </tr>
                                     </tbody>
                                 </Table>

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Row, Col, Button, InputGroup, Form } from 'react-bootstrap';
+import { Row, Col, InputGroup, Form } from 'react-bootstrap';
 import { Card, CardContent, Typography, Avatar, Box } from '@mui/material';
 import axios from 'axios';
 import Pagination from 'react-js-pagination';
 import { TbBrandSnapseed } from "react-icons/tb";
 import { Link } from 'react-router-dom';
+import Button from '@mui/material/Button';
 const AdminSeedPage = () => {
     const [list, setList] = useState([]);
     const [count, setCount] = useState(0);
@@ -37,7 +38,7 @@ const AdminSeedPage = () => {
                     <form onSubmit={onSubmit}>
                         <InputGroup>
                             <Form.Control name="word" value={word} onChange={(e) => setWord(e.target.value)} />
-                            <Button type="submit" size="sm">검색</Button>
+                            <Button variant="contained" color='success' type="submit" size="sm">검색</Button>
                         </InputGroup>
                     </form>
                 </Col>
@@ -92,7 +93,7 @@ const AdminSeedPage = () => {
                                         </Typography>
                                         입니다
                                     </Typography>
-                                    <Link to={`/user/wallet/${seed.seed_uid}`}> <Button size="sm">거래내역 {seed.seed_uid}</Button></Link>
+                                    <Link to={`/user/wallet/${seed.seed_uid}`}> <Button variant="contained" color='success' size="sm">거래내역 {seed.seed_uid}</Button></Link>
 
                                 </Box>
                             </CardContent>

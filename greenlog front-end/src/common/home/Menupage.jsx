@@ -27,7 +27,6 @@ const Menupage = () => {
 
     const onClickIcon = () => {
         window.location.href = `/user/read/${uid}`
-    }
 
     const onClickAdmin = () => {
         window.location.href = '/admin/dash'
@@ -78,7 +77,6 @@ const Menupage = () => {
                             <>
                                 <span className='me-3' style={{ float: "right", color: "white", cursor: "pointer" }} onClick={onClickIcon}><AccountCircleIcon /></span>
                                 <span onClick={onClickLogout} className='me-3' style={{ float: "right", color: "white", cursor: "pointer" }}><LogoutIcon /></span>
-
                             </>
                             :
                             <span className='me-3' style={{ float: "right", color: "white", cursor: "pointer" }} onClick={onClickLogin}>로그인</span>

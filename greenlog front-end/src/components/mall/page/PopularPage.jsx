@@ -4,6 +4,7 @@ import { Container, Row, Col,  Table } from 'react-bootstrap';
 import {Card } from 'antd'; 
 import axios from 'axios';
 import moment from 'moment';
+import MallList from '../MallList';
 
 const PopularPage = () => {
     const { Meta } = Card;
@@ -151,7 +152,11 @@ const PopularPage = () => {
                 </Col>
             </Row>
             <hr className='mx-5'/>
-            <h3 className='text-center my-5'>♻ 인기상품리스트 TOP10 ♻</h3>
+            <h3 className='text-center my-5'>
+                <img src="../images/pmang1.png" style={{width:"3rem",height:"3rem", marginBottom:"1rem"}} />
+                    인기상품리스트 TOP10
+                <img src="../images/pmang1.png" style={{width:"3rem",height:"3rem",marginBottom:"1rem"}} />
+            </h3>
             <div className='' style={{position:"relative"}}>
                 {list.slice(0, 10).map((list, index) => (
                     <Card key={index} className='m-0 p-0  mx-5 mb-3' style={{height:"8rem"}}>
@@ -171,15 +176,17 @@ const PopularPage = () => {
                                             </p>
                                         </Col>
                                         <Col className='text-center' xs={2} md={2} lg={2}>
-                                           <div style={{border:"1px solid #d7ffa3",backgroundColor:"#d7ffa3", borderRadius:"20px"}}> ID : {list.mall_seller} </div>
+                                           <div style={{border:"1px solid black",backgroundColor:"black", borderRadius:"20px",color:"white"}}> ID : {list.mall_seller} </div>
                                             <p className='my-0 py-0 ' >
-                                                {list.mall_tstate === 0 && `일반나눔`}
-                                                {list.mall_tstate === 1 && `무료나눔`}
-                                                {list.mall_tstate === 2 && `구매글`}
+                                                글 유형 : 
+                                                {list.mall_tstate === 0 && <span style={{textDecoration: 'underline'}}>일반나눔</span>}
+                                                {list.mall_tstate === 1 && <span style={{textDecoration: 'underline'}}>무료나눔</span>}
+                                                {list.mall_tstate === 2 && <span style={{textDecoration: 'underline'}}>구매글</span>}
                                             </p>
                                             <p>
-                                                {list.mall_pstate === 0 && `중고상품`}
-                                                {list.mall_pstate === 1 && `새상품`}
+                                                상품상태 : 
+                                                {list.mall_pstate === 0 && <span style={{textDecoration: 'underline'}}>중고상품</span>}
+                                                {list.mall_pstate === 1 && <span style={{textDecoration: 'underline'}}>새상품</span>}
                                             </p>
                                         </Col>
                                     </Row>

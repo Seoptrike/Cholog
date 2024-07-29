@@ -26,4 +26,6 @@ public interface DiaryDAO {
 	public String thumbnailSelect(int diary_key);
 	public void updateThumbnail(DiaryPhotoVO vo);
 	public void updatePhoto(DiaryPhotoVO vo);
+	public List<HashMap<String, Object>> DiaryTopList (String diary_writer, String user_uid);
+	public int DiaryTotal(String diary_writer);
 }

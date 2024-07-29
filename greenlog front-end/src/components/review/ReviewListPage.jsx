@@ -33,7 +33,7 @@ const ReviewListPage = ({ mall_key, mall_seller, seller_number }) => {
         await axios.post(`/review/delete/${review_key}`);
         alert('리뷰 삭제 완료!');
         callAPI();
-        window.location.href=`/mall/read/${mall_key}`
+        window.location.href = `/mall/read/${mall_key}`
     };
 
     const onUpdate = (review_key) => {
@@ -81,9 +81,9 @@ const ReviewListPage = ({ mall_key, mall_seller, seller_number }) => {
     };
 
     const onClickBuy = async (review_writer, review_rating, mall_seller) => {
-        //alert(review_writer, review_rating, mall_seller)
-        if (!window.confirm(`[${review_writer}]님을 선택하시겠습니까?`))
-            await axios.post('/auction/insert', {
+        // alert(review_writer+"....................."+review_rating+"....................."+mall_seller+"............................."+review_rating)
+        if (window.confirm(`[${review_writer}]님을 선택하시겠습니까?`)){
+        await axios.post('/auction/insert', {
                 auction_mall_key: mall_key,
                 auction_seller: mall_seller,
                 auction_buyer: review_writer,
@@ -99,10 +99,11 @@ const ReviewListPage = ({ mall_key, mall_seller, seller_number }) => {
                 trade_state: 1,
                 trade_info: "경매"
             })
-            //마감
-            await axios.post(`/mall/updateEndDate/${mall_key}`)
-            alert("낙찰완료! 해당 글은 마감됩니다.");
-            window.location.href = `/mall/list.json`;
+        }
+          //마감
+        await axios.post(`/mall/updateEndDate/${mall_key}`)
+        alert("낙찰완료! 해당 글은 마감됩니다.");
+        window.location.href = `/mall/list.json`;
         }
     };
 

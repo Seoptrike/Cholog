@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Button, Card, Form, InputGroup } from 'react-bootstrap';
+import { Row, Col, Card, Form, InputGroup, Button } from 'react-bootstrap';
 import { BsChevronDown } from 'react-icons/bs';
 import ReplyListPage from './ReplyListPage';
 import axios from 'axios';
@@ -129,8 +129,9 @@ const ReplyPage = ({ bbs_key, bbs_writer }) => {
         <Row className='justify-content-center mt-3'>
             <Col xs={10}>
                 <Button type='button' variant="" onClick={() => setShowReply(!showReply)}>
-                    댓글 {replyCount} <BsChevronDown />
+                    댓글 {replyCount}
                 </Button>
+                <BsChevronDown />
                 <hr />
                 {showReply && (
                     <>
@@ -166,25 +167,24 @@ const ReplyPage = ({ bbs_key, bbs_writer }) => {
                                     <Button variant='' onClick={() => onKey('reply_regdate desc')}>최신순</Button>
                                     <Button variant='' onClick={() => onKey('reply_reaction desc')}>인기순</Button>
                                 </div> */}
-                    
                             </Col>
                         </Row>
                         <ReplyListPage reply={reply} setReply={setReply} bbs_writer={bbs_writer} callCount={callCount} callList={callList} />
                         <hr />
                         {count > size && (
-                        <Row className="pagination-container">
-                            <Col xs={12} md={10}>
-                                <MuiPagination
-                                    count={Math.ceil(count / size)}
-                                    page={page}
-                                    onChange={handlePageChange}
-                                    color="standard"
-                                    variant="outlined"
-                                    shape="rounded"
-                                />
-                            </Col>
-                        </Row>
-                    )}
+                            <Row className="pagination-container">
+                                <Col xs={12} md={10}>
+                                    <MuiPagination
+                                        count={Math.ceil(count / size)}
+                                        page={page}
+                                        onChange={handlePageChange}
+                                        color="standard"
+                                        variant="outlined"
+                                        shape="rounded"
+                                    />
+                                </Col>
+                            </Row>
+                        )}
                     </>
                 )}
             </Col>

@@ -7,7 +7,7 @@ import ReviewReadPage from '../components/review/ReviewReadPage'
 const ReviewRouter = () => {
     return (
         <Routes>
-            <Route path='list.json' element={<ReviewListPage/>}></Route>
+            <Route path='list.json/:review_key' element={<ReviewListPage/>}></Route>
             <Route path='read/:review_key' element={<ReviewReadPage/>}></Route>
             <Route path='insert' element={<InsertPage/>}></Route>
         </Routes>
