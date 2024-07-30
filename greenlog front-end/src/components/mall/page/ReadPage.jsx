@@ -140,10 +140,10 @@ const ReadPage = () => {
                         <Col className=' text-center  text-middle  mall_read_item' xs={5} md={5} lg={5} style={{ whiteSpace: "nowrap" }}>
                             {endDate <= today ?
                                 <Watermark  {...watermarkProps}>
-                                    <img style={photoST} src={mall_photo ? mall_photo : ' http://via.placeholder.com/300x300'} alt='상품대표이미지' />
+                                    <img style={photoST} src={mall_photo ? mall_photo : '../images/sorry.png'} alt='상품대표이미지' />
                                 </Watermark>
                                 :
-                                <img style={photoST} src={mall_photo ? mall_photo : ' http://via.placeholder.com/300x300'} alt='상품대표이미지' />
+                                <img style={photoST} src={mall_photo ? mall_photo :  '/images/sorry.png'} alt='상품대표이미지' />
                             }
                         </Col>
                         <Col className=' mall_read_item ' xs={7} md={7} lg={7} style={{ whiteSpace: "nowrap", height: "100%", padding: "0px 2rem 0px 0px" }} >
@@ -182,7 +182,7 @@ const ReadPage = () => {
                                         </tr>
                                         <tr>
                                             {mall_info !== "" ?
-                                            <td colSpan={2} style={{ width: "100%", height: "80px",fontSize:"1rem" }}>
+                                            <td colSpan={2} style={{  whiteSpace: "normal",overflow: "auto",  wordWrap: "break-word",width: "100%", height: "80px",fontSize:"1rem" }}>
                                                  내용 : {mall_info} 
                                             </td>
                                             :
@@ -209,7 +209,7 @@ const ReadPage = () => {
                                             list.map(list => (
                                                 <div className='' key={list.mall_key}>
                                                     <Link to={`/mall/read/${list.mall_key}`}>
-                                                        <img style={slideImg} src={list.mall_photo ? list.mall_photo : "http://via.placeholder.com/100x100"} />
+                                                        <img style={slideImg} src={list.mall_photo ? list.mall_photo :  '/images/sorry.png'} />
                                                     </Link>
                                                 </div>
                                             ))}

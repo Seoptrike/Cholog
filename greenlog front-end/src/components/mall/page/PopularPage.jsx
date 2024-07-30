@@ -94,7 +94,7 @@ const PopularPage = () => {
                             cover={
                                 <a href={`/mall/read/${top2.mall_key}`} style={topCover}>
                                     <img alt="mall" style={topST}
-                                        src={top2.mall_photo ? top2.mall_photo : "http://via.placeholder.com/100x100"}/>
+                                        src={top2.mall_photo ? top2.mall_photo :  '../images/sorry.png'}/>
                                 </a>
                             }
                         >
@@ -115,7 +115,7 @@ const PopularPage = () => {
                          cover={
                              <a href={`/mall/read/${top1.mall_key}`} style={topCover}>
                                  <img alt="mall" style={topST}
-                                     src={top1.mall_photo ? top1.mall_photo : "http://via.placeholder.com/100x100"}/>
+                                     src={top1.mall_photo ? top1.mall_photo :  '../images/sorry.png'}/>
                              </a>
                          }
                         >
@@ -137,7 +137,7 @@ const PopularPage = () => {
                             cover={
                             <a href={`/mall/read/${top3.mall_key}`} style={topCover}>
                                 <img alt="mall" style={topST}
-                                    src={top3.mall_photo ? top3.mall_photo : "http://via.placeholder.com/100x100"}/>
+                                    src={top3.mall_photo ? top3.mall_photo :  '../images/sorry.png'}/>
                             </a>}
                         >
                         <div style={metaDiv}>
@@ -163,7 +163,7 @@ const PopularPage = () => {
                             <a href={`/mall/read/${list.mall_key}`} style={{color:"#5a9410",textDecoration: 'none'}} >
                             <Row>
                                 <Col xs={2} md={2} lg={2}>
-                                    <img src={list.mall_photo ? list.mall_photo : "http://via.placeholder.com/100x100"} style={photoST}/>
+                                    <img src={list.mall_photo ? list.mall_photo :  '../images/sorry.png'} style={photoST}/>
                                 </Col>
                                 <Col className='me-5 py-0'>
                                     <Row className='mb-0 pb-0'>
