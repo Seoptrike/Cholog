@@ -6,6 +6,7 @@ import { MdOutlineSettings } from "react-icons/md";
 import '../../common/useful/Paging.css';
 import Pagination from 'react-js-pagination'
 import { UserContext } from '../user/UserContext';
+import userlist from './userlist.png'
 
 //이미지 클릭 시 관리자용 회원정보읽기페이지로 이동
 //설정아이콘 클릭 시 관리자용 회원정보수정페이지로 이동 
@@ -41,9 +42,10 @@ const UserListPage = () => {
                 <Sidebar />
             </Col>
             <Col>
-                <h5 className='mb-5 mt-2'> {userData.uname} 관리자님 환영합니다.</h5>
-
-                <Row className='justify-content-center mb-5'>
+            <div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
+                        <img src={userlist} alt="car" style={{ width: '100%', maxWidth: '800px' }} />
+                    </div>
+                <Row className='justify-content-center my-5'>
                     <Col lg={5}>
                         <form onSubmit={onSubmit}>
                             <InputGroup>
@@ -81,7 +83,7 @@ const UserListPage = () => {
                                                     <p>전화번호: {user.user_phone}</p>
                                                     <p>이메일: {user.user_email}</p>
                                                     <p>주소: {user.user_address1 ? `${user.user_address1} (${user.user_address2})` : "-"}</p>
-                                                    <p>권한: {user.user_auth}</p>
+                                                    <p>등급: {user.user_auth}</p>
                                                 </div>
                                             </Card.Text>
                                         </Col>

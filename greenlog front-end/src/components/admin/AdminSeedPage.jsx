@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { Row, Col, InputGroup, Form } from 'react-bootstrap';
 import { Card, CardContent, Typography, Avatar, Box } from '@mui/material';
+import Sidebar from './Sidebar'
 import axios from 'axios';
 import Pagination from 'react-js-pagination';
 import { TbBrandSnapseed } from "react-icons/tb";
 import { Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
+import seedwallet from './seedwallet.png'
+
 const AdminSeedPage = () => {
     const [list, setList] = useState([]);
     const [count, setCount] = useState(0);
@@ -30,76 +33,89 @@ const AdminSeedPage = () => {
         callAPI();
     }, [page]);
 
-    
+
     return (
         <div>
             <Row className='justify-content-center mt-3'>
-                <Col lg={3}>
-                    <form onSubmit={onSubmit}>
-                        <InputGroup>
-                            <Form.Control name="word" value={word} onChange={(e) => setWord(e.target.value)} />
-                            <Button variant="contained" color='success' type="submit" size="sm">검색</Button>
-                        </InputGroup>
-                    </form>
-                </Col>
-            </Row>
-            <Row className='justify-content-center mt-5'>
-                <Col lg={8}>
-                    {list.map(seed =>
-                        <Card
-                            sx={{
-                                maxWidth: '100%',
-                                borderRadius: '16px',
-                                boxShadow: 3,
-                                margin: '16px',
-                                overflow: 'visible',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center'
-                            }}
-                        >
-                            <CardContent
-                                sx={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    width: '100%',
-                                    textAlign: 'center'
-                                }}
-                            >
-                                <Avatar
-                                    src={seed.user_img || "http://via.placeholder.com/70x70"}
-                                    sx={{ width: 70, height: 70, marginRight: 2 }}
-                                />
-                                <Box>
-                                    <Typography
-                                        variant="h6"
-                                        component="div"
-                                        sx={{ fontSize: '1.2rem', fontWeight: 'bold' }}
+                <Row>
+                    <Col md={3} lg={2}>
+                        <Sidebar />
+                    </Col>
+                    <Col>
+                    <div style={{ display: 'flex', justifyContent: 'center', margin: '5px 0' }}>
+                        <img src={seedwallet} alt="car" style={{ width: '100%', maxWidth: '800px' }} />
+                    </div>
+                        <Row className='justify-content-center'>
+                            <Col lg={5}>
+                            <form onSubmit={onSubmit}>
+                                <InputGroup>
+                                    <Form.Control name="word" value={word} onChange={(e) => setWord(e.target.value)} />
+                                    <Button variant="contained" color='success' type="submit" size="sm">검색</Button>
+                                </InputGroup>
+                            </form>
+                            </Col>
+                        </Row>
+                        <Row className='justify-content-center mt-5'>
+                            <Col lg={8}>
+                                {list.map(seed =>
+                                    <Card
+                                        sx={{
+                                            maxWidth: '100%',
+                                            borderRadius: '16px',
+                                            boxShadow: 3,
+                                            margin: '16px',
+                                            overflow: 'visible',
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            alignItems: 'center'
+                                        }}
                                     >
-                                        {seed.user_uname} ({seed.user_nickname})님의 씨앗지갑
-                                    </Typography>
-                                    <Typography
-                                        variant="body2"
-                                        color="text.secondary"
-                                        sx={{ fontSize: '0.875rem' }}
-                                    >
-                                        현재 보유중인 씨앗은
-                                        <Typography
-                                            component="span"
-                                            sx={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'brown' }}
+                                        <CardContent
+                                            sx={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                width: '100%',
+                                                textAlign: 'center'
+                                            }}
                                         >
-                                            {seed.seed_point} <TbBrandSnapseed style={{ fontSize: '15px', color: 'brown', verticalAlign: 'middle' }} />
-                                        </Typography>
-                                        입니다
-                                    </Typography>
-                                    <Link to={`/user/wallet/${seed.seed_uid}`}> <Button variant="contained" color='success' size="sm">거래내역 {seed.seed_uid}</Button></Link>
+                                            <Avatar
+                                                src={seed.user_img || "http://via.placeholder.com/70x70"}
+                                                sx={{ width: 70, height: 70, marginRight: 2 }}
+                                            />
+                                            <Box>
+                                                <Typography
+                                                    variant="h6"
+                                                    component="div"
+                                                    sx={{ fontSize: '1.2rem', fontWeight: 'bold' }}
+                                                >
+                                                    {seed.user_uname} ({seed.user_nickname})님의 씨앗지갑
+                                                </Typography>
+                                                <Typography
+                                                    variant="body2"
+                                                    color="text.secondary"
+                                                    sx={{ fontSize: '0.875rem' }}
+                                                >
+                                                    현재 보유중인 씨앗은
+                                                    <Typography
+                                                        component="span"
+                                                        sx={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'brown' }}
+                                                    >
+                                                        {seed.seed_point} <TbBrandSnapseed style={{ fontSize: '15px', color: 'brown', verticalAlign: 'middle' }} />
+                                                    </Typography>
+                                                    입니다
+                                                </Typography>
+                                                <Link to={`/user/wallet/${seed.seed_uid}`}> <Button variant="contained" color='success' size="sm">거래내역 {seed.seed_uid}</Button></Link>
 
-                                </Box>
-                            </CardContent>
-                        </Card>
-                    )}
-                </Col>
+                                            </Box>
+                                        </CardContent>
+                                    </Card>
+                                )}
+                            </Col>
+                        </Row>
+                    </Col>
+                </Row>
+
             </Row>
             {count > size &&
                 <Pagination

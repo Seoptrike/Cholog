@@ -9,6 +9,8 @@ import { Link } from 'react-router-dom';
 import { Calendar } from 'primereact/calendar';
 import MallList from '../mall/MallList';
 import Button from '@mui/material/Button';
+import transaction from './transaction.png'
+
 
 const AuctionList = () => {
 
@@ -32,7 +34,7 @@ const AuctionList = () => {
         console.log(res.data);
     }
 
-  
+
     const onSubmit = (e) => {
         e.preventDefault();
         setPage(1);
@@ -62,32 +64,32 @@ const AuctionList = () => {
         setList(data);
     }
 
-//데이터삭제(update auction_state=1)
+    //데이터삭제(update auction_state=1)
     const onClickDelete = async () => {
         if (!window.confirm("거래내역은 복구하기 어렵습니다. 삭제하시겠습니까?")) return;
-        
+
         const checkedItems = list.filter(item => item.checked);
         if (checkedItems.length === 0) {
             alert("선택하신 내역이 없습니다.");
             return;
         }
-    
+
         let cnt = 0;
         for (const item of checkedItems) {
             await axios.post(`/auction/delete/${item.auction_key}`);
             cnt++;
         }
-    
+
         alert(`${cnt}개의 거래내역이 삭제되었습니다.`);
         callAPI();
         setPage(1);
     };
 
-//달력날짜표시
+    //달력날짜표시
     function fmtDate(dateString) {
         const date = new Date(dateString);
         const year = date.getFullYear();
-        const month = ('0' + (date.getMonth() + 1)).slice(-2); 
+        const month = ('0' + (date.getMonth() + 1)).slice(-2);
         const day = ('0' + date.getDate()).slice(-2);
         return `${year}-${month}-${day}`;
     }
@@ -113,8 +115,10 @@ const AuctionList = () => {
     return (
         <Row>
             <Col>
-                <MallList/>
-                <h1 className='text-center my-5'>거래완료내역</h1>
+                <MallList />
+                <div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
+                    <img src={transaction} alt="car" style={{ width: '100%', maxWidth: '800px' }} />
+                </div>
                 <Row className='justify-content-center mt-3'>
                     <Col lg={5}>
                         <form onSubmit={onSubmit}>
@@ -127,7 +131,7 @@ const AuctionList = () => {
                                         <option value="auction_regDate">거래일</option>
                                     </Form.Select>
                                 </Col>
-                                {key === "auction_regDate"&&
+                                {key === "auction_regDate" &&
                                     <Calendar value={dates} onChange={onChangedate} selectionMode="range" dateFormat="yy/mm/dd" readOnlyInput hideOnRangeSelection />
                                 }
                                 <Button variant="contained" type="submit" size="sm">검색</Button>
@@ -140,7 +144,7 @@ const AuctionList = () => {
                     <Table>
                         <thead>
                             <tr>
-                               {count===0 || <td><input type="checkbox" onClick={onChangeAll} checked={list.length === checked} /></td>}
+                                {count === 0 || <td><input type="checkbox" onClick={onChangeAll} checked={list.length === checked} /></td>}
                                 <td>번호</td>
                                 <td colSpan={2}>상품명</td>
                                 <td>거래내역</td>

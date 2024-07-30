@@ -52,9 +52,11 @@ const ModalFollowing = ({ uid, cnt }) => {
     }
     return (
         <>
-            <div onClick={handleShow}>
-                팔로잉 {count}
-            </div>
+            <Card  style={{ cursor: "pointer", padding: "20px" }}>
+                        <div className='text-center' onClick={handleShow}>
+                        팔로잉 {count}
+                        </div>
+        </Card>
             <Modal
                 style={{ top: "25%" }}
                 show={show}

@@ -11,6 +11,7 @@ import DiaryChart from './DiaryChart';
 import MallChart from './MallChart';
 import { RiAwardFill } from 'react-icons/ri';
 import './AdminPage.css'
+import dashboard from './dashboard.png'
 
 
 const Dashboard = () => {
@@ -50,7 +51,9 @@ const Dashboard = () => {
                     <Sidebar />
                 </Col>
                 <Col>
-                    <h2 className='text-center my-5'>{userData.nickname}님 오늘도 초록데이</h2>
+                    <div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
+                        <img src={dashboard} alt="car" style={{ width: '100%', maxWidth: '800px' }} />
+                    </div>
                     <div className='mb-3'><h4>오늘의 할일</h4></div>
                     <div className='today text-center mb-5'>
                         <div className="p-grid p-justify-center small-card-grid">
@@ -72,14 +75,14 @@ const Dashboard = () => {
                     </div>
                     <div className='chart text-center mb-5'>
                         <Row>
-                            <div className='mb-5'>행운일기 전체 차트</div>
+                            <div className='mb-5'>Clover Diary Chart</div>
                             <Col><Card><DiaryChart /></Card></Col>
                         </Row>
                     </div>
                     <div>
                         <Row>
                             <Col lg={5}>
-                                <Card className="mb-3" style={{ height: "500px", overflowY: "scroll" }}>
+                                <Card className="mb-3" style={{ height: "570px", overflowY: "scroll" }}>
                                     <div className='mb-2'>씨드포인트 이번달 랭킹</div>
                                     {rank.map(r => (
                                         <div key={r.seed_uid}>
@@ -133,7 +136,7 @@ const Dashboard = () => {
                             </Col>
                             <Col lg={7}>
                                 <Card className="mb-3">
-                                    <div>피망마켓 이용 차트</div>
+                                    <div>Mall Chart</div>
                                     <MallChart />
                                 </Card>
                             </Col>

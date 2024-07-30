@@ -8,6 +8,7 @@ import Pagination from 'react-js-pagination'
 import { UserContext } from '../user/UserContext';
 import { Calendar } from 'primereact/calendar';
 import Button from '@mui/material/Button';
+import malltransaction from './malltransaction.png'
 
 const AuctionPage = () => {
   const [list, setList] = useState([]);
@@ -136,8 +137,10 @@ const AuctionPage = () => {
           <Sidebar />
         </Col>
         <Col>
-          <h5 className='mb-5 mt-2'> {userData.uname} 관리자님 환영합니다.</h5>
-          <Row className='justify-content-center mt-3'>
+          <Row className='justify-content-center my-2'>
+          <div style={{ display: 'flex', justifyContent: 'center', margin: '5px 0' }}>
+                        <img src={malltransaction} alt="car" style={{ width: '100%', maxWidth: '800px' }} />
+                    </div>
             <Col xs={12} md={10} lg={8}>
               <form onSubmit={onSubmit}>
                 <InputGroup className="mb-5">
@@ -158,8 +161,8 @@ const AuctionPage = () => {
             </Col>
             <Col>
               <div className="text-end me-2 mt-2">
-                <Button variant="contained" color='error' size="sm" className="me-2" onClick={onClickDelete}>선택삭제</Button>
-                <Button variant="contained" type="submit" size="sm" onClick={onClickRestore}>선택복원</Button>
+                <Button variant="outlined" color='error' size="sm" className="me-2" onClick={onClickDelete}>선택삭제</Button>
+                <Button variant="outlined" type="submit" size="sm" onClick={onClickRestore}>선택복원</Button>
               </div>
             </Col>
           </Row>

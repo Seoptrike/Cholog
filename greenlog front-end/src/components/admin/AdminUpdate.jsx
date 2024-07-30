@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { Row, Col, Button, Badge, InputGroup, Form, Card } from 'react-bootstrap'
+import { Row, Col, Badge, InputGroup, Form, Card } from 'react-bootstrap'
+import { InputText, Button, Dropdown } from 'primereact'
 import { useParams } from 'react-router-dom'
 import { GiCancel } from "react-icons/gi";
 import { FaEdit } from "react-icons/fa";
@@ -148,10 +149,26 @@ const AdminUpdate = () => {
     setIsModalOpen(false);
   };
 
+  //셀렉트박스
+  const genderOptions = [
+    { label: '남자', value: '남자' },
+    { label: '여자', value: '여자' }
+  ];
+
+  const authOptions = [
+    { label: '일반회원', value: '일반회원' },
+    { label: '우수회원', value: '우수회원' },
+    { label: '휴면회원', value: '휴면회원' },
+    { label: '블랙리스트', value: '블랙리스트' },
+    { label: '탈퇴회원', value: '탈퇴회원' },
+    { label: '관리자', value: '관리자' }
+  ];
+
+
   return (
-    <div><h1 className='text-center my-5'>{user_uid}({user_uname})님 회원정보</h1>
+    <div className="user-profile"><h1 className='text-center my-5'>{user_uid}({user_uname})님 회원정보</h1>
       <Row className='justify-content-center'>
-        <Col xs={12} sm={11} md={10} lg={9} className='mb-3'>
+        <Col xs={12} md={10} lg={9} className='mb-3'>
           <Card className='text-center' border={user_gender === "남자" ? styleBlue : styleRed}>
             <Card.Body>
               <Row>
@@ -162,82 +179,92 @@ const AdminUpdate = () => {
                     <input ref={refFile} type="file" style={{ display: 'none' }} onChange={onChangeFile} />
                   </InputGroup>
                   <div className='text-center mt-2'>
-                    <Button className='w-100' size="sm" variant='outline-primary' onClick={onUploadImage}>이미지저장</Button>
+                    <Button className='w-100' size="small" text raised onClick={onUploadImage} label="이미지저장"></Button>
                   </div>
                 </Col>
                 <Col>
                   <Card.Text>
                     <div className='text-start'>
                       <br />
-                      <InputGroup className='mb-2'>
-                        <InputGroup.Text>회원번호</InputGroup.Text>
-                        <Form.Control value={user_key} disabled="true" />
-                      </InputGroup>
-                      <InputGroup className='mb-2'>
-                        <InputGroup.Text>아이디</InputGroup.Text>
-                        <Form.Control value={user_uid} name="user_uid" disabled="true" />
-                      </InputGroup>
-                      <InputGroup className='mb-2'>
-                        <InputGroup.Text>이름</InputGroup.Text>
-                        <Form.Control value={user_uname} name="user_uname" onChange={onChangeForm} />
-                      </InputGroup>
-                      <InputGroup className='mb-2'>
-                        <InputGroup.Text>닉네임</InputGroup.Text>
-                        <Form.Control value={user_nickname} name="user_nickname" onChange={onChangeForm} />
-                        <Button onClick={() => onCheckNickname(user_nickname)} >중복확인</Button>
-                      </InputGroup>
-                      <InputGroup className='mb-2'>
-                        <InputGroup.Text>생년월일</InputGroup.Text>
-                        <Form.Control value={user_birth} name="user_birth" onChange={onChangeForm} type="date" />
-                      </InputGroup>
-                      <InputGroup className='mb-2'>
-                        <InputGroup.Text>성별</InputGroup.Text>
-                        <Form.Select onChange={onChangeForm} value={user_gender} name="user_gender" >
-                          <option value="남자">남자</option>
-                          <option value="여자">여자</option>
-                        </Form.Select>
-                      </InputGroup>
-                      <InputGroup className='mb-2'>
-                        <InputGroup.Text>전화번호</InputGroup.Text>
-                        <Form.Control value={user_phone} name="user_phone" onChange={handlePress} maxLength={13} />
-                      </InputGroup>
-                      <InputGroup className='mb-2'>
-                        <InputGroup.Text>이메일</InputGroup.Text>
-                        <Form.Control value={user_email} name="user_email" onChange={onChangeForm} onBlur={emailPress} type="email" />
-                      </InputGroup>
-                      <InputGroup className='mb-2'>
-                        <InputGroup.Text>주소</InputGroup.Text>
-                        <Form.Control value={user_address1} name="user_address1" onChange={onChangeForm} />
-                        <Button onClick={openModal} variant='warning'>주소찾기</Button>
+                      <div className="form-group">
+                        <div className="form-input">
+                          <label htmlFor="user_key">회원번호</label>
+                          <InputText value={user_key} disabled className="input-half" />
+                        </div>
+                        <div className="form-input">
+                          <label htmlFor="user_uid">아이디</label>
+                          <InputText value={user_uid} disabled className="input-half" />
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <div className="form-input">
+                          <label htmlFor="user_uname">이름</label>
+                          <InputText value={user_uname} name="user_uname" onChange={onChangeForm} className="input-half" />
+                        </div>
+                          <div className="form-input">
+                            <label htmlFor="user_auth">등급</label>
+                            <Dropdown
+                              onChange={onChangeForm}
+                              value={user_auth}
+                              name="user_auth"
+                              options={authOptions}
+                              className="input-half"
+                            />
+                          </div>
+                      </div>
+                      <div className="form-group">
+                        <div className="form-input">
+                          <label htmlFor="user_birth">생일</label>
+                          <InputText value={user_birth} name="user_birth" onChange={onChangeForm} type="date" className="input-half" />
+                        </div>
+                        <div className="form-input">
+                          <label htmlFor="user_gender">성별</label>
+                          <Dropdown
+                            onChange={onChangeForm}
+                            value={user_gender}
+                            name="user_gender"
+                            options={genderOptions}
+                            className="input-half"
+                          />
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <div className="form-input">
+                          <label htmlFor="user_phone">전화번호</label>
+                          <InputText value={user_phone} name="user_phone" onChange={handlePress} maxLength={13} className="input-half" />
+                        </div>
+                        <div className="form-input">
+                          <label htmlFor="user_email">이메일</label>
+                          <InputText value={user_email} name="user_email" onChange={onChangeForm} onBlur={emailPress} type="email" className="input-half" />
+                        </div>
+                      </div>
+                      <div className="p-inputgroup flex-1 mb-2">
+                        <label htmlFor="user_nickname" className='me-3'>닉네임</label>
+                        <InputText value={user_nickname} name="user_nickname" onChange={onChangeForm} className="input-half" />
+                        <Button onClick={() => onCheckNickname(user_nickname)} icon="pi pi-check" ></Button>
+                      </div>
+                      <div className=" p-inputgroup flex-1 mb-2">
+                        <label htmlFor="user_address1" className='me-3'>주소 </label>
+                        <InputText value={user_address1} name="user_address1" onChange={onChangeForm} className="input-half" />
+                        <Button onClick={openModal} icon="pi pi-search" ></Button>
+                      </div>
+                      <div className="p-inputgroup flex-1 mb-2">
+                        <label htmlFor="user_address2" className='me-3'>상세주소</label>
+                        <InputText value={user_address2} name="user_address2" onChange={onChangeForm} className="w-100" />
                         <ModalAddress
                           show={isModalOpen}
                           handleClose={closeModal}
                           setform={setForm}
                           form={form}
                         />
-                      </InputGroup>
-                      <InputGroup className='mb-2'>
-                        <Form.Control value={user_address2} name="user_address2" onChange={onChangeForm} />
-                        <ModalAddress form={form} setform={setForm} />
-                      </InputGroup>
-                      <InputGroup className='mb-2'>
-                        <InputGroup.Text>권한</InputGroup.Text>
-                        <Form.Select onChange={onChangeForm} value={user_auth} name="user_auth">
-                          <option value="일반회원">일반회원</option>
-                          <option value="우수회원">우수회원</option>
-                          <option value="휴면회원">휴면회원</option>
-                          <option value="블랙리스트">블랙리스트</option>
-                          <option value="탈퇴회원">탈퇴회원</option>
-                          <option value="관리자">관리자</option>
-                        </Form.Select>
-                      </InputGroup>
+                      </div>
                     </div>
                   </Card.Text>
                 </Col>
               </Row>
               <div className='text-center mt-3'>
-                <Button className='me-4 px-5' variant="outline-dark" onClick={onClickUpdate}>수정하기</Button>
-                <Button className='me-4 px-5' variant="outline-dark" onClick={onClickReset}>취소하기</Button>
+                <Button className='me-4 px-5' text raised onClick={onClickUpdate}>수정하기</Button>
+                <Button className='me-4 px-5' text raised onClick={onClickReset}>취소하기</Button>
                 <Button className='px-5' onClick={() => onClickDelete(user_key)}>회원영구삭제</Button>
               </div>
             </Card.Body>

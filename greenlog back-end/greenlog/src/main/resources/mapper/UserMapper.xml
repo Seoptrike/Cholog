@@ -83,7 +83,7 @@
         u.user_uid, 
         u.user_nickname, 
         u.user_img, 
-        u.user_ment, 
+        u.user_auth, 
         s.seed_point,
         coalesce(a.auction_count, 0) as auction_count,
         coalesce(f.following_count, 0) as following_count,

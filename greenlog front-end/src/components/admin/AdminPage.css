@@ -16,7 +16,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
     border-radius: 8px; /* 모서리 둥글게 설정 */
     background-color: #fff; /* 배경색 설정 */
-    height: 250px;
+    height: 200px;
 }
 
 .task-link h3 {
@@ -34,3 +34,30 @@
         width: 100%;
     }
 }
+
+.user-profile .form-group {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  
+  .user-profile .form-group .form-input {
+    flex: 0 0 48%;
+  }
+  
+  .user-profile .form-group .form-input label {
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  
+  .user-profile .form-group .input-half {
+    width: 100%;
+  }
+  
+  .user-profile .form-group .w-100 {
+    width: 100%;
+  }
+
+  .p-inputgroup label {
+    margin-right: 5rem; /* 조정 가능한 간격 */
+  }
