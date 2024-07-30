@@ -254,7 +254,7 @@ const ListPage = () => {
                                 cover={
                                     <a href={`/mall/read/${card.mall_key}`} style={{ display: 'block', height: '10rem', overflow: 'hidden' }}>
                                         <img alt="mall"
-                                            src={card.mall_photo ? card.mall_photo : "http://via.placeholder.com/100x100"}
+                                            src={card.mall_photo ? card.mall_photo : '../images/sorry.png' }
                                             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                         />
                                     </a>

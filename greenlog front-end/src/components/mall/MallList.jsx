@@ -1,10 +1,11 @@
 import axios from 'axios';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react'
-import { Table} from 'react-bootstrap'
+import { Table } from 'react-bootstrap'
 import Pagination from 'react-js-pagination';
 import '../../common/useful/Paging.css';
 import Button from '@mui/material/Button';
+import { Margin } from '@mui/icons-material';
 
 const MallList = () => {
     const uid = sessionStorage.getItem("uid");
@@ -100,173 +101,202 @@ const MallList = () => {
         setView('endlist');
     }
 
+    const noData ={
+        marginTop:"10rem",
+        marginBottom:"10rem",
+        color:"#ccc",
+        fontSize:"3rem",
+
+    }
+
     return (
         <>
             <h1 className='text-center my-5'>피망이용목록</h1>
             <div className='text-end my-3'  >
-                <Button onClick={onClicksellerlist} className='me-3' variant='dark'>판매 내역</Button>
+                <Button onClick={onClicksellerlist} className='me-3' variant=''>판매 내역</Button>
                 <Button onClick={onClickendlist} className='me-3' variant='dark'>마감 내역</Button>
                 <Button onClick={onClickreview} className='me-3' variant='dark'>입찰 내역</Button>
                 <Button onClick={onClickbuy} className='me-3' variant='dark'>낙찰 내역</Button>
             </div>
+
             {view === 'sellerlist' && (
                 <>
-                    <Table className='sellerList'>
-                        <thead>
-                            <tr>
-                                <td>글번호</td>
-                                <td colSpan={2}>제목</td>
-                                <td>반응수</td>
-                                <td>마감일</td>
-                                <td>작성일</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {list.map(list =>
-                                <tr key={list.mall_key}>
-                                    <td>[{list.mall_key}]</td>
-                                    <td ><a href={`/mall/read/${list.mall_key}`}>{list.mall_title}</a></td>
-                                    <td >
-                                        <img src={list.mall_photo || "http://via.placeholder.com/200x200"}
-                                            style={{ width: "40%", height: "4rem", objectFit: "contain" }} />
-                                    </td>
-                                    <td>{list.reviewCount}개</td>
-                                    <td>{list.mall_endDate}</td>
-                                    <td>{list.mall_regDate}</td>
+                    {total === 0 ? (
+                        <div  style={noData} className='text-center'> 데이터가 존재하지 않습니다.</div>
+                    ) : (<>
+                        <Table className='sellerList'>
+                            <thead>
+                                <tr>
+                                    <td>글번호</td>
+                                    <td colSpan={2}>제목</td>
+                                    <td>반응수</td>
+                                    <td>마감일</td>
+                                    <td>작성일</td>
                                 </tr>
-                            )}
-                        </tbody>
-                    </Table>
-                    {total > size &&
-                        <Pagination
-                            activePage={page}
-                            itemsCountPerPage={size}
-                            totalItemsCount={total}
-                            pageRangeDisplayed={5}
-                            prevPageText={"‹"}
-                            nextPageText={"›"}
-                            onChange={(e) => setPage(e)} />
-                    }
+                            </thead>
+                            <tbody>
+                                {list.map(list =>
+                                    <tr key={list.mall_key}>
+                                        <td>[{list.mall_key}]</td>
+                                        <td ><a href={`/mall/read/${list.mall_key}`}>{list.mall_title}</a></td>
+                                        <td >
+                                            <img src={list.mall_photo || "http://via.placeholder.com/200x200"}
+                                                style={{ width: "40%", height: "4rem", objectFit: "contain" }} />
+                                        </td>
+                                        <td>{list.reviewCount}개</td>
+                                        <td>{list.mall_endDate}</td>
+                                        <td>{list.mall_regDate}</td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </Table>
+                        {total > size &&
+                            <Pagination
+                                activePage={page}
+                                itemsCountPerPage={size}
+                                totalItemsCount={total}
+                                pageRangeDisplayed={5}
+                                prevPageText={"‹"}
+                                nextPageText={"›"}
+                                onChange={(e) => setPage(e)} />
+                        }
+                    </>
+                    )}
                 </>
             )}
             {view === 'buy' && (
                 <>
-                    <Table className='reviewList'>
-                        <thead>
-                            <tr>
-                                <td>글번호</td>
-                                <td colSpan={2}>제목</td>
-                                <td>나의 반응</td>
-                                <td>마감일</td>
-                                <td>글쓴이</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {list2.map((list, index) =>
-                                <tr key={index}>
-                                    <td>[{list.mall_key}]</td>
-                                    <td ><a href={`/mall/read/${list.mall_key}`}>{list.mall_title}</a></td>
-                                    <td >
-                                        <img src={list.mall_photo || "http://via.placeholder.com/200x200"}
-                                            style={{ width: "40%", height: "4rem", objectFit: "contain" }} />
-                                    </td>
-                                    <td>{list.review_rating}씨드</td>
-                                    <td>{list.mall_endDate}</td>
-                                    <td>{list.mall_seller}</td>
+                    {total2 === 0 ? (
+                        <div  style={noData} className='text-center'>데이터가 존재하지 않습니다.</div>
+                    ) : (<>
+                        <Table className='reviewList'>
+                            <thead>
+                                <tr>
+                                    <td>글번호</td>
+                                    <td colSpan={2}>제목</td>
+                                    <td>나의 반응</td>
+                                    <td>마감일</td>
+                                    <td>글쓴이</td>
                                 </tr>
-                            )}
-                        </tbody>
-                    </Table>
-                    {total2 > size2 &&
-                        <Pagination
-                            activePage={page2}
-                            itemsCountPerPage={size2}
-                            totalItemsCount={total2}
-                            pageRangeDisplayed={5}
-                            prevPageText={"‹"}
-                            nextPageText={"›"}
-                            onChange={(e) => setPage2(e)} />
-                    }
+                            </thead>
+                            <tbody>
+                                {list2.map((list, index) =>
+                                    <tr key={index}>
+                                        <td>[{list.mall_key}]</td>
+                                        <td ><a href={`/mall/read/${list.mall_key}`}>{list.mall_title}</a></td>
+                                        <td >
+                                            <img src={list.mall_photo || "http://via.placeholder.com/200x200"}
+                                                style={{ width: "40%", height: "4rem", objectFit: "contain" }} />
+                                        </td>
+                                        <td>{list.review_rating}씨드</td>
+                                        <td>{list.mall_endDate}</td>
+                                        <td>{list.mall_seller}</td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </Table>
+                        {total2 > size2 &&
+                            <Pagination
+                                activePage={page2}
+                                itemsCountPerPage={size2}
+                                totalItemsCount={total2}
+                                pageRangeDisplayed={5}
+                                prevPageText={"‹"}
+                                nextPageText={"›"}
+                                onChange={(e) => setPage2(e)} />
+                        }
+                    </>
+                    )}
                 </>
             )}
             {view === 'review' && (
                 <>
-                    <Table className='reviewList'>
-                        <thead>
-                            <tr>
-                                <td>글번호</td>
-                                <td colSpan={2}>제목</td>
-                                <td>나의 반응</td>
-                                <td>마감일</td>
-                                <td>글쓴이</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {list3.map((list, index) =>
-                                <tr key={index}>
-                                    <td>[{list.mall_key}]</td>
-                                    <td ><a href={`/mall/read/${list.mall_key}`}>{list.mall_endDate > today ? list.mall_title : `[마감]${list.mall_title}`}</a></td>
-                                    <td >
-                                        <img src={list.mall_photo || "http://via.placeholder.com/200x200"}
-                                            style={{ width: "40%", height: "4rem", objectFit: "contain" }} />
-                                    </td>
-                                    <td>{list.review_rating}씨드</td>
-                                    <td>{list.mall_endDate}</td>
-                                    <td>{list.mall_seller}</td>
+                    {total3 === 0 ? (
+                       <div  style={noData} className='text-center'>데이터가 존재하지 않습니다.</div>
+                    ) : (<>
+                        <Table className='reviewList'>
+                            <thead>
+                                <tr>
+                                    <td>글번호</td>
+                                    <td colSpan={2}>제목</td>
+                                    <td>나의 반응</td>
+                                    <td>마감일</td>
+                                    <td>글쓴이</td>
                                 </tr>
-                            )}
-                        </tbody>
-                    </Table>
-                    {total3 > size3 &&
-                        <Pagination
-                            activePage={page3}
-                            itemsCountPerPage={size3}
-                            totalItemsCount={total3}
-                            pageRangeDisplayed={5}
-                            prevPageText={"‹"}
-                            nextPageText={"›"}
-                            onChange={(e) => setPage3(e)} />
-                    }
+                            </thead>
+                            <tbody>
+                                {list3.map((list, index) =>
+                                    <tr key={index}>
+                                        <td>[{list.mall_key}]</td>
+                                        <td ><a href={`/mall/read/${list.mall_key}`}>{list.mall_endDate > today ? list.mall_title : `[마감]${list.mall_title}`}</a></td>
+                                        <td >
+                                            <img src={list.mall_photo || "http://via.placeholder.com/200x200"}
+                                                style={{ width: "40%", height: "4rem", objectFit: "contain" }} />
+                                        </td>
+                                        <td>{list.review_rating}씨드</td>
+                                        <td>{list.mall_endDate}</td>
+                                        <td>{list.mall_seller}</td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </Table>
+                        {total3 > size3 &&
+                            <Pagination
+                                activePage={page3}
+                                itemsCountPerPage={size3}
+                                totalItemsCount={total3}
+                                pageRangeDisplayed={5}
+                                prevPageText={"‹"}
+                                nextPageText={"›"}
+                                onChange={(e) => setPage3(e)} />
+                        }
+                    </>
+                    )}
                 </>
             )}
             {view === 'endlist' && (
                 <>
-                    <Table className='reviewList'>
-                        <thead>
-                            <tr>
-                                <td>글번호</td>
-                                <td colSpan={2}>제목</td>
-                                <td>낙찰자</td>
-                                <td>마감일</td>
-                                <td>작성일</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {list4.map((list, index) =>
-                                <tr key={list.mall_key}>
-                                    <td>[{list.mall_key}]</td>
-                                    <td >[마감]{list.mall_title}</td>
-                                    <td >
-                                        <img src={list.mall_photo || "http://via.placeholder.com/200x200"}
-                                            style={{ width: "40%", height: "4rem", objectFit: "contain" }} />
-                                    </td>
-                                    <td>{list.auction_buyer !== undefined ? `${list.auction_buyer}님` : ` - `}</td>
-                                    <td>{list.mall_endDate}</td>
-                                    <td>{list.mall_regDate}</td>
+                    {total4 === 0 ? (
+                        <div  style={noData} className='text-center'>데이터가 존재하지 않습니다.</div>
+                    ) : (<>
+                        <Table className='reviewList'>
+                            <thead>
+                                <tr>
+                                    <td>글번호</td>
+                                    <td colSpan={2}>제목</td>
+                                    <td>낙찰자</td>
+                                    <td>마감일</td>
+                                    <td>작성일</td>
                                 </tr>
-                            )}
-                        </tbody>
-                    </Table>
-                    {total4 > size4 &&
-                        <Pagination
-                            activePage={page4}
-                            itemsCountPerPage={size4}
-                            totalItemsCount={total4}
-                            pageRangeDisplayed={5}
-                            prevPageText={"‹"}
-                            nextPageText={"›"}
-                            onChange={(e) => setPage4(e)} />
-                    }
+                            </thead>
+                            <tbody>
+                                {list4.map((list, index) =>
+                                    <tr key={list.mall_key}>
+                                        <td>[{list.mall_key}]</td>
+                                        <td >[마감]{list.mall_title}</td>
+                                        <td >
+                                            <img src={list.mall_photo || "http://via.placeholder.com/200x200"}
+                                                style={{ width: "40%", height: "4rem", objectFit: "contain" }} />
+                                        </td>
+                                        <td>{list.auction_buyer !== undefined ? `${list.auction_buyer}님` : ` - `}</td>
+                                        <td>{list.mall_endDate}</td>
+                                        <td>{list.mall_regDate}</td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </Table>
+                        {total4 > size4 &&
+                            <Pagination
+                                activePage={page4}
+                                itemsCountPerPage={size4}
+                                totalItemsCount={total4}
+                                pageRangeDisplayed={5}
+                                prevPageText={"‹"}
+                                nextPageText={"›"}
+                                onChange={(e) => setPage4(e)} />
+                        }
+                    </>
+                    )}
                 </>
             )}
             <hr className='my-5' />
