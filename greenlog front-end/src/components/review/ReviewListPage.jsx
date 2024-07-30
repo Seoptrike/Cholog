@@ -9,7 +9,7 @@ import { Pagination as MuiPagination } from '@mui/material';
 import { Link } from 'react-router-dom';
 import './ReviewPage.css';
 
-const ReviewListPage = ({ mall_key, mall_seller, seller_number }) => {
+const ReviewListPage = ({ mall_key, mall_seller, seller_number, mall_tstate }) => {
     const [list, setList] = useState([]);
     const [page, setPage] = useState(1);
     const [size, setSize] = useState(3);
@@ -164,19 +164,21 @@ const ReviewListPage = ({ mall_key, mall_seller, seller_number }) => {
 
                             </div>
                             <div className="review-card-body">
-                                <div className="review-rating">
-                                    <Rating
-                                        name='point'
-                                        value={review.num || review.review_rating}
-                                        precision={1}
-                                        max={10}
-                                        size='large'
-                                        onChange={(e, newValue) => changeRating(review.review_key, newValue)}
-                                        icon={<TbBrandSnapseed style={{ color: "brown" }} />}
-                                        emptyIcon={<TbBrandSnapseed />}
-                                        readOnly={!review.isEdit}
-                                    />
-                                </div>
+                                {mall_tstate === 0 ? (
+                                    <div className="review-rating">
+                                        <Rating
+                                            name='point'
+                                            value={review.num || review.review_rating}
+                                            precision={1}
+                                            max={10}
+                                            size='large'
+                                            onChange={(e, newValue) => changeRating(review.review_key, newValue)}
+                                            icon={<TbBrandSnapseed style={{ color: "brown" }} />}
+                                            emptyIcon={<TbBrandSnapseed />}
+                                            readOnly={!review.isEdit}
+                                        />
+                                    </div>
+                                ) : null}
                                 {review.isEdit ? (
                                     <textarea
                                         name='contents'
