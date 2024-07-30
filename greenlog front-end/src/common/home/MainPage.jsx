@@ -57,14 +57,18 @@ const MainPage = () => {
                 </div>
             </div>
             <Row>
-                <Col xs={3}>
-                    <div style={textStyle} className='text-center'>
-                        <span style={{ fontSize: "2.5rem" }}>
-                        PROJECT
-                        <img src="/images/green.png" alt="Icon" style={{ width: "2.5rem", marginRight: "0.5rem" }} />
-                        </span>
-                        <br />
-                        <span style={{ fontSize: "0.8rem" }}>GREENLOG carry out projects with clear goals regarding domestic and global environmental issues.</span>
+            <Col xs={3}>
+                    <div className='text-center' style={{ marginLeft: '20px', marginTop: '70px' }}> 
+                        <img
+                            src="/images/project.png"  
+                            alt="Project GREEN_LOG"
+                            style={{
+                                width: '100%',
+                                maxWidth: '300px', 
+                                height: 'auto',
+                                margin: '0 auto'
+                            }}
+                        />
                     </div>
                 </Col>
                 <Col xs={9}>

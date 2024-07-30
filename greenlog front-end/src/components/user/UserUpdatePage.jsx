@@ -145,7 +145,7 @@ const UserUpdatePage = () => {
                 <Container maxWidth="sm" style={{ textAlign: 'center', marginTop: "20px" }}>
                     <Grid container row spacing={2}>
                         <Grid item>
-                            <img src={file.name || "http://via.placeholder.com/100x150"} style={{ width: '100%', cursor: 'pointer' }} onClick={() => refFile.current.click()} />
+                            <img src={file.name || "http://via.placeholder.com/100x150"} style={{ width: '30rem', height:"30rem", cursor: 'pointer' }} onClick={() => refFile.current.click()} />
                             <input ref={refFile} type="file" onChange={onChangeFile} style={{ display: "none" }} />
                             <Button onClick={onClickImageSave} variant="outlined" className="w-100 mt-1 mb-5">이미지저장</Button>
                         </Grid>

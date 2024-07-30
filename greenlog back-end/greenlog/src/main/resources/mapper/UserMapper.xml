@@ -37,8 +37,8 @@
 	</select>
 	
 	<insert id="insert" >
-		insert into user( user_uid, user_upass, user_uname, user_nickname, user_email, user_phone, user_gender, user_address1, user_address2, user_birth )
-		value (#{user_uid},#{user_upass},#{user_uname},#{user_nickname},#{user_email},#{user_phone},#{user_gender},#{user_address1},#{user_address2},
+		insert into user( user_uid, user_upass, user_uname, user_nickname, user_email, user_phone, user_gender, user_address1, user_address2, user_auth,user_birth )
+		value (#{user_uid},#{user_upass},#{user_uname},#{user_nickname},#{user_email},#{user_phone},#{user_gender},#{user_address1},#{user_address2}, '일반회원',  
 		DATE_ADD(
             CONVERT_TZ(
                 STR_TO_DATE(
