@@ -117,11 +117,8 @@ const JoinPage = ({ onNextStep }) => {
         try {
             await axios.post(`/user/insert`, form);
             await axios.post('/seed/insert', { seed_uid: form.user_uid });
-            if (!window.confirm("회원가입하시겠습니까?"))
-                if (onNextStep) {
-                    onNextStep(); // 부모 컴포넌트의 콜백 호출
-                }
-
+            if (!window.confirm("회원가입하시겠습니까?")) return
+            onNextStep(); // 부모 컴포넌트의 콜백 호출
         } catch (error) {
             console.error('Error signing up:', error);
         }

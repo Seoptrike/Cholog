@@ -133,7 +133,7 @@ const UserUpdatePage = () => {
         //이미지 업로드
         const formData = new FormData();
         formData.append("byte", file.byte);
-        console.log(formData);
+        //console.log(formData);
         await axios.post(`/upload/img/${uid}`, formData);
         alert("이미지 변경완료!")
     }

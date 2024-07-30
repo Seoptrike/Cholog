@@ -30,7 +30,7 @@
 	</select>
 	
 	<insert id="insert">
-		insert into seed (seed_uid,seed_number) value( #{seed_uid}, concat('seed',lpad(last_insert_id(),8,'0')) );
+		insert into seed (seed_uid,seed_number) value( #{seed_uid},  CONCAT('seed', SUBSTRING(REPLACE(UUID(), '-', ''), 1, 8)) );
 	</insert>
 	
 	<update id="update">

@@ -172,5 +172,8 @@
   right: 7%;
 }
 
-
+/* 드롭다운의 caret 아이콘을 숨깁니다 */
+.navbar-nav .dropdown-toggle::after {
+  display: none;
+}
 
