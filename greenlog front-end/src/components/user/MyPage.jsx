@@ -87,7 +87,7 @@ const MyPage = () => {
       <Row className='my-5'>
         <Col xs={8} md={6} lg={4}>
           <Grid item >
-            <img src={data.user_img || "http://via.placeholder.com/200x200"} style={styleimg1} />
+            <img src={data.user_img || "http://via.placeholder.com/200x200"} style={{width :"27rem" , height:"27rem"}} />
           </Grid>
         </Col>
         <Col xs={7} md={6} lg={8}>

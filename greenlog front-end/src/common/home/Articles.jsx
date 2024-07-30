@@ -20,27 +20,18 @@ const Articles = () => {
 
     return (
         <div className='mt-5'>
-            <Box
-                sx={{
-                    padding: '16px',
-                    marginBottom: '16px',
-                    backgroundColor: '#f5f5f5',
-                    borderRadius: '4px',
-                    border: '1px solid #ddd',
-                    boxShadow: '0px 2px 4px rgba(0,0,0,0.1)',
-                }}
-            >
-                <Typography
-                    variant="h6"
-                    component="h2"
-                    sx={{
-                        fontWeight: 'bold',
-                        color: '#333',
-                        textAlign: 'center',
+          <Box>
+                <img
+                    src="/images/news.png"  
+                    alt="환경 주요 뉴스"
+                    style={{
+                        width: '100%',
+                        maxWidth: '300px',
+                        height: 'auto',
+                        display: 'block',
+                        margin: '0 auto'
                     }}
-                >
-                    환경 주요 뉴스
-                </Typography>
+                />
             </Box>
             <List>
                 {list.map((art, index) => (

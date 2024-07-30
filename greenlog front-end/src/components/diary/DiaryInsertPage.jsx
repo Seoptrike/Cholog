@@ -156,7 +156,7 @@ const DiaryInsertPage = () => {
                     오늘은 어떤 활동을 하셨나요?
                 </Typography>
                 <Typography variant="h6" align="center" paragraph>
-                    행운일기를 통해 알려주세요
+                    초록을 통해 알려주세요
                 </Typography>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>

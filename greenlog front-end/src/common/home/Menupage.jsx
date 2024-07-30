@@ -50,7 +50,7 @@ const Menupage = () => {
                                 <NavDropdown.Item href="/about/seed">씨앗이란?</NavDropdown.Item>
                             </NavDropdown>
                             <NavDropdown title="피망 마켓" id="basic-nav-dropdown">
-                                <NavDropdown.Item href="/mall/pop">베스트 물품</NavDropdown.Item>
+                                <NavDropdown.Item href="/mall/pop">베스트 피망</NavDropdown.Item>
                                 <NavDropdown.Item href="/mall/list.json">피망 몰</NavDropdown.Item>
                             </NavDropdown>
                             <NavDropdown title="클로버 숲" id="basic-nav-dropdown">
@@ -92,7 +92,7 @@ const Menupage = () => {
             </Navbar>
             <RouterPage />
             <BottomPage />
-            <TotalPage />
+            {/* <TotalPage /> */}
         </div>
     );
 };
