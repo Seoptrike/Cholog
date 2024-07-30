@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button } from 'react-bootstrap'
+import { FaRegThumbsUp, FaThumbsUp, FaRegThumbsDown, FaThumbsDown } from "react-icons/fa";
 
 const RereplyReaction = ({ rereply_key, uid }) => {
     const [reaction, setReaction] = useState([]);
@@ -17,7 +17,6 @@ const RereplyReaction = ({ rereply_key, uid }) => {
     const onInsertLike = async () => {
         const res = await axios.post("/rereply/insert/like", { rereply_key, rereply_writer: uid })
         if (res.data === 1) {
-            alert("좋아요")
             callAPI();
         } else {
             alert("로그인이 필요합니다")
@@ -27,7 +26,6 @@ const RereplyReaction = ({ rereply_key, uid }) => {
     const onInsertHate = async () => {
         const res = await axios.post("/rereply/insert/hate", { rereply_key, rereply_writer: uid })
         if (res.data === 1) {
-            alert("싫어요")
             callAPI();
         } else {
             alert("로그인이 필요합니다")
@@ -46,31 +44,29 @@ const RereplyReaction = ({ rereply_key, uid }) => {
 
     useEffect(() => { callAPI() }, [])
     return (
-        <div>
+        <span>
             {reaction ?
                 <>
-                    <span style={{ cursor: 'pointer' }}>
-                        {reaction === 1 ? (
-                            <Button variant="success" size='sm' className='me-2' onClick={onReactionDelete}>좋아요 {likeCount}</Button>
-                        ) : (
-                            <Button variant="outline-success" size='sm' className='me-2' onClick={onReactionUpdate}>좋아요 {likeCount}</Button>
-                        )}
-                    </span>
-                    <span style={{ cursor: 'pointer' }}>
-                        {reaction === -1 ? (
-                            <Button variant="danger" size='sm' onClick={onReactionDelete}>싫어요 {hateCount}</Button>
-                        ) : (
-                            <Button variant="outline-danger" size='sm' onClick={onReactionUpdate}>싫어요 {hateCount}</Button>
-                        )}
-                    </span>
+                    {reaction === 1 ? (
+                        <FaThumbsUp style={{ cursor: 'pointer' }} onClick={onReactionDelete} className='me-2' />
+                    ) : (
+                        <FaRegThumbsUp style={{ cursor: 'pointer' }} onClick={onReactionUpdate} className='me-2' />
+                    )} <span className='me-3'>{likeCount}</span>
+
+
+                    {reaction === -1 ? (
+                        <FaThumbsDown style={{ cursor: 'pointer' }} onClick={onReactionDelete} className='me-2' />
+                    ) : (
+                        <FaRegThumbsDown style={{ cursor: 'pointer' }} onClick={onReactionUpdate} className='me-2' />
+                    )} <span className='me-3'>{hateCount}</span>
                 </>
                 :
                 <>
-                    <Button variant="outline-success" size='sm' className='me-2' onClick={onInsertLike}>좋아요 {likeCount}</Button>
-                    <Button variant="outline-danger" size='sm' onClick={onInsertHate}>싫어요 {hateCount}</Button>
+                    <FaRegThumbsUp style={{ cursor: 'pointer' }} onClick={onInsertLike} className='me-2' /> <span className='me-3'>{likeCount}</span>
+                    <FaRegThumbsDown style={{ cursor: 'pointer' }} onClick={onInsertHate} className='me-2' /> <span className='me-3'>{hateCount}</span>
                 </>
             }
-        </div>
+        </span>
     )
 }
 

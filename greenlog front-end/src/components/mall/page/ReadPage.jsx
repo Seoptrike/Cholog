@@ -252,12 +252,12 @@ const ReadPage = () => {
                 )}
                 {activeTab === '2' && (
                     <div>
-                        <InsertPage mall_key={mall_key} mall_seller={mall_seller} mall_photo={mall_photo} />
+                        <InsertPage mall_key={mall_key} mall_seller={mall_seller} mall_photo={mall_photo} mall_tstate={mall_tstate}/>
                     </div>
                 )}
                 {activeTab === '3' && (
                     <div>
-                        <ReviewListPage mall_key={mall_key} mall_seller={mall_seller} seller_number={seed_number} />
+                        <ReviewListPage mall_key={mall_key} mall_seller={mall_seller} seller_number={seed_number} mall_tstate={mall_tstate} />
                     </div>
                 )}
             </TabContent>
