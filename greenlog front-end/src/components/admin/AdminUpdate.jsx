@@ -10,6 +10,7 @@ import ModalAddress from '../../common/useful/ModalAddress';
 
 const AdminUpdate = () => {
   const { user_uid } = useParams();
+  const uid = user_uid
   const [form, setForm] = useState("");
   const [origin, setOrigin] = useState("");
   const [isCheck, setIsCheck] = useState(false);
@@ -20,11 +21,10 @@ const AdminUpdate = () => {
   const { user_key, user_nickname, user_uname, user_phone, user_address1, user_address2,
     user_birth, user_email, user_gender, user_auth } = form;
 
-  const [img, setImg] = useState({
-    fileName: '',
-    file: null
+  const [file, setfile] = useState({
+    name: '',
+    byte: null
   })
-  const { fileName, file } = img;
   const photoStyle = {
     borderRadius: '10px',
     cursor: "pointer",
@@ -48,24 +48,23 @@ const AdminUpdate = () => {
 
   //이미지업로드
   const onChangeFile = (e) => {
-    setImg({
-      fileName: URL.createObjectURL(e.target.files[0]),
-      file: e.target.files[0]
+    setfile({
+      name: URL.createObjectURL(e.target.files[0]),
+      byte: e.target.files[0]
     })
   }
 
   const onUploadImage = async () => {
-    if (file) {
+    if (file.byte) {
       if (!window.confirm("이미지를 수정하시겠습니까?")) return;
 
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append("byte", file.byte);
       const config = {
         Headers: { 'content-type': 'multipart/form-data' }
       }
-      await axios.post(`/upload/img/${user_uid}`, formData, config);
+      await axios.post(`/upload/img/${uid}`, formData, config);
       alert("이미지가 변경되었습니다");
-      setImg({ file: null, fileName: '' });
       callAPI();
     }
   }
@@ -173,7 +172,7 @@ const AdminUpdate = () => {
             <Card.Body>
               <Row>
                 <Col lg={4}>
-                  <Card.Img src={fileName || "/images/woman.jpg"} variant="top" width="100%"
+                  <Card.Img src={file.name || "/images/woman.jpg"} variant="top" width="100%"
                     style={photoStyle} onClick={() => refFile.current.click()} />
                   <InputGroup>
                     <input ref={refFile} type="file" style={{ display: 'none' }} onChange={onChangeFile} />

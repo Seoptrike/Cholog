@@ -5,6 +5,7 @@ import ReadPage from '../components/mall/page/ReadPage'
 import InsertPage from '../components/mall/page/InsertPage'
 import UpdatePage from '../components/mall/page/UpdatePage'
 import PopularPage from '../components/mall/page/PopularPage'
+import MallList from '../components/mall/MallList'
 
 const MallRouter = () => {
     return (

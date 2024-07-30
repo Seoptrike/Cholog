@@ -221,7 +221,7 @@ const DiaryInsertPage = () => {
                     <Grid item xs={12} container justifyContent="center">
                         <Row className='justify-content-center mt-2 text-center'>
                             {files.map(f =>
-                                <Col key={f.name} lg={4} className='mb-2'>
+                                <Col key={f.name} lg={6} className='mb-2'>
                                     <img src={f.name} style={style} />
                                 </Col>
                             )}
