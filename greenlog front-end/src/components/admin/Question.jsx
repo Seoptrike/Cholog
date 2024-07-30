@@ -28,7 +28,6 @@ const Question = () => {
             <Sidebar/>
         </Col>
         <Col>
-          <h5 className='mb-5'> 000 관리자님 환영합니다.</h5>
               <Tabs
                 activeKey={activeKey} 
                 onSelect={handleSelect}

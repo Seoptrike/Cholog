@@ -5,7 +5,9 @@ import { Table } from 'react-bootstrap'
 import Pagination from 'react-js-pagination';
 import '../../common/useful/Paging.css';
 import Button from '@mui/material/Button';
+import malluselist from './malluselist.png'
 import { Margin } from '@mui/icons-material';
+
 
 const MallList = () => {
     const uid = sessionStorage.getItem("uid");
@@ -111,7 +113,9 @@ const MallList = () => {
 
     return (
         <>
-            <h1 className='text-center my-5'>피망이용목록</h1>
+            <div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
+                <img src={malluselist} alt="car" style={{ width: '100%', maxWidth: '800px' }} />
+            </div>
             <div className='text-end my-3'  >
                 <Button onClick={onClicksellerlist} className='me-3' variant=''>판매 내역</Button>
                 <Button onClick={onClickendlist} className='me-3' variant='dark'>마감 내역</Button>

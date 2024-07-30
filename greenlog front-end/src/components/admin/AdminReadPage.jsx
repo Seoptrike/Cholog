@@ -45,7 +45,7 @@ const AdminReadPage = () => {
                                                     <p>전화번호: {form.user_phone}</p>
                                                     <p>이메일: {form.user_email}</p>
                                                     <p>주소: {form.user_address1 ? `${form.user_address1} (${form.user_address2})` : "-"} </p>
-                                                    <p>권한: {form.user_auth}</p>
+                                                    <p>등급: {form.user_auth}</p>
                                                 </div>
                                             </Card.Text>
                                         </Col>

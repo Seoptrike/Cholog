@@ -6,7 +6,7 @@ import {
 } from '@mui/material';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import { useNavigate } from 'react-router-dom';
-import { Height } from '@mui/icons-material';
+import diarybanner from './diarybanner.png'
 
 
 const DiaryInsertPage = () => {
@@ -148,6 +148,9 @@ const DiaryInsertPage = () => {
 
     return (
         <Container maxWidth="sm">
+            <div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
+                <img src={diarybanner} alt="car" style={{ width: '100%', maxWidth: '800px' }} />
+            </div>
             <Card sx={{ padding: 3, marginTop: 5 }}>
                 <Typography variant="h4" align="center" gutterBottom>
                     오늘은 어떤 활동을 하셨나요?
