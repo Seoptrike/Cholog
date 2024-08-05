@@ -24,7 +24,7 @@ const MypageSlick = ({ user_img, user_uid }) => {
     };
     const settings2 = {
         dots: true,
-        infinite: true,
+        infinite: false,
         speed: 500,
         slidesToShow: 1,
         slidesToScroll: 1
