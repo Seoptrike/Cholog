@@ -2,11 +2,9 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Row, Col, Badge, InputGroup, Form, Card } from 'react-bootstrap'
 import { InputText, Button, Dropdown } from 'primereact'
 import { useParams } from 'react-router-dom'
-import { GiCancel } from "react-icons/gi";
-import { FaEdit } from "react-icons/fa";
 import axios from 'axios';
 import ModalAddress from '../../common/useful/ModalAddress';
-
+import CircularProgress from '@mui/material/CircularProgress';
 
 const AdminUpdate = () => {
   const { user_uid } = useParams();
@@ -17,9 +15,10 @@ const AdminUpdate = () => {
   const [isEmail, setIsEmail] = useState(false);
   const [phoneCheck, setPhoneCheck] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const { user_key, user_nickname, user_uname, user_phone, user_address1, user_address2,
-    user_birth, user_email, user_gender, user_auth } = form;
+    user_birth, user_email, user_gender, user_auth, user_img } = form;
 
   const [file, setfile] = useState({
     name: '',
@@ -37,9 +36,20 @@ const AdminUpdate = () => {
 
 
   const callAPI = async () => {
-    const res = await axios.get(`/user/read/${user_uid}`);
-    setForm(res.data);
-    setOrigin(res.data);
+    setLoading(true)
+    try {
+      const res = await axios.get(`/user/read/${user_uid}`);
+      setForm(res.data);
+      setOrigin(res.data);
+      console.log(res.data)
+
+    } catch (error) {
+      console.error('Error data diary:', error);
+      alert("데이터를 불러오지 못했습니다.");
+    } finally {
+      setLoading(false);
+    }
+
   }
 
   useEffect(() => {
@@ -57,15 +67,23 @@ const AdminUpdate = () => {
   const onUploadImage = async () => {
     if (file.byte) {
       if (!window.confirm("이미지를 수정하시겠습니까?")) return;
-
-      const formData = new FormData();
-      formData.append("byte", file.byte);
-      const config = {
-        Headers: { 'content-type': 'multipart/form-data' }
+      setLoading(true)
+      try {
+        const formData = new FormData();
+        formData.append("byte", file.byte);
+        const config = {
+          Headers: { 'content-type': 'multipart/form-data' }
+        }
+        await axios.post(`/upload/img/${uid}`, formData, config);
+        alert("이미지가 변경되었습니다");
+        callAPI();
+      } catch (error) {
+        console.error('Error data diary:', error);
+        alert("데이터를 불러오지 못했습니다.");
+      } finally {
+        setLoading(false);
       }
-      await axios.post(`/upload/img/${uid}`, formData, config);
-      alert("이미지가 변경되었습니다");
-      callAPI();
+
     }
   }
 
@@ -78,9 +96,18 @@ const AdminUpdate = () => {
   //회원영구삭제
   const onClickDelete = async (user_key) => {
     alert(`${user_key} 회원 정보는 다시 복구할 수 없습니다. 그래도 삭제하시겠습니까?`);
-    await axios.post(`/user/delete/${user_key}`);
-    alert("회원영구 삭제완료!");
-    window.location.href = "/user/admin/list.json";
+    setLoading(true);
+    try {
+      await axios.post(`/user/delete/${user_key}`);
+      alert("회원영구 삭제완료!");
+      window.location.href = "/user/admin/list.json";
+    } catch (error) {
+      console.error('Error data diary:', error);
+      alert("데이터를 불러오지 못했습니다.");
+    } finally {
+      setLoading(false);
+    }
+  
   }
 
   //닉네임 중복확인
@@ -135,8 +162,18 @@ const AdminUpdate = () => {
   //정보수정
   const onClickUpdate = async () => {
     if (!window.confirm("변경된 내용을 수정하시겠습니까?")) return;
-    await axios.post("/user/admin/update", form);
-    window.location.href = `/user/admin/read/${user_uid}`;
+    setLoading(true)
+    try {
+      await axios.post("/user/admin/update", form);
+      window.location.href = `/user/admin/read/${user_uid}`;
+
+    } catch (error) {
+      console.error('Error data diary:', error);
+      alert("데이터를 불러오지 못했습니다.");
+    } finally {
+      setLoading(false);
+    }
+  
   }
 
   //모달
@@ -163,7 +200,7 @@ const AdminUpdate = () => {
     { label: '관리자', value: '관리자' }
   ];
 
-
+  if (loading) return <div style={{ textAlign: 'center', marginTop: '20px' }}><CircularProgress /></div>;
   return (
     <div className="user-profile"><h1 className='text-center my-5'>{user_uid}({user_uname})님 회원정보</h1>
       <Row className='justify-content-center'>
@@ -172,7 +209,7 @@ const AdminUpdate = () => {
             <Card.Body>
               <Row>
                 <Col lg={4}>
-                  <Card.Img src={file.name || "/images/woman.jpg"} variant="top" width="100%"
+                  <Card.Img src={file.name || (user_img || "/images/woman.jpg")} variant="top" width="100%"
                     style={photoStyle} onClick={() => refFile.current.click()} />
                   <InputGroup>
                     <input ref={refFile} type="file" style={{ display: 'none' }} onChange={onChangeFile} />
@@ -200,16 +237,16 @@ const AdminUpdate = () => {
                           <label htmlFor="user_uname">이름</label>
                           <InputText value={user_uname} name="user_uname" onChange={onChangeForm} className="input-half" />
                         </div>
-                          <div className="form-input">
-                            <label htmlFor="user_auth">등급</label>
-                            <Dropdown
-                              onChange={onChangeForm}
-                              value={user_auth}
-                              name="user_auth"
-                              options={authOptions}
-                              className="input-half"
-                            />
-                          </div>
+                        <div className="form-input">
+                          <label htmlFor="user_auth">등급</label>
+                          <Dropdown
+                            onChange={onChangeForm}
+                            value={user_auth}
+                            name="user_auth"
+                            options={authOptions}
+                            className="input-half"
+                          />
+                        </div>
                       </div>
                       <div className="form-group">
                         <div className="form-input">
@@ -238,18 +275,17 @@ const AdminUpdate = () => {
                         </div>
                       </div>
                       <div className="p-inputgroup flex-1 mb-2">
-                        <label htmlFor="user_nickname" className='me-3'>닉네임</label>
-                        <InputText value={user_nickname} name="user_nickname" onChange={onChangeForm} className="input-half" />
+                        <InputText value={user_nickname} name="user_nickname" onChange={onChangeForm} className="input-half"
+                          placeholder="닉네임" />
                         <Button onClick={() => onCheckNickname(user_nickname)} icon="pi pi-check" ></Button>
                       </div>
                       <div className=" p-inputgroup flex-1 mb-2">
-                        <label htmlFor="user_address1" className='me-3'>주소 </label>
-                        <InputText value={user_address1} name="user_address1" onChange={onChangeForm} className="input-half" />
+                        <InputText value={user_address1} name="user_address1" onChange={onChangeForm} className="input-half"
+                          placeholder="주소" />
                         <Button onClick={openModal} icon="pi pi-search" ></Button>
                       </div>
                       <div className="p-inputgroup flex-1 mb-2">
-                        <label htmlFor="user_address2" className='me-3'>상세주소</label>
-                        <InputText value={user_address2} name="user_address2" onChange={onChangeForm} className="w-100" />
+                        <InputText value={user_address2} name="user_address2" onChange={onChangeForm} className="w-100" placeholder="상세주소" />
                         <ModalAddress
                           show={isModalOpen}
                           handleClose={closeModal}

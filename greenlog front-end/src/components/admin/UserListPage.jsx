@@ -5,15 +5,13 @@ import axios from 'axios';
 import { MdOutlineSettings } from "react-icons/md";
 import '../../common/useful/Paging.css';
 import Pagination from 'react-js-pagination'
-import { UserContext } from '../user/UserContext';
 import userlist from './userlist.png'
+import CircularProgress from '@mui/material/CircularProgress';
 
-//이미지 클릭 시 관리자용 회원정보읽기페이지로 이동
-//설정아이콘 클릭 시 관리자용 회원정보수정페이지로 이동 
 
 const UserListPage = () => {
-    const {userData, setUserData} = useContext(UserContext);
     const [list, setList] = useState([]);
+    const [loading, setLoading] = useState(false);
     const [key, setKey] = useState("user_uid");
     const [count, setCount] = useState(0);
     const [page, setPage] = useState(1);
@@ -21,11 +19,23 @@ const UserListPage = () => {
     const [word, setWord] = useState("");
     const styleRed = "danger"
     const styleBlue = "primary"
+
+
     const callAPI = async () => {
-        const res = await axios.get(`/user/admin/list?key=${key}&word=${word}&page=${page}&size=${size}`)
-        console.log(res.data)
-        setList(res.data.documents);
-        setCount(res.data.total);
+        setLoading(true)
+        try {
+            const res = await axios.get(`/user/admin/list?key=${key}&word=${word}&page=${page}&size=${size}`)
+            console.log(res.data)
+            setList(res.data.documents);
+            setCount(res.data.total);
+
+        } catch (error) {
+            console.error('Error data diary:', error);
+            alert("데이터를 불러오지 못했습니다.");
+        } finally {
+            setLoading(false);
+        }
+
     }
     useEffect(() => {
         callAPI()
@@ -33,18 +43,23 @@ const UserListPage = () => {
 
     const onSubmit = (e) => {
         e.preventDefault();
+        if(word===""){
+            alert("검색어를 입력하세요");
+            return;
+        }
         callAPI();
-      }
+    }
 
+    if (loading) return <div style={{ textAlign: 'center', marginTop: '20px' }}><CircularProgress /></div>;
     return (
         <Row>
             <Col lg={2}>
                 <Sidebar />
             </Col>
             <Col>
-            <div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
-                        <img src={userlist} alt="car" style={{ width: '100%', maxWidth: '800px' }} />
-                    </div>
+                <div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
+                    <img src={userlist} alt="car" style={{ width: '100%', maxWidth: '800px' }} />
+                </div>
                 <Row className='justify-content-center my-5'>
                     <Col lg={5}>
                         <form onSubmit={onSubmit}>
@@ -63,12 +78,12 @@ const UserListPage = () => {
                 </Row>
                 {list.map(user => (
                     <Row className='justify-content-center'>
-                        <Col xs={12} sm={11} md={10} lg={9}  className='mb-3' key={user.user_key}>
+                        <Col xs={12} sm={11} md={10} lg={9} className='mb-3' key={user.user_key}>
                             <Card className='text-center' border={user.user_gender === "남자" ? styleBlue : styleRed}>
                                 <Card.Body>
                                     <Row>
                                         <Col lg={5}>
-                                            <a href={`/user/admin/read/${user.user_uid}`}><Card.Img variant="top" src={user.user_img ||"/images/woman.jpg"} width="100%" /></a>
+                                            <a href={`/user/admin/read/${user.user_uid}`}><Card.Img variant="top" src={user.user_img || "/images/woman.jpg"} width="100%" /></a>
                                             <Card.Title className='mt-2'>{user.user_uname} 님의 정보</Card.Title>
                                         </Col>
                                         <Col lg={6}>

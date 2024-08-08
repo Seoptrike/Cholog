@@ -7,6 +7,7 @@ import Sidebar from '../admin/Sidebar'
 import { Calendar } from 'primereact/calendar';
 import Button from '@mui/material/Button';
 import seedtransaction from './seedtransaction.png'
+import CircularProgress from '@mui/material/CircularProgress';
 
 
 const AdminTradeListPage = () => {
@@ -20,16 +21,30 @@ const AdminTradeListPage = () => {
     const [dates, setDates] = useState(null);
     const [date1, setDate1] = useState(null);
     const [date2, setDate2] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     const callAPI = async () => {
-        const res = await axios.get(`/trade/adminList?key=${key}&word=${word}&page=${page}&size=${size}&date1=${date1}&date2=${date2}`)
-        console.log(res.data.doc)
-        const data = res.data.doc.map(t => t && { ...t, checked: false });
-        setList(data);
-        setCount(res.data.total)
+        setLoading(true)
+        try{
+            const res = await axios.get(`/trade/adminList?key=${key}&word=${word}&page=${page}&size=${size}&date1=${date1}&date2=${date2}`)
+            console.log(res.data.doc)
+            const data = res.data.doc.map(t => t && { ...t, checked: false });
+            setList(data);
+            setCount(res.data.total)
+        }catch (error) {
+            console.error('Error data diary:', error);
+            alert("데이터를 불러오지 못했습니다.");
+        } finally {
+            setLoading(false);
+        }
+        
     }
     const onClickSearch = async (e) => {
         e.preventDefault();
+        if(word===""){
+            alert("검색어를 입력하세요")
+            return;
+        }
         setPage(1);
         callAPI();
     };
@@ -124,6 +139,8 @@ const AdminTradeListPage = () => {
         setDate2(fmtDate2(e.value[1]))
     };
 
+
+    if (loading) return <div style={{ textAlign: 'center', marginTop: '20px' }}><CircularProgress /></div>;
     return (
         <div>
             <Row>

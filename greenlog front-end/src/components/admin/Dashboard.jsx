@@ -4,7 +4,6 @@ import { Row, Col } from 'react-bootstrap';
 import { Card } from 'primereact/card';
 import { List, ListItem, Divider, ListItemText, ListItemAvatar, Avatar, Typography, Chip, Stack, Box, Badge } from '@mui/material';
 import axios from 'axios';
-import FiberNewIcon from '@mui/icons-material/FiberNew';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../user/UserContext';
 import DiaryChart from './DiaryChart';
@@ -12,6 +11,7 @@ import MallChart from './MallChart';
 import { RiAwardFill } from 'react-icons/ri';
 import './AdminPage.css'
 import dashboard from './dashboard.png'
+import CircularProgress from '@mui/material/CircularProgress';
 
 
 const Dashboard = () => {
@@ -20,17 +20,27 @@ const Dashboard = () => {
     const [qaCount, setQaCount] = useState('');
     const { userData } = useContext(UserContext);
     const [rank, setRank] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const callAPI = async () => {
-        const res = await axios.get("/report/count");
-        const res1 = await axios.get("/chat/listCount");
-        const res2 = await axios.get("/qa/qaListCount");
-        const res3 = await axios.get("/graph/rank");
-        setAskCount(res1.data);
-        setReportCount(res.data);
-        setQaCount(res2.data);
-        setRank(res3.data);
-        console.log(res3.data);
+        setLoading(true)
+        try{
+            const res = await axios.get("/report/count");
+            const res1 = await axios.get("/chat/listCount");
+            const res2 = await axios.get("/qa/qaListCount");
+            const res3 = await axios.get("/graph/rank");
+            setAskCount(res1.data);
+            setReportCount(res.data);
+            setQaCount(res2.data);
+            setRank(res3.data);
+            console.log(res3.data);
+        }catch (error) {
+            console.error('Error data diary:', error);
+            alert("데이터를 불러오지 못했습니다.");
+        } finally {
+            setLoading(false);
+        }
+        
     };
 
     useEffect(() => {
@@ -43,7 +53,7 @@ const Dashboard = () => {
         { count: qaCount, link: "/admin/question#qa", label: "Q&A 답변하기", icon: "pi pi-question-circle" }
     ];
 
-
+    if (loading) return <div style={{ textAlign: 'center', marginTop: '20px' }}><CircularProgress /></div>;
     return (
         <div>
             <Row>

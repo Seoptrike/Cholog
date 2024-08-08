@@ -5,10 +5,10 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 import '../../common/useful/Paging.css';
 import Pagination from 'react-js-pagination'
-import { UserContext } from '../user/UserContext';
 import { Calendar } from 'primereact/calendar';
 import Button from '@mui/material/Button';
 import malltransaction from './malltransaction.png'
+import CircularProgress from '@mui/material/CircularProgress';
 
 const AuctionPage = () => {
   const [list, setList] = useState([]);
@@ -17,18 +17,27 @@ const AuctionPage = () => {
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(5);
   const [count, setCount] = useState(0);
-  const { userData, setUserData } = useContext(UserContext);
   const [checked, setChecked] = useState(false);
   const [dates, setDates] = useState(null);
   const [date1, setDate1] = useState(null);
   const [date2, setDate2] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const callAPI = async () => {
-    const res = await axios.get(`/auction/admin/list?key=${key}&word=${word}&page=${page}&size=${size}&date1=${date1}&date2=${date2}`)
-    console.log(res.data);
-    setCount(res.data.total);
-    const data = res.data.documents.map(t => t && { ...t, checked: false });
-    setList(data);
+    setLoading(true)
+    try {
+      const res = await axios.get(`/auction/admin/list?key=${key}&word=${word}&page=${page}&size=${size}&date1=${date1}&date2=${date2}`)
+      console.log(res.data);
+      setCount(res.data.total);
+      const data = res.data.documents.map(t => t && { ...t, checked: false });
+      setList(data);
+    } catch (error) {
+      console.error('Error data diary:', error);
+      alert("데이터를 불러오지 못했습니다.");
+    } finally {
+      setLoading(false);
+    }
+
   }
 
   useEffect(() => {
@@ -37,6 +46,10 @@ const AuctionPage = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
+    if (word === "") {
+      alert("검색어를 입력하세요");
+      return;
+    }
     callAPI();
   }
 
@@ -57,52 +70,52 @@ const AuctionPage = () => {
     setList(data);
   }
 
-//데이터삭제(update auction_state=1)
+  //데이터삭제(update auction_state=1)
   const onClickDelete = async () => {
     if (!window.confirm("거래내역은 복구하기 어렵습니다. 삭제하시겠습니까?")) return;
-    
+
     const checkedItems = list.filter(item => item.checked);
     if (checkedItems.length === 0) {
-        alert("선택하신 내역이 없습니다.");
-        return;
+      alert("선택하신 내역이 없습니다.");
+      return;
     }
 
     let cnt = 0;
     for (const item of checkedItems) {
-        await axios.post(`/auction/delete/${item.auction_key}`);
-        cnt++;
+      await axios.post(`/auction/delete/${item.auction_key}`);
+      cnt++;
     }
 
     alert(`${cnt}개의 거래내역이 삭제되었습니다.`);
     callAPI();
     setPage(1);
-};
+  };
 
 
-//데이터복구(update auction_state=0)
+  //데이터복구(update auction_state=0)
   const onClickRestore = async () => {
     if (!window.confirm("거래내역을 복구하시겠습니까?")) return;
-    
+
     const checkedItems = list.filter(item => item.checked);
     if (checkedItems.length === 0) {
-        alert("선택하신 내역이 없습니다.");
-        return;
+      alert("선택하신 내역이 없습니다.");
+      return;
     }
 
     let cnt = 0;
     for (const item of checkedItems) {
-        await axios.post(`/auction/restore/${item.auction_key}`);
-        cnt++;
+      await axios.post(`/auction/restore/${item.auction_key}`);
+      cnt++;
     }
 
     alert(`${cnt}개의 거래내역이 복구되었습니다.`);
     callAPI();
     setPage(1);
-};
+  };
 
 
 
-//달력날짜표시
+  //달력날짜표시
   function fmtDate(dateString) {
     const date = new Date(dateString);
     const year = date.getFullYear();
@@ -120,7 +133,7 @@ const AuctionPage = () => {
     const minutes = '59';
     const seconds = '59';
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-}
+  }
 
   const onChangedate = (e) => {
     setDates(e.value);
@@ -129,7 +142,7 @@ const AuctionPage = () => {
   };
 
 
-
+  if (loading) return <div style={{ textAlign: 'center', marginTop: '20px' }}><CircularProgress /></div>;
   return (
     <div>
       <Row>
@@ -138,9 +151,9 @@ const AuctionPage = () => {
         </Col>
         <Col>
           <Row className='justify-content-center my-2'>
-          <div style={{ display: 'flex', justifyContent: 'center', margin: '5px 0' }}>
-                        <img src={malltransaction} alt="car" style={{ width: '100%', maxWidth: '800px' }} />
-                    </div>
+            <div style={{ display: 'flex', justifyContent: 'center', margin: '5px 0' }}>
+              <img src={malltransaction} alt="car" style={{ width: '100%', maxWidth: '800px' }} />
+            </div>
             <Col xs={12} md={10} lg={8}>
               <form onSubmit={onSubmit}>
                 <InputGroup className="mb-5">
