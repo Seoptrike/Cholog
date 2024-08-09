@@ -74,11 +74,6 @@ const MyPage = () => {
     }
   }
 
-  const styleimg1 = {
-    width: "27rem"
-  }
-
-
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
