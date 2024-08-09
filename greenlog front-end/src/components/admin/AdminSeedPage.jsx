@@ -8,6 +8,7 @@ import { TbBrandSnapseed } from "react-icons/tb";
 import { Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import seedwallet from './seedwallet.png'
+import CircularProgress from '@mui/material/CircularProgress';
 
 const AdminSeedPage = () => {
     const [list, setList] = useState([]);
@@ -16,15 +17,29 @@ const AdminSeedPage = () => {
     const [size, setSize] = useState(10);
     const [key, setKey] = useState('id');
     const [word, setWord] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const callAPI = async () => {
-        const res = await axios.get(`/seed/list?key=${key}&word=${word}&page=${page}&size=${size}`)
-        setList(res.data.doc);
-        setCount(res.data.total);
-        console.log(res.data)
+        setLoading(true)
+        try{
+            const res = await axios.get(`/seed/list?key=${key}&word=${word}&page=${page}&size=${size}`)
+            setList(res.data.doc);
+            setCount(res.data.total);
+            console.log(res.data)
+        }catch (error) {
+            console.error('Error data diary:', error);
+            alert("데이터를 불러오지 못했습니다.");
+        } finally {
+            setLoading(false);
+        }
+       
     }
     const onSubmit = (e) => {
         e.preventDefault();
+        if(word===""){
+            alert("검색어를 입력하세요");
+            return;
+        }
         setPage(1);
         callAPI();
     }
@@ -33,7 +48,7 @@ const AdminSeedPage = () => {
         callAPI();
     }, [page]);
 
-
+    if (loading) return <div style={{ textAlign: 'center', marginTop: '20px' }}><CircularProgress /></div>;
     return (
         <div>
             <Row className='justify-content-center mt-3'>

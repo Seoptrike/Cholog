@@ -10,6 +10,7 @@ import { Calendar } from 'primereact/calendar';
 import MallList from '../mall/MallList';
 import Button from '@mui/material/Button';
 import transaction from './transaction.png'
+import CircularProgress from '@mui/material/CircularProgress';
 
 
 const AuctionList = () => {
@@ -25,18 +26,32 @@ const AuctionList = () => {
     const [dates, setDates] = useState(null);
     const [date1, setDate1] = useState(null);
     const [date2, setDate2] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     const callAPI = async () => {
-        const res = await axios.get(`/auction/list/${uid}?key=${key}&word=${word}&page=${page}&size=${size}&date1=${date1}&date2=${date2}`);
-        const data = res.data.documents.map(auction => auction && { ...auction, checked: false })
-        setList(data);
-        setCount(res.data.total);
-        console.log(res.data);
+        setLoading(true)
+        try{
+            const res = await axios.get(`/auction/list/${uid}?key=${key}&word=${word}&page=${page}&size=${size}&date1=${date1}&date2=${date2}`);
+            const data = res.data.documents.map(auction => auction && { ...auction, checked: false })
+            setList(data);
+            setCount(res.data.total);
+            console.log(res.data);
+        }catch (error) {
+            console.error('Error fetching data:', error);
+            alert('데이터를 불러오는 데 실패했습니다.');
+        }finally{
+            setLoading(false)
+        }
+        
     }
 
 
     const onSubmit = (e) => {
         e.preventDefault();
+        if(word===""){
+            alert("검색어를 입력하세요");
+            return;
+        }
         setPage(1);
         setWord("");
         callAPI();
@@ -112,6 +127,7 @@ const AuctionList = () => {
         setDate2(fmtDate2(e.value[1]))
     };
 
+    if (loading) return <div style={{ textAlign: 'center', marginTop: '20px' }}><CircularProgress /></div>;
     return (
         <Row>
             <Col>

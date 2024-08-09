@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Row, Col } from 'react-bootstrap'
-import { FaSeedling } from "react-icons/fa";
 import { MdOutlineSettings } from "react-icons/md";
 import { PiNotebookDuotone } from "react-icons/pi";
-import { Link, useActionData, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import MypageSlick from './MypageSlick';
 import DiaryListPage from '../diary/DiaryListPage';
@@ -14,14 +13,14 @@ import mypage from './mypage.png'
 import generalmemebr from './generalmember.png'
 import goodmemebr from './goodmember.png'
 import staffmemebr from './staffmember.png'
-import { CardActions, CardContent, Avatar, Typography, Chip, Stack, Box, Badge, Card, Grid } from '@mui/material';
-import { useDeprecatedAnimatedState } from 'framer-motion';
+import { Box,  Card, Grid } from '@mui/material';
 import ModalFollower from '../follow/ModalFollower';
 import ModalFollowing from '../follow/ModalFollowing';
+import CircularProgress from '@mui/material/CircularProgress';
 
 
 const MyPage = () => {
-
+  const [loading, setLoading] = useState(false);
   const { user_uid } = useParams();
   const [diary, setDiary] = useState([]);
   const [follow, setFollow] = useState("");
@@ -29,51 +28,102 @@ const MyPage = () => {
   const navi = useNavigate();
 
 
-  //일기내용 조회(슬라이더로 목록 만들기)
+  //일기내용 조회
   const callAPI2 = async () => {
-    const res = await axios.get(`/user/mypage2/${user_uid}`);
-    //console.log(res.data);
-    setDiary(res.data);
+    setLoading(true)
+    try {
+      const res = await axios.get(`/user/mypage2/${user_uid}`);
+      setDiary(res.data);
+    } catch (error) {
+      console.error('Error data diary:', error);
+      alert("데이터를 불러오지 못했습니다.");
+    }finally{
+      setLoading(false);
+    }
+
   }
 
+  //팔로우정보부르기
   const callAPI3 = async () => {
-    const res = await axios.post('/follow/chkfollow', { follow_to: user_uid, follow_from: sessionStorage.getItem("uid") })
-    console.log(res.data);
-    setFollow(res.data);
+    setLoading(true)
+    try {
+      const res = await axios.post('/follow/chkfollow', { follow_to: user_uid, follow_from: sessionStorage.getItem("uid") })
+      console.log(res.data);
+      setFollow(res.data);
+    } catch (error) {
+      console.error('Error data follow:', error);
+      alert("팔로우 데이터를 불러오지 못했습니다.");
+    }finally{
+      setLoading(false);
+    }
+
   }
 
+  //마이페이지 전체 데이터
   const callAPI4 = async () => {
-    const res = await axios.get(`/user/mypage/${user_uid}`);
-    //console.log(res.data);
-    setData(res.data);
+    setLoading(true)
+    try {
+      const res = await axios.get(`/user/mypage/${user_uid}`);
+      setData(res.data);
+    } catch (error) {
+      console.error('Error data mypage:', error);
+      alert("마이페이지 데이터를 불러오지 못했습니다.");
+    }finally{
+      setLoading(false);
+    }
+
   }
-  console.log(data);
+
   useEffect(() => {
     callAPI2();
     callAPI3();
     callAPI4();
   }, [])
 
+
+  //팔로우추가
   const onAddFollow = async () => {
-    const res = await axios.post("/follow/addFollow", { follow_to: user_uid, follow_from: sessionStorage.getItem("uid") })
-    if (res.data === 1) {
-      alert("팔로우완료!")
-      window.location.reload();
-    } else {
-      alert("이미 팔로우한 친구입니다!")
+    setLoading(true)
+    try {
+      const res = await axios.post("/follow/addFollow", { follow_to: user_uid, follow_from: sessionStorage.getItem("uid") })
+
+      if (res.data === 1) {
+        alert("팔로우완료!")
+        window.location.reload();
+      } else {
+        alert("이미 팔로우한 친구입니다!")
+      }
+      
+    } catch (error) {
+      console.error('Error data follow:', error);
+      alert("addfollow 데이터를 불러오지 못했습니다.");
+    }finally{
+      setLoading(false);
     }
+
   }
 
+  //팔로우취소
   const onUnFollow = async () => {
-    const res = await axios.post("/follow/unFollow", { follow_to: user_uid, follow_from: sessionStorage.getItem("uid") })
-    if (res.data === 1) {
-      alert("삭제완료!")
-      window.location.reload();
-    } else {
-      alert("팔로우하지 않은 친구입니다!")
-    }
-  }
+    setLoading(true)
+    try{
+      const res = await axios.post("/follow/unFollow", { follow_to: user_uid, follow_from: sessionStorage.getItem("uid") })
+      if (res.data === 1) {
+        alert("팔로우 취소 완료!")
+        window.location.reload();
+      } else {
+        alert("팔로우하지 않은 친구입니다!")
+      }
 
+    }catch (error) {
+      console.error('Error data follow:', error);
+      alert("minusfollow 데이터를 불러오지 못했습니다.");
+    }finally{
+      setLoading(false);
+    }
+    
+  }
+  if (loading) return <div style={{ textAlign: 'center', marginTop: '20px' }}><CircularProgress /></div>;
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
@@ -82,7 +132,7 @@ const MyPage = () => {
       <Row className='my-5'>
         <Col xs={8} md={6} lg={4}>
           <Grid item >
-            <img src={data.user_img || "http://via.placeholder.com/200x200"} style={{width :"27rem" , height:"27rem"}} />
+            <img src={data.user_img || "http://via.placeholder.com/200x200"} style={{ width: "27rem", height: "27rem" }} />
           </Grid>
         </Col>
         <Col xs={7} md={6} lg={8}>

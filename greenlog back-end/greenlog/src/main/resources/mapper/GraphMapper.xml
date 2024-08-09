@@ -24,7 +24,7 @@
     )
     SELECT *
     FROM ranked_data
-    WHERE ranked <= 10
+    WHERE ranked <= 5
     ORDER BY ranked;
     ]]>
 	

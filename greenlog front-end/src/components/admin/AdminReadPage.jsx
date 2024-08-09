@@ -3,24 +3,36 @@ import { Row, Col, Button, Badge, InputGroup, Form, Card } from 'react-bootstrap
 import { useParams } from 'react-router-dom'
 import { MdOutlineSettings } from "react-icons/md";
 import axios from 'axios';
-
+import CircularProgress from '@mui/material/CircularProgress';
 
 const AdminReadPage = () => {
     const {user_uid} =useParams();
     const [form, setForm]=useState("");
+    const [loading, setLoading] = useState(false);
     const styleRed = "danger"
     const styleBlue = "primary"
 
     const callAPI=async()=>{
-        const res = await axios.get(`/user/read/${user_uid}`);
-        setForm(res.data);
-        console.log(res.data);
+        setLoading(true)
+        try{
+            const res = await axios.get(`/user/read/${user_uid}`);
+            setForm(res.data);
+            console.log(res.data);
+        }catch (error) {
+            console.error('Error data diary:', error);
+            alert("데이터를 불러오지 못했습니다.");
+        } finally {
+            setLoading(false);
+        }
+       
     }
 
     useEffect(()=>{
         callAPI();
     },[]);
 
+
+if (loading) return <div style={{ textAlign: 'center', marginTop: '20px' }}><CircularProgress /></div>;
   return (
     <div>
         <h1 className='text-center my-5'>{form.user_uid}({form.user_uname})님 회원정보</h1>
