@@ -30,10 +30,6 @@ const TradeListPage = ({ seed_number }) => {
 
     const onClickSearch = (e) => {
         e.preventDefault();
-        if(word===""){
-            alert("검색어를 입력하세요");
-            return;
-        }
         setPage(1);
         callAPI();
     }

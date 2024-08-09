@@ -155,7 +155,7 @@ const DiaryListPage = ({ user_uid }) => {
     return (
         <div>
             <Row className="mb-4">
-                {(count !== 0 || sessionStorage.getItem("uid") === user_uid) &&
+                {(count !== 0 && sessionStorage.getItem("uid") === user_uid) &&
                     <>
                         <div>
                             <input type="checkbox" onChange={onChangeAll} checked={list.length === checked} className='me-2' /> 전체선택

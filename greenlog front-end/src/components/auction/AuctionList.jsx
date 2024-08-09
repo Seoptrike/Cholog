@@ -48,10 +48,6 @@ const AuctionList = () => {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        if(word===""){
-            alert("검색어를 입력하세요");
-            return;
-        }
         setPage(1);
         setWord("");
         callAPI();
