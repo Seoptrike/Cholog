@@ -2,12 +2,11 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { FaRegThumbsUp, FaThumbsUp } from "react-icons/fa";
-import { Pagination as MuiPagination } from '@mui/material';
 import { styled, Card, CardHeader, CardMedia, CardContent, CardActions, Avatar, IconButton, Typography, Chip } from '@mui/material';
 import ReportInsert from '../report/ReportInsert';
 import CircularProgress from '@mui/material/CircularProgress';
 import Button from '@mui/material/Button';
-import { useParams } from 'react-router-dom';
+import { useInView } from 'react-intersection-observer';
 
 const StyledCard = styled(Card)(({ theme }) => ({
     width: '100%',
@@ -27,23 +26,26 @@ const StyledCol = styled(Col)(({ theme }) => ({
 const DiaryListPage = ({ user_uid }) => {
     const [loading, setLoading] = useState(false);
     const [list, setList] = useState([]);
-    const [origin, setOrigin] = useState([]);
     const [checked, setChecked] = useState(0);
-    const [size, setSize] = useState(9);
+    const [size, setSize] = useState(2);
     const [page, setPage] = useState(1);
     const [count, setCount] = useState(0);
+    const [more, setMore] = useState(true);
+
     const uid = sessionStorage.getItem("uid");
     const diary_writer = user_uid;
 
-
-    const callAPI = async () => {
+    //다이어리 전체 데이터 
+    const callAPI = async (page) => {
         setLoading(true);
         try {
             const res = await axios.get(`/diary/list.json/${diary_writer}?user_uid=${uid}&page=${page}&size=${size}`);
             const data = res.data.documents.map(diary => diary && { ...diary, checked: false });
-            setList(data);
-            setOrigin(data);
+            setList(prevList => [...prevList, ...data]);
             setCount(res.data.total);
+            if (data.length === 0 || data.length < size) {
+                setMore(false);
+            }
         } catch (error) {
             console.error('Error fetching data:', error);
             alert('데이터를 불러오는 데 실패했습니다.');
@@ -52,10 +54,20 @@ const DiaryListPage = ({ user_uid }) => {
         }
     };
 
+    useEffect(() => {
+        callAPI(page);
+    }, [page]);
+
+    //무한스크롤 
+    const [ref, inView] = useInView({
+        threshold: 0.5
+    });
 
     useEffect(() => {
-        callAPI();
-    }, [page, size]);
+        if (inView && more && !loading) {
+            setPage(prevPage => prevPage + 1);
+        }
+    }, [inView, more, loading]);
 
     useEffect(() => {
         let cnt = list.filter(diary => diary.checked).length;
@@ -73,8 +85,10 @@ const DiaryListPage = ({ user_uid }) => {
         setList(data);
     };
 
+    //일기삭제
     const onClickDelete = async () => {
         if (!window.confirm("선택하신 일기를 삭제하시겠습니까?")) return;
+        setLoading(true);
         try {
             const deletePromises = list.filter(diary => diary.checked).map(diary =>
                 axios.post(`/diary/delete/${diary.diary_key}`)
@@ -86,28 +100,38 @@ const DiaryListPage = ({ user_uid }) => {
         } catch (error) {
             console.error('Error deleting diaries:', error);
             alert('일기 삭제에 실패했습니다.');
+        } finally {
+            setLoading(false);
         }
     };
 
+    //좋아요누르기
     const LikePress = async (diary_key) => {
+        setLoading(true);
         try {
             await axios.post(`/diary/like`, { user_uid: sessionStorage.getItem("uid"), diary_key });
             alert("좋아요를 눌렀습니다!");
-            callAPI();
+            callAPI(1); // 첫 페이지부터 다시 불러오기
         } catch (error) {
             console.error('Error liking diary:', error);
             alert("이미 좋아요를 누른 일기입니다.");
+        } finally {
+            setLoading(false);
         }
     };
 
+    //좋아요취소
     const LikeCancel = async (diary_key) => {
+        setLoading(true);
         try {
             await axios.post(`/diary/cancel`, { user_uid: sessionStorage.getItem("uid"), diary_key });
             alert("좋아요가 취소되었습니다");
-            callAPI();
+            callAPI(1); // 첫 페이지부터 다시 불러오기
         } catch (error) {
             console.error('Error canceling like:', error);
             alert("좋아요를 이미 취소한 상태입니다.");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -122,20 +146,16 @@ const DiaryListPage = ({ user_uid }) => {
         "봉사활동/개인 환경활동": "#D5AAFF", // Light Purple
     };
 
-    const handlePageChange = (event, value) => {
-        setPage(value);
-    };
-
     const DiaryRead = (diary_key, uid) => {
         window.location.href = `/diary/read/${diary_key}?user_uid=${uid}`;
-    }
+    };
 
-    if (loading) return <div style={{ textAlign: 'center', marginTop: '20px' }}><CircularProgress /></div>;
+    if (loading && page === 1) return <div style={{ textAlign: 'center', marginTop: '20px' }}><CircularProgress /></div>;
 
     return (
         <div>
             <Row className="mb-4">
-                {(count == !0 || sessionStorage.getItem("uid") === user_uid) &&
+                {(count !== 0 || sessionStorage.getItem("uid") === user_uid) &&
                     <>
                         <div>
                             <input type="checkbox" onChange={onChangeAll} checked={list.length === checked} className='me-2' /> 전체선택
@@ -146,10 +166,11 @@ const DiaryListPage = ({ user_uid }) => {
                     </>
                 }
             </Row>
+
             <Row>
                 {list.map(d =>
                     <StyledCol lg={4} key={d.diary_key}>
-                        <StyledCard>
+                        <StyledCard style={{ cursor: 'pointer' }}>
                             <CardHeader
                                 avatar={
                                     <Avatar src={d.user_img} aria-label="recipe" sx={{ width: 40, height: 40 }} />
@@ -195,7 +216,8 @@ const DiaryListPage = ({ user_uid }) => {
                                 </div>
                             </CardActions>
                             <CardContent sx={{ paddingBottom: 1, paddingTop: 0 }}>
-                                <Typography variant="h6" sx={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: 1 }}>
+                                <Typography variant="h6" className='ellipsis'
+                                    sx={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: 1 }}>
                                     {d.diary_title}
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary" sx={{ overflow: "hidden" }}>
@@ -206,20 +228,9 @@ const DiaryListPage = ({ user_uid }) => {
                     </StyledCol>
                 )}
             </Row>
-            {count > size && (
-                <Row className="pagination-container">
-                    <Col xs={12} md={10}>
-                        <MuiPagination
-                            count={Math.ceil(count / size)}
-                            page={page}
-                            onChange={handlePageChange}
-                            color="standard"
-                            variant="outlined"
-                            shape="rounded"
-                        />
-                    </Col>
-                </Row>
-            )}
+
+            {loading && <div style={{ textAlign: 'center', marginTop: '20px' }}><CircularProgress /></div>}
+            <div ref={ref} />
         </div>
     );
 };

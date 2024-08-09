@@ -4,7 +4,7 @@ import ModalAddress from '../../common/useful/ModalAddress'
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 import { TextField, Button, Grid, Container, Typography, FormControl, InputLabel, Box, Alert, Card } from '@mui/material';
-
+import CircularProgress from '@mui/material/CircularProgress';
 
 
 
@@ -15,7 +15,6 @@ const UserUpdatePage = () => {
         user_birth: '', user_email: '', user_gender: '', user_ment: ''
     });
     const [loading, setLoading] = useState(false);
-    const [origin, setOrigin] = useState("");
     const [isCheck, setIsCheck] = useState(false);
     const [phoneCheck, setPhoneCheck] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,20 +23,25 @@ const UserUpdatePage = () => {
         name: '',
         byte: null
     })
-    const photoStyle = {
-        borderRadius: '10px',
-        cursor: "pointer",
-    }
+
 
     const refFile = useRef();
 
 
     const callAPI = async () => {
-        const res = await axios.get(`/user/read/${user_uid}`);
-        setForm(res.data);
-        setOrigin(res.data);
-        console.log(res.data)
-        setfile({ name: res.data.user_img, byte: null });
+        setLoading(true)
+        try {
+            const res = await axios.get(`/user/read/${user_uid}`);
+            setForm(res.data);
+            console.log(res.data)
+            setfile({ name: res.data.user_img, byte: null });
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            alert('데이터를 불러오는 데 실패했습니다.');
+        } finally {
+            setLoading(false);
+        }
+
     }
 
     const { user_key, user_nickname, user_uname, user_phone, user_address1, user_address2,
@@ -102,9 +106,6 @@ const UserUpdatePage = () => {
     };
 
 
-
-
-
     //수정취소
     const onClickReset = () => {
         alert("취소하시겠습니까?");
@@ -112,14 +113,23 @@ const UserUpdatePage = () => {
     }
 
     //수정하기
-
     const onClickUpdate = async () => {
-        if (!window.confirm("변경된 내용을 수정하시겠습니까?")) return;
-        await axios.post("/user/update", form);
-        window.location.href = `/user/read/${user_uid}`;
-    }
-    //사진 업로드
+        setLoading(true);
+        try {
+            if (!window.confirm("변경된 내용을 수정하시겠습니까?")) return;
+            await axios.post("/user/update", form);
+            window.location.href = `/user/read/${user_uid}`;
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            alert('수정을 하는데 실패했습니다.');
+        } finally {
+            setLoading(false);
+        }
 
+    }
+
+
+    //사진 업로드
     const onChangeFile = (e) => {
         setfile({
             name: URL.createObjectURL(e.target.files[0]),
@@ -131,21 +141,30 @@ const UserUpdatePage = () => {
         if (file.byte === null) return;
         if (!window.confirm("변경된 이미지를 저장하시겠습니까?")) return;
         //이미지 업로드
-        const formData = new FormData();
-        formData.append("byte", file.byte);
-        //console.log(formData);
-        await axios.post(`/upload/img/${uid}`, formData);
-        alert("이미지 변경완료!")
+        setLoading(true);
+        try{
+            const formData = new FormData();
+            formData.append("byte", file.byte);
+            //console.log(formData);
+            await axios.post(`/upload/img/${uid}`, formData);
+            alert("이미지 변경완료!")
+        }catch (error) {
+            console.error('Error fetching data:', error);
+            alert('이미지를 불러오는 데 실패했습니다.');
+        } finally {
+            setLoading(false);
+        }
+       
     }
 
-    if (loading) return <h1>로딩중</h1>
+    if (loading) return <div style={{ textAlign: 'center', marginTop: '20px' }}><CircularProgress /></div>;
     return (
         <div>
             <Row className='justify-content-center'>
                 <Container maxWidth="sm" style={{ textAlign: 'center', marginTop: "20px" }}>
                     <Grid container row spacing={2}>
                         <Grid item>
-                            <img src={file.name || "http://via.placeholder.com/100x150"} style={{ width: '30rem', height:"30rem", cursor: 'pointer' }} onClick={() => refFile.current.click()} />
+                            <img src={file.name || "http://via.placeholder.com/100x150"} style={{ width: '30rem', height: "30rem", cursor: 'pointer' }} onClick={() => refFile.current.click()} />
                             <input ref={refFile} type="file" onChange={onChangeFile} style={{ display: "none" }} />
                             <Button onClick={onClickImageSave} variant="outlined" className="w-100 mt-1 mb-5">이미지저장</Button>
                         </Grid>

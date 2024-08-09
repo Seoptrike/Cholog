@@ -4,11 +4,13 @@ import { Row, Col, InputGroup, Form } from 'react-bootstrap'
 import { useParams } from 'react-router-dom';
 import { MdOutlineCancel } from "react-icons/md";
 import { DragDropContext, Draggable, Droppable, } from 'react-beautiful-dnd';
-import { Card, Chip } from '@mui/material';
+import { Card, Chip, Tooltip } from '@mui/material';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const DiaryUpdatePage = () => {
     const uid = sessionStorage.getItem("uid");
+    const [loading, setLoading] = useState(false);
 
     //파일추가시 미리보기
     const refFile = useRef(null);
@@ -29,9 +31,18 @@ const DiaryUpdatePage = () => {
     const [photo, setPhoto] = useState([]);
 
     const callAttach = async () => {
-        const res2 = await axios.get(`/diary/attach/${diary_key}`);
-        console.log(res2.data);
-        setPhoto(res2.data);
+        setLoading(true)
+        try {
+            const res2 = await axios.get(`/diary/attach/${diary_key}`);
+            console.log(res2.data);
+            setPhoto(res2.data);
+        } catch (error) {
+            console.error('Error deleting diaries:', error);
+            alert('현재 저장된 사진을 불러오는데 실패했습니다.');
+        } finally {
+            setLoading(false);
+        }
+
     }
 
 
@@ -45,9 +56,19 @@ const DiaryUpdatePage = () => {
 
     //다이어리 정보 가져오기
     const callAPI = async () => {
-        const res = await axios.get(`/diary/read/${diary_key}?user_uid=${uid}`)
-        console.log(res.data);
-        setDiary(res.data);
+        setLoading(true)
+        try {
+            const res = await axios.get(`/diary/read/${diary_key}?user_uid=${uid}`)
+            console.log(res.data);
+            setDiary(res.data);
+        } catch (error) {
+            console.error('Error deleting diaries:', error);
+            alert('현재 저장된 일기정보를 불러오는데 실패했습니다.');
+        } finally {
+            setLoading(false);
+        }
+
+
     }
 
     const { diary_contents, diary_title, diary_state, diary_thumbnail } = diary;
@@ -67,25 +88,41 @@ const DiaryUpdatePage = () => {
 
     //일기 썸네일 수정
     const ThumbnailUpload = async (photo) => {
-        console.log(photo);
-        if (!window.confirm("선택하신 사진을 대표이미지로 수정하시겠습니까?")) return;
-        await axios.post(`/diary/update/thumbnail`, photo);
-        alert("썸네일이 수정되었습니다.");
-        callAttach();
-        callAPI();
+        setLoading(true)
+        try {
+            console.log(photo);
+            if (!window.confirm("선택하신 사진을 대표이미지로 수정하시겠습니까?")) return;
+            await axios.post(`/diary/update/thumbnail`, photo);
+            alert("썸네일이 수정되었습니다.");
+            callAttach();
+            callAPI();
+        } catch (error) {
+            console.error('Error deleting diaries:', error);
+            alert('썸네일을 저장하는 데 실패했습니다.');
+        } finally {
+            setLoading(false);
+        }
+
     }
 
     //사진삭제
     const onClickDelete = async (photo) => {
-        console.log(photo);
-        if (!window.confirm("선택하신 사진을 삭제하시겠습니까?")) return;
-        const res = await axios.post('/diary/attach/delete', photo);
-        console.log(res.data);
-        if (res.data === 0) {
-            alert("대표사진은 삭제할 수 없습니다.")
-        } else {
-            alert("삭제완료");
-            callAttach();
+        try {
+            console.log(photo);
+            if (!window.confirm("선택하신 사진을 삭제하시겠습니까?")) return;
+            const res = await axios.post('/diary/attach/delete', photo);
+            console.log(res.data);
+            if (res.data === 0) {
+                alert("대표사진은 삭제할 수 없습니다.")
+            } else {
+                alert("삭제완료");
+                callAttach();
+            }
+        } catch (error) {
+            console.error('Error deleting diaries:', error);
+            alert('사진을 삭제하는 데 실패했습니다.');
+        } finally {
+            setLoading(false);
         }
 
     }
@@ -113,26 +150,43 @@ const DiaryUpdatePage = () => {
         if (file.byte === null) return;
         if (!window.confirm("이 사진을 새로 저장하시겠습니까?")) return;
         //이미지 업로드
-        const formData = new FormData();
-        formData.append("byte", file.byte);
-        console.log(formData);
-        await axios.post(`/diary/attachOne/${diary_key}`, formData);
-        alert("이미지저장 성공!")
-        setFile("");
-        callAttach();
+        setLoading(true)
+        try {
+            const formData = new FormData();
+            formData.append("byte", file.byte);
+            console.log(formData);
+            await axios.post(`/diary/attachOne/${diary_key}`, formData);
+            alert("이미지저장 성공!")
+            setFile("");
+            callAttach();
+        } catch (error) {
+            console.error('Error deleting diaries:', error);
+            alert('이미지를 저장하는 데 실패했습니다.');
+        } finally {
+            setLoading(false);
+        }
+
     }
 
 
     //일기수정
     const onClickUpdate = async (photo) => {
         if (!window.confirm("변경된 내용을 수정하시겠습니까?")) return;
-        photo.forEach(async p => {
-            await axios.post('/diary/update/attach', p);
-            console.log(p);
-        });
-        await axios.post('/diary/update', { diary_title, diary_contents, diary_state, diary_writer: uid, diary_key });
-        alert("수정완료");
-        window.location.href = `/diary/read/${diary_key}`;
+        try {
+            photo.forEach(async p => {
+                await axios.post('/diary/update/attach', p);
+                console.log(p);
+            });
+            await axios.post('/diary/update', { diary_title, diary_contents, diary_state, diary_writer: uid, diary_key });
+            alert("수정완료");
+            window.location.href = `/diary/read/${diary_key}`;
+        } catch (error) {
+            console.error('Error deleting diaries:', error);
+            alert('일기를 수정하는 데 실패했습니다.');
+        } finally {
+            setLoading(false);
+        }
+
     }
 
     const chipColors = {
@@ -141,6 +195,8 @@ const DiaryUpdatePage = () => {
         "이미지 추가하기": "#dc3545"
     };
 
+
+    if (loading) return <div style={{ textAlign: 'center', marginTop: '20px' }}><CircularProgress /></div>;
     return (
         <div>
             <div className='text-center my-5'>
@@ -223,13 +279,15 @@ const DiaryUpdatePage = () => {
                                     </DragDropContext>
                                     <div>
                                         <img src={file.name || "/images/plus.png"} onClick={() => refFile.current.click()}
-                                            style={{ width: "15rem", cursor: "pointer", position: "relative" }} />
+                                            style={{ width: "15rem", cursor: "pointer" }} />
                                         {file.name &&
-                                            <Chip
-                                                onClick={onClickImageSave}
-                                                sx={{ cursor: "pointer", position: "absolute", bottom: '850px', left: "300px", backgroundColor: chipColors["이미지 추가하기"], color: '#fff' }}
-                                                label="이미지 추가하기"
-                                            />}
+                                            <Tooltip title="이미지를 추가하고 싶으면 이 버튼을 눌러주세요. 누르지 않을 시 추가하신 사진이 저장이 되지 않습니다. "  placement="top">
+                                                <Chip
+                                                    onClick={onClickImageSave}
+                                                    sx={{ cursor: "pointer", top: '100px', right: "5px", backgroundColor: chipColors["이미지 추가하기"], color: '#fff' }}
+                                                    label="이미지 추가하기"
+                                                />
+                                            </Tooltip>}
                                     </div>
                                     <Form.Control type="file" ref={refFile} onChange={onChangeFile} style={{ display: 'none' }} />
 

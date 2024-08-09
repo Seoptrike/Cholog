@@ -7,9 +7,11 @@ import {
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import { useNavigate } from 'react-router-dom';
 import diarybanner from './diarybanner.png'
+import CircularProgress from '@mui/material/CircularProgress';
 
 
 const DiaryInsertPage = () => {
+    const [loading, setLoading] = useState(false);
     const uid = sessionStorage.getItem("uid");
     const [diary, setDiary] = useState({
         diary_writer: uid,
@@ -91,7 +93,7 @@ const DiaryInsertPage = () => {
     const onClickUpload = async (diaryPhoto_diary_key) => {
         if (files.length === 0) return;
         if (!window.confirm(`${files.length}개 사진파일을 업로드 하시겠습니까?`)) return;
-
+        setLoading(true);
         try {
             const formData = new FormData();
             for (let i = 0; i < files.length; i++) {
@@ -105,6 +107,8 @@ const DiaryInsertPage = () => {
         } catch (error) {
             console.err("첨부파일업로드오류:", error);
             alert("첨부파일 업로드 중 오류가 발생했습니다.");
+        }finally{
+            setLoading(false);
         }
     }
 
@@ -121,7 +125,7 @@ const DiaryInsertPage = () => {
         if (!window.confirm("일기를 등록하시겠습니까?")) return;
 
 
-
+        setLoading(true);
         try {
             const response = await axios.post('/diary/insert', diary);
             const lastkey = response.data;
@@ -143,9 +147,12 @@ const DiaryInsertPage = () => {
         } catch (error) {
             console.error("일기 등록 오류:", error);
             alert("일기 등록 중 오류가 발생했습니다.");
+        }finally{
+            setLoading(false);
         }
     }
 
+    if (loading) return <div style={{ textAlign: 'center', marginTop: '20px' }}><CircularProgress /></div>;
     return (
         <Container maxWidth="sm">
             <div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>

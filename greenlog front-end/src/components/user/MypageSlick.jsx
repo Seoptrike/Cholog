@@ -1,18 +1,18 @@
 import axios from "axios";
 import React, { Component, useEffect, useId, useState } from "react";
-import { Pagination as MuiPagination } from '@mui/material';
 import { styled, Card, CardHeader, CardMedia, CardContent, CardActions, Avatar, IconButton, Typography, Chip } from '@mui/material';
 import Slider from "react-slick";
 import { FaRegThumbsUp } from "react-icons/fa";
 import { FaThumbsUp } from "react-icons/fa";
 import '../user/MypageSlider.css';
 import { Row, Col, Button } from 'react-bootstrap';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const MypageSlick = ({ user_img, user_uid }) => {
-    //console.log(diary);
     const diary_writer = user_uid;
     const uid = sessionStorage.getItem("uid");
-    const [diary, setDiary] = useState([])
+    const [diary, setDiary] = useState([]);
+    const [loading, setLoading] = useState(false);
     console.log(diary_writer)
     const settings = {
         dots: true,
@@ -22,13 +22,16 @@ const MypageSlick = ({ user_img, user_uid }) => {
         slidesToShow: 3,
         slidesToScroll: 3
     };
+
     const settings2 = {
         dots: true,
-        infinite: false,
-        speed: 500,
+        infinite: true,
+        autoplay: true,
+        autoplaySpeed: 3000,
         slidesToShow: 1,
         slidesToScroll: 1
     };
+
     const chipColors = {
         "개인컵/텀블러": "#FF6F61", // Coral
         "리필스테이션/개인용기": "#6B5B95", // Slate Blue
@@ -42,30 +45,45 @@ const MypageSlick = ({ user_img, user_uid }) => {
 
     //일기내용 조회(슬라이더로 목록 만들기)
     const callAPI2 = async () => {
-        const res = await axios.get(`/diary/DiaryTopList/${diary_writer}?uid=${uid}`);
-        console.log(res.data);
-        if (res.data) {
-            setDiary(res.data)
+        setLoading(true)
+        try {
+            const res = await axios.get(`/diary/DiaryTopList/${diary_writer}?uid=${uid}`);
+
+            if (res.data) {
+                setDiary(res.data)
+                console.log(diary.length)
+            }
+        } catch (error) {
+            console.error('Error data diary:', error);
+            alert("데이터를 불러오지 못했습니다.");
+        } finally {
+            setLoading(false);
         }
+
     }
 
     useEffect(() => {
         callAPI2();
     }, [])
 
+    //좋아요누르기
     const LikePress = async (diary_key) => {
+        setLoading(true);
         try {
             await axios.post(`/diary/like`, { user_uid: sessionStorage.getItem("uid"), diary_key });
             alert("좋아요를 눌렀습니다!");
-
             callAPI2();
         } catch (error) {
             console.error('Error liking diary:', error);
             alert("이미 좋아요를 누른 일기입니다.");
+        } finally {
+            setLoading(false);
         }
     };
 
+    //좋아요취소
     const LikeCancel = async (diary_key) => {
+        setLoading(true)
         try {
             await axios.post(`/diary/cancel`, { user_uid: sessionStorage.getItem("uid"), diary_key });
             alert("좋아요가 취소되었습니다");
@@ -74,6 +92,8 @@ const MypageSlick = ({ user_img, user_uid }) => {
         } catch (error) {
             console.error('Error canceling like:', error);
             alert("좋아요를 이미 취소한 상태입니다.");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -99,9 +119,12 @@ const MypageSlick = ({ user_img, user_uid }) => {
         window.location.href = `/diary/read/${diary_key}?user_uid=${user_uid}`;
     }
 
+    if (loading) return <div style={{ textAlign: 'center', marginTop: '20px' }}><CircularProgress /></div>;
     return (
         <div className="slider-container">
-            <Slider {...settings}>
+            <Slider
+                style={{ cursor: 'pointer' }}
+                {...(diary.length <= 2   ? {...settings2} : {...settings})}>
                 {diary && diary.map(d =>
                     <StyledCol lg={3} key={d.diary_key}>
                         <StyledCard>

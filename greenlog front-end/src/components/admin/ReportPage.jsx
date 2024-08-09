@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Pagination, Typography, Checkbox, Chip, Button, Paper, Grid } from '@mui/material';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const ReportPage = () => {
     const [list, setList] = useState([]);
@@ -13,21 +14,40 @@ const ReportPage = () => {
     const [allChecked, setAllChecked] = useState(false);
     const [alist, setAlist] = useState([]);
     const [acount, setAcount] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const callAPI = async () => {
-        const res = await axios.get(`/report/list?key=${key}&word=${word}&page=${page}&size=${size}`);
-        console.log(res.data);
-        const data = res.data.doc.map(r => r && { ...r, checked: false });
-        setList(data);
-        setCount(res.data.total);
+        setLoading(true)
+        try{
+            const res = await axios.get(`/report/list?key=${key}&word=${word}&page=${page}&size=${size}`);
+            console.log(res.data);
+            const data = res.data.doc.map(r => r && { ...r, checked: false });
+            setList(data);
+            setCount(res.data.total);
+        }catch (error) {
+            console.error('Error data diary:', error);
+            alert("데이터를 불러오지 못했습니다.");
+        } finally {
+            setLoading(false);
+        }
+       
     };
 
     const callAPI2 = async () => {
-        const res = await axios.get(`/report/alist?key=${key}&word=${word}&page=${page}&size=${size}`);
-        console.log(res.data);
-        const data = res.data.doc.map(r => r && { ...r, checked: false });
-        setAlist(data);
-        setAcount(res.data.total);
+        setLoading(true)
+        try{
+            const res = await axios.get(`/report/alist?key=${key}&word=${word}&page=${page}&size=${size}`);
+            console.log(res.data);
+            const data = res.data.doc.map(r => r && { ...r, checked: false });
+            setAlist(data);
+            setAcount(res.data.total);
+        }catch (error) {
+            console.error('Error data diary:', error);
+            alert("데이터를 불러오지 못했습니다.");
+        } finally {
+            setLoading(false);
+        }
+       
     };
 
     useEffect(() => { callAPI(); }, []);
@@ -83,6 +103,8 @@ const ReportPage = () => {
         const allChecked = list.length > 0 && list.every(r => r.checked);
         setAllChecked(allChecked);
     }, [list]);
+
+    if (loading) return <div style={{ textAlign: 'center', marginTop: '20px' }}><CircularProgress /></div>;
     return (
         <Container>
             <Box mt={3}>
