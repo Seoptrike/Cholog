@@ -90,7 +90,7 @@ const AdminChat = () => {
             <Row className='justify-content-center'>
                 <Col xs={6}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                        <span>관리자와 1:1 대화</span>
+                        <span>고객과 1:1 대화</span>
                     </div>
                     <div ref={chatContainerRef} style={{ height: '400px', overflowY: 'scroll', border: '1px solid #ddd', borderRadius: '10px', backgroundColor: '#fff', padding: '10px', marginBottom: '10px' }}>
                         {messages.map((msg, index) => (

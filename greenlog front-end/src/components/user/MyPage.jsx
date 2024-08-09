@@ -123,10 +123,6 @@ const MyPage = () => {
     }
     
   }
-
-  
-
-
   if (loading) return <div style={{ textAlign: 'center', marginTop: '20px' }}><CircularProgress /></div>;
   return (
     <div>
