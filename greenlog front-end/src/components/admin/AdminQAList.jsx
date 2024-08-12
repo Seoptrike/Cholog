@@ -20,10 +20,6 @@ const AdminQAList = () => {
             const res = await axios.get(`/qa/qaList?key=${key}&word=${word}&page=${page}&size=${size}`);
             setList(res.data.doc);
             setCount(res.data.total);
-
-            if (res.data.total === 0) {
-                alert('검색어가 없습니다');
-            }
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -38,6 +34,7 @@ const AdminQAList = () => {
         setPage(1);
         await callAPI();
     };
+
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
             e.preventDefault();

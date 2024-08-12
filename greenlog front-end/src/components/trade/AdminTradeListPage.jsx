@@ -41,10 +41,6 @@ const AdminTradeListPage = () => {
     }
     const onClickSearch = async (e) => {
         e.preventDefault();
-        if(word===""){
-            alert("검색어를 입력하세요")
-            return;
-        }
         setPage(1);
         callAPI();
     };
