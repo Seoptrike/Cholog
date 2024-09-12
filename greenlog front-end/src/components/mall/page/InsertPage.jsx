@@ -1,13 +1,15 @@
 
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { TextField, Grid, Typography, Paper, MenuItem } from "@mui/material";
 import { Form, Row, Col, Button, Tooltip, OverlayTrigger } from "react-bootstrap";
 import axios from "axios";
+import { UserContext } from '../../user/UserContext';
 
 const InsertPage = () => {
     const uid = sessionStorage.getItem("uid");
     const today = new Date(); //오늘
     const tomorrowDate = new Date(today);
+    const { userData } = useContext(UserContext);
     tomorrowDate.setDate(today.getDate() + 1); //내일
     const tomorrow = tomorrowDate.toISOString().split('T')[0]; //내일 형식변환본
     const [edate, setEdate] = useState(tomorrow); // endDate값
@@ -74,6 +76,12 @@ const InsertPage = () => {
             alert("일반나눔은 1씨드부터 가능합니다.씨드를 수정해주세요.");
             return;
         }
+        
+        if(userData.auth ==="블랙리스트"){
+            alert("마켓을 등록하실 수 없습니다. 자세한 사항은 고객센터에 문의바랍니다.");
+            return;
+        }
+
         if (!window.confirm("피망마켓에 등록하실래요?")) return;
         //console.log(form);
         try {
