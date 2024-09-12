@@ -1,16 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Row, Col, Button, Form } from 'react-bootstrap';
 import { BsArrowReturnRight } from "react-icons/bs";
 import { SlLock, SlLockOpen } from "react-icons/sl";
 import RereplyListPage from './RereplyListPage';
 import axios from 'axios';
 import { BsChevronDown } from "react-icons/bs";
+import { UserContext } from '../user/UserContext';
 
 const RereplyPage = ({ reply_key, reply_writer, bbs_writer }) => {
     const [count, setCount] = useState(0);
     const [rereply, setRereply] = useState([]);
     const [showRep, setShowRep] = useState({});
     const [rereplyCount, setRereplyCount] = useState("")
+    const { userData } = useContext(UserContext);
 
     const callCount = async () => {
         const res = await axios.get(`/rereply/count/${reply_key}`);
@@ -70,6 +72,11 @@ const RereplyPage = ({ reply_key, reply_writer, bbs_writer }) => {
         const uid = sessionStorage.getItem('uid');
         if (!uid) {
             alert("로그인이 필요합니다.");
+            return;
+        }
+
+        if(userData.auth ==="블랙리스트"){
+            alert("대댓글을 등록하실 수 없습니다. 자세한 사항은 고객센터에 문의바랍니다.");
             return;
         }
 

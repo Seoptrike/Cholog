@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Row, Col } from 'react-bootstrap';
 import {
     Container, Card, Typography, MenuItem, Select, TextField, Button, Grid, IconButton, ButtonGroup
@@ -8,11 +8,13 @@ import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import { useNavigate } from 'react-router-dom';
 import diarybanner from './diarybanner.png'
 import CircularProgress from '@mui/material/CircularProgress';
+import { UserContext } from '../user/UserContext';
 
 
 const DiaryInsertPage = () => {
     const [loading, setLoading] = useState(false);
     const uid = sessionStorage.getItem("uid");
+    const { userData } = useContext(UserContext);
     const [diary, setDiary] = useState({
         diary_writer: uid,
         diary_contents: "",
@@ -119,6 +121,11 @@ const DiaryInsertPage = () => {
             alert("로그인이 필요한 작업입니다.");
             sessionStorage.setItem('target', '/diary/insert');
             window.location.href = "/user/login";
+            return;
+        }
+
+        if(userData.auth ==="블랙리스트"){
+            alert("일기를 등록하실 수 없습니다. 자세한 사항은 고객센터에 문의바랍니다.");
             return;
         }
 

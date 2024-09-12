@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Row, Col, Form } from 'react-bootstrap';
 import { Rating } from '@mui/material';
 import axios from 'axios';
 import { TbBrandSnapseed } from "react-icons/tb";
 import './ReviewInsertPage.css';
 import Button from '@mui/material/Button';
+import { UserContext } from '../user/UserContext';
 
 const InsertPage = ({ mall_key, mall_seller, mall_tstate }) => {
     const uid = sessionStorage.getItem('uid');
-
+    const { userData } = useContext(UserContext);
     const [form, setForm] = useState({
         review_mall_key: mall_key,
         review_writer: sessionStorage.getItem('uid'),
@@ -47,6 +48,11 @@ const InsertPage = ({ mall_key, mall_seller, mall_tstate }) => {
         }
         if (!uid) {
             alert("로그인이 필요합니다.");
+            return;
+        }
+
+        if(userData.auth ==="블랙리스트"){
+            alert("입찰을 등록하실 수 없습니다. 자세한 사항은 고객센터에 문의바랍니다.");
             return;
         }
 

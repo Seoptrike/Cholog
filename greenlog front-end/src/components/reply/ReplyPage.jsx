@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Row, Col, Card, Form, InputGroup, Button } from 'react-bootstrap';
 import { BsChevronDown } from 'react-icons/bs';
 import ReplyListPage from './ReplyListPage';
 import axios from 'axios';
 import { SlLock, SlLockOpen } from "react-icons/sl";
 import { Pagination as MuiPagination } from '@mui/material';
+import { UserContext } from '../user/UserContext';
 
 const ReplyPage = ({ bbs_key, bbs_writer }) => {
     const [page, setPage] = useState(1);
     const [size, setSize] = useState(3);
+    const { userData } = useContext(UserContext);
     const [key, setKey] = useState('reply_regdate desc');
     const [count, setCount] = useState(0);
     const [reply, setReply] = useState([]);
@@ -81,6 +83,11 @@ const ReplyPage = ({ bbs_key, bbs_writer }) => {
         const uid = sessionStorage.getItem('uid');
         if (!uid) {
             alert("로그인이 필요합니다.");
+            return;
+        }
+
+        if(userData.auth ==="블랙리스트"){
+            alert("댓글을 등록하실 수 없습니다. 자세한 사항은 고객센터에 문의바랍니다.");
             return;
         }
 

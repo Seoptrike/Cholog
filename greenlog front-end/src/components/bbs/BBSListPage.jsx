@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Pagination as MuiPagination, Chip, TextField, Button, MenuItem, Select, FormControl, Box } from '@mui/material';
 import { styled } from '@mui/system';
@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
 import BBSImage from './bbs.png'
+import { UserContext } from '../user/UserContext';
 
 // Define custom styles for top list rows
 const TopListTableRow = styled(TableRow)(({ theme }) => ({
@@ -19,6 +20,8 @@ const DefaultTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const BBSListPage = () => {
+    const {uid} = sessionStorage.getItem('uid');
+    const { userData } = useContext(UserContext);
     const [list, setList] = useState([]);
     const [topList, setTopList] = useState([]);
     const [noticeList, setNoticeList] = useState([]);
@@ -134,7 +137,7 @@ const BBSListPage = () => {
                     <Button onClick={onClickShow} variant="contained" sx={{ backgroundColor: 'black', color: 'white', mr: 2 }}>
                         {showNotice ? '공지접기' : '공지보기'}
                     </Button>
-                    {sessionStorage.getItem('uid') && (
+                    {(uid && userData.auth != '블랙리스트') && (
                         <Link to="/bbs/insert">
                             <Button variant="contained" sx={{ backgroundColor: 'black', color: 'white' }}>글쓰기</Button>
                         </Link>
