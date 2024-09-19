@@ -5,6 +5,7 @@ import { TbBrandSnapseed } from "react-icons/tb";
 import Pagination from 'react-js-pagination';
 import { Calendar } from 'primereact/calendar';
 
+
 const TradeListPage = ({ seed_number }) => {
     const [list, setList] = useState([]);
     const [word, setWord] = useState('');
@@ -24,6 +25,7 @@ const TradeListPage = ({ seed_number }) => {
             const data = res.data.doc.map(t => t && { ...t, checked: false });
             setList(data);
             setCount(res.data.total);
+            console.log(seed_number);
         }
     }
     useEffect(() => { callAPI() }, [seed_number, page])
@@ -173,7 +175,7 @@ const TradeListPage = ({ seed_number }) => {
                                     <td>{data.fmtdate}</td>
                                     <td>{data.from_user_uid === "admin" ? <Badge bg='dark'>관리자</Badge> : `${data.from_user_uid} (${data.from_user_nickname})`}</td>
                                     <td>{data.trade_amount} <span style={{ fontSize: '15px', color: "brown" }}><TbBrandSnapseed /></span> </td>
-                                    <td>{data.trade_info ? data.trade_info : "경매 낙찰"}</td>
+                                    <td>{data.trade_info ? data.trade_info : "관리자 지급"}</td>
                                 </tr>
                             </tbody>
                         )}

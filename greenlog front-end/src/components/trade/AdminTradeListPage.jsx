@@ -190,9 +190,9 @@ const AdminTradeListPage = () => {
                                     <td>{trade.trade_key}</td>
                                     <td>{trade.fmtdate}</td>
                                     <td>{trade.from_user_uid === "admin" ? <Badge bg='dark'>관리자</Badge> : `${trade.from_user_uid} (${trade.from_user_nickname})`}</td>
-                                    <td>{trade.to_user_uid} ( {trade.to_user_nickname} )</td>
+                                    <td>{trade.to_user_uid === "admin" ? <Badge bg='dark'>관리자</Badge> : `${trade.to_user_uid} (${trade.to_user_nickname})`}</td>
                                     <td>{trade.trade_amount} <span style={{ fontSize: '15px', color: "brown" }}><TbBrandSnapseed /></span>  </td>
-                                    <td>{trade.trade_info}</td>
+                                    <td>{trade.trade_info || "관리자 지급"}</td>
                                     <td>{trade.trade_status === 1 && "삭제"}</td>
                                 </tr>
                             )}

@@ -104,7 +104,7 @@ const DiaryInsertPage = () => {
             console.log(formData);
 
             await axios.post(`/diary/attach/${diaryPhoto_diary_key}`, formData);
-            alert("이미지저장완료!");
+            //alert("이미지저장완료!");
             setFiles([]);
         } catch (error) {
             console.err("첨부파일업로드오류:", error);
@@ -151,7 +151,7 @@ const DiaryInsertPage = () => {
                         trade_state: 1,
                         trade_info: "다이어리 작성"
                 })}
-            alert("일기등록완료!");
+            //alert("일기등록완료!");
             alert("관련없는 일기가 있을 시, 포인트를 관리자가 차감합니다. 유의해주십시오.")
             window.location.href = `/user/read/${uid}`;
         }
