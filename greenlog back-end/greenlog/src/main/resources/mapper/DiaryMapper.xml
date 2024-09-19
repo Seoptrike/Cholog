@@ -96,4 +96,8 @@
 		select count(*) from diary where diary_writer=#{diary_writer}
 	</select>
 	
+	<select id="diaryNumber" resultType="int">
+		select count(*) from trade where trade_to=#{trade_to} and trade_info='다이어리 작성' and Date(trade_date)=CURDATE();
+	</select>
+	
 </mapper>

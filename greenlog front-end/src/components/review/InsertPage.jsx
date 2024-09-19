@@ -17,7 +17,7 @@ const InsertPage = ({ mall_key, mall_seller, mall_tstate }) => {
         review_contents: '',
     });
 
-    const { review_rating, review_contents } = form;
+    const { review_rating, review_contents, review_writer } = form;
     const [onCancel, setOnCancel] = useState(false);
 
     const onChangeForm = (e) => {
@@ -42,6 +42,7 @@ const InsertPage = ({ mall_key, mall_seller, mall_tstate }) => {
     const onSubmit = async (e) => {
         e.preventDefault();
         const uid = sessionStorage.getItem('uid');
+        const res2 = await axios.get(`/seed/read/${review_writer}`);
         if (uid === mall_seller) {
             alert("자신의 게시글에는 리뷰를 남길 수 없습니다.");
             return;
@@ -57,9 +58,15 @@ const InsertPage = ({ mall_key, mall_seller, mall_tstate }) => {
         }
 
         if (review_contents === '' && review_rating === 0) {
-            alert("리뷰나 포인트를 작성해주세요.");
+            alert("리뷰나 씨드를 작성해주세요.");
             return;
         }
+
+        if(res2.data.seed_point < review_rating){
+            alert("씨드가 부족합니다.")
+            return;
+        }
+
         if (!window.confirm("리뷰를 등록하실래요?")) return;
         try {
             await axios.post('/review/insert', form);

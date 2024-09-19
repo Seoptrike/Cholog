@@ -137,6 +137,11 @@ public class DiaryDAOImpl implements DiaryDAO{
 		return session.selectOne(namespace + ".DiaryTotal", diary_writer);
 	}
 
+	@Override
+	public int diaryNumber(String trade_to) {
+		return session.selectOne(namespace + ".diaryNumber", trade_to);
+	}
+
 
 	
 

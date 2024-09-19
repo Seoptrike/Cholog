@@ -31,38 +31,43 @@
 	</select>
 	
 	<select id="mallChart" resultType="hashmap">
-				SELECT 
-		    dates.date,
-		    IFNULL(mall_counts.mall_count, 0) as mall_key_count,
-		    IFNULL(auction_counts.auction_count, 0) as auction_key_count,
-		    IFNULL(review_counts.review_count, 0) as review_key_count
-		FROM 
-		    (SELECT CURDATE() as date
-		     UNION ALL SELECT CURDATE() - INTERVAL 1 DAY
-		     UNION ALL SELECT CURDATE() - INTERVAL 2 DAY
-		     UNION ALL SELECT CURDATE() - INTERVAL 3 DAY
-		     UNION ALL SELECT CURDATE() - INTERVAL 4 DAY
-		     UNION ALL SELECT CURDATE() - INTERVAL 5 DAY
-		     UNION ALL SELECT CURDATE() - INTERVAL 6 DAY) dates
-		LEFT JOIN 
-		    (SELECT DATE(mall_regDate) as date, COUNT(*) as mall_count
-		     FROM mall
-		     WHERE mall_regDate BETWEEN DATE_ADD(CURDATE(), INTERVAL -6 DAY) AND CURDATE()
-		     GROUP BY DATE(mall_regDate)) mall_counts
-		ON dates.date = mall_counts.date
-		LEFT JOIN 
-		    (SELECT DATE(auction_regDate) as date, COUNT(*) as auction_count
-		     FROM auction
-		     WHERE auction_regDate BETWEEN DATE_ADD(CURDATE(), INTERVAL -6 DAY) AND CURDATE()
-		     GROUP BY DATE(auction_regDate)) auction_counts
-		ON dates.date = auction_counts.date
-		LEFT JOIN 
-		    (SELECT DATE(review_regDate) as date, COUNT(*) as review_count
-		     FROM review
-		     WHERE review_regDate BETWEEN DATE_ADD(CURDATE(), INTERVAL -6 DAY) AND CURDATE()
-		     GROUP BY DATE(review_regDate)) review_counts
-		ON dates.date = review_counts.date
-		ORDER BY dates.date;
+		WITH recent_dates AS (
+		    SELECT CURDATE() AS date
+		    UNION ALL SELECT CURDATE() - INTERVAL 1 DAY
+		    UNION ALL SELECT CURDATE() - INTERVAL 2 DAY
+		    UNION ALL SELECT CURDATE() - INTERVAL 3 DAY
+		    UNION ALL SELECT CURDATE() - INTERVAL 4 DAY
+		    UNION ALL SELECT CURDATE() - INTERVAL 5 DAY
+		    UNION ALL SELECT CURDATE() - INTERVAL 6 DAY
+		),
+		mall_counts AS (
+		    SELECT DATE(mall_regDate) AS date, COUNT(*) AS mall_count
+		    FROM mall
+		    WHERE mall_regDate >= CURDATE() - INTERVAL 6 DAY
+		    GROUP BY DATE(mall_regDate)
+		),
+		auction_counts AS (
+		    SELECT DATE(auction_regDate) AS date, COUNT(*) AS auction_count
+		    FROM auction
+		    WHERE auction_regDate >= CURDATE() - INTERVAL 6 DAY
+		    GROUP BY DATE(auction_regDate)
+		),
+		review_counts AS (
+		    SELECT DATE(review_regDate) AS date, COUNT(*) AS review_count
+		    FROM review
+		    WHERE review_regDate >= CURDATE() - INTERVAL 6 DAY
+		    GROUP BY DATE(review_regDate)
+		)
+		SELECT 
+		    d.date,
+		    IFNULL(m.mall_count, 0) AS mall_key_count,
+		    IFNULL(a.auction_count, 0) AS auction_key_count,
+		    IFNULL(r.review_count, 0) AS review_key_count
+		FROM recent_dates d
+		LEFT JOIN mall_counts m ON d.date = m.date
+		LEFT JOIN auction_counts a ON d.date = a.date
+		LEFT JOIN review_counts r ON d.date = r.date
+		ORDER BY d.date;
 	</select>
 
 </mapper>
