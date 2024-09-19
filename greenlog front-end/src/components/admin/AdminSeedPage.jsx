@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import seedwallet from './seedwallet.png'
 import CircularProgress from '@mui/material/CircularProgress';
+import SeedInsertModal from '../trade/SeedInsertModal';
 
 const AdminSeedPage = () => {
     const [list, setList] = useState([]);
@@ -120,8 +121,8 @@ const AdminSeedPage = () => {
                                                     </Typography>
                                                     입니다
                                                 </Typography>
-                                                <Link to={`/user/wallet/${seed.seed_uid}`}> <Button variant="contained" color='success' size="sm">거래내역 {seed.seed_uid}</Button></Link>
-
+                                                <Link to={`/user/wallet/${seed.seed_uid}`}> <Button variant="contained" color='success' className='me-1' size="sm">거래내역 {seed.seed_uid}</Button></Link>
+                                                <SeedInsertModal seed_number={seed.seed_number} seed_uid={seed.seed_uid}/>
                                             </Box>
                                         </CardContent>
                                     </Card>
