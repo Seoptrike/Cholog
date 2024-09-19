@@ -250,4 +250,9 @@ public class DiaryController {
 			@RequestParam("uid") String user_uid) {
 			return dao.DiaryTopList(diary_writer, user_uid);
 	}
+	
+	@GetMapping("/number/{trade_to}")
+	public int diaryNumber(@PathVariable("trade_to") String trade_to) {
+		return dao.diaryNumber(trade_to);
+	}
 }

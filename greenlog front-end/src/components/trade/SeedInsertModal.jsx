@@ -4,7 +4,7 @@ import { Modal } from 'react-bootstrap';
 import axios from 'axios';
 
 
-const SeedInsertModal = ({ seed_number, seed_uid}) => {
+const SeedInsertModal = ({ seed_number, seed_uid, seed_point}) => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -27,6 +27,11 @@ const SeedInsertModal = ({ seed_number, seed_uid}) => {
 
   const payment = async () => {
     if(!window.confirm("씨앗내역을 입력하시겠습니까?")) return;
+    if(type===-1){
+      if(seed_point <= 0){
+        alert("현재 씨앗이 0입니다."); return;
+      } 
+    }
     await axios.post('/trade/insert', {
       trade_to: seed_number,
       trade_from: 'seed00000000',
@@ -63,6 +68,9 @@ const SeedInsertModal = ({ seed_number, seed_uid}) => {
           <Modal.Title>관리자용 씨앗 내역입력</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          <FormControl sx={{ m: 1, width: '78.5ch' }} className='me-2'>
+            <TextField label="현재 씨앗포인트"value={seed_point} disabled></TextField>
+          </FormControl>
           <FormControl sx={{ m: 1, width: '25ch' }} className='me-2'>
             <Select label="거래" value={type} onChange={handleChange}>
               <MenuItem value={1}>지급</MenuItem>

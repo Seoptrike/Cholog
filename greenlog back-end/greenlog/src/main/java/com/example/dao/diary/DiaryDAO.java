@@ -28,4 +28,5 @@ public interface DiaryDAO {
 	public void updatePhoto(DiaryPhotoVO vo);
 	public List<HashMap<String, Object>> DiaryTopList (String diary_writer, String user_uid);
 	public int DiaryTotal(String diary_writer);
+	public int diaryNumber(String trade_to);
 }

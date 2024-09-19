@@ -20,7 +20,7 @@ const DefaultTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const BBSListPage = () => {
-    const {uid} = sessionStorage.getItem('uid');
+    const uid = sessionStorage.getItem('uid');
     const { userData } = useContext(UserContext);
     const [list, setList] = useState([]);
     const [topList, setTopList] = useState([]);

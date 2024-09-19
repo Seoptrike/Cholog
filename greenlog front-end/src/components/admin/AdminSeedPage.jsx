@@ -122,7 +122,7 @@ const AdminSeedPage = () => {
                                                     입니다
                                                 </Typography>
                                                 <Link to={`/user/wallet/${seed.seed_uid}`}> <Button variant="contained" color='success' className='me-1' size="sm">거래내역 {seed.seed_uid}</Button></Link>
-                                                <SeedInsertModal seed_number={seed.seed_number} seed_uid={seed.seed_uid}/>
+                                                <SeedInsertModal seed_number={seed.seed_number} seed_uid={seed.seed_uid} seed_point={seed.seed_point}/>
                                             </Box>
                                         </CardContent>
                                     </Card>
