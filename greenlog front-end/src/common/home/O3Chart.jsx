@@ -12,6 +12,8 @@ const O3Chart = () => {
     const formattedYesterday = yesterday.toISOString().slice(0, 10).replace(/-/g, '');
     const formattedOneWeekAgo = oneWeekAgo.toISOString().slice(0, 10).replace(/-/g, '');
 
+    console.log(formattedYesterday)
+    console.log(formattedOneWeekAgo)
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [hasError, setHasError] = useState(false);
@@ -26,7 +28,12 @@ const O3Chart = () => {
                     inqEndDt: formattedYesterday,
                     msrstnName: '강남구'
                 }
-            });
+                
+            }
+            
+        );
+        console.log(res)
+            
             let array = [];
             array.push(['Date', 'O3', 'SO2', 'CO', 'NO2']);
             res.data.response.body.items.forEach(row => {
