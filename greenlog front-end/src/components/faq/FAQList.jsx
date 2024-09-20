@@ -135,7 +135,7 @@ const FAQList = () => {
             </AccordionSummary>
             <AccordionDetails>
               <Typography sx={{ whiteSpace: 'pre-wrap' }}>A. {faq.FAQ_answer}</Typography>
-              {userData.auth && (
+              {userData.auth === '관리자' && (
                 <Box mt={3} display="flex" justifyContent="flex-end">
                   <Button variant="contained" sx={{ backgroundColor: 'black', color: 'white', mr: 1 }} onClick={() => UpdateClick(faq.FAQ_key)} >
                     수정
