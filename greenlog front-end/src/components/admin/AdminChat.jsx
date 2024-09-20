@@ -16,7 +16,7 @@ const AdminChat = () => {
     const chatContainerRef = useRef(null);
 
     useEffect(() => {
-        const socket = new SockJS('http://localhost:8080/ws');
+        const socket = new SockJS('http://192.168.0.193:8080/ws');
         const stomp = Stomp.over(socket);
         stomp.connect({}, frame => {
             console.log('Connected: ' + frame);
