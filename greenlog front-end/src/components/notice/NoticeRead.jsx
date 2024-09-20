@@ -18,7 +18,7 @@ const NoticeRead = () => {
   const { notice_title, notice_contents, notice_writer, notice_regDate } = form;
 
   // 관리자 아이디 목록
-  const adminIds = ['admin', 'seop', 'hanna', 'gr001231', 'laonmiku', 'ne4102'];
+  const adminIds = ['admin', 'seop', 'hanna', 'laonmiku', 'ne4102'];
   const currentUser = sessionStorage.getItem('uid');
 
   const callAPI = async () => {
