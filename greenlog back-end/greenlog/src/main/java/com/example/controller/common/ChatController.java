@@ -19,7 +19,7 @@ import com.example.domain.ChatlogVO;
 import com.example.domain.QueryVO;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+@CrossOrigin(origins = "*")
 public class ChatController {
 	@Autowired
 	ChatDAO cdao;

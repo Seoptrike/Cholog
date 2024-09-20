@@ -13,7 +13,7 @@ const ChatRoom = () => {
     const chatContainerRef = useRef(null);
 
     useEffect(() => {
-        const socket = new SockJS('http://localhost:8080/ws');
+        const socket = new SockJS('http://192.168.0.193:8080/ws');
         const stomp = Stomp.over(socket);
         stomp.connect({}, frame => {
             console.log('Connected: ' + frame);
@@ -44,7 +44,9 @@ const ChatRoom = () => {
         setTimeout(scrollToBottom, 100);
     };
 
-    const sendMessage = async () => {
+    const sendMessage = async (event) => {
+        event.preventDefault();
+
         if (stompClient && messageInput) {
             const messageData = {
                 chat_content: messageInput,
@@ -105,7 +107,7 @@ const ChatRoom = () => {
                                 borderRadius: '10px',
                                 wordBreak: 'break-word'
                             }}>
-                                {msg.chat_sender !== 'admin' && <img src={msg.user_img} alt="User" style={{ borderRadius: "50%", width: "1.5rem", height: "1.5rem", marginRight: '8px' }} />}
+                                {/* {msg.chat_sender !== 'admin' && <img src={msg.user_img} alt="User" style={{ borderRadius: "50%", width: "1.5rem", height: "1.5rem", marginRight: '8px' }} />} */}
                                 <strong>{msg.chat_sender}</strong>: {msg.chatlog_msg || msg.chat_content}
                             </div>
                         </div>
