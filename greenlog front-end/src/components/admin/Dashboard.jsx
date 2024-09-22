@@ -85,7 +85,7 @@ const Dashboard = () => {
                     </div>
                     <div className='chart text-center mb-5'>
                         <Row>
-                            <div className='mb-5'>Clover Diary Chart</div>
+                            <div className='mb-5'>Cho-log 상태</div>
                             <Col><Card><DiaryChart /></Card></Col>
                         </Row>
                     </div>
@@ -93,7 +93,7 @@ const Dashboard = () => {
                         <Row>
                             <Col lg={5}>
                                 <Card className="mb-3" style={{ height: "570px", overflowY: "scroll" }}>
-                                    <div className='mb-2'>씨드포인트 이번달 랭킹</div>
+                                    <div className='mb-2'>이번달 씨앗 랭킹</div>
                                     {rank.map(r => (
                                         <div key={r.seed_uid}>
                                             <ListItem alignItems="flex-start">
@@ -146,7 +146,7 @@ const Dashboard = () => {
                             </Col>
                             <Col lg={7}>
                                 <Card className="mb-3">
-                                    <div>Mall Chart</div>
+                                    <div>피망마켓 이용차트</div>
                                     <MallChart />
                                 </Card>
                             </Col>

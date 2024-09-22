@@ -247,7 +247,7 @@ const MyPage = () => {
         </Col>
       </Row>
       <div className='my-5'>
-        <h4 className='text-center mb-3'>{data.user_nickname}님의 럭키클로버 일기</h4>
+        <h4 className='text-center mb-3'>{data.user_nickname}님의 Cho-log</h4>
         <h5 className='text-center'>{data.user_ment}</h5>
       </div>
       <div className='mt-3 mb-5'>

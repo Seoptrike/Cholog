@@ -100,13 +100,14 @@ const AdminSeedPage = () => {
                                                 sx={{ width: 70, height: 70, marginRight: 2 }}
                                             />
                                             <Box>
-                                                <Typography
+                                            <Link to={`/user/admin/update/${seed.seed_uid}`}>
+                                            <Typography
                                                     variant="h6"
                                                     component="div"
                                                     sx={{ fontSize: '1.2rem', fontWeight: 'bold' }}
                                                 >
                                                     {seed.user_uname} ({seed.user_nickname})님의 씨앗지갑
-                                                </Typography>
+                                                </Typography></Link>
                                                 <Typography
                                                     variant="body2"
                                                     color="text.secondary"
